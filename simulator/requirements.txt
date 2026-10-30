@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+httpx
+scapy  # only for make_samples.py

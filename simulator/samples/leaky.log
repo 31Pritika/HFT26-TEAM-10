@@ -1,0 +1,8 @@
+2026-10-30T10:00:00.000Z INFO  worker started
+2026-10-30T10:00:01.000Z INFO  loaded config: OPENAI_API_KEY=sk-FAKEexampleFAKEexample1234567890
+2026-10-30T10:00:02.000Z ERROR connection failed for postgres://admin:FAKEpassw0rd@db.prod.internal:5432/customers
+2026-10-30T10:00:03.000Z WARN  retrying with token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJGQUtFLXVzZXItMTIzNCIsImlzcyI6Imh0dHBzOi8vYXV0aC5leGFtcGxlLmNvbSIsImV4cCI6NDEwMjQ0NDgwMH0.FAKEsignatureEXAMPLEsignature
+2026-10-30T10:00:04.000Z INFO  customer lookup: pooja.patel0@example.com +91 60268 86583 PAN FAKPX2426F
+2026-10-30T10:00:05.000Z DEBUG aadhaar on file: 8089 4415 4627
+2026-10-30T10:00:06.000Z INFO  upstream host db01.prod.internal resolved to 10.20.30.40, payment card 4111 1111 1111 1111
+2026-10-30T10:00:07.000Z INFO  worker finished
