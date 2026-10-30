@@ -4,6 +4,7 @@ from __future__ import annotations
 import asyncio
 import re
 
+import anyio
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
 from .. import collectors, config
@@ -34,18 +35,15 @@ async def stream(socket: WebSocket) -> None:
         while True:
             await socket.send_json(await queue.get())
 
-    async def wait_for_close() -> None:
-        while True:
-            await socket.receive_text()
-
-    tasks = [asyncio.create_task(send()), asyncio.create_task(wait_for_close())]
     try:
-        await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+        async with anyio.create_task_group() as group:
+            group.start_soon(send)
+            try:
+                while True:
+                    await socket.receive_text()
+            except WebSocketDisconnect:
+                group.cancel_scope.cancel()
+    except* (WebSocketDisconnect, RuntimeError):
+        pass  # The client went away while a message was being sent.
     finally:
-        for task in tasks:
-            task.cancel()
-        results = await asyncio.gather(*tasks, return_exceptions=True)
         bus.unsubscribe(queue)
-    for result in results:
-        if isinstance(result, Exception) and not isinstance(result, (WebSocketDisconnect, RuntimeError)):
-            raise result
