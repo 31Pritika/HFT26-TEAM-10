@@ -16,7 +16,7 @@ AWS = "AKIAFAKEFAKEFAKE1234"
 # §6 fields that may be null even though the mock data happens to hold values.
 NULLABLE = {"provider", "pid", "exe", "user", "parent", "cmdline_hint", "ip", "path", "method", "model", "payload_preview", "entropy",
             "line", "offset", "fingerprint", "provider_id", "process_name", "event_id", "tool_name", "triage", "next_cursor", "model"}
-OPTIONAL = {"logo"}
+OPTIONAL = {"logo", "block_on_critical"}
 DYNAMIC_MAPS = {"by_type", "by_severity", "compliance", "window"}
 
 

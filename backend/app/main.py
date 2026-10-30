@@ -9,7 +9,7 @@ from contextlib import asynccontextmanager
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from . import config, db, seed
+from . import collectors, config, db, seed
 from .api import (errors, routes_events, routes_findings, routes_health, routes_ingest, routes_inventory, routes_overview, routes_policies,
                   routes_report, routes_scan, routes_scenarios, ws)
 from .bus import bus
@@ -37,11 +37,14 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     bus.bind(asyncio.get_running_loop())
     if config.SEED_ON_STARTUP:
         await asyncio.to_thread(seed.seed_if_empty)
+    if config.COLLECTORS_ENABLED:
+        await asyncio.to_thread(collectors.start_all)
     tasks = [asyncio.create_task(_publish_stats()), asyncio.create_task(_prune_events())]
     yield
     for task in tasks:
         task.cancel()
     await asyncio.gather(*tasks, return_exceptions=True)
+    await asyncio.to_thread(collectors.stop_all)
     db.close()
 
 

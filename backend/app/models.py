@@ -265,6 +265,7 @@ class Policy(BaseModel):
     redact_in_storage: Literal[True]
     llm_triage: LlmTriagePolicy
     self_exclude: Literal[True]
+    block_on_critical: bool = True  # Additive to §6: the gateway refuses requests with critical findings (spec §A5).
 
 
 class PolicyUpdate(BaseModel):
@@ -277,6 +278,7 @@ class PolicyUpdate(BaseModel):
     redact_in_storage: Literal[True] | None = None
     llm_triage: LlmTriagePolicy | None = None
     self_exclude: Literal[True] | None = None
+    block_on_critical: bool | None = None
 
 
 class ScanStats(BaseModel):

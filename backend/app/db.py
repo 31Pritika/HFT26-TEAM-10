@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import base64
 import json
+import os
 import sqlite3
 import threading
 from collections.abc import Iterator
@@ -69,6 +70,18 @@ def init(path: Path | None = None) -> None:
         _conn.execute("PRAGMA journal_mode=WAL")
         _conn.execute("PRAGMA synchronous=NORMAL")
         _conn.executescript(SCHEMA)
+        _return_to_sudo_user(target)
+
+
+def _return_to_sudo_user(path: Path) -> None:
+    """Under sudo the database would be root-owned, and the next normal run could not write to it.
+
+    SQLite gives the -wal and -shm files the owner of the database file, so only these two need changing.
+    """
+    uid, gid = os.getenv("SUDO_UID"), os.getenv("SUDO_GID")
+    if uid and gid and hasattr(os, "geteuid") and os.geteuid() == 0:
+        for item in (path.parent, path):
+            os.chown(item, int(uid), int(gid))
 
 
 def close() -> None:

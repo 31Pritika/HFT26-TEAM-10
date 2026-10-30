@@ -30,6 +30,10 @@ DB_PATH = Path(os.getenv("SHADOWSCOPE_DB", BACKEND_DIR / "data" / "shadowscope.d
 FRONTEND_ORIGIN = os.getenv("SHADOWSCOPE_FRONTEND_ORIGIN")
 ALLOW_REMOTE = os.getenv("SHADOWSCOPE_ALLOW_REMOTE") == "1"
 SEED_ON_STARTUP = os.getenv("SHADOWSCOPE_SEED", "1") == "1"
+COLLECTORS_ENABLED = os.getenv("SHADOWSCOPE_COLLECTORS", "1") == "1"
+GATEWAY_PORT = int(os.getenv("SHADOWSCOPE_GATEWAY_PORT", "8789"))
+# Test-only: send gateway traffic to a local stand-in. Ignored unless it points at this machine.
+GATEWAY_UPSTREAM = os.getenv("SHADOWSCOPE_GATEWAY_UPSTREAM")
 
 MAX_EVENTS = 50_000
 MAX_UPLOAD_BYTES = 25 * 1024 * 1024
@@ -45,7 +49,7 @@ RISK_HALF_LIFE_H = 6
 ALLOWED_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173", *([FRONTEND_ORIGIN] if FRONTEND_ORIGIN else [])]
 ALLOWED_ORIGIN_REGEX = r"chrome-extension://.*"
 
-COLLECTOR_NAMES = ("process_conn", "ip_cache", "dns_sni", "loopback", "agent_watch")
+COLLECTOR_NAMES = ("process_conn", "ip_cache", "dns_sni", "loopback", "agent_watch", "gateway")
 
 DEFAULT_POLICY = {
     "sanctioned_providers": ["copilot", "ollama"],
@@ -57,4 +61,5 @@ DEFAULT_POLICY = {
     "redact_in_storage": True,
     "llm_triage": {"enabled": True, "engine": "auto", "model": None},
     "self_exclude": True,
+    "block_on_critical": True,
 }

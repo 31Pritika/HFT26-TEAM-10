@@ -1,14 +1,26 @@
-"""Collector status registry. The collectors themselves arrive in Phase 2."""
+"""Collector registry."""
 from __future__ import annotations
 
 from .. import config
+from .base import Collector
 
-_status = {name: {"enabled": False, "running": False, "reason": "Not started yet (Phase 2)"} for name in config.COLLECTOR_NAMES}
+_collectors: dict[str, Collector] = {}
+_NOT_BUILT = {"enabled": False, "running": False, "reason": "Not available yet"}
 
 
 def status() -> dict[str, dict]:
-    return {name: dict(state) for name, state in _status.items()}
+    return {name: _collectors[name].status() if name in _collectors else dict(_NOT_BUILT) for name in config.COLLECTOR_NAMES}
 
 
 def summary() -> list[dict]:
-    return [{"name": name, "running": state["running"]} for name, state in _status.items()]
+    return [{"name": name, "running": state["running"]} for name, state in status().items()]
+
+
+def start_all() -> None:
+    for collector in _collectors.values():
+        collector.start()
+
+
+def stop_all() -> None:
+    for collector in _collectors.values():
+        collector.stop()
