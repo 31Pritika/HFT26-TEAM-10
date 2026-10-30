@@ -306,3 +306,58 @@ def test_prune_keeps_newest_events(client):
     assert db.prune(100) > 0
     assert db.table_count("events") == 100
     client.post("/api/admin/reset")
+
+
+# ---- Simulator integration (spec 01 §A6) ---------------------------------------------------------------
+@pytest.fixture
+def simulator(monkeypatch, tmp_path):
+    from app.api import routes_scenarios
+    monkeypatch.setattr(config, "SIMULATOR_DIR", tmp_path)
+    monkeypatch.setattr(routes_scenarios, "_cache", None)
+    yield tmp_path
+    routes_scenarios._cache = None
+
+
+def test_without_simulator_scenarios_come_from_the_contract(simulator):
+    from app.api.routes_scenarios import load_scenarios
+    assert [item["id"] for item in load_scenarios()] == [item["id"] for item in mock("scenarios")["items"]]
+
+
+def test_simulator_cli_supplies_the_scenarios(simulator, monkeypatch):
+    import subprocess
+    from app.api import routes_scenarios
+    (simulator / "run.py").write_text("")
+    calls = []
+    item = {"id": "x", "name": "X", "description": "d", "icon": "bot", "severity": "high", "tags": []}
+
+    def fake_run(command, **kwargs):
+        calls.append((command, kwargs["cwd"]))
+        return subprocess.CompletedProcess(command, 0, stdout=json.dumps([item]))
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    assert routes_scenarios.load_scenarios() == [item] == routes_scenarios.load_scenarios()
+    assert len(calls) == 1, "cached for 60 s"
+    assert calls[0][0][1:] == ["-m", "simulator.run", "--list", "--json"] and calls[0][1] == config.REPO_ROOT
+
+
+def test_broken_simulator_falls_back_to_the_contract(simulator, monkeypatch):
+    import subprocess
+    from app.api import routes_scenarios
+    (simulator / "run.py").write_text("")
+
+    def failing(command, **kwargs):
+        raise subprocess.CalledProcessError(1, command)
+
+    monkeypatch.setattr(subprocess, "run", failing)
+    assert len(routes_scenarios.load_scenarios()) == 9
+
+
+def test_simulate_spawns_the_cli_from_the_repo_root(simulator, monkeypatch):
+    import subprocess
+    from app import simulate
+    (simulator / "run.py").write_text("")
+    calls = []
+    monkeypatch.setattr(subprocess, "Popen", lambda command, **kwargs: calls.append((command, kwargs["cwd"])))
+    run_id = simulate.start("rogue_agent", 2)
+    assert run_id.startswith("run_")
+    assert calls[0][0][1:] == ["-m", "simulator.run", "rogue_agent", "--intensity", "2"] and calls[0][1] == config.REPO_ROOT
