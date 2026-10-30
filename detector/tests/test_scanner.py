@@ -37,6 +37,40 @@ def test_negative(subtype, text):
     assert subtype not in subtypes(text)
 
 
+def in_openai_body(text):
+    return json.dumps({"model": "gpt-4o", "messages": [{"role": "user", "content": text}]})
+
+
+def in_anthropic_body(text):
+    return json.dumps({"model": "claude", "messages": [{"role": "user", "content": [{"type": "text", "text": text}]}]})
+
+
+@pytest.mark.parametrize("wrap", [in_openai_body, in_anthropic_body])
+@pytest.mark.parametrize("subtype,sample", [(s, x) for s in ALL_SUBTYPES for x in POSITIVE[s]],
+                         ids=lambda v: v if isinstance(v, str) else "")
+def test_positive_inside_a_json_request_body(wrap, subtype, sample):
+    result = scan_text(wrap(sample.text))
+    assert subtype in [f["subtype"] for f in result["findings"]]
+    assert json.dumps(sample.value)[1:-1] not in result["redacted_text"]
+
+
+def test_value_right_after_an_escaped_newline_is_found():
+    assert "aadhaar" in subtypes(in_openai_body("name\n2345 6789 0124\nend"))
+    assert "pan" in subtypes(in_openai_body("name,x\nFAKPE1234X,y"))
+    assert only(in_openai_body("a\npriya@example.com\nb"), "email")["evidence"]["match_redacted"] == "p•••@e•••.com"
+
+
+def test_offsets_in_json_bodies_point_at_the_raw_text():
+    body = in_openai_body(f"line one\nkey {samples.AWS_ACCESS}")
+    assert only(body, "aws_access_key")["evidence"]["offset"] == body.index(samples.AWS_ACCESS)
+
+
+def test_escapes_stay_literal_outside_json():
+    value = "Zq7\\nXk9\\tPw4"
+    assert only(f"password={value} rest", "generic_secret_assignment")["evidence"]["fingerprint"] == \
+        __import__("hashlib").sha256(value.encode()).hexdigest()[:12]
+
+
 def test_every_spec_subtype_is_covered():
     assert set(POSITIVE) == set(NEGATIVE)
     assert len(POSITIVE) == 32  # master §8.1 (19 rows) + §8.2 (13 rows)

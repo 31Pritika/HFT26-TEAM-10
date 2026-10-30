@@ -115,6 +115,20 @@ def only_snippet(text):
 
 
 @pytest.mark.parametrize("sample", ALL_SAMPLES, ids=lambda s: s.value[:24])
+def test_match_redacted_appears_verbatim_in_redacted_text(sample):
+    # Part A's detect_adapter rebuilds snippets with redacted_text.find(match_redacted).
+    result = scan_text(sample.text)
+    assert result["findings"]
+    for finding in result["findings"]:
+        assert finding["evidence"]["match_redacted"] in result["redacted_text"]
+
+
+def test_match_redacted_is_verbatim_when_spans_merge():
+    result = scan_text("password=Zq7Xk9-4111 1111 1111 1111 end")
+    assert result["findings"][0]["evidence"]["match_redacted"] in result["redacted_text"]
+
+
+@pytest.mark.parametrize("sample", ALL_SAMPLES, ids=lambda s: s.value[:24])
 def test_no_raw_value_in_any_output_field(sample):
     result = scan_text(sample.text)
     assert sample.value not in json.dumps(result, ensure_ascii=False)

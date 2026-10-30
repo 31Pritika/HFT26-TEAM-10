@@ -208,7 +208,7 @@ def _jwt(value: str, text: str, start: int) -> Verdict:
 
 _PEM_END = re.compile(r"-----END [A-Z0-9 ]*PRIVATE KEY(?: BLOCK)?-----")
 _PEM_BODY = re.compile(  # armor headers and base64 lines, then a last line that must end where the base64 does
-    r"(?:(?:[ \t]*[A-Za-z0-9+/=]+[ \t]*|[A-Za-z][\w-]*: [^\n]*)?(?:\r?\n|(?:\\r)?\\n))*"
+    r"(?:[ \t]*(?:[A-Za-z0-9+/=]+|[A-Za-z][\w-]*: [^\n]*)?[ \t]*(?:\r?\n|(?:\\r)?\\n))*"
     r"(?:[ \t]*[A-Za-z0-9+/=]+(?=[ \t]*(?:[\r\n\"'\\]|\Z)))?"
 )
 _PEM_MAX = 64 * 1024

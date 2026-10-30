@@ -11,13 +11,15 @@ from . import entropy
 from .patterns import Rule
 from .patterns.pii import BULK_EMAILS, BULK_IDENTITY_DOCS, BULK_PII, PII_RULES
 from .patterns.secrets import HIGH_ENTROPY_STRING, SECRET_RULES
-from .redact import MASK_CHAR, MASKERS, Region, Span, apply_masks, merge_spans
+from .redact import MASK_CHAR, Region, Span, apply_masks, merge_spans
 from .types import DetFinding, ScanResult, Severity
 from .validators import VALIDATORS, Verdict
 
 _RULES = SECRET_RULES + PII_RULES
 _NO_VERDICT = Verdict()
 _DATA_URI = re.compile(r"data:(?:image|font|audio|video)/[\w.+-]+;base64,[A-Za-z0-9+/=]+")
+_ESCAPED_QUOTE_OPEN = re.compile(r'''(?<=[\s:=,(\[{"])\\"''')
+_JSON_START = ("{", "[", '"')
 _SEVERITY_RANK: dict[Severity, int] = {"critical": 4, "high": 3, "medium": 2, "low": 1, "info": 0}
 _WEIGHTS: dict[Severity, int] = {"critical": 60, "high": 40, "medium": 20, "low": 8, "info": 2}
 _SNIPPET_CONTEXT = 40
@@ -36,11 +38,20 @@ class _Candidate:
         return self.verdict.severity or self.rule.severity
 
 
-def _blank_data_uris(text: str) -> str:
-    """Spaces over embedded media, offsets intact: base64 payloads can only produce noise, and they are huge."""
-    if "data:" not in text:
-        return text
-    return _DATA_URI.sub(lambda m: " " * len(m.group()), text)
+def _unescape_json(text: str) -> str:
+    """Undo JSON string escapes without moving a single offset, spaces standing in for the backslashes."""
+    view = text.replace("\\n", " \n").replace("\\r", "  ").replace("\\t", "  ")
+    return _ESCAPED_QUOTE_OPEN.sub(' "', view).replace('\\"', '" ')
+
+
+def _scan_view(text: str) -> str:
+    """What the rules run on: same length as `text`, so spans carry straight back to it.
+
+    Raw request bodies are JSON, where a literal `\\n` glues a value to the letter n and hides line starts. Embedded
+    media is blanked: base64 payloads can only produce noise, and they are huge.
+    """
+    view = _unescape_json(text) if text[:64].lstrip()[:1] in _JSON_START else text
+    return _DATA_URI.sub(lambda m: " " * len(m.group()), view) if "data:" in view else view
 
 
 def _value_span(rule: Rule, match: re.Match[str]) -> tuple[int, int]:
@@ -140,7 +151,7 @@ class _Evidence:
         return {
             "redacted_snippet": self.redacted[max(region.redacted_start - _SNIPPET_CONTEXT, 0):
                                               region.redacted_end + _SNIPPET_CONTEXT],
-            "match_redacted": MASKERS[candidate.rule.mask](value),
+            "match_redacted": self.redacted[region.redacted_start:region.redacted_end],
             "entropy": round(entropy.shannon(value), 2),
             "line": bisect_left(self.newlines, candidate.start) + 1,
             "offset": candidate.start,
@@ -193,7 +204,7 @@ def scan_text(text: str, *, context: dict | None = None, policy: dict | None = N
     started = time.perf_counter()
     threshold = (policy or {}).get("entropy_threshold", entropy.DEFAULT_THRESHOLD)
 
-    view = _blank_data_uris(text)
+    view = _scan_view(text)
     candidates = _regex_candidates(view)
     taken = merge_spans(Span(c.start, c.end) for c in candidates)
     entropy_found, entropy_max = _entropy_candidates(view, taken, threshold)
