@@ -172,7 +172,8 @@ def test_control_status_follows_open_findings():
     assert compliance._control("X", "x", rule, [])["status"] == "pass"
     warned = compliance._control("X", "x", rule, [finding])
     assert warned["status"] == "warn" and "worker" in warned["evidence"]
-    assert compliance._control("X", "x", rule, [{**finding, "severity": "high"}])["status"] == "fail"
+    assert compliance._control("X", "x", rule, [{**finding, "severity": "high"}])["status"] == "warn"
+    assert compliance._control("X", "x", rule, [{**finding, "severity": "critical"}])["status"] == "fail"
 
 
 def test_clean_install_has_all_controls_passing_and_a_calm_recommendation():

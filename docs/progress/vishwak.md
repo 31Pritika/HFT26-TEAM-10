@@ -30,9 +30,23 @@ Phase 2 complete on `vishwak/core-engine`, except the with-sudo check (see Issue
 
 Check capture with `sudo scripts/verify_capture.sh`. Results go to `backend/data/verify_capture.txt`.
 
+Phase 3 complete on `vishwak/core-engine`, except the simulator run (see Issues).
+- Part B's detector (0.2.0) merged directly from `aaraadhyaa/detection-intel`, because checkpoint #1 had not happened: `main` was still the bootstrap commit. All of its 1461 tests and all backend tests pass together.
+- Risk: the org score is recorded each minute in `metrics_minute.risk_score`, and `risk_trend` reads it, so resolving a finding no longer rewrites history. Older databases migrate on start.
+- Compliance: 5 or 6 controls per framework, with pass (no open findings in scope), warn, or fail (an open critical). Recommendations P0/P1/P2 come from open findings and name the tools. `/report` is scoped to its window, and the CSV has the full record.
+- `engine/anomaly.py`: z-score above 3 on a per-process baseline, plus a 5 MB in 60 s rule, because a new process has no baseline. It also holds the burst data used for `autonomous_loop`.
+- Triage: real chain with Policy engine and model, 20 s timeout, stored result. A rules answer is retried next time, a real answer is reused.
+- Policies apply at once: sanctioning resolves open `shadow_ai` findings, newly blocked providers flag tools already using them, and new canaries apply to the next scan.
+
+Measured, on a seeded database with collectors on and no sudo: 200 observations/s for 30 s (5% with leaks) gave 6000 of 6000 delivered, no backlog, WebSocket latency p50 2 ms, p95 3 ms, max 44 ms.
+
+Real LLM: triage returned a valid answer from local Ollama with `gemma3:4b` in 5.8 s, with no raw value in what was sent and no event created.
+
 ## Next
 - Run `sudo scripts/verify_capture.sh` and review the output.
-- Phase 3: risk, compliance and report polish, anomaly detection, end-to-end with Part B's simulator and real detector.
+- Open the checkpoint PRs: `main` has none of this work yet.
+- Run all §B6 scenarios once `simulator/run.py` exists.
+- Phase 4: start scripts, including warming the Ollama model (see Issues), demo script, `docs/backend.md`, cloud mode.
 
 ## Issues
 - **Live capture under sudo is not verified yet.** It needs a password, so `dns_sni` and `loopback` have never run against real packets. `loopback` parsing was checked with real Ollama bytes recorded through a local relay, and the DB ownership fix for sudo has unit tests only.
@@ -42,8 +56,10 @@ Check capture with `sudo scripts/verify_capture.sh`. Results go to `backend/data
 - **Shared CDN IPs can give false matches.** `process_conn` matches them at confidence 0.6, which is still reported.
 - **`shell_spawn` fires on normal use of Cursor and Claude Code**, as §A3 specifies. It was seen on this machine. Repeats are limited by the 10-minute dedupe.
 - **The seed scripts its detection step** (`app/seed_catalog.py`) because the detector stub only finds AWS keys and emails. Risk, dedupe, inventory and agents are computed by the real pipeline. Revisit once Part B's detector is merged.
-- **`/simulate` uses canned observations** until `simulator/run.py` exists, then switches to the CLI automatically. `/scenarios` serves the contract mock until then.
-- **Exfil findings are seed/canned only.** `engine/anomaly.py` is Phase 3.
+- **Goal 5 of Phase 3 is not done: `simulator/` is still only a README.** All 9 scenarios ran through `/api/simulate` on the canned fallback and raised findings, but that tests the backend path, not the simulator or the §B6 table. `/simulate` and `/scenarios` switch to the CLI automatically when it exists.
+- **Ollama cold start.** The first triage after the model unloads takes over 12 s, so it hits the detector's engine limit and answers with rules. Asking again gets the LLM (about 5 s). Warm the model before the demo. `auto` also uses `llama3.2:3b`, which isn't installed here, so the Policy must set engine `ollama` and model `gemma3:4b`.
+- **On the seeded data most controls show `fail`**, because critical findings are open in most scopes. That is accurate, but expect few passes in the demo.
+- **The org score saturates after a burst of critical findings.** Running all scenarios took it from 48 to 96, and later changes then move it only slightly.
 - **§9 gives no scale for the org score components.** The saturation constants in `engine/risk.py` and the factors in `engine/compliance.py` are tuned by hand against the seed.
 - **The API has no authentication**, so keep the default `127.0.0.1` bind. Using `--host 0.0.0.0` for Wi-Fi testing exposes it to the network. `/observations` and `/admin/reset` stay loopback-only. A web page could also POST a file to `/ingest` or `/extension/event` on a machine running the engine, because CORS does not stop those requests from being sent.
 - **macOS can flag the editable-install `.pth` file as hidden, and Python then skips it silently**, so `import shadowscope_detect` fails even though pip lists it. The adapter falls back to the repo's `detector/` folder. `chflags nohidden` on the file fixes it for other tools.
@@ -55,6 +71,8 @@ Check capture with `sudo scripts/verify_capture.sh`. Results go to `backend/data
 - Redaction must cover a private key's body, not only the `-----BEGIN` header.
 - `analyze_agent_payload` only ever receives a dict or a str.
 - When sniffing is on, simulator traffic to :8788 is seen twice: captured by `loopback` and reported through `/observations`. Findings dedupe, but events don't. Please send a marker header such as `X-ShadowScope-Sim: 1` on those requests so `loopback` can skip them.
+- `OLLAMA_MODEL` is fixed at `llama3.2:3b` in `triage/engine.py`, so `auto` can't use another installed model. Please read it from an `OLLAMA_MODEL` env var. `model` in `engine_cfg` only applies when an engine is named.
+- The seed and canned simulator still use `seed_catalog.py`. I kept it so raw fake values never exist in the engine, and so the fallback works without the package.
 - `gateway_block` must only send fake secrets that the detector rates critical. The gateway forwards anything else to the real provider, which would break golden rule 5. An AWS key is enough.
 
 **Part C (Kevin)**
@@ -67,6 +85,10 @@ Check capture with `sudo scripts/verify_capture.sh`. Results go to `backend/data
 - `Policy` has a new additive key, `block_on_critical` (default true). Toggle it with `PUT /policies`.
 - `/health` and Overview now list six collectors (`gateway` is new). `reason` can be set while `running` is true, which means reduced mode, such as `process_conn` using lsof.
 - New event tags: `blocked` (stopped by the gateway) and `bytes-unavailable` (byte counts unknown, don't show 0).
+- `burst` now appears on any process making 6+ requests a minute with a mean gap under 2 s, not only agents.
+- Findings can have `event_id: null`: a provider that gets blocked flags the tools already using it, with no event behind it. The finding detail returns `event: null`.
+- `PUT /policies` changes other data at once (findings resolved or created, inventory), and publishes `finding` and `stats` stream messages, so refetch or rely on the stream.
+- Triage can take up to 20 s. A rules answer can be asked for again.
 
 **Team (contracts are frozen, flagging only)**
 - `contracts/mock/findings.json` tags `source_code`, `canary`, `policy` and `exfil_volume` findings with SOC2, which §9 doesn't map. The engine follows §9, so live SOC2 scores won't match the mock's logic.
