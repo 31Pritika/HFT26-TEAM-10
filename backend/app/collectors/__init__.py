@@ -28,6 +28,11 @@ def summary() -> list[dict]:
     return [{"name": name, "running": state["running"]} for name, state in status().items()]
 
 
+def disable_all(reason: str) -> None:
+    for collector in _build().values():
+        collector.disable(reason)
+
+
 def start_all() -> None:
     for collector in _build().values():
         collector.start()

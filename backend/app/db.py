@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS inventory (process_name TEXT PRIMARY KEY, id TEXT NOT
 CREATE TABLE IF NOT EXISTS policies (id INTEGER PRIMARY KEY CHECK (id = 1), data TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS metrics_minute (
     minute TEXT PRIMARY KEY, requests INTEGER NOT NULL DEFAULT 0, findings INTEGER NOT NULL DEFAULT 0,
-    bytes_out INTEGER NOT NULL DEFAULT 0
+    bytes_out INTEGER NOT NULL DEFAULT 0, risk_score INTEGER
 );
 """
 TABLES = ("events", "findings", "agents", "agent_actions", "inventory", "policies", "metrics_minute")
@@ -70,6 +70,8 @@ def init(path: Path | None = None) -> None:
         _conn.execute("PRAGMA journal_mode=WAL")
         _conn.execute("PRAGMA synchronous=NORMAL")
         _conn.executescript(SCHEMA)
+        if "risk_score" not in {row["name"] for row in _conn.execute("PRAGMA table_info(metrics_minute)")}:
+            _conn.execute("ALTER TABLE metrics_minute ADD COLUMN risk_score INTEGER")  # Databases from before this column.
         _return_to_sudo_user(target)
 
 
@@ -361,8 +363,13 @@ def bump_metrics(ts: str, requests: int = 0, findings: int = 0, bytes_out: int =
              (ts[:16], requests, findings, bytes_out))
 
 
+def record_risk(ts: str, score: int) -> None:
+    _execute("INSERT INTO metrics_minute (minute, risk_score) VALUES (?, ?)"
+             " ON CONFLICT(minute) DO UPDATE SET risk_score = excluded.risk_score", (ts[:16], score))
+
+
 def metrics_between(start: str, end: str) -> list[dict]:
-    rows = _rows("SELECT minute, requests, findings FROM metrics_minute WHERE minute >= ? AND minute <= ? ORDER BY minute",
+    rows = _rows("SELECT minute, requests, findings, risk_score FROM metrics_minute WHERE minute >= ? AND minute <= ? ORDER BY minute",
                  (start[:16], end[:16]))
     return [dict(row) for row in rows]
 

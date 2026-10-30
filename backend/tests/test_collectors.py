@@ -492,6 +492,10 @@ from app.collectors import agent_watch  # noqa: E402
     ("/repo/.env.example", "python3", None),
     ("/repo/src/environment.py", "python3", None),
     ("/Users/dev/Library/Google/Chrome/Default/Cookies", "python3", "high"),
+    ("C:\\Users\\dev\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Login Data", "python.exe", "high"),
+    ("/Users/dev/Library/Application Support/Claude/Cookies", "Claude Helper", None),
+    ("/Users/dev/Library/Application Support/Codex/Partitions/x/Cookies", "Codex (Service)", None),
+    ("/Users/dev/Library/Application Support/Cursor/Cookies", "python3", None),
     ("/Users/dev/Library/Google/Chrome/Default/Cookies", "Google Chrome Helper", None),
     ("/Users/dev/Library/Google/Chrome/Default/Login Data", "Microsoft Edge", None),
     ("/Users/dev/.ssh/id_rsa", "Google Chrome", "critical"),
@@ -557,3 +561,24 @@ def test_gone_processes_are_forgotten_without_error(empty_db):
     collector.poll()
     assert empty_db.is_empty()
     activity.clear()
+
+
+# ---- Self-exclusion ------------------------------------------------------------------------------------
+def test_our_own_sni_is_skipped_by_port_owner(empty_db):
+    import os
+    activity.clear()
+    activity.set_port_owners({50000: {"pid": os.getpid(), "name": "python"}})
+    dns_sni.DnsSni().observe("api.groq.com", "1.2.3.4", 443, 50000, now=0)
+    assert empty_db.is_empty()
+    activity.clear()
+
+
+def test_our_own_dns_lookups_are_skipped_during_triage(empty_db):
+    activity.clear()
+    activity.expect_own_traffic(("api.groq.com",), 30)
+    collector = dns_sni.DnsSni()
+    collector.observe("api.groq.com.", None, 53, None, now=0)
+    assert empty_db.is_empty()
+    activity.clear()
+    collector.observe("api.groq.com.", None, 53, None, now=100)
+    assert empty_db.table_count("events") == 1

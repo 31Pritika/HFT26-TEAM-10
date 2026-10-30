@@ -15,6 +15,11 @@ STARTED_AT = time.monotonic()
 
 
 def _llm_engine() -> str:
+    configured = db.get_policy()["llm_triage"]
+    if not configured["enabled"]:
+        return "rules"
+    if configured["engine"] != "auto":
+        return configured["engine"]
     if os.getenv("FEATHERLESS_API_KEY"):
         return "featherless"
     if os.getenv("GROQ_API_KEY"):

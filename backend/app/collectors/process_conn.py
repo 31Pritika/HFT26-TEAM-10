@@ -88,7 +88,11 @@ class ProcessConn(Collector):
         try:
             return psutil_connections(), None
         except psutil.AccessDenied:
+            pass
+        try:
             return lsof_connections(), "Using lsof: only this user's processes are visible (run with sudo for all)"
+        except (OSError, subprocess.SubprocessError) as error:
+            return [], f"Cannot list connections: {type(error).__name__}"
 
     def _bytes_out(self, pid: int) -> int | None:
         """Bytes written since the last report, or None where the platform does not expose it (macOS)."""

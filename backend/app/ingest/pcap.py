@@ -1,6 +1,7 @@
 """PCAP / PCAPNG: plaintext HTTP gives full payloads, TLS gives the hostname from the ClientHello SNI."""
 from __future__ import annotations
 
+import os
 import re
 import struct
 import tempfile
@@ -167,24 +168,26 @@ def _read_flows(data: bytes) -> tuple[dict[FlowKey, dict[int, bytes]], dict[Flow
 
     flows: dict[FlowKey, dict[int, bytes]] = defaultdict(dict)
     started: dict[FlowKey, float] = {}
-    with tempfile.NamedTemporaryFile(suffix=".pcap") as capture:
+    # Closed before reading: Windows refuses to open a temp file that is still open.
+    with tempfile.NamedTemporaryFile(suffix=".pcap", delete=False) as capture:
         capture.write(data)
-        capture.flush()
-        try:
-            with PcapReader(capture.name) as reader:
-                for packet in reader:
-                    network = packet.getlayer(IP) or packet.getlayer(IPv6)
-                    if network is None or not packet.haslayer(TCP):
-                        continue
-                    tcp = packet[TCP]
-                    key = (network.src, int(tcp.sport), network.dst, int(tcp.dport))
-                    started.setdefault(key, float(packet.time))
-                    payload = bytes(tcp.payload)
-                    if payload:
-                        flows[key].setdefault(int(tcp.seq), payload)
-        except (Scapy_Exception, EOFError, struct.error) as error:
-            if not flows:
-                raise IngestError("This is not a readable PCAP file") from error
+    try:
+        with PcapReader(capture.name) as reader:
+            for packet in reader:
+                network = packet.getlayer(IP) or packet.getlayer(IPv6)
+                if network is None or not packet.haslayer(TCP):
+                    continue
+                tcp = packet[TCP]
+                key = (network.src, int(tcp.sport), network.dst, int(tcp.dport))
+                started.setdefault(key, float(packet.time))
+                payload = bytes(tcp.payload)
+                if payload:
+                    flows[key].setdefault(int(tcp.seq), payload)
+    except (Scapy_Exception, EOFError, struct.error) as error:
+        if not flows:
+            raise IngestError("This is not a readable PCAP file") from error
+    finally:
+        os.unlink(capture.name)
     return flows, started
 
 

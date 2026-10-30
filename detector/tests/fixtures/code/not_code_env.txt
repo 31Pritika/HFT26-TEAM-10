@@ -1,0 +1,6 @@
+APP_NAME=widget
+APP_PORT=8080
+LOG_LEVEL=info
+FEATURE_FLAGS=a,b,c
+REGION=ap-south-1
+RETRIES=3

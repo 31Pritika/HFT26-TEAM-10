@@ -27,26 +27,31 @@ VERSION = "0.2.0"
 HOST = os.getenv("SHADOWSCOPE_HOST", "127.0.0.1")
 PORT = int(os.getenv("SHADOWSCOPE_PORT", "8787"))
 DB_PATH = Path(os.getenv("SHADOWSCOPE_DB", BACKEND_DIR / "data" / "shadowscope.db"))
-FRONTEND_ORIGIN = os.getenv("SHADOWSCOPE_FRONTEND_ORIGIN")
+CLOUD = os.getenv("SHADOWSCOPE_CLOUD") == "1"
+CORS_ORIGINS = [origin.strip().rstrip("/") for origin in
+                f"{os.getenv('SHADOWSCOPE_CORS_ORIGINS', '')},{os.getenv('SHADOWSCOPE_FRONTEND_ORIGIN', '')}".split(",") if origin.strip()]
 ALLOW_REMOTE = os.getenv("SHADOWSCOPE_ALLOW_REMOTE") == "1"
 SEED_ON_STARTUP = os.getenv("SHADOWSCOPE_SEED", "1") == "1"
-COLLECTORS_ENABLED = os.getenv("SHADOWSCOPE_COLLECTORS", "1") == "1"
+COLLECTORS_ENABLED = os.getenv("SHADOWSCOPE_COLLECTORS", "1") == "1" and not CLOUD
 GATEWAY_PORT = int(os.getenv("SHADOWSCOPE_GATEWAY_PORT", "8789"))
 # Test-only: send gateway traffic to a local stand-in. Ignored unless it points at this machine.
 GATEWAY_UPSTREAM = os.getenv("SHADOWSCOPE_GATEWAY_UPSTREAM")
 
-MAX_EVENTS = 50_000
-MAX_UPLOAD_BYTES = 25 * 1024 * 1024
+MAX_EVENTS = 10_000 if CLOUD else 50_000
+MAX_UPLOAD_BYTES = (5 if CLOUD else 25) * 1024 * 1024
+MAX_JSON_BYTES = 3 * 1024 * 1024
+RATE_LIMIT_PER_MINUTE = 120  # Cloud mode only: the API is public there.
 DEDUPE_WINDOW_S = 600
 PAYLOAD_PREVIEW_CHARS = 500
 TRIAGE_TIMEOUT_S = 20
 STATS_INTERVAL_S = 3
+RISK_RECORD_INTERVAL_S = 60
 PRUNE_INTERVAL_S = 600
 SCENARIO_CACHE_S = 60
 AGENT_ACTIVE_WINDOW_S = 600
 RISK_HALF_LIFE_H = 6
 
-ALLOWED_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173", *([FRONTEND_ORIGIN] if FRONTEND_ORIGIN else [])]
+ALLOWED_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173", *CORS_ORIGINS]
 ALLOWED_ORIGIN_REGEX = r"chrome-extension://.*"
 
 COLLECTOR_NAMES = ("process_conn", "ip_cache", "dns_sni", "loopback", "agent_watch", "gateway")

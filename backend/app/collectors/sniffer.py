@@ -11,7 +11,7 @@ from typing import Any
 from .base import Collector
 
 log = logging.getLogger("shadowscope.collectors")
-NEEDS_ROOT = "Needs packet capture permission (sudo on macOS, Npcap on Windows)"
+NEEDS_ROOT = "Needs packet capture permission (sudo on macOS and Linux, Npcap on Windows)"
 PROBE_TIMEOUT_S = 0.05
 QUEUE_SIZE = 20_000
 TICK_S = 0.5
@@ -41,7 +41,7 @@ def tcp_segment(packet: Any) -> Segment | None:
 
 def _is_permission_problem(error: Exception) -> bool:
     text = str(error).lower()
-    return isinstance(error, PermissionError) or "permission" in text or "operation not permitted" in text
+    return isinstance(error, PermissionError) or any(hint in text for hint in ("permission", "not permitted", "npcap", "winpcap", "libpcap"))
 
 
 class Sniffer(Collector):

@@ -1,0 +1,14 @@
+import threading
+from dataclasses import dataclass
+
+_state = threading.local()
+
+
+@dataclass
+class AbstractWidgetRepositoryFactory:
+    connection_pool_size: int = 10
+    password: str = ""
+
+    def get_user_profile_by_account_id(self, account_id: int) -> dict:
+        api_key = self.settings.resolve_api_key(account_id)
+        return {"id": account_id, "created_at": 1698765432123, "ratio": 0.9876543210}

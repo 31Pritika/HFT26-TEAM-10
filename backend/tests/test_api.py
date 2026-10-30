@@ -182,7 +182,7 @@ def test_triage_is_cached_on_the_finding(client):
     assert result.status_code == 200
     assert_shape(result.json(), [item["triage"] for item in mock("findings")["items"] if item["triage"]])
     assert client.get(f"/api/findings/{finding['id']}").json()["triage"]["engine"] == "rules"
-    assert client.post(f"/api/findings/{finding['id']}/triage").json() == result.json()
+    assert client.post(f"/api/findings/{finding['id']}/triage", json={"engine": "rules"}).json() == result.json()
 
 
 def test_policy_put_is_partial_and_applies(client):
@@ -361,3 +361,72 @@ def test_simulate_spawns_the_cli_from_the_repo_root(simulator, monkeypatch):
     run_id = simulate.start("rogue_agent", 2)
     assert run_id.startswith("run_")
     assert calls[0][0][1:] == ["-m", "simulator.run", "rogue_agent", "--intensity", "2"] and calls[0][1] == config.REPO_ROOT
+
+
+# ---- Triage (real chain, fake network) -------------------------------------------------------------------
+@pytest.fixture
+def llm(monkeypatch):
+    """A local stand-in for an LLM. Records what was sent, and proves the marker header is present."""
+    import httpx
+    calls = []
+    answer = {"verdict": "true_positive", "sensitivity": "critical", "reasoning": "Looks real.", "remediation_steps": ["Rotate it"], "policy_suggestion": "Block it"}
+
+    def handler(request):
+        calls.append(request)
+        return httpx.Response(200, json={"choices": [{"message": {"content": json.dumps(answer)}}]})
+
+    real_client = httpx.AsyncClient
+    monkeypatch.setattr(httpx, "AsyncClient", lambda **kwargs: real_client(transport=httpx.MockTransport(handler), **kwargs))
+    return calls
+
+
+def test_triage_uses_policy_engine_and_creates_no_events(client, llm):
+    before = client.get("/api/policies").json()
+    client.put("/api/policies", json={"llm_triage": {"enabled": True, "engine": "ollama", "model": "gemma3:4b"}})
+    pipeline.process({"source": "simulator", "dest": {"host": "api.openai.com", "port": 443}, "body_text": f"key {AWS}"})
+    finding = client.get("/api/findings?type=secret&limit=1").json()["items"][0]
+    events = db.table_count("events")
+    result = client.post(f"/api/findings/{finding['id']}/triage").json()
+    client.put("/api/policies", json=before)
+    assert result["engine"] == "ollama" and result["model"] == "gemma3:4b" and result["verdict"] == "true_positive"
+    assert llm and llm[0].headers["x-shadowscope-self"] == "1" and AWS.encode() not in llm[0].content
+    assert db.table_count("events") == events
+    assert client.get(f"/api/findings/{finding['id']}").json()["triage"]["engine"] == "ollama"
+
+
+def test_rules_answer_is_retried_but_a_real_answer_is_kept(client, llm):
+    before = client.get("/api/policies").json()
+    client.put("/api/policies", json={"llm_triage": {"enabled": True, "engine": "ollama", "model": "gemma3:4b"}})
+    pipeline.process({"source": "simulator", "dest": {"host": "api.openai.com", "port": 443}, "body_text": "key AKIAEXAMPLEEXAMPLE33"})
+    finding = next(item for item in client.get("/api/findings?type=secret").json()["items"] if not item["triage"])
+    db.update_finding({**finding, "triage": {"verdict": "needs_review", "sensitivity": "high", "reasoning": "x", "remediation_steps": [],
+                                             "policy_suggestion": "x", "engine": "rules", "model": "rules-v1", "latency_ms": 1, "redacted_input_preview": "x"}})
+    assert client.post(f"/api/findings/{finding['id']}/triage").json()["engine"] == "ollama"
+    calls = len(llm)
+    assert client.post(f"/api/findings/{finding['id']}/triage").json()["engine"] == "ollama"
+    client.put("/api/policies", json=before)
+    assert len(llm) == calls, "a real answer is reused"
+
+
+def test_triage_disabled_never_calls_an_llm(client, llm):
+    before = client.get("/api/policies").json()
+    client.put("/api/policies", json={"llm_triage": {"enabled": False, "engine": "groq", "model": None}})
+    pipeline.process({"source": "simulator", "dest": {"host": "api.openai.com", "port": 443}, "body_text": "key AKIAEXAMPLEEXAMPLE77"})
+    finding = next(item for item in client.get("/api/findings?type=secret").json()["items"] if not item["triage"])
+    result = client.post(f"/api/findings/{finding['id']}/triage").json()
+    client.put("/api/policies", json=before)
+    assert result["engine"] == "rules" and llm == []
+
+
+def test_triage_timeout_answers_with_rules(client, monkeypatch):
+    import asyncio
+    from app.engine import detect_adapter
+    monkeypatch.setattr(config, "TRIAGE_TIMEOUT_S", 0.05)
+
+    async def stuck(*args, **kwargs):
+        await asyncio.sleep(5)
+
+    monkeypatch.setattr(detect_adapter._detector, "triage", stuck)
+    pipeline.process({"source": "simulator", "dest": {"host": "api.openai.com", "port": 443}, "body_text": "key AKIAEXAMPLEEXAMPLE55"})
+    finding = next(item for item in client.get("/api/findings?type=secret").json()["items"] if not item["triage"])
+    assert client.post(f"/api/findings/{finding['id']}/triage").json()["engine"] == "rules"

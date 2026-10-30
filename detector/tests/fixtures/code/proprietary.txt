@@ -1,0 +1,11 @@
+# CONFIDENTIAL - Acme Pvt Ltd. Internal use only.
+import hashlib
+from dataclasses import dataclass
+
+
+@dataclass
+class PricingEngine:
+    margin: float = 0.2
+
+    def quote(self, cost: float) -> float:
+        return cost * (1 + self.margin)

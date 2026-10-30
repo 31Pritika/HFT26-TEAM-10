@@ -100,3 +100,59 @@ def test_process_classification(name, cmdline, framework):
 def test_triage_only_receives_hardened_text(builtin):
     result = asyncio.run(adapter.triage({"severity": "high", "remediation": ["x"]}, f"key {AWS}", engine_cfg={}))
     assert AWS not in result["redacted_input_preview"] and result["engine"] == "rules"
+
+
+def test_real_detector_is_active_with_its_real_functions():
+    assert adapter.status()["version"] != "0.1.0"
+    assert adapter.classify_process("python3", ["python3", "langchain_agent.py"])["framework"] == "langchain"
+
+
+def test_canary_from_the_real_detector_is_not_doubled():
+    assert sum(f["type"] == "canary" for f in adapter.scan_text("ref CANARY-SS-7F3A9", policy=POLICY)["findings"]) == 1
+
+
+@pytest.mark.parametrize("text,expected", [
+    ("pan FAKPF1234E", "pan"), ("aadhaar 2345 6789 0124", "aadhaar"), ("password=FAKEexample1", "generic_secret_assignment"),
+])
+def test_snippets_keep_context_with_real_masks(text, expected):
+    finding = next(f for f in adapter.scan_text(text + " trailing words")["findings"] if f["subtype"] == expected)
+    assert finding["evidence"]["match_redacted"] in finding["evidence"]["redacted_snippet"]
+    assert "trailing" in finding["evidence"]["redacted_snippet"]
+
+
+def test_remediation_comes_from_part_b_when_available():
+    assert adapter.remediation_steps("aws_access_key")
+    assert adapter.remediation_steps("no_such_subtype") == []
+
+
+# ---- Hostile input -----------------------------------------------------------------------------------------
+HOSTILE = {
+    "one word": "x" * 3_000_000, "digits": "1" * 3_000_000, "base64": "QUJD" * 750_000, "dots": "a." * 1_500_000,
+    "spaces": "ab " * 1_000_000, "assignments": "password=" * 330_000, "headers": "-----BEGIN RSA PRIVATE KEY-----\n" * 100_000,
+    "at signs": "a@" * 1_500_000, "hyphens": "sk-" * 1_000_000, "newlines": "\n" * 3_000_000,
+}
+
+
+@pytest.mark.parametrize("name", HOSTILE)
+def test_redaction_stays_fast_on_hostile_input(name):
+    import time
+    started = time.perf_counter()
+    adapter.harden(HOSTILE[name])
+    assert time.perf_counter() - started < 3, name
+
+
+def test_scanning_a_large_hostile_payload_finishes():
+    import time
+    started = time.perf_counter()
+    adapter.scan_text("x" * 3_000_000)
+    assert time.perf_counter() - started < 5
+
+
+@pytest.mark.parametrize("address", ["fake.person@example.com", "a+tag@mail.example.co.in", "x" * 100 + "@example.com"])
+def test_emails_are_still_masked_after_the_rewrite(address):
+    masked = adapter.harden(f"mail {address}, please")
+    assert address not in masked and "•••@" in masked and masked.startswith("mail ") and masked.endswith(", please")
+
+
+def test_a_key_after_a_long_word_is_still_masked():
+    assert AWS not in adapter.harden("x" * 500 + f" {AWS}")

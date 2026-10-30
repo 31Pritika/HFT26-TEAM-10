@@ -37,7 +37,7 @@ CANNED: dict[str, list[dict]] = {
     "rogue_agent": _agent("sensitive_file_read", "remote_code_exec", "recon", "unverified_tool_call"),
     "canary_trip": [_leak("Look up this reference.", "canary_token")],
     "gateway_block": [_leak("Why does this .env not load?", "aws_access_key", "db_connection_url")],
-    "exfil_spike": [{**_leak("Batch upload.", "bytes_out_spike"), "bytes_out": 8_400_000}],
+    "exfil_spike": [{**_leak("Batch upload."), "process": {"name": "uploader"}, "bytes_out": 8_400_000}],  # engine/anomaly.py raises the finding.
     "local_llm_chat": [_leak("Summarize this note.", "email", "internal_host", process={"name": "ollama"},
                              dest={"host": "localhost", "port": 11434, "path": "/api/chat", "protocol": "http"})],
 }
