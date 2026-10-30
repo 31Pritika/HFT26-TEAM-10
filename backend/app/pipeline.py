@@ -59,8 +59,9 @@ def _classify(process: dict) -> dict:
     return detect_adapter.classify_process(process["name"], cmdline)
 
 
-def _parse_payload(text: str) -> dict | list | str:
-    if text.lstrip()[:1] in ("{", "["):
+def _parse_payload(text: str) -> dict | str:
+    """A JSON object as a dict, anything else as text: the detector contract takes only these two."""
+    if text.lstrip()[:1] == "{":
         try:
             return json.loads(text)
         except ValueError:

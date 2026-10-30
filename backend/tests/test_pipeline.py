@@ -162,6 +162,14 @@ def test_process_signature_creates_agent_session():
     assert db.get_inventory("aider")["is_agent"] is True
 
 
+def test_agent_analyzer_only_receives_dict_or_text(monkeypatch):
+    seen = []
+    monkeypatch.setattr(pipeline.detect_adapter, "analyze_agent_payload",
+                        lambda payload, direction: seen.append(payload) or {"is_agent": False, "framework": "unknown", "tools_declared": [], "actions": [], "findings": []})
+    pipeline.process(obs(body_text='[1, 2]', response_text='{"a": 1}'))
+    assert seen == ["[1, 2]", {"a": 1}]
+
+
 def test_malformed_detector_finding_is_skipped():
     scan = {"findings": [{"type": "nonsense", "subtype": "x", "severity": "high", "title": "t", "evidence": {}}], "redacted_text": "x"}
     result = pipeline.process(obs(), prescan={"scan": scan})
