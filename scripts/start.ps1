@@ -47,7 +47,10 @@ function Test-PythonVersion([string]$Command, [string[]]$Arguments) {
 }
 
 function Find-Python {
-    foreach ($version in "-3.13", "-3.12", "-3.11") {
+    if (Test-Path "C:\Python315\python.exe") {
+        return @{ Command = "C:\Python315\python.exe"; Arguments = @() }
+    }
+    foreach ($version in "-3.15", "-3.14", "-3.13", "-3.12", "-3.11") {
         if ((Get-Command "py" -ErrorAction SilentlyContinue) -and (Test-PythonVersion "py" @($version))) {
             return @{ Command = "py"; Arguments = @($version) }
         }
