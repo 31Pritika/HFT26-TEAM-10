@@ -1,6 +1,7 @@
 """AgentSession aggregation and autonomy score (master §8.4)."""
 from __future__ import annotations
 
+import math
 import re
 
 from .. import config, db
@@ -64,7 +65,8 @@ def loop_fingerprint(process_name: str, framework: str) -> str:
 
 
 def _loop_finding(session: dict, requests: int, mean_gap: float, rounds: int) -> dict:
-    detail = f"{requests} requests/min, mean gap {mean_gap:.1f} s, {rounds} tool round trips"
+    pace = f"{requests} requests/min, mean gap {mean_gap:.1f} s, " if math.isfinite(mean_gap) else ""
+    detail = f"{pace}{rounds} tool round trips"
     return {
         "type": "agent_action", "subtype": "autonomous_loop", "severity": "medium", "confidence": 0.85,
         "title": "Autonomous agent loop detected", "description": f"{session['process_name']} is acting at machine speed.",
@@ -82,7 +84,9 @@ def update(process: dict, framework: str, provider_id: str | None, ts: str, anal
     """
     session = db.find_agent(process["name"], framework) or _new_session(process, framework, ts)
     counters = session["_stats"]
-    session["requests"] += 1
+    requests, mean_gap = burst
+    is_request = requests > 0  # Connection and file reports show the agent is alive, but they are not model requests.
+    session["requests"] += is_request
     session["last_seen"] = max(session["last_seen"], ts)
     session["pid"] = process.get("pid") or session["pid"]
     session["provider_id"] = provider_id or session["provider_id"]
@@ -95,12 +99,12 @@ def update(process: dict, framework: str, provider_id: str | None, ts: str, anal
             session["permissions"][permission] |= bool(granted)
     actions = [_record_action(session, raw, ts) for raw in analysis.get("actions") or []]
 
-    previous = counters.get("last_ts")
-    connected = previous is not None and (parse_ts(ts) - parse_ts(previous)).total_seconds() <= ROUND_TRIP_MAX_GAP_S
-    counters["last_ts"] = ts
-    counters["rounds"] = (counters["rounds"] + 1 if connected else 1) if actions else 0
-    counters["max_rounds"] = max(counters["max_rounds"], counters["rounds"])
-    requests, mean_gap = burst
+    if is_request:
+        previous = counters.get("last_ts")
+        connected = previous is not None and (parse_ts(ts) - parse_ts(previous)).total_seconds() <= ROUND_TRIP_MAX_GAP_S
+        counters["last_ts"] = ts
+        counters["rounds"] = (counters["rounds"] + 1 if connected else 1) if actions else 0
+        counters["max_rounds"] = max(counters["max_rounds"], counters["rounds"])
     counters["peak_rate"] = max(counters["peak_rate"], requests)
 
     session["autonomy_score"] = autonomy_score(

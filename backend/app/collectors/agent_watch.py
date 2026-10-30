@@ -12,8 +12,10 @@ from . import activity
 from .base import Collector
 
 SHELLS = {"bash", "sh", "zsh", "fish", "cmd.exe", "powershell.exe", "pwsh", "pwsh.exe"}
-BROWSERS = {"Google Chrome", "Google Chrome Helper", "Microsoft Edge", "Microsoft Edge Helper", "Brave Browser", "Safari", "firefox"}
-BROWSER_DATA = {"Login Data", "Cookies"}  # A browser always has its own profile files open.
+BROWSERS = ("Google Chrome", "Microsoft Edge", "Brave Browser", "Safari", "firefox", "chrome", "msedge", "brave")
+BROWSER_DATA = {"Login Data", "Cookies"}
+# Electron apps keep their own Cookies file, so only a real browser profile counts, and only if it isn't that browser's.
+BROWSER_PROFILE = re.compile(r"Google[/\\]Chrome|Chrome[/\\]User Data|Microsoft[/\\]Edge|Microsoft Edge|BraveSoftware|Mozilla[/\\]Firefox|Safari[/\\]")
 SENSITIVE_PATHS: list[tuple[str, re.Pattern, str]] = [
     ("SSH key", re.compile(r"/\.ssh/|id_rsa|id_ed25519"), "critical"),
     ("Password hashes", re.compile(r"/etc/shadow"), "critical"),
@@ -34,7 +36,7 @@ def classify_path(path: str, process_name: str) -> tuple[str, str] | None:
     """Label and severity for a sensitive path, or None."""
     for label, pattern, severity in SENSITIVE_PATHS:
         if pattern.search(path):
-            if label in BROWSER_DATA and process_name.split(" Helper")[0] in {name.split(" Helper")[0] for name in BROWSERS}:
+            if label in BROWSER_DATA and (not BROWSER_PROFILE.search(path) or process_name.startswith(BROWSERS)):
                 return None
             return label, severity
     return None

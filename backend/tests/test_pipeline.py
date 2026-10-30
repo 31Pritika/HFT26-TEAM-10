@@ -250,3 +250,21 @@ def test_two_loop_reports_for_a_session_become_one_finding():
     results = [pipeline.process(obs(body_text=None, response_text=payload, ts=f"2026-10-30T10:00:0{second}Z")) for second in range(4)]
     loops = [f for f in db.list_findings(500, type="agent_action")[0] if f["subtype"] == "autonomous_loop"]
     assert len(loops) == 1 and any("burst" in result.event["tags"] for result in results)
+
+
+def test_connection_reports_are_not_requests_or_tool_round_trips():
+    analysis = {"is_agent": True, "framework": "langchain", "tools_declared": [], "findings": [],
+                "actions": [{"kind": "file_read", "detail": "open file", "severity": "high", "tool_name": None}]}
+    results = [pipeline.process(obs(source="live_conn", body_text=None, ts=f"2026-10-30T10:00:0{second}Z"), prescan={"analysis": analysis}) for second in range(5)]
+    assert not any(f["subtype"] == "autonomous_loop" for result in results for f in result.findings)
+    assert db.find_agent("python3", "langchain")["requests"] == 0
+
+
+def test_loop_message_never_prints_infinity():
+    analysis = {"is_agent": True, "framework": "langchain", "tools_declared": [], "findings": [],
+                "actions": [{"kind": "shell_exec", "detail": "ls", "severity": "low", "tool_name": "shell"}]}
+    from app.engine import anomaly
+    anomaly.reset()
+    finding = agents._loop_finding({"process_name": "x", "framework": "y"}, 1, float("inf"), 3)
+    assert finding["evidence"]["redacted_snippet"] == "3 tool round trips"
+    assert analysis["actions"]
