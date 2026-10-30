@@ -217,7 +217,7 @@ def _private_key(value: str, text: str, start: int) -> Verdict:
     """Extend the match from the BEGIN header over the key body, which is the actual secret."""
     limit = start + _PEM_MAX
     header_end = start + len(value)
-    end = _PEM_END.search(text, header_end, limit)
+    end = _PEM_END.search(text, header_end, limit) if text.find("-----END ", header_end, limit) >= 0 else None
     return Verdict(span=(start, end.end() if end else _PEM_BODY.match(text, header_end, limit).end()))
 
 
