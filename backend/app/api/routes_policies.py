@@ -15,7 +15,8 @@ def get_policies() -> dict:
 
 @router.put("/policies", response_model=Policy)
 def update_policies(body: PolicyUpdate) -> dict:
-    policy = Policy.model_validate({**db.get_policy(), **body.model_dump(exclude_none=True)}).model_dump()
+    changes = {key: value for key, value in body.model_dump(exclude_unset=True).items() if value is not None}
+    policy = Policy.model_validate({**db.get_policy(), **changes}).model_dump()
     db.set_policy(policy)
     pipeline.refresh_inventory(policy)
     return policy

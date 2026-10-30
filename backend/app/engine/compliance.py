@@ -10,7 +10,7 @@ from . import agents, risk, stats
 FRAMEWORK_IDS = ("DPDP", "GDPR", "SOC2", "PCI-DSS", "ISO27001")
 ORG_NAME = "Local workstation"
 TOP_FINDINGS = 10
-SCORE_FACTOR = {"DPDP": 0.10, "GDPR": 0.10, "SOC2": 0.03, "PCI-DSS": 0.40, "ISO27001": 0.02}
+SCORE_FACTOR = {"DPDP": 0.08, "GDPR": 0.08, "SOC2": 0.015, "PCI-DSS": 0.30, "ISO27001": 0.01}
 
 _RULES: dict[str, Callable[[dict], bool]] = {
     "DPDP": lambda f: f["type"] == "pii",

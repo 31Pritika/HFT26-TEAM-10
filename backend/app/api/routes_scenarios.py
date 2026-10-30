@@ -9,7 +9,8 @@ import time
 from fastapi import APIRouter
 
 from .. import config
-from ..models import ScenarioList
+from ..models import ScenarioList, SimulateRequest
+from .errors import not_found
 
 router = APIRouter()
 log = logging.getLogger("shadowscope.scenarios")
@@ -47,3 +48,12 @@ def load_scenarios() -> list[dict]:
 @router.get("/scenarios", response_model=ScenarioList)
 def scenarios() -> dict:
     return {"items": load_scenarios()}
+
+
+@router.post("/simulate")
+def simulate(body: SimulateRequest) -> dict:
+    from .. import simulate as simulator  # Imported here because simulate.py uses this module.
+
+    if body.scenario_id not in {scenario["id"] for scenario in load_scenarios()}:
+        raise not_found("Scenario", body.scenario_id)
+    return {"run_id": simulator.start(body.scenario_id, body.intensity), "started": True}

@@ -12,6 +12,7 @@ LOOP_MIN_REQUESTS = 6
 LOOP_MAX_MEAN_GAP_S = 2.0
 LOOP_MIN_ROUND_TRIPS = 3
 RECENT_REQUESTS = 30
+ROUND_TRIP_MAX_GAP_S = 60  # Tool calls further apart than this are separate tasks, not one loop.
 
 _PERMISSION_TOOLS = {
     "shell": re.compile(r"shell|bash|terminal|run_command|powershell|cmd|subprocess", re.I),
@@ -54,7 +55,7 @@ def _record_action(session: dict, raw: dict, ts: str) -> dict:
 
     counters = session["_stats"]
     counters["tool_calls"] += 1
-    counters["dangerous"] += bool(DANGEROUS_TOOL.search(name))
+    counters["dangerous"] += bool(DANGEROUS_TOOL.search(name)) and not action["verified"]
     counters["max_weight"] = max(counters["max_weight"], risk.SEVERITY_WEIGHT[action["severity"]])
     if action["kind"] in _PERMISSION_KINDS:
         session["permissions"][_PERMISSION_KINDS[action["kind"]]] = True
@@ -96,8 +97,10 @@ def update(process: dict, framework: str, provider_id: str | None, ts: str, anal
             session["permissions"][permission] |= bool(pattern.search(str(tool)))
     actions = [_record_action(session, raw, ts) for raw in analysis.get("actions") or []]
 
+    previous = counters["recent"][-1] if counters["recent"] else None
+    connected = previous is not None and (parse_ts(ts) - parse_ts(previous)).total_seconds() <= ROUND_TRIP_MAX_GAP_S
     counters["recent"] = [*counters["recent"], ts][-RECENT_REQUESTS:]
-    counters["rounds"] = counters["rounds"] + 1 if actions else 0
+    counters["rounds"] = (counters["rounds"] + 1 if connected else 1) if actions else 0
     counters["max_rounds"] = max(counters["max_rounds"], counters["rounds"])
     requests, mean_gap = _rate(counters["recent"], ts)
     counters["peak_rate"] = max(counters["peak_rate"], requests)
