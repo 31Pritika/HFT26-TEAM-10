@@ -44,7 +44,7 @@ const ATTACK_STAGES: AttackStage[] = [
     output: [
       "OPENAI_API_KEY=sk-proj-9x7Fk••••••••••••••••••••",
       "AWS_ACCESS_KEY_ID=AKIAFAKEFAKE1234ABCD",
-      "STRIPE_SECRET_KEY=sk_live_51M••••••••••••••••••••",
+      "ANTHROPIC_API_KEY=sk-ant-api03-••••••••••••••••",
     ],
     alert: {
       title: "Secret Reconnaissance Detected",
@@ -339,3 +339,4 @@ function AttackStageCard({ stage }: { stage: AttackStage }) {
     </div>
   );
 }
+
