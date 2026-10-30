@@ -21,6 +21,7 @@ from .utils import fingerprint, new_id, normalize_ts, now_iso, parse_ts, to_iso
 log = logging.getLogger("shadowscope.pipeline")
 
 SELF_HEADER = "x-shadowscope-self"
+MAX_EXTENSION_FINDINGS = 200
 # These sources are scanned even when the destination is not a known AI provider.
 UNMATCHED_SOURCES = {"extension", "log"}
 DEFAULT_PROTOCOL = {443: "https"}
@@ -354,7 +355,20 @@ def scan_text(text: str, source: str = "api", context: dict[str, Any] | None = N
     return {"findings": findings, "risk_score": scan["risk_score"], "redacted_text": scan["redacted_text"], "stats": scan["stats"]}
 
 
-def record_extension_event(site: str, url: str, text: str, ts: str, browser: str, kind: str) -> Result:
+def _extension_scan(text: str, findings: list[dict]) -> dict | None:
+    """Turns the extension's own findings into scan results. They come from outside, so they are checked and redacted again."""
+    usable = []
+    for raw in findings[:MAX_EXTENSION_FINDINGS]:
+        evidence = raw.get("evidence")
+        if not isinstance(evidence, dict) or not isinstance(raw.get("subtype"), str):
+            continue
+        safe_evidence = {**evidence, **{key: detect_adapter.redact(str(evidence.get(key) or "")) for key in ("redacted_snippet", "match_redacted")}}
+        usable.append({**raw, "title": detect_adapter.redact(str(raw.get("title") or "")),
+                       "description": detect_adapter.redact(str(raw.get("description") or "")), "evidence": safe_evidence})
+    return {"findings": usable, "redacted_text": detect_adapter.redact(text), "risk_score": 0, "stats": {}} if usable else None
+
+
+def record_extension_event(site: str, url: str, text: str, ts: str, browser: str, kind: str, findings: list[dict] | None = None) -> Result:
     """POST /extension/event. Always stored: a paste into an AI site is worth recording even when clean."""
     names = {"chrome": "Google Chrome", "edge": "Microsoft Edge"}
     parts = urlsplit(url if "//" in url else f"//{url}")
@@ -362,7 +376,7 @@ def record_extension_event(site: str, url: str, text: str, ts: str, browser: str
         {"source": "extension", "ts": ts, "process": {"name": names.get(browser, "Browser")},
          "dest": {"host": parts.hostname or site, "port": parts.port or 443, "path": parts.path or None, "protocol": "https"},
          "method": kind.upper(), "body_text": text, "meta": {"tags": [f"extension:{kind}"]}},
-        force=True,
+        prescan={"scan": _extension_scan(text, findings or [])}, force=True,
     )
     assert result is not None  # Only self-traffic is dropped when forced, and this has no headers.
     return result
