@@ -7,6 +7,7 @@ import time
 _lock = threading.Lock()
 _active: dict[int, dict] = {}
 _port_owners: dict[int, dict] = {}
+_own_hosts: dict[str, float] = {}
 
 
 def mark_active(pid: int, process: dict, dest: dict) -> None:
@@ -34,7 +35,20 @@ def port_owner(port: int) -> dict | None:
         return _port_owners.get(port)
 
 
+def expect_own_traffic(hosts: tuple[str, ...], seconds: float) -> None:
+    """ShadowScope is about to contact these hosts itself. Sniffed DNS and SNI carry no marker header to check."""
+    until = time.monotonic() + seconds
+    with _lock:
+        _own_hosts.update(dict.fromkeys(hosts, until))
+
+
+def is_own_traffic(host: str) -> bool:
+    with _lock:
+        return _own_hosts.get(host, 0) > time.monotonic()
+
+
 def clear() -> None:
     with _lock:
         _active.clear()
         _port_owners.clear()
+        _own_hosts.clear()

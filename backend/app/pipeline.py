@@ -76,7 +76,7 @@ def _model_name(body: str | None) -> str | None:
 
 
 def _analyze_agent(obs: Observation) -> dict:
-    merged = {"is_agent": False, "framework": "unknown", "tools_declared": [], "actions": [], "findings": []}
+    merged = {"is_agent": False, "framework": "unknown", "tools_declared": [], "actions": [], "findings": [], "permissions": {}}
     for text, direction in ((obs.body_text, "request"), (obs.response_text, "response")):
         if not text:
             continue
@@ -86,6 +86,8 @@ def _analyze_agent(obs: Observation) -> dict:
             merged["framework"] = analysis["framework"]
         for key in ("tools_declared", "actions", "findings"):
             merged[key] += analysis[key]
+        for permission, granted in analysis.get("permissions", {}).items():
+            merged["permissions"][permission] = merged["permissions"].get(permission, False) or granted
     return merged
 
 
@@ -112,6 +114,12 @@ def _policy_findings(provider: dict, process_name: str, sanctioned: bool, policy
             "shadow_ai", "new_unsanctioned_tool", severity, f"New unsanctioned AI tool: {process_name}",
             f"{process_name} contacted {name} for the first time.", f"shadow:{process_name}:{provider['id']}", "process"))
     return found
+
+
+def _one_loop_per_session(detected: list[dict], process_name: str, framework: str | None) -> list[dict]:
+    """The detector and agents.py can both report a loop. A shared fingerprint makes them one finding."""
+    key = agents.loop_fingerprint(process_name, framework or "unknown")
+    return [{**raw, "evidence": {**raw["evidence"], "fingerprint": key}} if raw.get("subtype") == "autonomous_loop" else raw for raw in detected]
 
 
 def _store_finding(raw: dict, event_id: str, ts: str, provider_id: str | None, process_name: str) -> tuple[dict | None, bool]:
@@ -215,6 +223,7 @@ def process(observation: Observation | dict, *, prescan: dict | None = None, for
             detected += behaviour
         if provider:
             detected += _policy_findings(provider, name, sanctioned, policy)
+        detected = _one_loop_per_session(detected, name, framework)
 
         findings, created = [], 0
         for raw in detected:

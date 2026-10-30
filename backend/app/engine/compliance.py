@@ -5,7 +5,7 @@ from collections.abc import Callable
 
 from .. import db
 from ..utils import clamp, now, to_iso, window_start
-from . import agents, risk, stats
+from . import agents, detect_adapter, risk, stats
 
 FRAMEWORK_IDS = ("DPDP", "GDPR", "SOC2", "PCI-DSS", "ISO27001")
 ORG_NAME = "Local workstation"
@@ -66,7 +66,7 @@ def tags_for(finding_type: str, subtype: str) -> list[str]:
 
 
 def remediation_for(finding_type: str, subtype: str) -> list[str]:
-    return list(REMEDIATION.get(subtype) or REMEDIATION.get(finding_type) or [])
+    return detect_adapter.remediation_steps(subtype) or list(REMEDIATION.get(subtype) or REMEDIATION.get(finding_type) or [])
 
 
 def scores(open_findings: list[dict]) -> dict[str, int]:

@@ -258,7 +258,7 @@ def scan_text(text: str, *, context: dict | None = None, policy: dict | None = N
 
 
 def analyze_agent_payload(payload: dict | str, *, direction: str) -> dict:
-    empty = {"is_agent": False, "framework": "unknown", "tools_declared": [], "actions": [], "findings": []}
+    empty = {"is_agent": False, "framework": "unknown", "tools_declared": [], "actions": [], "findings": [], "permissions": {}}
     if _detector is None:
         return empty
     try:
@@ -269,6 +269,15 @@ def analyze_agent_payload(payload: dict | str, *, direction: str) -> dict:
     result["findings"] = [_clean_finding(finding, None, []) for finding in result["findings"]]
     result["actions"] = [{**action, "detail": harden(str(action.get("detail", "")))} for action in result["actions"]]
     return result
+
+
+def remediation_steps(subtype: str) -> list[str]:
+    """Part B's remediation table, or nothing when it has no entry or the package is missing."""
+    try:
+        from shadowscope_detect.remediation import remediation_for
+        return list(remediation_for(subtype) or [])
+    except Exception:
+        return []
 
 
 def classify_process(name: str, cmdline: list[str] | None = None) -> dict:

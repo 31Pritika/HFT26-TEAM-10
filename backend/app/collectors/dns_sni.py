@@ -1,6 +1,7 @@
 """Hostnames from DNS queries and TLS ClientHello SNI, which are plaintext. No decryption of any kind."""
 from __future__ import annotations
 
+import os
 import time
 from typing import Any
 
@@ -76,10 +77,12 @@ class DnsSni(Sniffer):
     def observe(self, host: str, ip: str | None, port: int, client_port: int | None, now: float | None = None) -> None:
         name = matcher.normalize_host(host)
         now = time.monotonic() if now is None else now
+        owner = activity.port_owner(client_port) if client_port else None
+        if activity.is_own_traffic(name) or (owner and owner["pid"] == os.getpid()):
+            return  # Our own LLM triage calls are never reported (master §5, policy.self_exclude).
         if now - self._last_seen.get(name, -HOST_REPEAT_S) < HOST_REPEAT_S or matcher.match(host=name, port=443) is None:
             return
         self._last_seen[name] = now
-        owner = activity.port_owner(client_port) if client_port else None
         pipeline.process({
             "source": "dns_sni", "process": describe_process(owner["pid"], owner["name"]) if owner else None,
             "dest": {"host": name, "ip": ip, "port": port, "protocol": "tls" if port == 443 else "tcp"},

@@ -557,3 +557,24 @@ def test_gone_processes_are_forgotten_without_error(empty_db):
     collector.poll()
     assert empty_db.is_empty()
     activity.clear()
+
+
+# ---- Self-exclusion ------------------------------------------------------------------------------------
+def test_our_own_sni_is_skipped_by_port_owner(empty_db):
+    import os
+    activity.clear()
+    activity.set_port_owners({50000: {"pid": os.getpid(), "name": "python"}})
+    dns_sni.DnsSni().observe("api.groq.com", "1.2.3.4", 443, 50000, now=0)
+    assert empty_db.is_empty()
+    activity.clear()
+
+
+def test_our_own_dns_lookups_are_skipped_during_triage(empty_db):
+    activity.clear()
+    activity.expect_own_traffic(("api.groq.com",), 30)
+    collector = dns_sni.DnsSni()
+    collector.observe("api.groq.com.", None, 53, None, now=0)
+    assert empty_db.is_empty()
+    activity.clear()
+    collector.observe("api.groq.com.", None, 53, None, now=100)
+    assert empty_db.table_count("events") == 1

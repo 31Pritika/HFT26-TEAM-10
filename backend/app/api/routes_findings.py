@@ -3,13 +3,15 @@ from __future__ import annotations
 from fastapi import APIRouter, Query
 from pydantic import ValidationError
 
-from .. import db
+from .. import config, db
 from ..bus import bus
+from ..collectors import activity
 from ..engine import detect_adapter
 from ..models import Finding, FindingDetail, FindingPage, FindingPatch, FindingStatus, FindingType, Severity, TriageRequest, TriageResult
 from .errors import ApiError, not_found
 
 router = APIRouter()
+TRIAGE_HOSTS = ("api.featherless.ai", "api.groq.com")
 
 
 def _require(finding_id: str) -> dict:
@@ -52,6 +54,7 @@ async def triage_finding(finding_id: str, body: TriageRequest | None = None) -> 
     engine = requested or settings["engine"] if settings["enabled"] else "rules"
     event = db.get_event(finding["event_id"]) if finding["event_id"] else None
     context = "\n".join(part for part in (finding["evidence"]["redacted_snippet"], (event or {}).get("payload_preview")) if part)
+    activity.expect_own_traffic(TRIAGE_HOSTS, config.TRIAGE_TIMEOUT_S + 5)
     result = await detect_adapter.triage(finding, context, engine_cfg={"engine": engine, "model": settings["model"]})
     try:
         triage = TriageResult.model_validate(result).model_dump()

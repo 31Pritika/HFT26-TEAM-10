@@ -100,3 +100,26 @@ def test_process_classification(name, cmdline, framework):
 def test_triage_only_receives_hardened_text(builtin):
     result = asyncio.run(adapter.triage({"severity": "high", "remediation": ["x"]}, f"key {AWS}", engine_cfg={}))
     assert AWS not in result["redacted_input_preview"] and result["engine"] == "rules"
+
+
+def test_real_detector_is_active_with_its_real_functions():
+    assert adapter.status()["version"] != "0.1.0"
+    assert adapter.classify_process("python3", ["python3", "langchain_agent.py"])["framework"] == "langchain"
+
+
+def test_canary_from_the_real_detector_is_not_doubled():
+    assert sum(f["type"] == "canary" for f in adapter.scan_text("ref CANARY-SS-7F3A9", policy=POLICY)["findings"]) == 1
+
+
+@pytest.mark.parametrize("text,expected", [
+    ("pan FAKPF1234E", "pan"), ("aadhaar 2345 6789 0124", "aadhaar"), ("password=FAKEexample1", "generic_secret_assignment"),
+])
+def test_snippets_keep_context_with_real_masks(text, expected):
+    finding = next(f for f in adapter.scan_text(text + " trailing words")["findings"] if f["subtype"] == expected)
+    assert finding["evidence"]["match_redacted"] in finding["evidence"]["redacted_snippet"]
+    assert "trailing" in finding["evidence"]["redacted_snippet"]
+
+
+def test_remediation_comes_from_part_b_when_available():
+    assert adapter.remediation_steps("aws_access_key")
+    assert adapter.remediation_steps("no_such_subtype") == []

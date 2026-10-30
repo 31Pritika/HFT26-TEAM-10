@@ -72,13 +72,17 @@ def _rate(recent: list[str], ts: str) -> tuple[int, float]:
     return len(window), sum(gaps) / len(gaps)
 
 
+def loop_fingerprint(process_name: str, framework: str) -> str:
+    return fingerprint(f"loop:{process_name}:{framework}")
+
+
 def _loop_finding(session: dict, requests: int, mean_gap: float, rounds: int) -> dict:
     detail = f"{requests} requests/min, mean gap {mean_gap:.1f} s, {rounds} tool round trips"
     return {
         "type": "agent_action", "subtype": "autonomous_loop", "severity": "medium", "confidence": 0.85,
         "title": "Autonomous agent loop detected", "description": f"{session['process_name']} is acting at machine speed.",
         "evidence": {"redacted_snippet": detail, "match_redacted": detail, "entropy": None, "line": None, "offset": None,
-                     "fingerprint": fingerprint(f"loop:{session['process_name']}:{session['framework']}")},
+                     "fingerprint": loop_fingerprint(session["process_name"], session["framework"])},
         "detector": "anomaly", "compliance": [], "remediation": [],
     }
 
@@ -95,6 +99,9 @@ def update(process: dict, framework: str, provider_id: str | None, ts: str, anal
     for tool in analysis.get("tools_declared") or []:
         for permission, pattern in _PERMISSION_TOOLS.items():
             session["permissions"][permission] |= bool(pattern.search(str(tool)))
+    for permission, granted in (analysis.get("permissions") or {}).items():
+        if permission in session["permissions"]:
+            session["permissions"][permission] |= bool(granted)
     actions = [_record_action(session, raw, ts) for raw in analysis.get("actions") or []]
 
     previous = counters["recent"][-1] if counters["recent"] else None
