@@ -143,3 +143,8 @@ export interface Page<T> {
   items: T[];
   next_cursor: string | null;
 }
+
+export type FindingStatus = "open" | "acknowledged" | "resolved" | "false_positive";
+export type FindingType = "secret" | "pii" | "source_code" | "agent_action" | "shadow_ai" | "canary" | "policy" | "exfil_volume";
+export type AgentStatus = "active" | "idle" | "blocked";
+export type RiskGrade = "A" | "B" | "C" | "D" | "F";
