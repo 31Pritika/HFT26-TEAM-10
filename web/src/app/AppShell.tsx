@@ -133,7 +133,7 @@ export default function AppShell() {
         {/* ======================================================================== */}
         <aside
           className={`hidden md:flex flex-col border-r border-white/[0.08] bg-[#070a14]/80 backdrop-blur-2xl transition-all duration-300 z-30 shrink-0 ${
-            collapsed ? "w-16" : "w-64"
+            collapsed ? "w-16" : "w-16 lg:w-64"
           }`}
         >
           {/* Logo & Brand Header */}
@@ -145,7 +145,7 @@ export default function AppShell() {
                 </div>
               </div>
               {!collapsed && (
-                <div className="flex flex-col">
+                <div className="hidden lg:flex flex-col">
                   <span className="font-display font-bold text-base tracking-tight text-white leading-none">
                     Shadow<span className="text-cyan-400">Scope</span>
                   </span>
@@ -170,8 +170,8 @@ export default function AppShell() {
           <div className="flex-1 overflow-y-auto py-4 px-2 space-y-6 scrollbar-thin">
             <div>
               {!collapsed && (
-                <p className="px-3 mb-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-muted/60">
-                  Detection & Auditing
+                <p className="hidden lg:block px-3 mb-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-muted/60">
+                  Detection &amp; Auditing
                 </p>
               )}
               <ul className="space-y-1">
@@ -185,18 +185,18 @@ export default function AppShell() {
                           isActive
                             ? "text-cyan-300 bg-cyan-500/10 font-semibold"
                             : "text-muted hover:text-text hover:bg-white/[0.05]"
-                        } ${collapsed ? "justify-center" : ""}`
+                        } ${collapsed ? "justify-center" : "justify-center lg:justify-start"}`
                       }
                       title={collapsed ? label : undefined}
                     >
                       {({ isActive }) => (
                         <>
                           <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-cyan-400" : "text-muted"}`} />
-                          {!collapsed && <span>{label}</span>}
+                          {!collapsed && <span className="hidden lg:inline">{label}</span>}
                           {to === "/app/alerts" && unreadCriticals.length > 0 && (
                             <span
                               className={`ml-auto rounded-full bg-red-500/20 px-1.5 py-0.5 font-mono text-[10px] font-bold text-red-400 border border-red-500/30 ${
-                                collapsed ? "absolute top-1 right-1 px-1 py-0 text-[8px]" : ""
+                                collapsed ? "absolute top-1 right-1 px-1 py-0 text-[8px]" : "hidden lg:inline-flex"
                               }`}
                             >
                               {unreadCriticals.length}
@@ -219,8 +219,8 @@ export default function AppShell() {
 
             <div>
               {!collapsed && (
-                <p className="px-3 mb-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-muted/60">
-                  Control & Policies
+                <p className="hidden lg:block px-3 mb-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-muted/60">
+                  Control &amp; Policies
                 </p>
               )}
               <ul className="space-y-1">
@@ -233,14 +233,14 @@ export default function AppShell() {
                           isActive
                             ? "text-cyan-300 bg-cyan-500/10 font-semibold"
                             : "text-muted hover:text-text hover:bg-white/[0.05]"
-                        } ${collapsed ? "justify-center" : ""}`
+                        } ${collapsed ? "justify-center" : "justify-center lg:justify-start"}`
                       }
                       title={collapsed ? label : undefined}
                     >
                       {({ isActive }) => (
                         <>
                           <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-cyan-400" : "text-muted"}`} />
-                          {!collapsed && <span>{label}</span>}
+                          {!collapsed && <span className="hidden lg:inline">{label}</span>}
                           {isActive && (
                             <motion.div
                               layoutId="active-sidebar-pill"
@@ -259,7 +259,7 @@ export default function AppShell() {
 
           {/* Sidebar Footer Posture Card */}
           {!collapsed && (
-            <div className="p-3 border-t border-white/[0.08] bg-[#05070e]/60">
+            <div className="hidden lg:block p-3 border-t border-white/[0.08] bg-[#05070e]/60">
               <div className="rounded-xl border border-white/[0.08] bg-surface/50 p-3 flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <RiskGauge score={riskScore} grade={riskGrade} size="compact" showLabel={false} />
