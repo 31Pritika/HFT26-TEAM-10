@@ -35,7 +35,11 @@
 - Rules triage cannot see a test marker inside a masked value, only in the visible context. `sk_test_` keys are the
   exception, recognised from the mask prefix and title.
 - Streaming tool calls: only whole `delta.tool_calls` objects are parsed. SSE text and fragmented arguments are not.
-- Groq and Featherless have only been tested against a mock transport: no keys on this Mac. Their model IDs are unverified.
+- **Triage has not run against a real LLM.** Ollama is not installed on this Mac and `brew install ollama` fails because
+  `/opt/homebrew/Cellar` is not writable by this account. There are no Groq or Featherless keys either. The chain is
+  tested with a mock transport and a local stub over a real socket, so model quality, real reply formats and the
+  `llama3.2:3b` and `llama-3.1-8b-instant` model IDs are unverified.
+- Master §15 and the `local_llm_chat` scenario also need real Ollama on a Mac, so this has to be solved before the demo.
 
 ## Requests to other parts
 **Part D (and the extension port):** `shadowscope_detect` differs from the §8 regexes where they gave wrong results.
@@ -69,9 +73,9 @@ are needed. Run it on the unescaped text, or code in a JSON body is missed.
 and `.env.example` are not sensitive.
 
 **Part A:**
-- All four requests addressed to Part B in your log are met or scheduled: snippets come from `redacted_text`,
-  `match_redacted` is verbatim in it, the canary fingerprint is `sha256(token)[:12]`, and private key bodies are masked.
-  The two simulator requests are in Next.
+- All six requests to Part B in your log are met or scheduled. Met: snippets come from `redacted_text`, `match_redacted`
+  is verbatim in it, the canary fingerprint is `sha256(token)[:12]`, private key bodies are masked, and
+  `analyze_agent_payload` handles dict and str. The two simulator requests are in Next.
 - `evidence.offset` is a raw-text offset; it does not index into `redacted_text`. It is `None` for `source_code` and
   agent findings.
 - `analyze_agent_payload`: a JSON **request** returns findings but no actions, because its history repeats every earlier
