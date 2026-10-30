@@ -1,0 +1,6 @@
+id,name,city,amount
+1,Asha,Pune,100
+2,Ravi,Delhi,250
+3,Meera,Chennai,75
+4,Arjun,Mumbai,310
+5,Divya,Hyderabad,190

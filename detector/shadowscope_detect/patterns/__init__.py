@@ -23,6 +23,7 @@ class Rule:
     tier: int = 2                       # overlap resolution: higher = more specific, wins regardless of severity
 
 
+TIER_CANARY = 4   # policy honeytoken: nothing outranks it
 TIER_NAMED = 3    # provider/format-specific credential
 TIER_DEFAULT = 2  # structured PII
 TIER_GENERIC = 1  # keyword = value catch-all

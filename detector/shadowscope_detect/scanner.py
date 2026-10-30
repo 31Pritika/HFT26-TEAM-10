@@ -8,10 +8,11 @@ from bisect import bisect_left, bisect_right
 from dataclasses import dataclass
 
 from . import entropy
+from .code_detect import detect_code
 from .patterns import Rule
 from .patterns.pii import BULK_EMAILS, BULK_IDENTITY_DOCS, BULK_PII, PII_RULES
-from .patterns.secrets import HIGH_ENTROPY_STRING, SECRET_RULES
-from .redact import MASK_CHAR, Region, Span, apply_masks, merge_spans
+from .patterns.secrets import CANARY_TOKEN, HIGH_ENTROPY_STRING, SECRET_RULES
+from .redact import MASK_CHAR, Region, Span, apply_masks, mask_value, merge_spans
 from .remediation import compliance_for, remediation_for
 from .types import DetFinding, ScanResult, Severity
 from .validators import VALIDATORS, Verdict
@@ -78,6 +79,17 @@ def _regex_candidates(view: str) -> list[_Candidate]:
             if verdict is not None:
                 start, end = verdict.span or (start, end)
                 candidates.append(_Candidate(rule, start, end, verdict))
+    return candidates
+
+
+def _canary_candidates(text: str, tokens: list[str]) -> list[_Candidate]:
+    verdict = Verdict(detail="A policy canary token appeared in this text.")
+    candidates = []
+    for token in tokens:
+        start = text.find(token) if token else -1
+        while start >= 0:
+            candidates.append(_Candidate(CANARY_TOKEN, start, start + len(token), verdict))
+            start = text.find(token, start + len(token))
     return candidates
 
 
@@ -195,6 +207,21 @@ def _bulk_finding(text: str, kept: list[_Candidate], evidence: _Evidence) -> Det
     )
 
 
+def _code_finding(redacted: str) -> DetFinding | None:
+    """Runs on the redacted text, so the excerpt cannot hold a secret. There is no span to point at: code is a whole
+    payload property, so line and offset stay None and nothing is added to the mask set."""
+    code = detect_code(_scan_view(redacted))
+    if code is None:
+        return None
+    excerpt = mask_value(code.excerpt)
+    return _finding(
+        code.rule, severity=code.rule.severity, confidence=code.rule.confidence, title=code.rule.title,
+        description=f"{code.rule.title}.",
+        evidence={"redacted_snippet": excerpt, "match_redacted": excerpt, "entropy": None, "line": None, "offset": None,
+                  "fingerprint": _fingerprint(redacted)},
+    )
+
+
 def _risk_score(findings: list[DetFinding]) -> int:
     weights = sorted((_WEIGHTS[f["severity"]] for f in findings), reverse=True)
     return min(100, round(sum(weight * _RISK_DECAY ** i for i, weight in enumerate(weights))))
@@ -203,10 +230,11 @@ def _risk_score(findings: list[DetFinding]) -> int:
 def scan_text(text: str, *, context: dict | None = None, policy: dict | None = None) -> ScanResult:
     """Find secrets and PII in `text`. Raw matches never leave this function: every field of the result is masked."""
     started = time.perf_counter()
-    threshold = (policy or {}).get("entropy_threshold", entropy.DEFAULT_THRESHOLD)
+    policy = policy or {}
+    threshold = policy.get("entropy_threshold", entropy.DEFAULT_THRESHOLD)
 
     view = _scan_view(text)
-    candidates = _regex_candidates(view)
+    candidates = _regex_candidates(view) + _canary_candidates(text, policy.get("canary_tokens") or [])
     taken = merge_spans(Span(c.start, c.end) for c in candidates)
     entropy_found, entropy_max = _entropy_candidates(view, taken, threshold)
     candidates += entropy_found
@@ -217,11 +245,9 @@ def scan_text(text: str, *, context: dict | None = None, policy: dict | None = N
 
     evidence = _Evidence(text, redacted, regions)
     findings = [_candidate_finding(c, evidence.build(c)) for c in kept]
-    bulk = _bulk_finding(text, kept, evidence)
     entropy_max = max((entropy_max, *(f["evidence"]["entropy"] for f in findings)))
-    if bulk:
-        findings.append(bulk)
-    findings.sort(key=lambda f: (-_SEVERITY_RANK[f["severity"]], f["evidence"]["offset"]))
+    findings += filter(None, (_bulk_finding(text, kept, evidence), _code_finding(redacted)))
+    findings.sort(key=lambda f: (-_SEVERITY_RANK[f["severity"]], f["evidence"]["offset"] or 0))
 
     return {
         "findings": findings,

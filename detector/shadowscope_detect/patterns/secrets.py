@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import re
 
-from . import TIER_GENERIC, TIER_NAMED, Rule
+from . import TIER_CANARY, TIER_GENERIC, TIER_NAMED, Rule
 
 
 def _secret(id: str, pattern: str, severity: str, title: str, *, flags: int = re.ASCII, tier: int = TIER_NAMED,
@@ -92,6 +92,11 @@ GENERIC_SECRET_ASSIGNMENT = _secret(
 HIGH_ENTROPY_STRING = Rule(
     id="high_entropy_string", type="secret", regex=None, severity="medium", title="High-entropy token",
     detector="entropy", tier=0,
+)
+
+CANARY_TOKEN = Rule(
+    id="canary_token", type="canary", regex=None, severity="critical", title="Honeytoken tripped", confidence=1.0,
+    tier=TIER_CANARY,
 )
 
 SECRET_RULES: tuple[Rule, ...] = (

@@ -95,7 +95,9 @@ _TAGS: dict[str, tuple[str, ...]] = {
     "exfil_volume": ("ISO27001",),
 }
 
-REMEDIATION: dict[str, tuple[str, ...]] = {subtype: steps for group in _STEPS.values() for subtype, steps in group.items()}
+REMEDIATION: dict[str, tuple[str, ...]] = {
+    subtype: steps for group in _STEPS.values() for subtype, steps in group.items()
+}
 COMPLIANCE: dict[str, tuple[str, ...]] = {
     subtype: _TAGS[finding_type] for finding_type, group in _STEPS.items() for subtype in group
 }
