@@ -1,9 +1,11 @@
 """Framework scores, findings → framework mapping, remediation defaults and the report (master §9)."""
 from __future__ import annotations
 
+from collections import Counter
 from collections.abc import Callable
 
 from .. import db
+from ..fingerprints import matcher
 from ..utils import clamp, now, to_iso, window_start
 from . import agents, detect_adapter, risk, stats
 
@@ -34,28 +36,96 @@ REMEDIATION: dict[str, list[str]] = {
     "exfil_volume": ["Inspect the destination and payload", "Pause the process until it is reviewed"],
 }
 
+
+
+def _is_pii(finding: dict) -> bool:
+    return finding["type"] == "pii"
+
+
+def _is_secret(finding: dict) -> bool:
+    return finding["type"] == "secret"
+
+
+def _is_sensitive_pii(finding: dict) -> bool:
+    return finding["subtype"] in ("aadhaar", "pan", "bulk_pii", "credit_card", "passport_in", "us_ssn")
+
+
+def _is_serious_pii(finding: dict) -> bool:
+    return _is_pii(finding) and finding["severity"] in ("critical", "high")
+
+
+def _left_for_cloud(finding: dict) -> bool:
+    provider = matcher.provider_by_id(finding["provider_id"])
+    return provider is not None and provider["category"] != "local_llm"
+
+
+def _pii_in_cloud(finding: dict) -> bool:
+    return _is_pii(finding) and _left_for_cloud(finding)
+
+
+def _is_card(finding: dict) -> bool:
+    return finding["subtype"] == "credit_card"
+
+
+def _is_shadow(finding: dict) -> bool:
+    return finding["type"] in ("shadow_ai", "policy")
+
+
+def _is_agent(finding: dict) -> bool:
+    return finding["type"] == "agent_action"
+
+
+def _is_exfil(finding: dict) -> bool:
+    return finding["type"] in ("exfil_volume", "canary")
+
+
+def _is_code(finding: dict) -> bool:
+    return finding["type"] == "source_code"
+
+
+def _is_dangerous_agent(finding: dict) -> bool:
+    return _is_agent(finding) and finding["severity"] in ("critical", "high")
+
+
 _FRAMEWORKS: list[dict] = [
     {"id": "DPDP", "name": "India DPDP Act 2023", "controls": [
-        ("DPDP-8.5", "Reasonable security safeguards", _RULES["DPDP"]),
-        ("DPDP-8.6", "Breach notification readiness", lambda f: f["subtype"] in ("aadhaar", "pan", "bulk_pii")),
+        ("DPDP-S4", "Personal data handled for a lawful purpose", _is_pii),
+        ("DPDP-S8.4", "Technical and organisational measures", _is_serious_pii),
+        ("DPDP-S8.5", "Reasonable security safeguards", lambda f: _is_pii(f) or _is_secret(f)),
+        ("DPDP-S8.6", "Breach notification readiness", _is_sensitive_pii),
+        ("DPDP-S8.7", "Erasure from third-party systems", _pii_in_cloud),
+        ("DPDP-S16", "Transfer of personal data outside India", _pii_in_cloud),
     ]},
     {"id": "GDPR", "name": "GDPR", "controls": [
-        ("GDPR-5", "Data minimisation", _RULES["GDPR"]),
-        ("GDPR-32", "Security of processing", lambda f: f["type"] == "pii" and f["severity"] in ("critical", "high")),
+        ("GDPR-5", "Data minimisation", _is_pii),
+        ("GDPR-6", "Lawful basis for processing", _pii_in_cloud),
+        ("GDPR-25", "Data protection by design", _is_serious_pii),
+        ("GDPR-32", "Security of processing", lambda f: _is_pii(f) or _is_secret(f)),
+        ("GDPR-33", "Breach notification readiness", _is_sensitive_pii),
+        ("GDPR-44", "International transfers", _pii_in_cloud),
     ]},
     {"id": "SOC2", "name": "SOC 2", "controls": [
-        ("CC6.1", "Logical access controls", lambda f: f["type"] == "secret"),
-        ("CC6.8", "Unauthorised software", lambda f: f["type"] == "shadow_ai"),
-        ("CC7.2", "Monitoring of anomalous activity", lambda f: f["type"] == "agent_action"),
+        ("CC6.1", "Logical access controls", _is_secret),
+        ("CC6.6", "Protection at system boundaries", lambda f: _is_shadow(f) or _is_exfil(f)),
+        ("CC6.7", "Restricted transmission of information", lambda f: _is_secret(f) or _is_pii(f)),
+        ("CC6.8", "Prevention of unauthorised software", _is_shadow),
+        ("CC7.2", "Monitoring of anomalous activity", lambda f: _is_agent(f) or _is_exfil(f)),
+        ("CC7.3", "Evaluation of security events", _is_dangerous_agent),
     ]},
     {"id": "PCI-DSS", "name": "PCI-DSS", "controls": [
-        ("PCI-3", "Protect stored account data", _RULES["PCI-DSS"]),
-        ("PCI-4", "Protect cardholder data in transit", _RULES["PCI-DSS"]),
+        ("PCI-3", "Protect stored account data", _is_card),
+        ("PCI-4", "Protect cardholder data in transit", lambda f: _is_card(f) and _left_for_cloud(f)),
+        ("PCI-7", "Restrict access to cardholder data", lambda f: _is_card(f) or _is_dangerous_agent(f)),
+        ("PCI-10", "Log and monitor access", lambda f: _is_card(f) or _is_exfil(f)),
+        ("PCI-12", "Information security policy", lambda f: _is_card(f) or _is_shadow(f)),
     ]},
     {"id": "ISO27001", "name": "ISO 27001", "controls": [
-        ("A.5.14", "Information transfer", lambda f: f["type"] in ("secret", "pii", "source_code", "exfil_volume")),
-        ("A.8.12", "Data leakage prevention", lambda f: f["type"] in ("canary", "exfil_volume", "policy")),
+        ("A.5.14", "Information transfer", lambda f: _is_secret(f) or _is_pii(f) or _is_code(f)),
+        ("A.5.23", "Use of cloud services", _is_shadow),
+        ("A.8.11", "Data masking", _is_pii),
+        ("A.8.12", "Data leakage prevention", lambda f: _is_exfil(f) or _is_code(f)),
         ("A.8.16", "Monitoring activities", _RULES["ISO27001"]),
+        ("A.8.19", "Software installation on operational systems", _is_dangerous_agent),
     ]},
 ]
 
@@ -78,39 +148,75 @@ def scores(open_findings: list[dict]) -> dict[str, int]:
     return result
 
 
+def _names(findings: list[dict], limit: int = 3) -> str:
+    """The tools involved, most frequent first."""
+    counts = Counter(f["process_name"] or "unknown" for f in findings)
+    names = [name for name, _ in counts.most_common(limit)]
+    extra = len(counts) - len(names)
+    return ", ".join(names) + (f" and {extra} more" if extra > 0 else "")
+
+
 def _control(control_id: str, name: str, rule: Callable[[dict], bool], open_findings: list[dict]) -> dict:
     matched = [f for f in open_findings if rule(f)]
     serious = sum(f["severity"] in ("critical", "high") for f in matched)
     status = "fail" if serious else "warn" if matched else "pass"
-    evidence = f"{len(matched)} open findings, {serious} critical or high" if matched else "No open findings"
+    if not matched:
+        return {"id": control_id, "name": name, "status": status, "evidence": "No open findings in scope"}
+    evidence = f"{len(matched)} open findings, {serious} critical or high. Tools: {_names(matched)}"
     return {"id": control_id, "name": name, "status": status, "evidence": evidence}
 
 
+def _recommendation(priority: str, title: str, detail: str) -> dict:
+    return {"priority": priority, "title": title, "detail": detail}
+
+
 def _recommendations(open_findings: list[dict], sessions: list[dict], inventory: list[dict]) -> list[dict]:
+    """Every entry comes from something open right now, and names what it affects."""
+    def matching(rule: Callable[[dict], bool]) -> list[dict]:
+        return [f for f in open_findings if rule(f)]
+
     items = []
-    secrets = sum(f["type"] == "secret" and f["severity"] == "critical" for f in open_findings)
+    secrets = matching(lambda f: _is_secret(f) and f["severity"] == "critical")
     if secrets:
-        items.append({"priority": "P0", "title": "Rotate exposed credentials",
-                      "detail": f"{secrets} critical secrets reached AI tools. Revoke them, starting with cloud and database keys."})
+        items.append(_recommendation("P0", "Rotate exposed credentials", f"{len(secrets)} critical secrets reached AI tools through {_names(secrets)}. Revoke them, starting with cloud and database keys."))
+    canaries = matching(lambda f: f["type"] == "canary")
+    if canaries:
+        items.append(_recommendation("P0", "Investigate tripped honeytokens", f"{len(canaries)} canary tokens appeared in traffic from {_names(canaries)}. Treat this as an active leak."))
+    cards = matching(_is_card)
+    if cards:
+        items.append(_recommendation("P0", "Contain card data exposure", f"{len(cards)} card numbers reached {_names(cards)}. Follow your PCI-DSS incident process."))
     risky = [session for session in sessions if session["risk_score"] >= 70 and session["status"] != "blocked"]
     if risky:
         names = ", ".join(sorted({session["process_name"] for session in risky}))
-        items.append({"priority": "P0", "title": "Sandbox high-risk agents", "detail": f"Require human approval for shell and file tools in: {names}."})
-    personal = sum(f["type"] == "pii" for f in open_findings)
+        items.append(_recommendation("P0", "Sandbox high-risk agents", f"Require human approval for shell and file tools in: {names}."))
+    blocked = matching(lambda f: f["type"] == "policy")
+    if blocked:
+        items.append(_recommendation("P0", "Stop traffic to blocked providers", f"{len(blocked)} contacts with blocked providers from {_names(blocked)}. Block them at the network edge."))
+    personal = matching(_is_pii)
     if personal:
-        items.append({"priority": "P1", "title": "Review personal data exposure",
-                      "detail": f"{personal} open PII findings. Check whether DPDP notification duties apply."})
-    if any(not item["sanctioned"] for item in inventory):
-        shadow = sum(not item["sanctioned"] for item in inventory)
-        items.append({"priority": "P2", "title": "Publish a sanctioned AI tool list", "detail": f"{shadow} unsanctioned tools are in use. Give teams an approved alternative."})
-    return items or [{"priority": "P2", "title": "Keep monitoring", "detail": "No open risks need action right now."}]
+        items.append(_recommendation("P1", "Review personal data exposure", f"{len(personal)} open PII findings from {_names(personal)}. Check whether DPDP or GDPR notification duties apply."))
+    exfil = matching(lambda f: f["type"] == "exfil_volume")
+    if exfil:
+        items.append(_recommendation("P1", "Review unusual upload volume", f"{len(exfil)} volume spikes from {_names(exfil)}. Inspect the destination and pause the process until reviewed."))
+    code = matching(_is_code)
+    if code:
+        items.append(_recommendation("P1", "Move code review to a sanctioned tool", f"{len(code)} source code findings from {_names(code)}."))
+    leaks = matching(lambda f: _is_secret(f) or _is_pii(f))
+    if leaks:
+        items.append(_recommendation("P1", "Route AI traffic through the Local Gateway", f"Point {_names(leaks)} at the gateway so critical leaks are blocked before they leave."))
+    shadow = [item["process_name"] for item in inventory if not item["sanctioned"]]
+    if shadow:
+        named = ", ".join(shadow[:3]) + (f" and {len(shadow) - 3} more" if len(shadow) > 3 else "")
+        items.append(_recommendation("P2", "Publish a sanctioned AI tool list", f"{len(shadow)} unsanctioned tools are in use, including {named}."))
+    return items or [_recommendation("P2", "Keep monitoring", "No open risks need action right now.")]
 
 
 def build_report(window: str) -> dict:
     moment = now()
     since = to_iso(window_start(window, moment))
-    open_findings = db.open_findings()
-    org = risk.org_score(open_findings, moment)
+    all_open = db.open_findings()
+    open_findings = [f for f in all_open if f["ts"] >= since]
+    org = risk.org_score(all_open, moment)
     framework_scores = scores(open_findings)
     sessions = agents.list_sessions()
     inventory = db.list_inventory()

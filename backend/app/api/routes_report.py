@@ -15,7 +15,8 @@ from ..utils import to_iso, window_start
 from .routes_overview import Window
 
 router = APIRouter()
-CSV_COLUMNS = ("id", "ts", "severity", "type", "subtype", "status", "title", "provider_id", "process_name", "match_redacted", "compliance")
+CSV_COLUMNS = ("id", "ts", "severity", "type", "subtype", "status", "confidence", "title", "description", "provider_id", "process_name",
+               "event_id", "match_redacted", "redacted_snippet", "compliance", "remediation")
 PAGE_SIZE = 500
 
 
@@ -36,7 +37,7 @@ def _findings_csv(window: str) -> str:
         for finding in items:
             if finding["ts"] < since:
                 return buffer.getvalue()
-            row = {**finding, "match_redacted": finding["evidence"]["match_redacted"], "compliance": " ".join(finding["compliance"])}
+            row = {**finding, **finding["evidence"], "compliance": " ".join(finding["compliance"]), "remediation": "; ".join(finding["remediation"])}
             writer.writerow([_csv_cell(row[column]) for column in CSV_COLUMNS])
         if cursor is None:
             return buffer.getvalue()
