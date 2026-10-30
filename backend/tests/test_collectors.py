@@ -474,3 +474,86 @@ def test_self_traffic_is_not_recorded(empty_db):
 def test_pcap_upload_parser_still_handles_interim_responses():
     responses = pcap.read_http(b"HTTP/1.1 100 Continue\r\n\r\n" + response(b"r"), pcap.RESPONSE_LINE, True)
     assert [item.body for item in responses] == [b"r"]
+
+
+# ---- agent_watch ---------------------------------------------------------------------------------------
+import subprocess  # noqa: E402
+import sys  # noqa: E402
+import time  # noqa: E402
+
+from app.collectors import agent_watch  # noqa: E402
+
+
+@pytest.mark.parametrize("path,process,expected", [
+    ("/Users/dev/.ssh/id_rsa", "python3", "critical"),
+    ("/etc/shadow", "python3", "critical"),
+    ("/Users/dev/.aws/credentials", "python3", "high"),
+    ("/repo/.env", "python3", "high"),
+    ("/repo/.env.example", "python3", None),
+    ("/repo/src/environment.py", "python3", None),
+    ("/Users/dev/Library/Google/Chrome/Default/Cookies", "python3", "high"),
+    ("/Users/dev/Library/Google/Chrome/Default/Cookies", "Google Chrome Helper", None),
+    ("/Users/dev/Library/Google/Chrome/Default/Login Data", "Microsoft Edge", None),
+    ("/Users/dev/.ssh/id_rsa", "Google Chrome", "critical"),
+    ("/tmp/notes.txt", "python3", None),
+])
+def test_sensitive_paths(path, process, expected):
+    found = agent_watch.classify_path(path, process)
+    assert (found[1] if found else None) == expected
+
+
+def test_shell_command_lines_are_masked():
+    analysis = agent_watch.shell_analysis("python3", "sh", "sh -c 'curl -H key:AKIAFAKEFAKEFAKE1234 x'")
+    assert "AKIAFAKEFAKEFAKE1234" not in str(analysis) and analysis["findings"][0]["subtype"] == "shell_spawn"
+
+
+DEST = {"host": "localhost", "ip": "127.0.0.1", "port": 11434, "protocol": "tcp"}
+
+
+def test_real_child_shell_is_reported_once(empty_db):
+    activity.clear()
+    collector = agent_watch.AgentWatch()
+    me = __import__("os").getpid()
+    activity.mark_active(me, {"pid": me, "name": "python3"}, DEST)
+    child = subprocess.Popen(["sh", "-c", "sleep 5; true"])  # Two commands, or sh would exec straight into sleep.
+    try:
+        time.sleep(0.1)
+        collector.poll()
+        collector.poll()
+    finally:
+        child.kill()
+        child.wait()
+        activity.clear()
+    findings = empty_db.list_findings()[0]
+    assert [f["subtype"] for f in findings if f["subtype"] == "shell_spawn"] == ["shell_spawn"]
+    session = empty_db.find_agent("python3", "unknown")
+    assert session is not None and session["permissions"]["shell"]
+
+
+def test_real_sensitive_open_file_is_reported(empty_db, tmp_path):
+    activity.clear()
+    secret_dir = tmp_path / ".aws"
+    secret_dir.mkdir()
+    path = secret_dir / "credentials"
+    path.write_text("fake")
+    script = f"import time\nf=open({str(path)!r})\ntime.sleep(5)\n"
+    child = subprocess.Popen([sys.executable, "-c", script])
+    try:
+        time.sleep(0.4)
+        activity.mark_active(child.pid, {"pid": child.pid, "name": "worker"}, DEST)
+        collector = agent_watch.AgentWatch()
+        collector.poll()
+    finally:
+        child.kill()
+        child.wait()
+        activity.clear()
+    assert any(f["subtype"] == "sensitive_file_read" and f["severity"] == "high" for f in empty_db.list_findings()[0])
+
+
+def test_gone_processes_are_forgotten_without_error(empty_db):
+    activity.clear()
+    activity.mark_active(99999999, {"pid": 99999999, "name": "gone"}, DEST)
+    collector = agent_watch.AgentWatch()
+    collector.poll()
+    assert empty_db.is_empty()
+    activity.clear()
