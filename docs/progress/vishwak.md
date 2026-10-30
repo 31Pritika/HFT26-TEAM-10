@@ -48,10 +48,19 @@ Phase 4 complete on `vishwak/core-engine`.
 - Hardening: body size limits, one error format, `SHADOWSCOPE_CORS_ORIGINS`, `SHADOWSCOPE_CLOUD=1`, `Dockerfile`, `render.yaml`. `docs/backend.md` written.
 - Bugs fixed: redaction took quadratic time on text with no spaces (40 KB took 7 s), PCAP upload would have failed on Windows, Electron apps' own Cookies files raised false HIGH findings, and connection reports counted as requests and tool round trips.
 
+Integration fixes on `vishwak/integration-fixes`, after all four parts reached `main` (`f81b0fa`).
+- The extension's findings now reach the engine. They are redacted again on arrival, and malformed ones are skipped.
+- Runs started from `/api/simulate` carry a `run:<run_id>` tag. `loopback` skips requests marked `X-ShadowScope-Sim`, so they aren't counted twice.
+- `/health` reports `ollama` only when the configured model is installed (cached 30 s, marked as self-traffic), and `featherless` only when a model is set too.
+- `OLLAMA_MODEL` added to `.env.example`, which is a shared file.
+- `demo.sh` ran all 9 real simulator scenarios against the engine (no sudo): findings fit §B6, and the gateway returned 403. This closes Goal 5 of Phase 3.
+- Browser pass on `main` with this branch's backend: every page in live and demo mode at 1440 and 375 px, plus simulate, triage, status change, uploads and the `/report` PDF (8 pages). Results are under Requests.
+- 414 backend, 1,494 detector and 507 simulator and extension tests pass. All four sample files create events and findings on a fresh database.
+
 ## Next
 - Run `sudo scripts/verify_capture.sh` and review the output.
-- Kevin or Pritika: run `scripts\start.ps1` once on real Windows.
-- Run all §B6 scenarios once `simulator/run.py` exists.
+- Set `OLLAMA_MODEL=gemma3:4b` in `.env`, or add a Groq key, so AI Analyst uses an LLM on this Mac.
+- Run `start.sh --sudo` once the capture check passes. Docker and Render have not been run.
 
 ## Issues
 - **Live capture under sudo is not verified yet.** It needs a password, so `dns_sni` and `loopback` have never run against real packets. `loopback` parsing was checked with real Ollama bytes recorded through a local relay, and the DB ownership fix for sudo has unit tests only.
@@ -61,7 +70,6 @@ Phase 4 complete on `vishwak/core-engine`.
 - **Shared CDN IPs can give false matches.** `process_conn` matches them at confidence 0.6, which is still reported.
 - **`shell_spawn` fires on normal use of Cursor and Claude Code**, as §A3 specifies. It was seen on this machine. Repeats are limited by the 10-minute dedupe.
 - **The seed scripts its detection step** (`app/seed_catalog.py`) because the detector stub only finds AWS keys and emails. Risk, dedupe, inventory and agents are computed by the real pipeline. Revisit once Part B's detector is merged.
-- **Goal 5 of Phase 3 is not done: `simulator/` is still only a README.** All 9 scenarios ran through `/api/simulate` on the canned fallback and raised findings, but that tests the backend path, not the simulator or the §B6 table. `/simulate` and `/scenarios` switch to the CLI automatically when it exists.
 - **Ollama cold start.** The first triage after the model unloads takes over 12 s, so it hits the detector's engine limit and answers with rules. Asking again gets the LLM (about 5 s). Warm the model before the demo. `auto` also uses `llama3.2:3b`, which isn't installed here, so the Policy must set engine `ollama` and model `gemma3:4b`.
 - **On the seeded data most controls show `fail`**, because critical findings are open in most scopes. That is accurate, but expect few passes in the demo.
 - **The org score saturates after a burst of critical findings.** Running all scenarios took it from 48 to 96, and later changes then move it only slightly.
@@ -79,13 +87,21 @@ Phase 4 complete on `vishwak/core-engine`.
 - `OLLAMA_MODEL` is fixed at `llama3.2:3b` in `triage/engine.py`, so `auto` can't use another installed model. Please read it from an `OLLAMA_MODEL` env var. `model` in `engine_cfg` only applies when an engine is named.
 - The seed and canned simulator still use `seed_catalog.py`. I kept it so raw fake values never exist in the engine, and so the fallback works without the package.
 - `gateway_block` must only send fake secrets that the detector rates critical. The gateway forwards anything else to the real provider, which would break golden rule 5. An AWS key is enough.
+- Your Part A requests are done: extension `findings`, `--run-id` and the `X-ShadowScope-Sim` skip. `autonomous_loop` was already one finding per session.
+- Extension: still needs a run on real sites and in Edge. Paste only, never Send.
+- `bench.py` gave a steady 3.3 MB/s on this Mac, against 5.5 in your docs. Please state which machine that figure came from.
 
 **Part C (Kevin)** (found running the dashboard against the live engine)
-- `Overview.tsx` ~line 840-866: the collector strip is hardcoded (`active: true`, always `LIVE`), and line 245 hardcodes "5 Collectors Active". Without sudo, `dns_sni` and `loopback` are off, but the page says they're live. Please use `overview.collectors` or the store's `collectors`. There are six now, including `gateway`.
-- `Overview.tsx` line 745: severity bars divide all-status counts by `totals.findings_open`, so percentages add up to over 100%. Divide by the sum of `by_severity`.
-- `Overview.tsx` line 798: "Revoke 2 exposed AWS IAM credentials" is hardcoded. `/report` has real recommendations.
+- `Overview.tsx` line 810: "Revoke 2 exposed AWS IAM credentials" is still hardcoded. `/report` has real recommendations.
 - Line 332 states ports 8787 / 8788 / 8789 as active, which isn't checked.
-- `Ingest.tsx`: the "Wireshark PCAP" Load Sample button uploads text, not a real capture, so the live engine answers 400 "This is not a readable PCAP file". The HAR and JSONL samples work. Please use Part B's `simulator/samples/demo.pcap` when it exists, or hide this one in live mode.
+- `Ingest.tsx`: the PCAP Load Sample button still gets a 400, because it uploads text. `simulator/samples/demo.pcap` works when uploaded, so use that file.
+- **Kill switch:** `Agents.tsx` line 81 changes local state only. The engine still shows no blocked agents, and the block is gone after a reload, yet the toast says the PID was terminated. Please reword it, or ask for a backend block.
+- `Alerts.tsx` line 66 loads 100 findings and never pages: the tab showed `ALL 100` with 222 open. `next_cursor` is available.
+- `Alerts.tsx` ignores `?process=`, so the Threat Graph link doesn't filter.
+- `Settings.tsx` line 329: the API base override only shows a toast.
+- `Simulate.tsx` line 138: the mini-feed shows the newest 6 items from every source. Filter on the `run:<run_id>` tag, which is now set on every run.
+- The command palette can't jump to an alert by ID (spec C3).
+- `web/index.html` line 5 still uses Vite's default favicon, and there is no `og:image`. Pritika's files are in `web/public/experience/`.
 
 - While the backend is partial, a laptop running it alongside the web app sees the engine as live, so set `VITE_DEMO_MODE=true` in the root `.env` if you see errors. All §5 endpoints exist on this branch now, so this stops mattering after the checkpoint merge.
 - `/health` has an extra `detector` key. `next_cursor` is an opaque string.
@@ -102,10 +118,17 @@ Phase 4 complete on `vishwak/core-engine`.
 - Triage can take up to 20 s. A rules answer can be asked for again.
 
 **Part D (Pritika)**
-- Landing logs a React error on load: "Attempted to synchronously unmount a root while React was already rendering".
-- At last check `/app/graph`, `/report`, `/playground`, `/architecture` and 404 were still placeholders, so they have not been tested against the engine.
+- Landing still logs a React error on desktop load: "Attempted to synchronously unmount a root while React was already rendering". It repeated on every recheck, in live and demo mode.
+- `/architecture` overflows by 60 px at 375 px wide.
+- Playground misses §8 rules, measured on Part B's 80 fixtures. Never: `high_entropy_string`, `phone_intl`, `ifsc`, `passport_in`. Partly: `generic_secret_assignment` 2/7, `phone_in` 2/4, `aws_secret_key` 1/2, `db_connection_url` 2/3, `aadhaar` 2/3, `credit_card` 9/10. Absent: `recon`, `unverified_tool_call`. False positives include `react@18.2.0`, `git@github.com:...`, `10.0.19041.1` and `.env.example`. `extension/src/scanner.js` is a tested port you can reuse.
+- README: 6 references to `docs/media/`, which doesn't exist, no demo link, and `<your-username>` in the clone command. `vishwak-b`, `kevin-tejas` and `aaraadhyaa-r` return 404; the real handles are `VBodduku`, `kevintejas07` and `aaraadhyaVanama`.
+- `DEMO_SCRIPT.md` says the kill switch revokes permissions in real time, which it doesn't, and uses mock details (`PID 2841`, 92% autonomy).
+- The 404 page says eBPF and 22 fingerprints. We don't use eBPF, and there are 30 providers.
+- Deployment: nothing is deployed, and without `web/vercel.json` rewrites a refresh on `/app/alerts` will likely 404.
+- The submission PR to `cbitosc` isn't open. PR #4 went to the fork.
 
 **Team (contracts are frozen, flagging only)**
 - `contracts/mock/findings.json` tags `source_code`, `canary`, `policy` and `exfil_volume` findings with SOC2, which §9 doesn't map. The engine follows §9, so live SOC2 scores won't match the mock's logic.
 - `block_on_critical` is additive to frozen §6 `Policy`, because spec §A5 asks for it as a policy flag.
+- `ExtensionEvent.findings` is additive to frozen §6, because the extension scans before it redacts.
 - `/scan` events use source `log` (or `extension`), because §6 `Source` has no `playground` value.

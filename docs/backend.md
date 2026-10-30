@@ -133,7 +133,7 @@ Base URL `http://localhost:8787/api`. JSON throughout, timestamps are ISO-8601 U
 | POST | `/simulate` | `{scenario_id, intensity?}` |
 | GET | `/report` | `?window` |
 | GET | `/report/export` | `?format=json\|csv&window` |
-| POST | `/extension/event` | Browser extension events. Cloud mode: disabled |
+| POST | `/extension/event` | Browser extension events, with the extension's own findings in an extra `findings` list. They are redacted again on arrival. Cloud mode: disabled |
 | POST | `/admin/reset` | Dev only: wipe and re-seed. This machine only |
 | WS | `/ws/stream` | Messages `event`, `finding`, `stats`, `agent`, `collector`. Other sites' origins are refused |
 
@@ -150,7 +150,7 @@ Environment variables, or a `.env` file in the repo root.
 | `SHADOWSCOPE_COLLECTORS` | `1` | `0` turns off collectors and the gateway |
 | `SHADOWSCOPE_ALLOW_REMOTE` | off | `1` lets other machines use `/observations` |
 | `SHADOWSCOPE_GATEWAY_PORT` | `8789` | Gateway port |
-| `FEATHERLESS_API_KEY`, `FEATHERLESS_MODEL`, `GROQ_API_KEY`, `OLLAMA_URL` | none | LLM triage engines |
+| `FEATHERLESS_API_KEY`, `FEATHERLESS_MODEL`, `GROQ_API_KEY`, `OLLAMA_URL`, `OLLAMA_MODEL` | none | LLM triage engines. `/health` shows `ollama` only when `OLLAMA_MODEL` (default `llama3.2:3b`) is installed |
 
 For local Ollama triage, set the policy `llm_triage` to engine `ollama` and an installed model. The first call after the model unloads can take over 12 s and fall back to rules, so warm it up first.
 
