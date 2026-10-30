@@ -57,7 +57,7 @@ def _line_at(text: str, position: int) -> str:
 
 def detect_code(text: str) -> CodeMatch | None:
     """Return a match when `text` has at least MIN_CODE_LINES code-looking lines. Pass redacted text only."""
-    text = text.replace('": "', '":\n').replace('":"', '":\n')  # a JSON string's first line has no line start of its own
+    text = text.replace('": "', '":\n').replace('":"', '":\n')  # a JSON string's first line has no line start
     first = None
     lines = 0
     position = 0

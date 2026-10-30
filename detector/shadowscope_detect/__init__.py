@@ -1,11 +1,12 @@
-"""Public detection API (spec 01 §A9). Signatures are frozen; triage is still a stub."""
+"""Public detection API (spec 01 §A9). Signatures are frozen."""
 from __future__ import annotations
 
 from .agent_analyzer import analyze_agent_payload as _analyze_agent_payload
 from .classify import classify_process as _classify_process
 from .scanner import scan_text
+from .triage.engine import triage as _triage
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __all__ = ["scan_text", "analyze_agent_payload", "classify_process", "triage", "redact", "__version__"]
 
 
@@ -25,15 +26,5 @@ def classify_process(name: str, cmdline: list[str] | None) -> dict:
 
 
 async def triage(finding: dict, context_snippet: str, *, engine_cfg: dict) -> dict:
-    """Stub: rules-style TriageResult. Never sends anything over the network."""
-    return {
-        "verdict": "needs_review",
-        "sensitivity": finding.get("severity", "medium"),
-        "reasoning": "Rules-only stub: no LLM was consulted.",
-        "remediation_steps": list(finding.get("remediation", [])),
-        "policy_suggestion": "Review this finding manually.",
-        "engine": "rules",
-        "model": "rules-v0",
-        "latency_ms": 0,
-        "redacted_input_preview": redact(context_snippet)[:500],
-    }
+    """Triage a finding: Featherless → Groq → Ollama → rules. Always redacts and re-scans before anything is sent."""
+    return await _triage(finding, context_snippet, engine_cfg=engine_cfg)
