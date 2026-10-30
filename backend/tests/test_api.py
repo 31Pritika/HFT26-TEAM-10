@@ -232,6 +232,63 @@ def test_extension_event(client):
     assert client.get(f"/api/events/{body['event_id']}").json()["source"] == "extension"
 
 
+def extension_finding(**changes):
+    masked = "AKIA••••••••••••••34"
+    return {"type": "secret", "subtype": "aws_access_key", "severity": "critical", "confidence": 0.95, "title": "AWS access key",
+            "description": "AWS access key.", "detector": "regex", "compliance": [], "remediation": [],
+            "evidence": {"redacted_snippet": f"key {masked}", "match_redacted": masked, "entropy": 3.5, "line": 1, "offset": 4, "fingerprint": "ext0123456ab"},
+            **changes}
+
+
+def post_extension(client, text, findings):
+    return client.post("/api/extension/event", json={"site": "chatgpt.com", "url": "https://chatgpt.com/c/1", "kind": "paste", "text": text,
+                                                     "ts": "2026-10-30T10:00:00Z", "browser": "chrome", "findings": findings})
+
+
+def test_extension_findings_survive_redacted_text(client):
+    body = post_extension(client, "key AKIA••••••••••••••34", [extension_finding()]).json()
+    assert [f["subtype"] for f in body["findings"]] == ["aws_access_key"] and body["findings"][0]["severity"] == "critical"
+    stored = client.get(f"/api/events/{body['event_id']}").json()
+    assert stored["finding_ids"] == [body["findings"][0]["id"]] and stored["risk_score"] >= 60
+    assert body["findings"][0]["compliance"] and body["findings"][0]["remediation"]
+
+
+def test_extension_findings_cannot_store_raw_secrets(client):
+    leaky = extension_finding(title=f"Found {AWS}", description=f"Value {AWS}", evidence={
+        "redacted_snippet": f"key {AWS}", "match_redacted": AWS, "entropy": None, "line": 1, "offset": 4, "fingerprint": "ext0123456cd"})
+    body = post_extension(client, f"key {AWS}", [leaky]).json()
+    assert body["findings"] and AWS not in json.dumps(body)
+    assert AWS not in json.dumps(client.get(f"/api/events/{body['event_id']}").json())
+
+
+@pytest.mark.parametrize("bad", [{}, {"subtype": "x"}, {"subtype": 5, "evidence": {}}, {"subtype": "autonomous_loop", "evidence": "text"}, extension_finding(type="made_up", evidence={"redacted_snippet": "x", "match_redacted": "x", "fingerprint": "ext0123456ef"})])
+def test_malformed_extension_findings_are_skipped(client, bad):
+    response = post_extension(client, "hello", [bad])
+    assert response.status_code == 200 and response.json()["findings"] == []
+
+
+def test_health_reports_ollama_only_when_the_model_is_installed(client, monkeypatch):
+    import httpx
+    from app.api import routes_health
+    calls = []
+
+    def tags(url, headers, **kwargs):
+        calls.append((url, headers))
+        return httpx.Response(200, json={"models": [{"name": "gemma3:4b"}]})
+
+    monkeypatch.setattr(httpx, "get", tags)
+    for name in ("FEATHERLESS_API_KEY", "FEATHERLESS_MODEL", "GROQ_API_KEY"):
+        monkeypatch.delenv(name, raising=False)
+    monkeypatch.setattr(routes_health, "_ollama_checked", None)
+    monkeypatch.setenv("OLLAMA_MODEL", "gemma3:4b")
+    assert client.get("/api/health").json()["llm_engine"] == "ollama"
+    assert client.get("/api/health").json()["llm_engine"] == "ollama" and len(calls) == 1  # Polled, so cached.
+    assert calls[0][1]["X-ShadowScope-Self"] == "1"
+    monkeypatch.setattr(routes_health, "_ollama_checked", None)
+    monkeypatch.setenv("OLLAMA_MODEL", "not-installed")
+    assert client.get("/api/health").json()["llm_engine"] == "rules"
+
+
 def test_simulate(client):
     started = client.post("/api/simulate", json={"scenario_id": "canary_trip", "intensity": 1}).json()
     assert started["started"] is True and started["run_id"].startswith("run_")
@@ -360,7 +417,7 @@ def test_simulate_spawns_the_cli_from_the_repo_root(simulator, monkeypatch):
     monkeypatch.setattr(subprocess, "Popen", lambda command, **kwargs: calls.append((command, kwargs["cwd"])))
     run_id = simulate.start("rogue_agent", 2)
     assert run_id.startswith("run_")
-    assert calls[0][0][1:] == ["-m", "simulator.run", "rogue_agent", "--intensity", "2"] and calls[0][1] == config.REPO_ROOT
+    assert calls[0][0][1:] == ["-m", "simulator.run", "rogue_agent", "--intensity", "2", "--run-id", run_id] and calls[0][1] == config.REPO_ROOT
 
 
 # ---- Triage (real chain, fake network) -------------------------------------------------------------------

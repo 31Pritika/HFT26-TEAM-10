@@ -65,7 +65,7 @@ def start(scenario_id: str, intensity: int) -> str:
     """Launches a run in the background and returns its id. `scenario_id` must already be validated."""
     run_id = new_id("run")
     if simulator_available():
-        subprocess.Popen([sys.executable, "-m", "simulator.run", scenario_id, "--intensity", str(intensity)], cwd=config.REPO_ROOT,
+        subprocess.Popen([sys.executable, "-m", "simulator.run", scenario_id, "--intensity", str(intensity), "--run-id", run_id], cwd=config.REPO_ROOT,
                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     else:
         threading.Thread(target=_run_canned, args=(scenario_id, intensity, run_id), daemon=True).start()

@@ -27,5 +27,5 @@ def observations(body: Observation | list[Observation] = Body(...)) -> dict:
 
 @router.post("/extension/event", dependencies=[Depends(require_local_engine)])
 def extension_event(body: ExtensionEvent) -> dict:
-    result = pipeline.record_extension_event(body.site, body.url, body.text, body.ts, body.browser, body.kind)
+    result = pipeline.record_extension_event(body.site, body.url, body.text, body.ts, body.browser, body.kind, body.findings)
     return {"event_id": result.event["id"], "findings": result.findings}

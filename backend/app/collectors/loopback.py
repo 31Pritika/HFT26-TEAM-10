@@ -22,6 +22,7 @@ IDLE_S = 60.0  # A local model can think for a long time before its first byte.
 CLOSE_GRACE_S = 0.5
 MAX_OUT_OF_ORDER = 256
 UNKNOWN_CLIENT = {"name": "Local client"}
+SIM_HEADER = "x-shadowscope-sim"
 
 
 class TcpStream:
@@ -131,6 +132,11 @@ class HttpFlows:
         return observations
 
 
+def is_simulator_traffic(observation: dict) -> bool:
+    """The simulator reports each request through /observations too, so capturing it here would count it twice."""
+    return any(key.lower() == SIM_HEADER and value == "1" for key, value in (observation.get("headers") or {}).items())
+
+
 def lookup_client(port: int) -> dict | None:
     """Which process owns this local port, or None. Short-lived clients are gone before the 2 s poll sees them."""
     known = activity.port_owner(port)
@@ -171,7 +177,8 @@ class Loopback(Sniffer):
 
     def _send(self, observations: list[dict]) -> None:
         for observation in observations:
-            pipeline.process(observation)
+            if not is_simulator_traffic(observation):
+                pipeline.process(observation)
 
     def handle(self, item: Segment) -> None:
         self._send(self.flows.feed(item, time.monotonic()))

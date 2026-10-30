@@ -353,6 +353,7 @@ class ExtensionEvent(BaseModel):
     text: str
     ts: str
     browser: Literal["chrome", "edge", "other"]
+    findings: list[dict] = []  # Additive to §6: the extension scans before redacting, so the engine cannot find these again.
 
 
 class ComplianceControl(BaseModel):

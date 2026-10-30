@@ -353,6 +353,22 @@ def test_request_and_response_are_paired():
     assert observation["dest"]["port"] == 11434 and observation["dest"]["path"] == "/api/chat" and observation["method"] == "POST"
 
 
+def test_simulator_traffic_is_left_to_its_own_report(monkeypatch):
+    sent = []
+    monkeypatch.setattr(loopback.pipeline, "process", sent.append)
+    flows = loopback.HttpFlows()
+    marked = http_request(b'{"prompt":"hi"}').replace(b"\r\n", b"\r\nX-ShadowScope-Sim: 1\r\n", 1)
+    flows.feed(segment(marked, 1), 0)
+    observations = flows.feed(segment(response(), 1, outbound=False), 1)
+    assert observations and observations[0]["headers"]
+    collector = loopback.Loopback()
+    collector._send(observations)
+    assert sent == []
+    plain = [{**observations[0], "headers": {"content-type": "application/json"}}]
+    collector._send(plain)
+    assert sent == plain
+
+
 def test_nothing_is_emitted_for_a_half_received_body():
     flows = loopback.HttpFlows()
     message = http_request(b"x" * 500)
