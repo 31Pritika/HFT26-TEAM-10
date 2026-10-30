@@ -182,7 +182,7 @@ def test_triage_is_cached_on_the_finding(client):
     assert result.status_code == 200
     assert_shape(result.json(), [item["triage"] for item in mock("findings")["items"] if item["triage"]])
     assert client.get(f"/api/findings/{finding['id']}").json()["triage"]["engine"] == "rules"
-    assert client.post(f"/api/findings/{finding['id']}/triage").json() == result.json()
+    assert client.post(f"/api/findings/{finding['id']}/triage", json={"engine": "rules"}).json() == result.json()
 
 
 def test_policy_put_is_partial_and_applies(client):
@@ -392,6 +392,20 @@ def test_triage_uses_policy_engine_and_creates_no_events(client, llm):
     assert llm and llm[0].headers["x-shadowscope-self"] == "1" and AWS.encode() not in llm[0].content
     assert db.table_count("events") == events
     assert client.get(f"/api/findings/{finding['id']}").json()["triage"]["engine"] == "ollama"
+
+
+def test_rules_answer_is_retried_but_a_real_answer_is_kept(client, llm):
+    before = client.get("/api/policies").json()
+    client.put("/api/policies", json={"llm_triage": {"enabled": True, "engine": "ollama", "model": "gemma3:4b"}})
+    pipeline.process({"source": "simulator", "dest": {"host": "api.openai.com", "port": 443}, "body_text": "key AKIAEXAMPLEEXAMPLE33"})
+    finding = next(item for item in client.get("/api/findings?type=secret").json()["items"] if not item["triage"])
+    db.update_finding({**finding, "triage": {"verdict": "needs_review", "sensitivity": "high", "reasoning": "x", "remediation_steps": [],
+                                             "policy_suggestion": "x", "engine": "rules", "model": "rules-v1", "latency_ms": 1, "redacted_input_preview": "x"}})
+    assert client.post(f"/api/findings/{finding['id']}/triage").json()["engine"] == "ollama"
+    calls = len(llm)
+    assert client.post(f"/api/findings/{finding['id']}/triage").json()["engine"] == "ollama"
+    client.put("/api/policies", json=before)
+    assert len(llm) == calls, "a real answer is reused"
 
 
 def test_triage_disabled_never_calls_an_llm(client, llm):

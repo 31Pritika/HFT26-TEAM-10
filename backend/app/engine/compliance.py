@@ -108,20 +108,20 @@ _FRAMEWORKS: list[dict] = [
         ("CC6.1", "Logical access controls", _is_secret),
         ("CC6.6", "Protection at system boundaries", lambda f: _is_shadow(f) or _is_exfil(f)),
         ("CC6.7", "Restricted transmission of information", lambda f: _is_secret(f) or _is_pii(f)),
-        ("CC6.8", "Prevention of unauthorised software", _is_shadow),
+        ("CC6.8", "Prevention of unauthorised software", lambda f: f["type"] == "shadow_ai"),
         ("CC7.2", "Monitoring of anomalous activity", lambda f: _is_agent(f) or _is_exfil(f)),
         ("CC7.3", "Evaluation of security events", _is_dangerous_agent),
     ]},
     {"id": "PCI-DSS", "name": "PCI-DSS", "controls": [
         ("PCI-3", "Protect stored account data", _is_card),
         ("PCI-4", "Protect cardholder data in transit", lambda f: _is_card(f) and _left_for_cloud(f)),
-        ("PCI-7", "Restrict access to cardholder data", lambda f: _is_card(f) or _is_dangerous_agent(f)),
-        ("PCI-10", "Log and monitor access", lambda f: _is_card(f) or _is_exfil(f)),
-        ("PCI-12", "Information security policy", lambda f: _is_card(f) or _is_shadow(f)),
+        ("PCI-7", "Restrict access to cardholder data", _is_dangerous_agent),
+        ("PCI-10", "Log and monitor access", lambda f: f["type"] == "exfil_volume"),
+        ("PCI-12", "Information security policy", lambda f: f["type"] == "shadow_ai"),
     ]},
     {"id": "ISO27001", "name": "ISO 27001", "controls": [
         ("A.5.14", "Information transfer", lambda f: _is_secret(f) or _is_pii(f) or _is_code(f)),
-        ("A.5.23", "Use of cloud services", _is_shadow),
+        ("A.5.23", "Use of cloud services", lambda f: f["type"] == "shadow_ai"),
         ("A.8.11", "Data masking", _is_pii),
         ("A.8.12", "Data leakage prevention", lambda f: _is_exfil(f) or _is_code(f)),
         ("A.8.16", "Monitoring activities", _RULES["ISO27001"]),
@@ -158,11 +158,11 @@ def _names(findings: list[dict], limit: int = 3) -> str:
 
 def _control(control_id: str, name: str, rule: Callable[[dict], bool], open_findings: list[dict]) -> dict:
     matched = [f for f in open_findings if rule(f)]
-    serious = sum(f["severity"] in ("critical", "high") for f in matched)
-    status = "fail" if serious else "warn" if matched else "pass"
+    critical = sum(f["severity"] == "critical" for f in matched)
+    status = "fail" if critical else "warn" if matched else "pass"
     if not matched:
         return {"id": control_id, "name": name, "status": status, "evidence": "No open findings in scope"}
-    evidence = f"{len(matched)} open findings, {serious} critical or high. Tools: {_names(matched)}"
+    evidence = f"{len(matched)} open findings, {critical} critical. Tools: {_names(matched)}"
     return {"id": control_id, "name": name, "status": status, "evidence": evidence}
 
 

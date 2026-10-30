@@ -46,12 +46,13 @@ def update_finding(finding_id: str, body: FindingPatch) -> dict:
 async def triage_finding(finding_id: str, body: TriageRequest | None = None) -> dict:
     finding = _require(finding_id)
     requested = body.engine if body else None
-    cached = finding["triage"]
-    if cached and requested in (None, "auto", cached["engine"]):
-        return cached
-
     settings = db.get_policy()["llm_triage"]
     engine = requested or settings["engine"] if settings["enabled"] else "rules"
+    cached = finding["triage"]
+    # A rules answer may only mean an engine was slow, so asking again retries the LLM.
+    if cached and (requested in (None, "auto", cached["engine"])) and (cached["engine"] != "rules" or engine == "rules"):
+        return cached
+
     event = db.get_event(finding["event_id"]) if finding["event_id"] else None
     context = "\n".join(part for part in (finding["evidence"]["redacted_snippet"], (event or {}).get("payload_preview")) if part)
     activity.expect_own_traffic(TRIAGE_HOSTS, config.TRIAGE_TIMEOUT_S + 5)
