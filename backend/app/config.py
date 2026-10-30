@@ -42,6 +42,9 @@ SCENARIO_CACHE_S = 60
 AGENT_ACTIVE_WINDOW_S = 600
 RISK_HALF_LIFE_H = 6
 
+ALLOWED_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173", *([FRONTEND_ORIGIN] if FRONTEND_ORIGIN else [])]
+ALLOWED_ORIGIN_REGEX = r"chrome-extension://.*"
+
 COLLECTOR_NAMES = ("process_conn", "ip_cache", "dns_sni", "loopback", "agent_watch")
 
 DEFAULT_POLICY = {
