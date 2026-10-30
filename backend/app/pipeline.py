@@ -13,10 +13,10 @@ from pydantic import ValidationError
 
 from . import config, db
 from .bus import bus
-from .engine import agents, compliance, detect_adapter, risk
+from .engine import agents, anomaly, compliance, detect_adapter, risk, stats
 from .fingerprints import matcher
 from .models import AIEvent, Finding, Observation
-from .utils import fingerprint, new_id, normalize_ts, parse_ts, to_iso
+from .utils import fingerprint, new_id, normalize_ts, now_iso, parse_ts, to_iso
 
 log = logging.getLogger("shadowscope.pipeline")
 
@@ -100,13 +100,18 @@ def _behaviour_finding(finding_type: str, subtype: str, severity: str, title: st
     }
 
 
+def _blocked_finding(provider: dict, process_name: str) -> dict:
+    name = provider["name"]
+    return _behaviour_finding(
+        "policy", "blocked_provider_contacted", "critical", f"Blocked provider contacted: {name}",
+        f"{process_name} contacted {name}, which policy blocks.", f"blocked:{process_name}:{provider['id']}", "heuristic")
+
+
 def _policy_findings(provider: dict, process_name: str, sanctioned: bool, policy: dict) -> list[dict]:
     found = []
     name = provider["name"]
     if provider["id"] in policy["blocked_providers"]:
-        found.append(_behaviour_finding(
-            "policy", "blocked_provider_contacted", "critical", f"Blocked provider contacted: {name}",
-            f"{process_name} contacted {name}, which policy blocks.", f"blocked:{process_name}:{provider['id']}", "heuristic"))
+        found.append(_blocked_finding(provider, process_name))
     item = db.get_inventory(process_name)
     if not sanctioned and (item is None or provider["id"] not in item["provider_ids"]):
         severity = "high" if provider["category"] in ("cloud_llm", "ai_saas", "ai_coding") else "medium"
@@ -177,6 +182,48 @@ def refresh_inventory(policy: dict) -> None:
             db.upsert_inventory(item)
 
 
+def _resolve_sanctioned_shadow_findings(policy: dict) -> list[dict]:
+    """A tool that is now approved is no longer shadow AI, so its open findings stop counting towards risk."""
+    resolved, cursor = [], None
+    while True:
+        items, cursor = db.list_findings(500, cursor, type="shadow_ai", status="open")
+        for finding in items:
+            if finding["process_name"] in policy["sanctioned_processes"] or finding["provider_id"] in policy["sanctioned_providers"]:
+                finding["status"] = "resolved"
+                db.update_finding(finding)
+                resolved.append(finding)
+        if cursor is None:
+            return resolved
+
+
+def _flag_newly_blocked(before: dict, policy: dict) -> list[dict]:
+    """Tools already using a provider that has just been blocked are flagged now, not on their next request."""
+    newly_blocked = set(policy["blocked_providers"]) - set(before["blocked_providers"])
+    created, ts = [], now_iso()
+    for item in db.list_inventory():
+        for provider_id in newly_blocked & set(item["provider_ids"]):
+            provider = matcher.provider_by_id(provider_id)
+            if provider:
+                finding, is_new = _store_finding(_blocked_finding(provider, item["process_name"]), None, ts, provider_id, item["process_name"])
+                if finding and is_new:
+                    created.append(finding)
+    if created:
+        db.bump_metrics(ts, findings=len(created))
+    return created
+
+
+def apply_policy_change(before: dict, policy: dict) -> dict:
+    """Makes a policy edit take effect at once. New canary tokens need nothing: every scan reads the current policy."""
+    with db.transaction():
+        refresh_inventory(policy)
+        resolved = _resolve_sanctioned_shadow_findings(policy)
+        flagged = _flag_newly_blocked(before, policy)
+    for finding in [*resolved, *flagged]:
+        bus.publish({"type": "finding", "data": finding})
+    bus.publish({"type": "stats", "data": stats.stream_stats()})
+    return {"resolved": len(resolved), "flagged": len(flagged)}
+
+
 def process(observation: Observation | dict, *, prescan: dict | None = None, force: bool = False, publish: bool = True) -> Result | None:
     """Runs one observation through the pipeline. Returns None when it is dropped.
 
@@ -217,10 +264,16 @@ def process(observation: Observation | dict, *, prescan: dict | None = None, for
     event_id = new_id("evt")
     session = None
 
+    bytes_out = obs.bytes_out if obs.bytes_out is not None else body_bytes
+    burst = anomaly.track_request(name, ts, obs.source)
+
     with db.transaction():
         if framework:
-            session, behaviour = agents.update(process_info, framework, provider_id, ts, analysis)
+            session, behaviour = agents.update(process_info, framework, provider_id, ts, analysis, burst)
             detected += behaviour
+        spike = anomaly.check_bytes(name, ts, bytes_out, obs.source)
+        if spike:
+            detected.append(spike)
         if provider:
             detected += _policy_findings(provider, name, sanctioned, policy)
         detected = _one_loop_per_session(detected, name, framework)
@@ -237,7 +290,7 @@ def process(observation: Observation | dict, *, prescan: dict | None = None, for
         tags += ["shadow-ai"] if provider and not sanctioned else []
         tags += ["agent"] if framework else []
         tags += ["tool-call"] if analysis["actions"] else []
-        tags += ["burst"] if any(f["subtype"] == "autonomous_loop" for f in findings) else []
+        tags += ["burst"] if anomaly.is_burst(*burst) or any(f["subtype"] == "autonomous_loop" for f in findings) else []
         if (obs.meta or {}).get("run_id"):
             tags.append(f"run:{obs.meta['run_id']}")
 
@@ -247,7 +300,7 @@ def process(observation: Observation | dict, *, prescan: dict | None = None, for
             "dest": {"host": matcher.normalize_host(obs.dest.host) or obs.dest.host, "ip": obs.dest.ip, "port": obs.dest.port,
                      "path": obs.dest.path, "protocol": obs.dest.protocol or DEFAULT_PROTOCOL.get(obs.dest.port, "http")},
             "method": obs.method, "model": _model_name(obs.body_text),
-            "bytes_out": obs.bytes_out if obs.bytes_out is not None else body_bytes,
+            "bytes_out": bytes_out,
             "bytes_in": obs.bytes_in if obs.bytes_in is not None else response_bytes,
             "payload_visible": bool(obs.body_text),
             "payload_preview": scan["redacted_text"][:config.PAYLOAD_PREVIEW_CHARS] if scan else None,
