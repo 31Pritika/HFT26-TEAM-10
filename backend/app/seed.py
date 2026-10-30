@@ -12,6 +12,7 @@ import time
 from datetime import datetime, timedelta
 
 from . import db, pipeline
+from .engine import risk
 from .fingerprints import matcher
 from .seed_catalog import AGENT_FINDINGS, DATA_FINDINGS, agent_action, agent_finding, no_agent, scan_result
 from .utils import now, parse_ts, to_iso
@@ -139,6 +140,13 @@ def _triage_history(rng: random.Random, moment: datetime) -> None:
             return
 
 
+def _record_risk_history(moment: datetime) -> None:
+    open_findings = db.open_findings()
+    for steps in range(HISTORY_HOURS * 2, -1, -1):
+        point = moment - timedelta(minutes=30 * steps)
+        db.record_risk(to_iso(point), risk.org_score(open_findings, point)["score"])
+
+
 def run(events: int = EVENTS, seed: int = FINDING_SALT_SEED) -> dict:
     """Fills an empty database and returns row counts."""
     rng = random.Random(seed)
@@ -183,6 +191,7 @@ def run(events: int = EVENTS, seed: int = FINDING_SALT_SEED) -> dict:
             }
             pipeline.process(observation, prescan=prescan, publish=False)
         _triage_history(rng, moment)
+        _record_risk_history(moment)
 
     counts = {table: db.table_count(table) for table in ("events", "findings", "agents", "inventory")}
     log.info("seeded %s in %.1f s", counts, time.perf_counter() - started)

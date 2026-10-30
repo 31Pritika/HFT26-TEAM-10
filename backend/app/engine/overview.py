@@ -1,12 +1,24 @@
 """Builds the Overview and GraphData responses."""
 from __future__ import annotations
 
+from datetime import datetime, timedelta
+
 from .. import collectors, db
 from ..utils import now, parse_ts, to_iso, window_start
 from . import agents, compliance, risk, stats
 
 BUCKETS = 24
 SEVERITIES = ("critical", "high", "medium", "low", "info")
+
+
+def _risk_trend(recorded: list[int | None], start: datetime, step: timedelta, open_findings: list[dict]) -> list[dict]:
+    """Scores as they were recorded each minute. Gaps hold the last score, or are estimated before any exists."""
+    trend, last = [], None
+    for index, score in enumerate(recorded):
+        moment = start + step * (index + 1)
+        last = score if score is not None else last
+        trend.append({"ts": to_iso(moment), "score": last if last is not None else risk.org_score(open_findings, moment)["score"]})
+    return trend
 
 
 def build_overview(window: str) -> dict:
@@ -18,14 +30,16 @@ def build_overview(window: str) -> dict:
     org = risk.org_score(open_findings, moment)
 
     timeline = [{"ts": to_iso(start + step * index), "requests": 0, "findings": 0} for index in range(BUCKETS)]
+    recorded: list[int | None] = [None] * BUCKETS
     for row in db.metrics_between(since, to_iso(moment)):
-        index = int((parse_ts(row["minute"]) - start) / step)
-        bucket = timeline[min(max(index, 0), BUCKETS - 1)]
-        bucket["requests"] += row["requests"]
-        bucket["findings"] += row["findings"]
+        index = min(max(int((parse_ts(row["minute"]) - start) / step), 0), BUCKETS - 1)
+        timeline[index]["requests"] += row["requests"]
+        timeline[index]["findings"] += row["findings"]
+        if row["risk_score"] is not None:
+            recorded[index] = row["risk_score"]
+    trend = _risk_trend(recorded, start, step, open_findings)
+    trend[-1]["score"] = org["score"]
 
-    trend = [{"ts": to_iso(start + step * (index + 1)), "score": risk.org_score(open_findings, start + step * (index + 1))["score"]}
-             for index in range(BUCKETS)]
     severity_counts = db.finding_counts("severity", since)
     return {
         "risk_score": org["score"], "risk_grade": org["grade"], "risk_trend": trend, "totals": stats.totals(since),
