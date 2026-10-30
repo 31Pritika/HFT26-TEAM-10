@@ -33,21 +33,56 @@
     - Policy recommendation card.
     - Engine / model / latency performance badge.
     - Collapsible "Privacy Proof: What was sent to the LLM" box demonstrating mathematical token redaction.
-- **Automated Verification:**
-  - Automated headless Edge CDP viewport test across 375px (mobile), 768px (tablet), and 1440px (desktop) on `/app`, `/app/live`, `/app/alerts`, and `/app/alerts/:id`: 0 horizontal scroll overflow (`scrollWidth === innerWidth`).
-  - `npm run build` passing in ~500ms with zero errors.
+- **Phase 3 Agents & Permissions (`/app/agents`):**
+  - Agent session list with framework badges, autonomy arc gauge (0–100%), and risk scores.
+  - Glowing permission matrix (shell, fs_read, fs_write, net_outbound, net_inbound, memory_dump) with danger color toggles.
+  - Tools usage horizontal breakdown bar chart.
+  - Vertical action audit timeline with monospace shell commands and severity badges.
+  - Instant "Kill Switch" policy revocation button animating agent status to `BLOCKED`.
+- **Phase 3 Attack Simulator (`/app/simulate`):**
+  - Scenario catalog cards with icon, severity, and tags loaded dynamically from `api.getScenarios()`.
+  - Launch button with glowing pulse ripple animation.
+  - Per-run mini live telemetry feed filtered to the scenario execution.
+  - "Run Full Demo Sequence": automated 9-scenario execution loop with 4s intervals and animated progress stepper.
+  - Full bidirectional integration with the mock WebSocket stream to reactively broadcast events into Live Traffic and Alerts Center.
+- **Phase 3 Shadow AI Inventory (`/app/inventory`):**
+  - Discovered tools and process cards with provider tags, first/last seen timestamps, request counts, byte volumes, and risk grades.
+  - Animated Sanctioned vs Shadow split posture summary bar.
+  - 1-click Sanctioned / Unsanctioned toggle updating `PUT /policies` with instant optimistic UI.
+  - "New this session" gradient ribbon.
+  - Category filter chips and search filter.
+- **Phase 3 Evidence Ingest (`/app/ingest`):**
+  - Drag & drop file dropzone (`react-dropzone`) supporting `.har`, `.pcap`, `.pcapng`, `.jsonl`, `.json`, and `.log`.
+  - Multi-stage animated parsing progress indicator (packet decoding, entropy analysis, provider correlation, finding synthesis).
+  - `IngestResult` metric summary cards with animated `CountUp` (events created, findings flagged, AI requests, scan duration ms).
+  - 3 pre-packaged forensic sample buttons ("DevTools HAR: ChatGPT", "Wireshark PCAP: Ollama", "JSONL Proxy: ReAct Agent").
+  - Collapsible step-by-step DevTools HAR export guide.
+- **Phase 3 Security Policies (`/app/policies`):**
+  - Comprehensive AI Provider Authorization Matrix: sanction, neutral, or block with 3-state buttons.
+  - Canary Honeytoken editor: add/delete tokens + instant random honeytoken generator (`CANARY-SS-XXXXXX`).
+  - Shannon Entropy sensitivity slider with live tokenized preview analyzer: highlights tokens with entropy $\ge$ threshold in real time.
+  - Alert minimum severity filter selector pills (`info`, `low`, `medium`, `high`, `critical`).
+  - Automated AI triage engine selector (`auto`, `groq`, `ollama`, `featherless`, `rules`).
+  - Core immutable guardrails verification (storage redaction & agent self-exclusion).
+- **Phase 3 Settings & Diagnostics (`/app/settings`):**
+  - ShadowScope daemon health status, uptime counter, and version display.
+  - Telemetry status grid for 5 active inspection collectors (`process_conn`, `ip_cache`, `dns_sni`, `loopback`, `agent_watch`).
+  - API base URL endpoint configuration and ping health check button.
+  - Manual Demo Mode simulation override toggle.
+  - Accessibility controls: reduce-motion switch.
+  - Browser desktop notifications permission requester and test P0 alert trigger.
+  - Local security & airgapped privacy guarantee manifest cross-referenced with DPDP, GDPR, SOC2, and PCI-DSS.
+- **Automated Viewport & Build Verification:**
+  - Automated headless Edge CDP test suite verified across 375px (mobile), 768px (tablet icon rail), and 1440px (desktop) across all 9 dashboard pages (`/app`, `/app/live`, `/app/alerts`, `/app/agents`, `/app/simulate`, `/app/inventory`, `/app/ingest`, `/app/policies`, `/app/settings`).
+  - Result: 100% PASS with 0 horizontal overflow (`scrollWidth <= innerWidth`).
+  - `npm run build` succeeds cleanly in ~500ms with zero errors or warnings.
 
 ## Next
-- **Phase 3 (Management, Simulator & Governance):**
-  - Shadow AI Inventory (`/app/inventory`): discovered tools/processes, Sanctioned vs Unsanctioned toggle via `PUT /policies`.
-  - Agents & Permissions (`/app/agents`): agent session cards, permission matrix, dangerous tool action timeline, kill switch.
-  - Attack Simulator (`/app/simulate`): scenario trigger cards, launch pulse animation, full demo sequence runner.
-  - Evidence Ingest (`/app/ingest`): drag & drop HAR/PCAP/log uploads with animated parse progress.
-  - Policies (`/app/policies`): canary token generator/manager, entropy threshold slider, provider allowlists.
-  - Settings (`/app/settings`): API configuration, engine diagnostics, demo mode toggle, and privacy manifest.
+- Final integration review with Part D (`ThreatConstellation.tsx` at `/app/graph`).
+- Ready for hackathon presentation and demonstration!
 
 ## Issues
-- None. Build is clean, responsive, and fully tested.
+- None. All pages and features are 100% complete, fully responsive, and verified.
 
 ## Requests to other parts
-- **Part D (Pritika):** All shared UI primitives and alert models are fully functional and ready for linking from the 3D threat constellation graph (`/app/graph`) and the compliance report (`/report`).
+- **Part D (Pritika):** All dashboard routes, shared UI primitives, store states, and mock streaming engines are fully built and verified. Your `ThreatConstellation.tsx` at `/app/graph` is linked in the sidebar, command palette, and mobile drawer.
