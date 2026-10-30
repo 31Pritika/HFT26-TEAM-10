@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shadow Sensor test page</title>
+  <style>
+    :root { --bg: #05060A; --surface: #111627; --border: rgba(148, 163, 255, 0.22); --text: #E8ECF5; --muted: #8A93A8; --primary: #22D3EE; }
+    body { margin: 0 auto; padding: 16px; max-width: 760px; background: var(--bg); color: var(--text); font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+    h1 { font-size: 20px; } h2 { font-size: 15px; margin-top: 24px; }
+    p { color: var(--muted); }
+    textarea, #editable, pre { box-sizing: border-box; width: 100%; padding: 10px; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 8px; font: inherit; }
+    textarea, #editable { min-height: 90px; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 12px/1.4 ui-monospace, Menlo, monospace; min-height: 40px; }
+    button { margin: 4px 4px 4px 0; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text); font: inherit; cursor: pointer; }
+    #send { background: var(--primary); color: var(--bg); border-color: var(--primary); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <h1>Shadow Sensor test page</h1>
+  <p>Open this file directly: it runs the real <code>scanner.js</code> and <code>content.js</code> with a stand-in for the
+    extension APIs, so it needs no install. Every value is fake. Pick a sample, paste it into either box, then try Send.</p>
+  <h2>Samples</h2>
+  <div id="samples"></div>
+  <h2>Textarea</h2>
+  <textarea id="plain" aria-label="Prompt, textarea" placeholder="Paste here"></textarea>
+  <h2>Contenteditable</h2>
+  <div id="editable" contenteditable="true" role="textbox" aria-label="Prompt, contenteditable"></div>
+  <p><button id="send" data-testid="send-button" aria-label="Send prompt">Send</button></p>
+  <h2>Sent to the page</h2>
+  <pre id="sent"></pre>
+  <h2>Messages to the background worker</h2>
+  <pre id="messages"></pre>
+
+  <script>
+    // Split so that secret scanners do not read this page as a leak. Every value is fake.
+    const SAMPLES = {
+      "AWS key": "my key is AKIA" + "FAKEFAKEFAKE1234 please help",
+      ".env file": "OPENAI_API_KEY=sk-" + "FAKEexampleFAKEexample1234567890\nSTRIPE_SECRET_KEY=sk_" + "live_FAKEexample1234567\nDATABASE_URL=postgres://admin:FAKEpassw0rd@db.prod.internal:5432/customers",
+      "Indian PII": "Priya Sharma, Aadhaar 2345 6789 0124, PAN FAKPE1234X, +91 98765 43210, priya.fake@okaxis, priya.fake@example.com",
+      "Card": "card 4111 1111 1111 1111 exp 12/29",
+      "Clean text": "Please summarise the attached meeting notes in three bullet points.",
+    };
+    const stored = {};
+    const listeners = [];
+    const log = (text) => { document.getElementById("messages").textContent += `${text}\n`; };
+    window.chrome = window.chrome?.runtime?.id ? window.chrome : {
+      runtime: { id: "test-page", sendMessage(message) { log(JSON.stringify(message)); } },
+      storage: {
+        onChanged: { addListener(listener) { listeners.push(listener); } },
+        local: { get(keys, done) { done(stored); }, set(values) { Object.assign(stored, values); listeners.forEach((l) => l()); } },
+      },
+    };
+    for (const [name, text] of Object.entries(SAMPLES)) {
+      const button = document.createElement("button");
+      button.textContent = `Copy: ${name}`;
+      button.addEventListener("click", () => navigator.clipboard.writeText(text));
+      document.getElementById("samples").append(button);
+    }
+    document.getElementById("send").addEventListener("click", () => {
+      const plain = document.getElementById("plain"), editable = document.getElementById("editable");
+      document.getElementById("sent").textContent += `${plain.value || editable.innerText}\n`;
+      plain.value = "";
+      editable.textContent = "";
+    });
+  </script>
+  <script src="src/scanner.js"></script>
+  <script src="src/content.js"></script>
+</body>
+</html>

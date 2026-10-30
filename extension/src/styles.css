@@ -1,0 +1,21 @@
+/* Popup styles: the design tokens of master §10. The in-page toast carries its own copy, inside its shadow root. */
+:root {
+  --bg: #05060A; --surface: #111627; --border: rgba(148, 163, 255, 0.10); --border-strong: rgba(148, 163, 255, 0.22);
+  --text: #E8ECF5; --muted: #8A93A8; --primary: #22D3EE; --critical: #FF3B5C; --low: #34D399;
+}
+* { box-sizing: border-box; }
+body { width: 320px; margin: 0; padding: 14px; background: var(--bg); color: var(--text); font: 13px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+header img { width: 24px; height: 24px; }
+h1 { flex: 1; margin: 0; font: 600 15px/1.2 "Space Grotesk", Inter, ui-sans-serif, system-ui, sans-serif; }
+.panel { padding: 10px 12px; margin-bottom: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.muted { color: var(--muted); }
+.engine[data-online="true"] { color: var(--low); }
+.engine[data-online="false"] { color: var(--critical); }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th { text-align: right; font-weight: 500; color: var(--muted); }
+td { text-align: right; padding-top: 4px; font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+th:first-child, td:first-child { text-align: left; font-family: inherit; overflow-wrap: anywhere; }
+button { width: 100%; padding: 8px; border: 0; border-radius: 8px; background: var(--primary); color: var(--bg); font: 600 13px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
