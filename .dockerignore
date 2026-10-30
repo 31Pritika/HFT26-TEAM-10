@@ -1,0 +1,12 @@
+**/.venv
+**/node_modules
+**/__pycache__
+**/*.egg-info
+**/*.db
+**/*.db-*
+backend/data
+web
+docs
+.env
+.env.*
+.git

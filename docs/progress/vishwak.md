@@ -42,11 +42,16 @@ Measured, on a seeded database with collectors on and no sudo: 200 observations/
 
 Real LLM: triage returned a valid answer from local Ollama with `gemma3:4b` in 5.8 s, with no raw value in what was sent and no event created.
 
+Phase 4 complete on `vishwak/core-engine`.
+- `scripts/start.sh`, `start.ps1`, `demo.sh`, `demo.ps1`. `start.sh` was run from a clean clone, including `--host`, Ctrl+C cleanup and a busy port.
+- Full stack tested in a local merge of `kevin/dashboard` and `pritika/experience`: every dashboard page ran in `LIVE ENGINE` mode, and triage, status changes, inventory toggle, simulate, upload, policy save and WebSocket updates all worked with no console or HTTP errors. No response-shape mismatches were found.
+- Hardening: body size limits, one error format, `SHADOWSCOPE_CORS_ORIGINS`, `SHADOWSCOPE_CLOUD=1`, `Dockerfile`, `render.yaml`. `docs/backend.md` written.
+- Bugs fixed: redaction took quadratic time on text with no spaces (40 KB took 7 s), PCAP upload would have failed on Windows, Electron apps' own Cookies files raised false HIGH findings, and connection reports counted as requests and tool round trips.
+
 ## Next
 - Run `sudo scripts/verify_capture.sh` and review the output.
-- Open the checkpoint PRs: `main` has none of this work yet.
+- Kevin or Pritika: run `scripts\start.ps1` once on real Windows.
 - Run all §B6 scenarios once `simulator/run.py` exists.
-- Phase 4: start scripts, including warming the Ollama model (see Issues), demo script, `docs/backend.md`, cloud mode.
 
 ## Issues
 - **Live capture under sudo is not verified yet.** It needs a password, so `dns_sni` and `loopback` have never run against real packets. `loopback` parsing was checked with real Ollama bytes recorded through a local relay, and the DB ownership fix for sudo has unit tests only.
@@ -75,7 +80,13 @@ Real LLM: triage returned a valid answer from local Ollama with `gemma3:4b` in 5
 - The seed and canned simulator still use `seed_catalog.py`. I kept it so raw fake values never exist in the engine, and so the fallback works without the package.
 - `gateway_block` must only send fake secrets that the detector rates critical. The gateway forwards anything else to the real provider, which would break golden rule 5. An AWS key is enough.
 
-**Part C (Kevin)**
+**Part C (Kevin)** (found running the dashboard against the live engine)
+- `Overview.tsx` ~line 840-866: the collector strip is hardcoded (`active: true`, always `LIVE`), and line 245 hardcodes "5 Collectors Active". Without sudo, `dns_sni` and `loopback` are off, but the page says they're live. Please use `overview.collectors` or the store's `collectors`. There are six now, including `gateway`.
+- `Overview.tsx` line 745: severity bars divide all-status counts by `totals.findings_open`, so percentages add up to over 100%. Divide by the sum of `by_severity`.
+- `Overview.tsx` line 798: "Revoke 2 exposed AWS IAM credentials" is hardcoded. `/report` has real recommendations.
+- Line 332 states ports 8787 / 8788 / 8789 as active, which isn't checked.
+- `Ingest.tsx`: the "Wireshark PCAP" Load Sample button uploads text, not a real capture, so the live engine answers 400 "This is not a readable PCAP file". The HAR and JSONL samples work. Please use Part B's `simulator/samples/demo.pcap` when it exists, or hide this one in live mode.
+
 - While the backend is partial, a laptop running it alongside the web app sees the engine as live, so set `VITE_DEMO_MODE=true` in the root `.env` if you see errors. All §5 endpoints exist on this branch now, so this stops mattering after the checkpoint merge.
 - `/health` has an extra `detector` key. `next_cursor` is an opaque string.
 - `/report/export` also accepts `?window=`.
@@ -89,6 +100,10 @@ Real LLM: triage returned a valid answer from local Ollama with `gemma3:4b` in 5
 - Findings can have `event_id: null`: a provider that gets blocked flags the tools already using it, with no event behind it. The finding detail returns `event: null`.
 - `PUT /policies` changes other data at once (findings resolved or created, inventory), and publishes `finding` and `stats` stream messages, so refetch or rely on the stream.
 - Triage can take up to 20 s. A rules answer can be asked for again.
+
+**Part D (Pritika)**
+- Landing logs a React error on load: "Attempted to synchronously unmount a root while React was already rendering".
+- At last check `/app/graph`, `/report`, `/playground`, `/architecture` and 404 were still placeholders, so they have not been tested against the engine.
 
 **Team (contracts are frozen, flagging only)**
 - `contracts/mock/findings.json` tags `source_code`, `canary`, `policy` and `exfil_volume` findings with SOC2, which §9 doesn't map. The engine follows §9, so live SOC2 scores won't match the mock's logic.

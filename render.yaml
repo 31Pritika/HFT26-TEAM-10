@@ -1,0 +1,14 @@
+# Optional free deployment of the backend in cloud mode. The dashboard itself deploys separately.
+services:
+  - type: web
+    name: shadowscope-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: false
+    envVars:
+      - key: SHADOWSCOPE_CLOUD
+        value: "1"
+      - key: SHADOWSCOPE_CORS_ORIGINS
+        sync: false  # Set this to the deployed frontend's origin, such as https://shadowscope.vercel.app
