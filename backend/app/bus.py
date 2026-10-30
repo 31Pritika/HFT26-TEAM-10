@@ -37,11 +37,8 @@ class Bus:
         if loop is None or loop.is_closed():
             return
         try:
-            if threading.current_thread() is threading.main_thread() and asyncio._get_running_loop() is loop:
-                self._fan_out(message)
-            else:
-                loop.call_soon_threadsafe(self._fan_out, message)
-        except RuntimeError:
+            loop.call_soon_threadsafe(self._fan_out, message)
+        except RuntimeError:  # The loop closed between the check and the call.
             pass
 
     def _fan_out(self, message: dict) -> None:
