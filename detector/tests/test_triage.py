@@ -51,7 +51,7 @@ class FakeLLM:
 @pytest.fixture(autouse=True)
 def clean_state(monkeypatch):
     engine_module._cache.clear()
-    for name in ("FEATHERLESS_API_KEY", "FEATHERLESS_MODEL", "GROQ_API_KEY", "OLLAMA_URL"):
+    for name in ("FEATHERLESS_API_KEY", "FEATHERLESS_MODEL", "GROQ_API_KEY", "OLLAMA_URL", "OLLAMA_MODEL"):
         monkeypatch.delenv(name, raising=False)
 
 
@@ -208,6 +208,19 @@ def test_featherless_needs_a_model_as_well_as_a_key(llm, monkeypatch):
     monkeypatch.setenv("FEATHERLESS_API_KEY", "fake-featherless")
     triage(engine="auto")
     assert "api.featherless.ai" not in llm.hosts
+
+
+def test_ollama_model_comes_from_the_environment(llm, monkeypatch):
+    monkeypatch.setenv("OLLAMA_MODEL", "qwen2:0.5b")
+    result = triage(engine="auto")
+    assert json.loads(llm.requests[0].content)["model"] == "qwen2:0.5b"
+    assert result["model"] == "qwen2:0.5b"
+
+
+def test_named_engine_model_beats_the_environment(llm, monkeypatch):
+    monkeypatch.setenv("OLLAMA_MODEL", "qwen2:0.5b")
+    triage(engine="ollama", model="custom-model")
+    assert json.loads(llm.requests[0].content)["model"] == "custom-model"
 
 
 def test_ollama_url_comes_from_the_environment(llm, monkeypatch):

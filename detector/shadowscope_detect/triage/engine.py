@@ -76,7 +76,7 @@ def _build_chain(requested: str, model: str | None) -> list[_Engine]:
     if os.getenv("GROQ_API_KEY"):
         available["groq"] = _Engine("groq", GROQ_BASE, GROQ_MODEL, os.environ["GROQ_API_KEY"])
     ollama_url = (os.getenv("OLLAMA_URL") or OLLAMA_DEFAULT_URL).rstrip("/")
-    available["ollama"] = _Engine("ollama", f"{ollama_url}/v1", OLLAMA_MODEL)
+    available["ollama"] = _Engine("ollama", f"{ollama_url}/v1", os.getenv("OLLAMA_MODEL") or OLLAMA_MODEL)
 
     if requested == "auto":
         return [available[name] for name in _CHAIN if name in available]

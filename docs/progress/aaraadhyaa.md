@@ -16,10 +16,10 @@
   to a local stub, no raw value in stored data or on the wire.
 - Speed: 110-160 ms per MB on prose, code and logs (budget 400 ms). Non-agent text costs under 1 ms in the analyzer.
 - **Phase 3:** `simulator/` (mock provider, nine scenarios, CLI, demo sequence, samples) and `shadowscope-scan`.
-  - 1490 detector tests and the simulator's tests pass (`pytest detector`, `python -m pytest simulator`).
-  - Run live against Part A's real server, gateway and collectors at `569bf1b`, on empty databases: all nine scenarios
-    gave their expected findings except `exfil_volume` (see Issues). The demo sequence gives 145 findings and grade F.
-    All four samples ingest. `/api/scenarios` and `/api/simulate` work through its subprocess path.
+  - 1492 detector tests and 167 simulator tests pass (`pytest detector`, `python -m pytest simulator`).
+  - Run live against Part A's real server, gateway, collectors and anomaly engine at `04ba612`, on empty databases: all
+    nine scenarios give their expected findings. All four samples ingest. `/api/scenarios` and `/api/simulate` work
+    through its subprocess path. Its 359 backend tests pass with this `detector/` and `simulator/`.
   - `gateway_block` got a real 403. With `block_on_critical` off it sent nothing. The gateway's upstream was a local stub
     throughout, and it received nothing.
 
@@ -45,10 +45,8 @@
   `llama3.2:3b` and `llama-3.1-8b-instant` model IDs are unverified.
 - Master §15 and the `local_llm_chat` scenario also need real Ollama on a Mac, so this has to be solved before the demo.
   Until then `local_llm_chat` and `customer_pii_dump` use the mock, and say so in their output and `dest`.
-- **`exfil_spike` raises no `exfil_volume` finding yet.** The 40 events and their bytes arrive, but `engine/anomaly.py`
-  does not exist on Part A's branch.
-- `main` has not had checkpoint #1 merged, so the live checks above used an export of `vishwak/core-engine` in a scratch
-  directory, not `main`. Nothing has run with both branches merged in the repo.
+- `main` has not had checkpoint #1 merged, so the live checks above used an export of `vishwak/core-engine` with this
+  branch's `detector/` and `simulator/` copied over it, not a real merge.
 - `shell_spawn` on a real machine also fires for whatever else is using AI tools. On this Mac it reports Claude Code's
   own shells beside the simulator's. Part A's log already lists this.
 - `.pre-commit-hooks.yaml` is in `detector/` (ownership rule), but pre-commit looks at a repo root. For now use the
@@ -88,17 +86,16 @@ are needed. Run it on the unescaped text, or code in a JSON body is missed.
 and `.env.example` are not sensitive.
 
 **Part A, from Phase 3:**
+- `OLLAMA_MODEL` is now read from the environment. An explicit `model` with a named engine still wins.
 - `X-ShadowScope-Sim: 1` is on all simulator traffic to local providers and the gateway. `loopback` does not skip it yet.
 - Please pass `--run-id <run_id>` in `simulate.py`, so CLI runs carry your `run:<run_id>` tag. The CLI accepts it now.
-- `engine/anomaly.py` is needed for `exfil_spike`: 40 observations of 200 KB each, with `bytes_out` set and a short
-  `body_text` sample (the full bodies go to the mock).
 - `POST /api/admin/reset` re-seeds, so it is not an empty state. Use `SHADOWSCOPE_SEED=0` and a new DB for testing.
 - `gateway_block` does not post an Observation after a 403, because your gateway has already recorded it.
 
 **Part A:**
-- All six requests to Part B in your log are met or scheduled. Met: snippets come from `redacted_text`, `match_redacted`
-  is verbatim in it, the canary fingerprint is `sha256(token)[:12]`, private key bodies are masked, and
-  `analyze_agent_payload` handles dict and str. The two simulator requests are in Next.
+- Every request to Part B in your log is met: snippets come from `redacted_text`, `match_redacted` is verbatim in it, the
+  canary fingerprint is `sha256(token)[:12]`, private key bodies are masked, `analyze_agent_payload` handles dict and str,
+  `X-ShadowScope-Sim` is sent, `gateway_block` sends only critical secrets, and `OLLAMA_MODEL` is read from the environment.
 - `evidence.offset` is a raw-text offset; it does not index into `redacted_text`. It is `None` for `source_code` and
   agent findings.
 - `analyze_agent_payload`: a JSON **request** returns findings but no actions, because its history repeats every earlier
