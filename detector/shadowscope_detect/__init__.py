@@ -1,6 +1,7 @@
-"""Public detection API (spec 01 §A9). Signatures are frozen; agent, classify and triage are still stubs."""
+"""Public detection API (spec 01 §A9). Signatures are frozen; agent analysis and triage are still stubs."""
 from __future__ import annotations
 
+from .classify import classify_process as _classify_process
 from .scanner import scan_text
 
 __version__ = "0.1.0"
@@ -18,8 +19,8 @@ def analyze_agent_payload(payload: dict | str, *, direction: str) -> dict:
 
 
 def classify_process(name: str, cmdline: list[str] | None) -> dict:
-    """Stub: recognises nothing as an AI tool."""
-    return {"is_ai_tool": False, "framework": None, "category": None, "confidence": 0.0}
+    """Whether a process is an AI tool: {is_ai_tool, framework, category, confidence}."""
+    return _classify_process(name, cmdline)
 
 
 async def triage(finding: dict, context_snippet: str, *, engine_cfg: dict) -> dict:

@@ -55,6 +55,22 @@ class AgentAction(TypedDict):
     tool_name: str | None
 
 
+class AgentAnalysis(TypedDict):
+    is_agent: bool
+    framework: str
+    tools_declared: list[str]
+    actions: list[AgentAction]
+    findings: list[DetFinding]
+    permissions: dict[str, bool]
+
+
+class ProcessClass(TypedDict):
+    is_ai_tool: bool
+    framework: str | None
+    category: Literal["cloud_llm", "local_llm", "ai_saas", "ai_coding", "unknown"] | None
+    confidence: float
+
+
 class TriageResult(TypedDict):
     verdict: Literal["true_positive", "likely_false_positive", "needs_review"]
     sensitivity: Severity
