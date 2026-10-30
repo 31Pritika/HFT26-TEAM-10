@@ -244,3 +244,233 @@ def test_poll_feeds_the_pipeline_and_port_owners(known_ip, monkeypatch):
     assert "bytes-unavailable" in event["tags"]
     assert activity.port_owner(50000)["name"] == "python3" and 999999 in activity.recently_active(60)
     assert collector.status()["reason"] == "Using lsof"
+
+
+# ---- sniffers ------------------------------------------------------------------------------------------
+
+from app.collectors import dns_sni, loopback, sniffer  # noqa: E402
+from app.collectors.sniffer import Segment  # noqa: E402
+from app.ingest import pcap  # noqa: E402
+from tests.test_ingest import client_hello, http_request  # noqa: E402
+
+
+def test_no_permission_gives_a_clear_reason(monkeypatch):
+    import scapy.sendrecv
+    def denied(**kwargs):
+        raise OSError("Permission denied: could not open /dev/bpf0")
+    monkeypatch.setattr(scapy.sendrecv, "sniff", denied)
+    for collector in (loopback.Loopback(), dns_sni.DnsSni()):
+        collector.start()
+        assert collector.status() == {"enabled": False, "running": False, "reason": sniffer.NEEDS_ROOT}
+
+
+def test_filter_failure_falls_back_to_python_filtering(monkeypatch):
+    import scapy.sendrecv
+    calls = []
+    def probe(**kwargs):
+        calls.append(kwargs.get("filter"))
+        if kwargs.get("filter"):
+            raise ValueError("cannot compile filter")
+    monkeypatch.setattr(scapy.sendrecv, "sniff", probe)
+    collector = loopback.Loopback()
+    assert collector.unavailable_reason() is None and collector.bpf_filter is None and calls[-1] is None
+
+
+def test_packets_are_decoded_from_real_frames():
+    from scapy.layers.dns import DNS, DNSQR
+    from scapy.layers.inet import IP, TCP, UDP
+    from scapy.layers.l2 import Loopback as LoopbackFrame
+    frame = LoopbackFrame(type=2) / IP(src="127.0.0.1", dst="127.0.0.1") / TCP(sport=50000, dport=11434, seq=7, flags="FA") / b"hi"
+    segment = sniffer.tcp_segment(LoopbackFrame(bytes(frame)))
+    assert (segment.sport, segment.dport, segment.seq, segment.fin_or_rst, segment.payload) == (50000, 11434, 7, True, b"hi")
+    query = IP(dst="1.1.1.1") / UDP(sport=5000, dport=53) / DNS(rd=1, qd=DNSQR(qname="api.openai.com"))
+    assert dns_sni.DnsSni().extract(IP(bytes(query))) == ("dns", "api.openai.com.")
+    answer = IP() / UDP(sport=53, dport=5000) / DNS(qr=1, qd=DNSQR(qname="api.openai.com"))
+    assert dns_sni.DnsSni().extract(IP(bytes(answer))) is None
+
+
+def test_full_hello_gives_the_host():
+    assert dns_sni.HelloBuffer().feed(("c", 1, "s"), client_hello("api.openai.com")) == "api.openai.com"
+
+
+def test_hello_split_across_packets():
+    hello = client_hello("api.anthropic.com", b"\x01" * 32)
+    buffer = dns_sni.HelloBuffer()
+    assert buffer.feed(("c", 1, "s"), hello[:70]) is None
+    assert buffer.feed(("c", 1, "s"), hello[70:]) == "api.anthropic.com"
+
+
+def test_split_never_returns_a_partial_hostname():
+    hello = client_hello("api.anthropic.com")
+    assert all(pcap.parse_sni(hello[:cut]) in (None, "api.anthropic.com") for cut in range(len(hello)))
+
+
+def test_non_hello_tls_is_ignored_and_buffer_stays_bounded():
+    buffer = dns_sni.HelloBuffer()
+    assert buffer.feed(("c", 1, "s"), b"\x17\x03\x03\x00\x10" + b"x" * 16) is None
+    truncated = client_hello("x.com")[:50]
+    for port in range(1000):
+        buffer.feed(("c", port, "s"), truncated)
+    assert len(buffer._pending) <= dns_sni.MAX_PENDING_HELLOS
+
+
+@pytest.fixture
+def empty_db():
+    from app import db
+    db.init()
+    db.reset()
+    yield db
+
+
+def test_dns_and_sni_become_events_once_per_minute(empty_db):
+    collector = dns_sni.DnsSni()
+    collector.observe("api.openai.com.", None, 53, None, now=100)
+    collector.observe("api.openai.com", "1.2.3.4", 443, 50000, now=120)
+    collector.observe("api.openai.com", "1.2.3.4", 443, 50000, now=161)
+    events = empty_db.list_events()[0]
+    assert len(events) == 2 and {event["source"] for event in events} == {"dns_sni"} and events[0]["payload_visible"] is False
+
+
+def test_unrelated_hosts_are_ignored(empty_db):
+    dns_sni.DnsSni().observe("example.com", None, 53, None, now=0)
+    assert empty_db.is_empty()
+
+
+def segment(payload, seq, outbound=True, fin=False, port=50000):
+    ends = ("127.0.0.1", port, "127.0.0.1", 11434) if outbound else ("127.0.0.1", 11434, "127.0.0.1", port)
+    return Segment(*ends, seq, fin, payload)
+
+
+def response(body=b"ok"):
+    return b"HTTP/1.1 200 OK\r\nContent-Length: " + str(len(body)).encode() + b"\r\n\r\n" + body
+
+
+def test_request_and_response_are_paired():
+    flows = loopback.HttpFlows()
+    assert flows.feed(segment(http_request(b'{"prompt":"hi"}'), 1), 0) == []
+    observation = flows.feed(segment(response(b'{"response":"yo"}'), 1, outbound=False), 1)[0]
+    assert observation["source"] == "loopback" and observation["body_text"] == '{"prompt":"hi"}' and observation["response_text"] == '{"response":"yo"}'
+    assert observation["dest"]["port"] == 11434 and observation["dest"]["path"] == "/api/chat" and observation["method"] == "POST"
+
+
+def test_nothing_is_emitted_for_a_half_received_body():
+    flows = loopback.HttpFlows()
+    message = http_request(b"x" * 500)
+    flows.feed(segment(message[:100], 1), 0)
+    assert flows.feed(segment(response(), 1, outbound=False), 1) == []
+    observation = flows.feed(segment(message[100:], 101), 2)
+    assert flows.connections and observation == []
+
+
+def test_out_of_order_and_retransmitted_segments():
+    stream = loopback.TcpStream()
+    stream.add(1, b"abc")
+    stream.add(7, b"ghi")
+    stream.add(4, b"def")
+    stream.add(4, b"def")
+    stream.add(2, b"bcd")
+    assert bytes(stream.data) == b"abcdefghi"
+
+
+def test_lost_packet_does_not_block_forever():
+    stream = loopback.TcpStream()
+    stream.add(1, b"a")
+    for index in range(loopback.MAX_OUT_OF_ORDER + 1):
+        stream.add(1000 + index, b"b")
+    assert len(stream.data) > 1
+
+
+def test_streaming_chunked_response_is_one_exchange():
+    flows = loopback.HttpFlows()
+    flows.feed(segment(http_request(b"hi"), 1), 0)
+    head = b"HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n"
+    chunks = [head, b"6\r\n{\"a\":1\r\n", b"2\r\n}\n\r\n", b"0\r\n\r\n"]
+    seq, results = 1, []
+    for chunk in chunks:
+        results.append(flows.feed(segment(chunk, seq, outbound=False), 1))
+        seq += len(chunk)
+    assert results[:3] == [[], [], []] and results[3][0]["response_text"] == '{"a":1}\n'
+
+
+def test_keep_alive_pairs_in_order():
+    flows = loopback.HttpFlows()
+    first, second = http_request(b"one"), http_request(b"two")
+    flows.feed(segment(first, 1), 0)
+    flows.feed(segment(second, 1 + len(first)), 0)
+    a = flows.feed(segment(response(b"r1"), 1, outbound=False), 1)
+    b = flows.feed(segment(response(b"r2"), 1 + len(response(b"r1")), outbound=False), 1)
+    assert (a[0]["body_text"], a[0]["response_text"], b[0]["body_text"], b[0]["response_text"]) == ("one", "r1", "two", "r2")
+
+
+def test_interleaved_connections_stay_separate():
+    flows = loopback.HttpFlows()
+    flows.feed(segment(http_request(b"from-a"), 1, port=50000), 0)
+    flows.feed(segment(http_request(b"from-b"), 1, port=50001), 0)
+    b = flows.feed(segment(response(b"to-b"), 1, outbound=False, port=50001), 1)
+    a = flows.feed(segment(response(b"to-a"), 1, outbound=False, port=50000), 1)
+    assert (a[0]["body_text"], a[0]["response_text"], b[0]["body_text"], b[0]["response_text"]) == ("from-a", "to-a", "from-b", "to-b")
+
+
+def test_interim_100_continue_does_not_steal_the_response():
+    flows = loopback.HttpFlows()
+    flows.feed(segment(http_request(b"hi"), 1), 0)
+    interim = b"HTTP/1.1 100 Continue\r\n\r\n"
+    assert flows.feed(segment(interim, 1, outbound=False), 1) == []
+    assert flows.feed(segment(response(b"done"), 1 + len(interim), outbound=False), 2)[0]["response_text"] == "done"
+
+
+def test_response_ending_at_close():
+    flows = loopback.HttpFlows()
+    flows.feed(segment(http_request(b"hi"), 1), 0)
+    raw = b"HTTP/1.0 200 OK\r\n\r\nall of it"
+    assert flows.feed(segment(raw, 1, outbound=False, fin=True), 1) == []
+    assert flows.expire(1.1) == []
+    assert flows.expire(2)[0]["response_text"] == "all of it"
+    assert not flows.connections
+
+
+def test_request_with_no_reply_is_kept_after_idle():
+    flows = loopback.HttpFlows()
+    flows.feed(segment(http_request(b"hi"), 1), 0)
+    assert flows.expire(10) == []
+    assert flows.expire(loopback.IDLE_S + 1)[0]["response_text"] is None
+
+
+def test_oversized_stream_is_cut_off_but_still_scanned():
+    flows = loopback.HttpFlows()
+    body = b"x" * (loopback.MAX_STREAM_BYTES + 1000)
+    message = b"POST /api/chat HTTP/1.1\r\nHost: localhost\r\nContent-Length: " + str(len(body)).encode() + b"\r\n\r\n" + body[:loopback.MAX_STREAM_BYTES + 500]
+    observation = flows.feed(segment(message, 1), 0)
+    assert len(observation) == 1 and not flows.connections
+
+
+def test_other_traffic_and_binary_streams_are_ignored():
+    flows = loopback.HttpFlows()
+    other = Segment("127.0.0.1", 50000, "127.0.0.1", 3000, 1, False, b"GET / HTTP/1.1\r\n\r\n")
+    assert flows.feed(other, 0) == [] and not flows.connections
+    assert flows.feed(segment(b"\x00\x01binary\r\n\r\n", 1), 0) == []
+    assert not flows.connections[("127.0.0.1", 50000, "127.0.0.1", 11434)].requests.data
+
+
+def test_loopback_payload_reaches_the_pipeline_with_findings(empty_db):
+    collector = loopback.Loopback()
+    body = b'{"model":"gemma3:4b","prompt":"mail fake.person@example.com key AKIAFAKEFAKEFAKE1234"}'
+    collector.handle(segment(http_request(body, path=b"/api/generate"), 1))
+    collector.handle(segment(response(b'{"response":"ok"}'), 1, outbound=False))
+    event = empty_db.list_events()[0][0]
+    assert event["source"] == "loopback" and event["payload_visible"] is True and event["provider"]["id"] == "ollama"
+    assert event["model"] == "gemma3:4b" and "AKIAFAKEFAKEFAKE1234" not in event["payload_preview"]
+    assert {f["subtype"] for f in empty_db.list_findings()[0]} >= {"aws_access_key", "email"}
+
+
+def test_self_traffic_is_not_recorded(empty_db):
+    collector = loopback.Loopback()
+    message = b"POST /v1/chat/completions HTTP/1.1\r\nHost: localhost\r\nX-ShadowScope-Self: 1\r\nContent-Length: 2\r\n\r\nhi"
+    collector.handle(segment(message, 1))
+    collector.handle(segment(response(), 1, outbound=False))
+    assert empty_db.is_empty()
+
+
+def test_pcap_upload_parser_still_handles_interim_responses():
+    responses = pcap.read_http(b"HTTP/1.1 100 Continue\r\n\r\n" + response(b"r"), pcap.RESPONSE_LINE, True)
+    assert [item.body for item in responses] == [b"r"]
