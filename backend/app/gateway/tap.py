@@ -52,10 +52,11 @@ def upstream_host(provider: dict | None) -> str | None:
 
 def upstream_url(host: str, path: str, query: str) -> httpx.URL:
     """The host is passed separately, so nothing in the request path can change where this goes."""
+    target = {"scheme": "https", "host": host, "path": f"/{path}"}
     override = urlsplit(config.GATEWAY_UPSTREAM or "")
     if override.hostname in matcher.LOCAL_HOSTS:
-        return httpx.URL(scheme=override.scheme, host=override.hostname, port=override.port, path=f"/{path}", query=query.encode())
-    return httpx.URL(scheme="https", host=host, path=f"/{path}", query=query.encode())
+        target.update(scheme=override.scheme, host=override.hostname, port=override.port)
+    return httpx.URL(**target, **({"query": query.encode()} if query else {}))
 
 
 def _client_process(request: Request) -> dict:

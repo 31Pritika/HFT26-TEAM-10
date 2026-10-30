@@ -175,6 +175,10 @@ def test_oversized_body(gateway, monkeypatch):
     assert client.post(CHAT, content=b"x" * 11).status_code == 413 and not upstream.calls
 
 
+def test_no_query_means_no_question_mark():
+    assert str(tap.upstream_url("api.openai.com", "v1/x", "")) == "https://api.openai.com/v1/x"
+
+
 def test_override_only_applies_to_this_machine(monkeypatch):
     monkeypatch.setattr(config, "GATEWAY_UPSTREAM", "http://127.0.0.1:9999")
     assert str(tap.upstream_url("api.openai.com", "v1/x", "")).startswith("http://127.0.0.1:9999/v1/x")
