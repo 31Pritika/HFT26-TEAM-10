@@ -23,8 +23,16 @@
   - `gateway_block` got a real 403. With `block_on_critical` off it sent nothing. The gateway's upstream was a local stub
     throughout, and it received nothing.
 
+- **Phase 4:** `extension/` (Shadow Sensor), `detector/bench.py` (5.5 MB/s, target 5), `docs/detector.md`, `docs/simulator.md`.
+  - `scanner.js` matches the Python scanner on 340 fixture cases: findings, masks, fingerprints, risk and stats
+    (`python -m pytest extension`).
+  - The real extension runs in real Chrome with trusted paste and clicks, on a local stand-in for chatgpt.com with every
+    other host blocked (`node extension/tests/e2e_chrome.mjs`). Toast, redaction, submit checks, SPA, popup and offline
+    queue all pass.
+
 ## Next
-- Phase 4: browser extension, `bench.py`, `docs/detector.md`, `docs/simulator.md`, PR to `main`.
+- Open the PR to `main`, then checkpoint merges. `gh` is not installed on this Mac, so the PR needs opening in a browser.
+- Then the checks only a person can do, listed in Issues.
 
 ## Issues
 - `python3` on this Mac is the system 3.9, which the package rejects (needs 3.11+). The venv was made with
@@ -47,6 +55,11 @@
   Until then `local_llm_chat` and `customer_pii_dump` use the mock, and say so in their output and `dest`.
 - `main` has not had checkpoint #1 merged, so the live checks above used an export of `vishwak/core-engine` with this
   branch's `detector/` and `simulator/` copied over it, not a real merge.
+- **The extension has not been tested on the real sites, or in Edge.** Edge is not installed here, and chatgpt.com and
+  claude.ai need a signed-in person. `extension/README.md` has the steps. Paste only: sending fake secrets to a real provider
+  breaks golden rule 5, so the prompt's "test with fake data" must stop before Send.
+- **Extension events show no findings in the dashboard until Part A's change below.** Events do arrive.
+- The Chrome test uses the real system clipboard, and clears it at the end.
 - `shell_spawn` on a real machine also fires for whatever else is using AI tools. On this Mac it reports Claude Code's
   own shells beside the simulator's. Part A's log already lists this.
 - `.pre-commit-hooks.yaml` is in `detector/` (ownership rule), but pre-commit looks at a repo root. For now use the
@@ -77,6 +90,10 @@ Please copy these into the TS Playground scanner. Regexes are in `detector/shado
 
 **Part D masking:** values under 12 characters keep first 1 + last 1 instead of first 4 + last 2 (spec B1), because
 4 + 2 shows 6 of 8 characters of a password. `contracts/mock/` still shows the old form for PAN and passport.
+**Part D, a shortcut:** `extension/src/scanner.js` is a complete JS port with no dependencies: `ShadowScopeScanner.scan(text)` returns
+the same result as Python, and `extension/tests/test_parity.py` proves it on 340 cases. The Playground can reuse it instead of a
+new port, which also covers the table above.
+
 **Part D, code detection (`code_detect.py`):** a line counts as code only at a line start or after code punctuation, so
 "class of students" stays prose; a trailing `{` counts only after `)`, so pretty-printed JSON is not code; and five lines
 are needed. Run it on the unescaped text, or code in a JSON body is missed.
@@ -84,6 +101,19 @@ are needed. Run it on the unescaped text, or code in a JSON body is missed.
 **Part D, agent rules (`patterns/agent.py`):** `-F file=@x` counts as `data_exfil_command`; `curl x | sudo sh` as
 `remote_code_exec`; `rm -fr` as destructive; `env` as recon only when it is a command (not `.env` or `env=`); `id_rsa.pub`
 and `.env.example` are not sensitive.
+
+**Part A, needed for the extension (tested, 359 backend tests pass with it):** `/api/extension/event` re-scans the text, but the
+extension sends it redacted, and redacted text scans clean. So extension events currently have no detector findings. Events now
+carry an extra `findings` list (masked, with fingerprints), which your model ignores. Three small changes keep it:
+```python
+# models.py, ExtensionEvent
+findings: list[dict] = []
+# api/routes_scan.py, extension_event
+result = pipeline.record_extension_event(body.site, body.url, body.text, body.ts, body.browser, body.kind, body.findings)
+# pipeline.py, record_extension_event: add `findings: list[dict] | None = None`, and pass to process():
+prescan={"scan": {"findings": findings, "redacted_text": text, "risk_score": 0, "stats": {}}} if findings else None,
+```
+A clean paste or prompt arrives with `text: ""`, as metadata only.
 
 **Part A, from Phase 3:**
 - `OLLAMA_MODEL` is now read from the environment. An explicit `model` with a named engine still wins.
