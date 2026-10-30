@@ -242,7 +242,9 @@ export default function Overview() {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                  <span className="font-mono text-[11px] text-emerald-400 uppercase">5 Collectors Active</span>
+                  <span className="font-mono text-[11px] text-emerald-400 uppercase">
+                    {overview?.collectors?.filter((c) => c.running).length ?? 6} Collectors Active
+                  </span>
                 </div>
               </div>
 
@@ -762,7 +764,7 @@ export default function Overview() {
                         </span>
                         <div className="flex items-center gap-2">
                           <span className={colors[sev].text}>{count}</span>
-                          <span className="text-muted/60 text-[10px]">({pct}%)</span>
+                          <span className="text-neutral-400 text-[10px]">({pct}%)</span>
                         </div>
                       </div>
                       <div className="h-1.5 w-full bg-white/[0.06] rounded-full overflow-hidden">
@@ -820,53 +822,59 @@ export default function Overview() {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
             {[
               {
                 id: "process_conn",
                 name: "Process & Sockets",
                 tech: "psutil net_connections",
-                active: true,
               },
               {
                 id: "ip_cache",
                 name: "IP-Cache Resolution",
                 tech: "5-min AI DNS cache",
-                active: true,
               },
               {
                 id: "dns_sni",
                 name: "DNS / TLS-SNI",
                 tech: "ClientHello plaintext",
-                active: true,
               },
               {
                 id: "loopback",
                 name: "Loopback Sniffer",
                 tech: "Ollama / LMStudio :11434",
-                active: true,
               },
               {
                 id: "agent_watch",
                 name: "Agent Watchdog",
                 tech: "Process-tree inspection",
-                active: true,
               },
-            ].map((col) => (
-              <div
-                key={col.id}
-                className="flex items-center justify-between p-3 rounded-lg border border-white/[0.06] bg-[#0c101d] text-xs font-mono"
-              >
-                <div>
-                  <p className="font-semibold text-text">{col.name}</p>
-                  <p className="text-[10px] text-muted mt-0.5 truncate">{col.tech}</p>
+              {
+                id: "gateway",
+                name: "Proxy Gateway",
+                tech: "P0 Block Stream :8789",
+              },
+            ].map((col) => {
+              const liveState = overview?.collectors?.find((c) => c.name === col.id);
+              const isRunning = liveState ? liveState.running : true;
+              return (
+                <div
+                  key={col.id}
+                  className="flex items-center justify-between p-3 rounded-lg border border-white/[0.06] bg-[#0c101d] text-xs font-mono"
+                >
+                  <div className="min-w-0 pr-1">
+                    <p className="font-semibold text-text truncate">{col.name}</p>
+                    <p className="text-[10px] text-muted mt-0.5 truncate">{col.tech}</p>
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0 ml-1">
+                    <span className={`w-2 h-2 rounded-full ${isRunning ? "bg-emerald-400 animate-pulse" : "bg-neutral-600"}`} />
+                    <span className={`text-[10px] font-bold uppercase ${isRunning ? "text-emerald-400" : "text-neutral-400"}`}>
+                      {isRunning ? "LIVE" : "STANDBY"}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[10px] text-emerald-400 font-bold uppercase">LIVE</span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </GlassCard>
       </motion.div>

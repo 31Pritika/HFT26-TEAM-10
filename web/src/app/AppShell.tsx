@@ -149,7 +149,7 @@ export default function AppShell() {
                   <span className="font-display font-bold text-base tracking-tight text-white leading-none">
                     Shadow<span className="text-cyan-400">Scope</span>
                   </span>
-                  <span className="font-mono text-[9px] uppercase tracking-widest text-muted/80 mt-0.5">
+                  <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-300 mt-0.5">
                     Security Console
                   </span>
                 </div>
@@ -170,7 +170,7 @@ export default function AppShell() {
           <div className="flex-1 overflow-y-auto py-4 px-2 space-y-6 scrollbar-thin">
             <div>
               {!collapsed && (
-                <p className="hidden lg:block px-3 mb-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-muted/60">
+                <p className="hidden lg:block px-3 mb-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-neutral-300">
                   Detection &amp; Auditing
                 </p>
               )}
@@ -219,7 +219,7 @@ export default function AppShell() {
 
             <div>
               {!collapsed && (
-                <p className="hidden lg:block px-3 mb-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-muted/60">
+                <p className="hidden lg:block px-3 mb-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-neutral-300">
                   Control &amp; Policies
                 </p>
               )}
@@ -346,11 +346,11 @@ export default function AppShell() {
               <button
                 onClick={() => setCmdOpen(true)}
                 className="flex items-center gap-2 rounded-lg border border-white/10 bg-surface/60 px-2.5 py-1.5 text-xs text-muted hover:border-white/20 hover:text-text transition-colors cursor-pointer"
-                aria-label="Open command palette"
+                aria-label="Search command palette"
               >
                 <Search className="w-3.5 h-3.5 text-muted" />
                 <span className="hidden sm:inline font-sans">Search</span>
-                <kbd className="hidden sm:inline font-mono text-[10px] text-muted/70 bg-white/5 px-1.5 py-0.5 rounded border border-white/10">
+                <kbd className="hidden sm:inline font-mono text-[10px] text-neutral-200 bg-white/10 px-1.5 py-0.5 rounded border border-white/15">
                   ⌘K
                 </kbd>
               </button>

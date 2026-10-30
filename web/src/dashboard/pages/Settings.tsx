@@ -57,6 +57,11 @@ const COLLECTOR_DESCRIPTIONS: Record<string, { label: string; desc: string; icon
     desc: "Detects autonomous agent processes (Claude Code, AutoGPT, LangChain) executing system commands.",
     icon: Cpu,
   },
+  gateway: {
+    label: "Local Proxy Gateway",
+    desc: "Pass-through gateway interceptor with automatic P0 Critical block enforcement on port 8789.",
+    icon: ShieldCheck,
+  },
 };
 
 export default function Settings() {

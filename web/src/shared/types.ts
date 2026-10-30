@@ -93,6 +93,7 @@ export interface Policy {
   redact_in_storage: true;             // always true
   llm_triage: { enabled: boolean; engine: "auto" | "featherless" | "groq" | "ollama" | "rules"; model: string | null };
   self_exclude: true;                  // ShadowScope's own LLM calls are never flagged
+  block_on_critical?: boolean;
 }
 
 export interface ScanResult { findings: Finding[]; risk_score: number; redacted_text: string; stats: { chars: number; lines: number; entropy_max: number; flagged_tokens: number; duration_ms: number } }
@@ -135,8 +136,9 @@ export interface Health {
   status: "ok";
   version: string;
   uptime_s: number;
-  collectors: Record<string, { enabled: boolean; running: boolean; reason?: string }>;
+  collectors: Record<string, { enabled?: boolean; running: boolean; reason?: string }>;
   llm_engine: string;
+  detector?: string;
 }
 
 export interface Page<T> {
