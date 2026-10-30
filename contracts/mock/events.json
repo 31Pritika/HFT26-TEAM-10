@@ -1,0 +1,5676 @@
+{
+  "items": [
+    {
+      "id": "evt_0001",
+      "ts": "2026-10-30T11:36:47Z",
+      "source": "loopback",
+      "process": {
+        "pid": 47660,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "mock_ai",
+        "name": "ShadowScope Mock Provider",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 8788,
+        "path": null,
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 38404,
+      "bytes_in": 26840,
+      "payload_visible": true,
+      "payload_preview": "Explain the difference between TCP and UDP for a new hire.",
+      "sanctioned": false,
+      "risk_score": 100,
+      "finding_ids": [
+        "fnd_0044",
+        "fnd_0058"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent",
+        "tool-call"
+      ]
+    },
+    {
+      "id": "evt_0002",
+      "ts": "2026-10-30T11:34:34Z",
+      "source": "har",
+      "process": {
+        "pid": 66046,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "chatgpt",
+        "name": "ChatGPT",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "chatgpt.com",
+        "ip": "104.18.181.121",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 28747,
+      "bytes_in": 83390,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0003",
+      "ts": "2026-10-30T11:25:35Z",
+      "source": "extension",
+      "process": {
+        "pid": 27022,
+        "name": "Microsoft Edge",
+        "exe": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "ms_copilot",
+        "name": "Microsoft Copilot",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "copilot.microsoft.com",
+        "ip": "104.18.212.187",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 36510,
+      "bytes_in": 57678,
+      "payload_visible": true,
+      "payload_preview": "ifsc: FAKE•••••PL",
+      "sanctioned": false,
+      "risk_score": 33,
+      "finding_ids": [
+        "fnd_0029"
+      ],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0004",
+      "ts": "2026-10-30T11:22:20Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 21754,
+        "name": "claude",
+        "exe": "/opt/homebrew/bin/claude",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "claude --print"
+      },
+      "provider": {
+        "id": "anthropic",
+        "name": "Anthropic API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.anthropic.com",
+        "ip": "104.18.208.105",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 5786,
+      "bytes_in": 33436,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0005",
+      "ts": "2026-10-30T11:15:18Z",
+      "source": "simulator",
+      "process": {
+        "pid": 77835,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "mock_ai",
+        "name": "ShadowScope Mock Provider",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 8788,
+        "path": null,
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 33985,
+      "bytes_in": 47441,
+      "payload_visible": true,
+      "payload_preview": "Rewrite this paragraph in a friendlier tone.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0006",
+      "ts": "2026-10-30T11:12:09Z",
+      "source": "loopback",
+      "process": {
+        "pid": 36156,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 31604,
+      "bytes_in": 40145,
+      "payload_visible": true,
+      "payload_preview": "Explain the difference between TCP and UDP for a new hire.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0007",
+      "ts": "2026-10-30T11:09:34Z",
+      "source": "simulator",
+      "process": {
+        "pid": 29212,
+        "name": "aider",
+        "exe": "/opt/homebrew/bin/aider",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "aider --yes src/billing.py"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.248.13",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 28479,
+      "bytes_in": 33770,
+      "payload_visible": true,
+      "payload_preview": "Write a unit test for a function that parses dates.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0008",
+      "ts": "2026-10-30T10:57:52Z",
+      "source": "gateway",
+      "process": {
+        "pid": 30478,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.238.57",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 9440,
+      "bytes_in": 91608,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0009",
+      "ts": "2026-10-30T10:54:08Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 14892,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "claude_web",
+        "name": "Claude.ai",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "claude.ai",
+        "ip": "104.18.23.132",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 45635,
+      "bytes_in": 43482,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0010",
+      "ts": "2026-10-30T10:46:13Z",
+      "source": "gateway",
+      "process": {
+        "pid": 80659,
+        "name": "node",
+        "exe": "/opt/homebrew/bin/node",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "node crewai_worker.js"
+      },
+      "provider": {
+        "id": "groq",
+        "name": "Groq",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.groq.com",
+        "ip": "104.18.86.181",
+        "port": 443,
+        "path": "/openai/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "llama-3.1-8b-instant",
+      "bytes_out": 53869,
+      "bytes_in": 52127,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0011",
+      "ts": "2026-10-30T10:40:30Z",
+      "source": "extension",
+      "process": {
+        "pid": 54133,
+        "name": "ChatGPT",
+        "exe": "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "chatgpt",
+        "name": "ChatGPT",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "chatgpt.com",
+        "ip": "104.18.104.70",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 46523,
+      "bytes_in": 89627,
+      "payload_visible": true,
+      "payload_preview": "passport number J123••67\ndef •••••••••••••••••••••••••••••):",
+      "sanctioned": false,
+      "risk_score": 50,
+      "finding_ids": [
+        "fnd_0030",
+        "fnd_0060"
+      ],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0012",
+      "ts": "2026-10-30T10:31:07Z",
+      "source": "log",
+      "process": {
+        "pid": 81007,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.59.238",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 44145,
+      "bytes_in": 36568,
+      "payload_visible": true,
+      "payload_preview": "Explain the difference between TCP and UDP for a new hire.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0013",
+      "ts": "2026-10-30T10:26:49Z",
+      "source": "simulator",
+      "process": {
+        "pid": 35290,
+        "name": "node",
+        "exe": "/opt/homebrew/bin/node",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "node crewai_worker.js"
+      },
+      "provider": {
+        "id": "groq",
+        "name": "Groq",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.groq.com",
+        "ip": "104.18.243.175",
+        "port": 443,
+        "path": "/openai/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "llama-3.1-8b-instant",
+      "bytes_out": 26813,
+      "bytes_in": 10086,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0014",
+      "ts": "2026-10-30T10:22:44Z",
+      "source": "log",
+      "process": {
+        "pid": 43208,
+        "name": "Code Helper (Plugin)",
+        "exe": "/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin)",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "copilot",
+        "name": "GitHub Copilot",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api.githubcopilot.com",
+        "ip": "104.18.224.247",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 18340,
+      "bytes_in": 96463,
+      "payload_visible": true,
+      "payload_preview": "connect to fake••••••rp",
+      "sanctioned": true,
+      "risk_score": 8,
+      "finding_ids": [
+        "fnd_0034"
+      ],
+      "tags": []
+    },
+    {
+      "id": "evt_0015",
+      "ts": "2026-10-30T09:52:27Z",
+      "source": "live_conn",
+      "process": {
+        "pid": 83052,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "gemini_web",
+        "name": "Gemini",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "gemini.google.com",
+        "ip": "104.18.162.193",
+        "port": 443,
+        "path": null,
+        "protocol": "tcp"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 36371,
+      "bytes_in": 94719,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0016",
+      "ts": "2026-10-30T09:52:27Z",
+      "source": "simulator",
+      "process": {
+        "pid": 86077,
+        "name": "LM Studio",
+        "exe": "/Applications/LM Studio.app/Contents/MacOS/LM Studio",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "lmstudio",
+        "name": "LM Studio",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 1234,
+        "path": "/v1/*",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "qwen2.5-coder",
+      "bytes_out": 43949,
+      "bytes_in": 12959,
+      "payload_visible": true,
+      "payload_preview": "token: \"FAKE••••••••••••••••••••••••••••••••••dm\"",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [
+        "fnd_0020"
+      ],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0017",
+      "ts": "2026-10-30T09:42:34Z",
+      "source": "extension",
+      "process": {
+        "pid": 71834,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "gemini_web",
+        "name": "Gemini",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "gemini.google.com",
+        "ip": "104.18.152.170",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 21068,
+      "bytes_in": 39735,
+      "payload_visible": true,
+      "payload_preview": "Rewrite this paragraph in a friendlier tone.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0018",
+      "ts": "2026-10-30T09:32:01Z",
+      "source": "loopback",
+      "process": {
+        "pid": 40299,
+        "name": "LM Studio",
+        "exe": "/Applications/LM Studio.app/Contents/MacOS/LM Studio",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "lmstudio",
+        "name": "LM Studio",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 1234,
+        "path": "/v1/*",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "qwen2.5-coder",
+      "bytes_out": 21272,
+      "bytes_in": 12113,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 5,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0019",
+      "ts": "2026-10-30T09:29:12Z",
+      "source": "extension",
+      "process": {
+        "pid": 43247,
+        "name": "Microsoft Edge",
+        "exe": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "perplexity",
+        "name": "Perplexity",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "api.perplexity.ai",
+        "ip": "104.18.85.188",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 52505,
+      "bytes_in": 12430,
+      "payload_visible": true,
+      "payload_preview": "Why is my CSS grid overflowing on mobile?",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0020",
+      "ts": "2026-10-30T09:26:17Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 63867,
+        "name": "claude",
+        "exe": "/opt/homebrew/bin/claude",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "claude --print"
+      },
+      "provider": {
+        "id": "anthropic",
+        "name": "Anthropic API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.anthropic.com",
+        "ip": "104.18.233.239",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 51932,
+      "bytes_in": 73532,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0021",
+      "ts": "2026-10-30T09:12:28Z",
+      "source": "loopback",
+      "process": {
+        "pid": 62906,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "mock_ai",
+        "name": "ShadowScope Mock Provider",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 8788,
+        "path": null,
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 10138,
+      "bytes_in": 45164,
+      "payload_visible": true,
+      "payload_preview": "GROQ_API_KEY=gsk_••••••••••••••••••••••••••••••••••••••••••LE\npan: FAKP••••4E",
+      "sanctioned": false,
+      "risk_score": 85,
+      "finding_ids": [
+        "fnd_0011",
+        "fnd_0026",
+        "fnd_0040"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent",
+        "tool-call"
+      ]
+    },
+    {
+      "id": "evt_0022",
+      "ts": "2026-10-30T08:56:58Z",
+      "source": "live_conn",
+      "process": {
+        "pid": 30507,
+        "name": "Microsoft Edge",
+        "exe": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "deepseek",
+        "name": "DeepSeek",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.deepseek.com",
+        "ip": "104.18.170.51",
+        "port": 443,
+        "path": null,
+        "protocol": "tcp"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 13326,
+      "bytes_in": 108980,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 85,
+      "finding_ids": [
+        "fnd_0051"
+      ],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0023",
+      "ts": "2026-10-30T08:36:28Z",
+      "source": "simulator",
+      "process": {
+        "pid": 80112,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 58205,
+      "bytes_in": 66273,
+      "payload_visible": true,
+      "payload_preview": "contact: f•••@e•••.com",
+      "sanctioned": true,
+      "risk_score": 20,
+      "finding_ids": [
+        "fnd_0021"
+      ],
+      "tags": []
+    },
+    {
+      "id": "evt_0024",
+      "ts": "2026-10-30T08:09:18Z",
+      "source": "extension",
+      "process": {
+        "pid": 50772,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "claude_web",
+        "name": "Claude.ai",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "claude.ai",
+        "ip": "104.18.109.134",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 22303,
+      "bytes_in": 118190,
+      "payload_visible": true,
+      "payload_preview": "Write a unit test for a function that parses dates.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0025",
+      "ts": "2026-10-30T07:54:46Z",
+      "source": "har",
+      "process": {
+        "pid": 24709,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "claude_web",
+        "name": "Claude.ai",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "claude.ai",
+        "ip": "104.18.104.23",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 40869,
+      "bytes_in": 2650,
+      "payload_visible": true,
+      "payload_preview": "Rewrite this paragraph in a friendlier tone.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0026",
+      "ts": "2026-10-30T07:45:24Z",
+      "source": "pcap",
+      "process": {
+        "pid": 31959,
+        "name": "node",
+        "exe": "/opt/homebrew/bin/node",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "node crewai_worker.js"
+      },
+      "provider": {
+        "id": "groq",
+        "name": "Groq",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.groq.com",
+        "ip": "104.18.159.86",
+        "port": 443,
+        "path": "/openai/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "llama-3.1-8b-instant",
+      "bytes_out": 23686,
+      "bytes_in": 83350,
+      "payload_visible": true,
+      "payload_preview": "card: 4111•••••••••••••11",
+      "sanctioned": false,
+      "risk_score": 85,
+      "finding_ids": [
+        "fnd_0031"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0027",
+      "ts": "2026-10-30T07:37:40Z",
+      "source": "log",
+      "process": {
+        "pid": 42925,
+        "name": "Code Helper (Plugin)",
+        "exe": "/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin)",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "copilot",
+        "name": "GitHub Copilot",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api.githubcopilot.com",
+        "ip": "104.18.119.79",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 53347,
+      "bytes_in": 18591,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0028",
+      "ts": "2026-10-30T07:37:33Z",
+      "source": "live_conn",
+      "process": {
+        "pid": 26434,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.130.244",
+        "port": 443,
+        "path": null,
+        "protocol": "tcp"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 48383,
+      "bytes_in": 17374,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0029",
+      "ts": "2026-10-30T07:16:32Z",
+      "source": "log",
+      "process": {
+        "pid": 29782,
+        "name": "Code Helper (Plugin)",
+        "exe": "/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin)",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "copilot",
+        "name": "GitHub Copilot",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api.githubcopilot.com",
+        "ip": "104.18.216.152",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 26862,
+      "bytes_in": 88284,
+      "payload_visible": true,
+      "payload_preview": "Write a unit test for a function that parses dates.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0030",
+      "ts": "2026-10-30T07:04:50Z",
+      "source": "extension",
+      "process": {
+        "pid": 43152,
+        "name": "ChatGPT",
+        "exe": "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "chatgpt",
+        "name": "ChatGPT",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "chatgpt.com",
+        "ip": "104.18.57.182",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 23374,
+      "bytes_in": 76420,
+      "payload_visible": true,
+      "payload_preview": "Write a unit test for a function that parses dates.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0031",
+      "ts": "2026-10-30T06:44:16Z",
+      "source": "extension",
+      "process": {
+        "pid": 12510,
+        "name": "Microsoft Edge",
+        "exe": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "ms_copilot",
+        "name": "Microsoft Copilot",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "copilot.microsoft.com",
+        "ip": "104.18.76.86",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 45324,
+      "bytes_in": 33836,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0032",
+      "ts": "2026-10-30T06:33:24Z",
+      "source": "loopback",
+      "process": {
+        "pid": 34932,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 31619,
+      "bytes_in": 12859,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0033",
+      "ts": "2026-10-30T06:33:12Z",
+      "source": "extension",
+      "process": {
+        "pid": 52097,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "claude_web",
+        "name": "Claude.ai",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "claude.ai",
+        "ip": "104.18.28.69",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 4681,
+      "bytes_in": 100521,
+      "payload_visible": true,
+      "payload_preview": "Explain the difference between TCP and UDP for a new hire.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0034",
+      "ts": "2026-10-30T06:27:41Z",
+      "source": "simulator",
+      "process": {
+        "pid": 27447,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "mock_ai",
+        "name": "ShadowScope Mock Provider",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 8788,
+        "path": null,
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 9457,
+      "bytes_in": 27625,
+      "payload_visible": true,
+      "payload_preview": "Why is my CSS grid overflowing on mobile?",
+      "sanctioned": false,
+      "risk_score": 75,
+      "finding_ids": [
+        "fnd_0041"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent",
+        "tool-call"
+      ]
+    },
+    {
+      "id": "evt_0035",
+      "ts": "2026-10-30T06:24:40Z",
+      "source": "log",
+      "process": {
+        "pid": 19552,
+        "name": "claude",
+        "exe": "/opt/homebrew/bin/claude",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "claude --print"
+      },
+      "provider": {
+        "id": "anthropic",
+        "name": "Anthropic API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.anthropic.com",
+        "ip": "104.18.221.25",
+        "port": 443,
+        "path": "/v1/messages",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "claude-sonnet-4-5",
+      "bytes_out": 31423,
+      "bytes_in": 10815,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0036",
+      "ts": "2026-10-30T06:17:36Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 77030,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.104.202",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 11895,
+      "bytes_in": 92850,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0037",
+      "ts": "2026-10-30T06:15:21Z",
+      "source": "pcap",
+      "process": {
+        "pid": 31026,
+        "name": "node",
+        "exe": "/opt/homebrew/bin/node",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "node crewai_worker.js"
+      },
+      "provider": {
+        "id": "groq",
+        "name": "Groq",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.groq.com",
+        "ip": "104.18.33.170",
+        "port": 443,
+        "path": "/openai/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "llama-3.1-8b-instant",
+      "bytes_out": 41524,
+      "bytes_in": 22274,
+      "payload_visible": true,
+      "payload_preview": "Explain the difference between TCP and UDP for a new hire.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0038",
+      "ts": "2026-10-30T06:10:10Z",
+      "source": "loopback",
+      "process": {
+        "pid": 8465,
+        "name": "LM Studio",
+        "exe": "/Applications/LM Studio.app/Contents/MacOS/LM Studio",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "lmstudio",
+        "name": "LM Studio",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 1234,
+        "path": "/v1/*",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "qwen2.5-coder",
+      "bytes_out": 27109,
+      "bytes_in": 97172,
+      "payload_visible": true,
+      "payload_preview": "Why is my CSS grid overflowing on mobile?",
+      "sanctioned": false,
+      "risk_score": 5,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0039",
+      "ts": "2026-10-30T06:00:55Z",
+      "source": "log",
+      "process": {
+        "pid": 75296,
+        "name": "claude",
+        "exe": "/opt/homebrew/bin/claude",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "claude --print"
+      },
+      "provider": {
+        "id": "anthropic",
+        "name": "Anthropic API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.anthropic.com",
+        "ip": "104.18.235.64",
+        "port": 443,
+        "path": "/v1/messages",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "claude-sonnet-4-5",
+      "bytes_out": 25249,
+      "bytes_in": 113688,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0040",
+      "ts": "2026-10-30T05:37:11Z",
+      "source": "simulator",
+      "process": {
+        "pid": 63618,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.251.155",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 36780,
+      "bytes_in": 63494,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0041",
+      "ts": "2026-10-30T05:29:00Z",
+      "source": "extension",
+      "process": {
+        "pid": 67770,
+        "name": "Microsoft Edge",
+        "exe": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "perplexity",
+        "name": "Perplexity",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "api.perplexity.ai",
+        "ip": "104.18.17.47",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 46967,
+      "bytes_in": 106451,
+      "payload_visible": true,
+      "payload_preview": "Explain the difference between TCP and UDP for a new hire.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0042",
+      "ts": "2026-10-30T05:22:02Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 5017,
+        "name": "Code Helper (Plugin)",
+        "exe": "/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin)",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "copilot",
+        "name": "GitHub Copilot",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api.githubcopilot.com",
+        "ip": "104.18.131.44",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 5056,
+      "bytes_in": 67210,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0043",
+      "ts": "2026-10-30T05:21:54Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 66278,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "cursor",
+        "name": "Cursor",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api2.cursor.sh",
+        "ip": "104.18.134.130",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 4683,
+      "bytes_in": 101939,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 20,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0044",
+      "ts": "2026-10-30T05:20:26Z",
+      "source": "simulator",
+      "process": {
+        "pid": 63072,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "mock_ai",
+        "name": "ShadowScope Mock Provider",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 8788,
+        "path": null,
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 44942,
+      "bytes_in": 65717,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": false,
+      "risk_score": 60,
+      "finding_ids": [
+        "fnd_0043",
+        "fnd_0047"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent",
+        "tool-call",
+        "burst"
+      ]
+    },
+    {
+      "id": "evt_0045",
+      "ts": "2026-10-30T05:20:09Z",
+      "source": "loopback",
+      "process": {
+        "pid": 52012,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 34054,
+      "bytes_in": 92002,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0046",
+      "ts": "2026-10-30T05:19:51Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 62665,
+        "name": "claude",
+        "exe": "/opt/homebrew/bin/claude",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "claude --print"
+      },
+      "provider": {
+        "id": "anthropic",
+        "name": "Anthropic API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.anthropic.com",
+        "ip": "104.18.126.90",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 43682,
+      "bytes_in": 116786,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0047",
+      "ts": "2026-10-30T05:11:03Z",
+      "source": "loopback",
+      "process": {
+        "pid": 79019,
+        "name": "LM Studio",
+        "exe": "/Applications/LM Studio.app/Contents/MacOS/LM Studio",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "lmstudio",
+        "name": "LM Studio",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 1234,
+        "path": "/v1/*",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "qwen2.5-coder",
+      "bytes_out": 12496,
+      "bytes_in": 36697,
+      "payload_visible": true,
+      "payload_preview": "Why is my CSS grid overflowing on mobile?",
+      "sanctioned": false,
+      "risk_score": 5,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0048",
+      "ts": "2026-10-30T05:07:27Z",
+      "source": "simulator",
+      "process": {
+        "pid": 4255,
+        "name": "LM Studio",
+        "exe": "/Applications/LM Studio.app/Contents/MacOS/LM Studio",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "lmstudio",
+        "name": "LM Studio",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 1234,
+        "path": "/v1/*",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "qwen2.5-coder",
+      "bytes_out": 5462,
+      "bytes_in": 111200,
+      "payload_visible": true,
+      "payload_preview": "{\"typ•••••••••••••••••••••••••••••••••••••••••••••••••e\"}\nAWS_ACCESS_KEY_ID=AKIA••••••••••••••EE",
+      "sanctioned": false,
+      "risk_score": 70,
+      "finding_ids": [
+        "fnd_0018",
+        "fnd_0059"
+      ],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0049",
+      "ts": "2026-10-30T05:04:45Z",
+      "source": "log",
+      "process": {
+        "pid": 12598,
+        "name": "node",
+        "exe": "/opt/homebrew/bin/node",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "node crewai_worker.js"
+      },
+      "provider": {
+        "id": "groq",
+        "name": "Groq",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.groq.com",
+        "ip": "104.18.72.94",
+        "port": 443,
+        "path": "/openai/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "llama-3.1-8b-instant",
+      "bytes_out": 58250,
+      "bytes_in": 111918,
+      "payload_visible": true,
+      "payload_preview": "Rewrite this paragraph in a friendlier tone.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0050",
+      "ts": "2026-10-30T05:03:39Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 70456,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "chatgpt",
+        "name": "ChatGPT",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "chatgpt.com",
+        "ip": "104.18.254.89",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 7116,
+      "bytes_in": 48176,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0051",
+      "ts": "2026-10-30T05:00:21Z",
+      "source": "gateway",
+      "process": {
+        "pid": 84006,
+        "name": "Windsurf",
+        "exe": "/Applications/Windsurf.app/Contents/MacOS/Windsurf",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "codeium",
+        "name": "Codeium / Windsurf",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "server.codeium.com",
+        "ip": "104.18.165.126",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 8400000,
+      "bytes_in": 100917,
+      "payload_visible": true,
+      "payload_preview": "Write a unit test for a function that parses dates.",
+      "sanctioned": false,
+      "risk_score": 60,
+      "finding_ids": [
+        "fnd_0052"
+      ],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0052",
+      "ts": "2026-10-30T04:52:24Z",
+      "source": "loopback",
+      "process": {
+        "pid": 28139,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 51234,
+      "bytes_in": 45408,
+      "payload_visible": true,
+      "payload_preview": "----•••••••••••••••••••••••••••••••••••••LE",
+      "sanctioned": true,
+      "risk_score": 65,
+      "finding_ids": [
+        "fnd_0015",
+        "fnd_0050"
+      ],
+      "tags": []
+    },
+    {
+      "id": "evt_0053",
+      "ts": "2026-10-30T04:37:39Z",
+      "source": "log",
+      "process": {
+        "pid": 59417,
+        "name": "Windsurf",
+        "exe": "/Applications/Windsurf.app/Contents/MacOS/Windsurf",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "codeium",
+        "name": "Codeium / Windsurf",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "server.codeium.com",
+        "ip": "104.18.177.147",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 22389,
+      "bytes_in": 50401,
+      "payload_visible": true,
+      "payload_preview": "Authorization: Bearer eyJh•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••re",
+      "sanctioned": false,
+      "risk_score": 65,
+      "finding_ids": [
+        "fnd_0014",
+        "fnd_0048"
+      ],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0054",
+      "ts": "2026-10-30T04:36:56Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 50342,
+        "name": "ChatGPT",
+        "exe": "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "chatgpt",
+        "name": "ChatGPT",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "chatgpt.com",
+        "ip": "104.18.201.89",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 47123,
+      "bytes_in": 31464,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0055",
+      "ts": "2026-10-30T04:17:58Z",
+      "source": "gateway",
+      "process": {
+        "pid": 9639,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.91.108",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 22663,
+      "bytes_in": 86017,
+      "payload_visible": true,
+      "payload_preview": "Write a unit test for a function that parses dates.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0056",
+      "ts": "2026-10-30T04:17:29Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 75729,
+        "name": "ChatGPT",
+        "exe": "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "chatgpt",
+        "name": "ChatGPT",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "chatgpt.com",
+        "ip": "104.18.121.94",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 24067,
+      "bytes_in": 74659,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0057",
+      "ts": "2026-10-30T04:14:38Z",
+      "source": "live_conn",
+      "process": {
+        "pid": 87827,
+        "name": "ChatGPT",
+        "exe": "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "chatgpt",
+        "name": "ChatGPT",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "chatgpt.com",
+        "ip": "104.18.40.79",
+        "port": 443,
+        "path": null,
+        "protocol": "tcp"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 42103,
+      "bytes_in": 68745,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0058",
+      "ts": "2026-10-30T04:14:35Z",
+      "source": "extension",
+      "process": {
+        "pid": 11947,
+        "name": "ChatGPT",
+        "exe": "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "chatgpt",
+        "name": "ChatGPT",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "chatgpt.com",
+        "ip": "104.18.191.104",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 25685,
+      "bytes_in": 103423,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0059",
+      "ts": "2026-10-30T04:09:34Z",
+      "source": "loopback",
+      "process": {
+        "pid": 70017,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 26490,
+      "bytes_in": 25971,
+      "payload_visible": true,
+      "payload_preview": "Why is my CSS grid overflowing on mobile?",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0060",
+      "ts": "2026-10-30T04:05:36Z",
+      "source": "simulator",
+      "process": {
+        "pid": 62022,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.32.237",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 46501,
+      "bytes_in": 79855,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": false,
+      "risk_score": 95,
+      "finding_ids": [
+        "fnd_0039"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent",
+        "tool-call"
+      ]
+    },
+    {
+      "id": "evt_0061",
+      "ts": "2026-10-30T04:04:48Z",
+      "source": "gateway",
+      "process": {
+        "pid": 66481,
+        "name": "Code Helper (Plugin)",
+        "exe": "/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin)",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "copilot",
+        "name": "GitHub Copilot",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api.githubcopilot.com",
+        "ip": "104.18.65.159",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 40008,
+      "bytes_in": 14519,
+      "payload_visible": true,
+      "payload_preview": "Rewrite this paragraph in a friendlier tone.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0062",
+      "ts": "2026-10-30T03:53:01Z",
+      "source": "pcap",
+      "process": {
+        "pid": 39545,
+        "name": "Windsurf",
+        "exe": "/Applications/Windsurf.app/Contents/MacOS/Windsurf",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "codeium",
+        "name": "Codeium / Windsurf",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "server.codeium.com",
+        "ip": "104.18.229.53",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 33113,
+      "bytes_in": 116795,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": false,
+      "risk_score": 20,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0063",
+      "ts": "2026-10-30T03:45:27Z",
+      "source": "loopback",
+      "process": {
+        "pid": 36968,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 23988,
+      "bytes_in": 114571,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0064",
+      "ts": "2026-10-30T03:41:44Z",
+      "source": "extension",
+      "process": {
+        "pid": 50389,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "claude_web",
+        "name": "Claude.ai",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "claude.ai",
+        "ip": "104.18.95.103",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 50110,
+      "bytes_in": 51895,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0065",
+      "ts": "2026-10-30T03:26:42Z",
+      "source": "loopback",
+      "process": {
+        "pid": 40565,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "mock_ai",
+        "name": "ShadowScope Mock Provider",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 8788,
+        "path": null,
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 44327,
+      "bytes_in": 18922,
+      "payload_visible": true,
+      "payload_preview": "GOOGLE_API_KEY=\"AIza•••••••••••••••••••••••••••••••••FA\"\nclie•••••••••••••••••••••••••••••••2\"\nmobile +91 ••••••••10",
+      "sanctioned": false,
+      "risk_score": 95,
+      "finding_ids": [
+        "fnd_0006",
+        "fnd_0019",
+        "fnd_0023",
+        "fnd_0046",
+        "fnd_0054"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent",
+        "tool-call"
+      ]
+    },
+    {
+      "id": "evt_0066",
+      "ts": "2026-10-30T03:21:57Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 54114,
+        "name": "aider",
+        "exe": "/opt/homebrew/bin/aider",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "aider --yes src/billing.py"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.27.129",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 4476,
+      "bytes_in": 56158,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0067",
+      "ts": "2026-10-30T03:09:29Z",
+      "source": "gateway",
+      "process": {
+        "pid": 18260,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.126.114",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 10781,
+      "bytes_in": 46119,
+      "payload_visible": true,
+      "payload_preview": "Why is my CSS grid overflowing on mobile?",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0068",
+      "ts": "2026-10-30T02:59:16Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 66161,
+        "name": "Code Helper (Plugin)",
+        "exe": "/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin)",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "copilot",
+        "name": "GitHub Copilot",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api.githubcopilot.com",
+        "ip": "104.18.55.152",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 6209,
+      "bytes_in": 78191,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0069",
+      "ts": "2026-10-30T02:57:34Z",
+      "source": "log",
+      "process": {
+        "pid": 64185,
+        "name": "Code Helper (Plugin)",
+        "exe": "/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin)",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "copilot",
+        "name": "GitHub Copilot",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api.githubcopilot.com",
+        "ip": "104.18.58.33",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 38781,
+      "bytes_in": 8277,
+      "payload_visible": true,
+      "payload_preview": "Explain the difference between TCP and UDP for a new hire.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0070",
+      "ts": "2026-10-30T02:51:27Z",
+      "source": "gateway",
+      "process": {
+        "pid": 5604,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.34.85",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 11492,
+      "bytes_in": 54847,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0071",
+      "ts": "2026-10-30T02:50:17Z",
+      "source": "simulator",
+      "process": {
+        "pid": 47220,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.186.199",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 43782,
+      "bytes_in": 103279,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0072",
+      "ts": "2026-10-30T02:45:41Z",
+      "source": "gateway",
+      "process": {
+        "pid": 7659,
+        "name": "Code Helper (Plugin)",
+        "exe": "/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin)",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "copilot",
+        "name": "GitHub Copilot",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api.githubcopilot.com",
+        "ip": "104.18.171.128",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 38202,
+      "bytes_in": 68939,
+      "payload_visible": true,
+      "payload_preview": "Rewrite this paragraph in a friendlier tone.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0073",
+      "ts": "2026-10-30T02:39:25Z",
+      "source": "gateway",
+      "process": {
+        "pid": 82549,
+        "name": "aider",
+        "exe": "/opt/homebrew/bin/aider",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "aider --yes src/billing.py"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.212.74",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 19645,
+      "bytes_in": 54859,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0074",
+      "ts": "2026-10-30T02:06:32Z",
+      "source": "log",
+      "process": {
+        "pid": 67812,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.105.17",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 35678,
+      "bytes_in": 21612,
+      "payload_visible": true,
+      "payload_preview": "office +44 ••••••••00",
+      "sanctioned": false,
+      "risk_score": 70,
+      "finding_ids": [
+        "fnd_0024",
+        "fnd_0057"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0075",
+      "ts": "2026-10-30T02:00:30Z",
+      "source": "gateway",
+      "process": {
+        "pid": 74423,
+        "name": "aider",
+        "exe": "/opt/homebrew/bin/aider",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "aider --yes src/billing.py"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.252.210",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 30957,
+      "bytes_in": 21203,
+      "payload_visible": true,
+      "payload_preview": "internal_ref=CANA•••••••••A9\ndef •••••••••••••••••••••••••••••):",
+      "sanctioned": false,
+      "risk_score": 90,
+      "finding_ids": [
+        "fnd_0037",
+        "fnd_0056"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0076",
+      "ts": "2026-10-30T01:49:21Z",
+      "source": "gateway",
+      "process": {
+        "pid": 30966,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.33.184",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 6956,
+      "bytes_in": 8446,
+      "payload_visible": true,
+      "payload_preview": "Explain the difference between TCP and UDP for a new hire.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0077",
+      "ts": "2026-10-30T01:36:00Z",
+      "source": "extension",
+      "process": {
+        "pid": 34393,
+        "name": "ChatGPT",
+        "exe": "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "chatgpt",
+        "name": "ChatGPT",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "chatgpt.com",
+        "ip": "104.18.50.202",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 31987,
+      "bytes_in": 47338,
+      "payload_visible": true,
+      "payload_preview": "SENDGRID_API_KEY=SG.F•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••PL\ngstin: 29FA•••••••••Z5",
+      "sanctioned": false,
+      "risk_score": 70,
+      "finding_ids": [
+        "fnd_0013",
+        "fnd_0027"
+      ],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0078",
+      "ts": "2026-10-30T01:27:52Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 9081,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.45.157",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 53435,
+      "bytes_in": 464,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0079",
+      "ts": "2026-10-30T01:15:34Z",
+      "source": "gateway",
+      "process": {
+        "pid": 60371,
+        "name": "aider",
+        "exe": "/opt/homebrew/bin/aider",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "aider --yes src/billing.py"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.84.216",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 4035,
+      "bytes_in": 59812,
+      "payload_visible": true,
+      "payload_preview": "Write a unit test for a function that parses dates.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0080",
+      "ts": "2026-10-30T01:12:10Z",
+      "source": "simulator",
+      "process": {
+        "pid": 4462,
+        "name": "node",
+        "exe": "/opt/homebrew/bin/node",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "node crewai_worker.js"
+      },
+      "provider": {
+        "id": "groq",
+        "name": "Groq",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.groq.com",
+        "ip": "104.18.201.232",
+        "port": 443,
+        "path": "/openai/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "llama-3.1-8b-instant",
+      "bytes_out": 19161,
+      "bytes_in": 91925,
+      "payload_visible": true,
+      "payload_preview": "Rewrite this paragraph in a friendlier tone.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0081",
+      "ts": "2026-10-30T01:12:02Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 15664,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "cursor",
+        "name": "Cursor",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api2.cursor.sh",
+        "ip": "104.18.198.9",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 51133,
+      "bytes_in": 114177,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 20,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0082",
+      "ts": "2026-10-30T01:07:32Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 56577,
+        "name": "Code Helper (Plugin)",
+        "exe": "/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin)",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "copilot",
+        "name": "GitHub Copilot",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api.githubcopilot.com",
+        "ip": "104.18.130.237",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 51750,
+      "bytes_in": 30900,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0083",
+      "ts": "2026-10-30T00:58:49Z",
+      "source": "live_conn",
+      "process": {
+        "pid": 37936,
+        "name": "claude",
+        "exe": "/opt/homebrew/bin/claude",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "claude --print"
+      },
+      "provider": {
+        "id": "anthropic",
+        "name": "Anthropic API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.anthropic.com",
+        "ip": "104.18.110.182",
+        "port": 443,
+        "path": null,
+        "protocol": "tcp"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 51024,
+      "bytes_in": 42156,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0084",
+      "ts": "2026-10-30T00:57:30Z",
+      "source": "live_conn",
+      "process": {
+        "pid": 69954,
+        "name": "Microsoft Edge",
+        "exe": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "perplexity",
+        "name": "Perplexity",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "api.perplexity.ai",
+        "ip": "104.18.115.34",
+        "port": 443,
+        "path": null,
+        "protocol": "tcp"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 18279,
+      "bytes_in": 1138,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0085",
+      "ts": "2026-10-30T00:42:07Z",
+      "source": "loopback",
+      "process": {
+        "pid": 62393,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 26810,
+      "bytes_in": 56476,
+      "payload_visible": true,
+      "payload_preview": "Rewrite this paragraph in a friendlier tone.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0086",
+      "ts": "2026-10-30T00:30:32Z",
+      "source": "pcap",
+      "process": {
+        "pid": 24300,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "cursor",
+        "name": "Cursor",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api2.cursor.sh",
+        "ip": "104.18.254.82",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 19728,
+      "bytes_in": 93567,
+      "payload_visible": true,
+      "payload_preview": "Rewrite this paragraph in a friendlier tone.",
+      "sanctioned": false,
+      "risk_score": 20,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0087",
+      "ts": "2026-10-30T00:28:22Z",
+      "source": "live_conn",
+      "process": {
+        "pid": 40803,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "cursor",
+        "name": "Cursor",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api2.cursor.sh",
+        "ip": "104.18.51.106",
+        "port": 443,
+        "path": null,
+        "protocol": "tcp"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 6246,
+      "bytes_in": 41336,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 20,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0088",
+      "ts": "2026-10-30T00:04:46Z",
+      "source": "gateway",
+      "process": {
+        "pid": 3849,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.101.194",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 59654,
+      "bytes_in": 54332,
+      "payload_visible": true,
+      "payload_preview": "Explain the difference between TCP and UDP for a new hire.",
+      "sanctioned": false,
+      "risk_score": 95,
+      "finding_ids": [
+        "fnd_0038"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent",
+        "tool-call"
+      ]
+    },
+    {
+      "id": "evt_0089",
+      "ts": "2026-10-29T23:42:02Z",
+      "source": "log",
+      "process": {
+        "pid": 46734,
+        "name": "aider",
+        "exe": "/opt/homebrew/bin/aider",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "aider --yes src/billing.py"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.240.154",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 9739,
+      "bytes_in": 92054,
+      "payload_visible": true,
+      "payload_preview": "Explain the difference between TCP and UDP for a new hire.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0090",
+      "ts": "2026-10-29T23:37:10Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 39545,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "chatgpt",
+        "name": "ChatGPT",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "chatgpt.com",
+        "ip": "104.18.130.106",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 31309,
+      "bytes_in": 109266,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0091",
+      "ts": "2026-10-29T23:03:32Z",
+      "source": "loopback",
+      "process": {
+        "pid": 76065,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 53604,
+      "bytes_in": 14474,
+      "payload_visible": true,
+      "payload_preview": "Write a unit test for a function that parses dates.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0092",
+      "ts": "2026-10-29T23:01:12Z",
+      "source": "live_conn",
+      "process": {
+        "pid": 85391,
+        "name": "Microsoft Edge",
+        "exe": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "perplexity",
+        "name": "Perplexity",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "api.perplexity.ai",
+        "ip": "104.18.162.140",
+        "port": 443,
+        "path": null,
+        "protocol": "tcp"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 39979,
+      "bytes_in": 31348,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0093",
+      "ts": "2026-10-29T22:55:21Z",
+      "source": "simulator",
+      "process": {
+        "pid": 9357,
+        "name": "LM Studio",
+        "exe": "/Applications/LM Studio.app/Contents/MacOS/LM Studio",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "lmstudio",
+        "name": "LM Studio",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 1234,
+        "path": "/v1/*",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "qwen2.5-coder",
+      "bytes_out": 53620,
+      "bytes_in": 109079,
+      "payload_visible": true,
+      "payload_preview": "Write a unit test for a function that parses dates.",
+      "sanctioned": false,
+      "risk_score": 5,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0094",
+      "ts": "2026-10-29T22:41:10Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 65136,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "gemini_web",
+        "name": "Gemini",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "gemini.google.com",
+        "ip": "104.18.90.163",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 17606,
+      "bytes_in": 87271,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0095",
+      "ts": "2026-10-29T22:24:46Z",
+      "source": "extension",
+      "process": {
+        "pid": 77514,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "gemini_web",
+        "name": "Gemini",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "gemini.google.com",
+        "ip": "104.18.230.80",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 38157,
+      "bytes_in": 3807,
+      "payload_visible": true,
+      "payload_preview": "Rewrite this paragraph in a friendlier tone.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0096",
+      "ts": "2026-10-29T22:23:16Z",
+      "source": "loopback",
+      "process": {
+        "pid": 45355,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 39102,
+      "bytes_in": 52347,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0097",
+      "ts": "2026-10-29T22:18:19Z",
+      "source": "har",
+      "process": {
+        "pid": 4067,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "claude_web",
+        "name": "Claude.ai",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "claude.ai",
+        "ip": "104.18.196.22",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 42257,
+      "bytes_in": 49225,
+      "payload_visible": true,
+      "payload_preview": "Why is my CSS grid overflowing on mobile?",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0098",
+      "ts": "2026-10-29T22:11:56Z",
+      "source": "extension",
+      "process": {
+        "pid": 40445,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "gemini_web",
+        "name": "Gemini",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "gemini.google.com",
+        "ip": "104.18.233.168",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 18601,
+      "bytes_in": 56472,
+      "payload_visible": true,
+      "payload_preview": "Why is my CSS grid overflowing on mobile?",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0099",
+      "ts": "2026-10-29T22:08:33Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 48915,
+        "name": "aider",
+        "exe": "/opt/homebrew/bin/aider",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "aider --yes src/billing.py"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.138.76",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 55940,
+      "bytes_in": 15364,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0100",
+      "ts": "2026-10-29T21:59:30Z",
+      "source": "simulator",
+      "process": {
+        "pid": 14652,
+        "name": "aider",
+        "exe": "/opt/homebrew/bin/aider",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "aider --yes src/billing.py"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.1.53",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 40690,
+      "bytes_in": 72715,
+      "payload_visible": true,
+      "payload_preview": "pan: FAKP••••4E",
+      "sanctioned": false,
+      "risk_score": 65,
+      "finding_ids": [
+        "fnd_0055"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0101",
+      "ts": "2026-10-29T21:52:21Z",
+      "source": "simulator",
+      "process": {
+        "pid": 38426,
+        "name": "LM Studio",
+        "exe": "/Applications/LM Studio.app/Contents/MacOS/LM Studio",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "lmstudio",
+        "name": "LM Studio",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 1234,
+        "path": "/v1/*",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "qwen2.5-coder",
+      "bytes_out": 55151,
+      "bytes_in": 17080,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 5,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0102",
+      "ts": "2026-10-29T21:33:46Z",
+      "source": "loopback",
+      "process": {
+        "pid": 64186,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 6403,
+      "bytes_in": 119440,
+      "payload_visible": true,
+      "payload_preview": "SLACK_BOT_TOKEN=xoxb•••••••••••••••••••••••FA",
+      "sanctioned": true,
+      "risk_score": 40,
+      "finding_ids": [
+        "fnd_0007"
+      ],
+      "tags": []
+    },
+    {
+      "id": "evt_0103",
+      "ts": "2026-10-29T21:24:01Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 51894,
+        "name": "aider",
+        "exe": "/opt/homebrew/bin/aider",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "aider --yes src/billing.py"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.187.244",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 2980,
+      "bytes_in": 30746,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0104",
+      "ts": "2026-10-29T21:11:51Z",
+      "source": "gateway",
+      "process": {
+        "pid": 21330,
+        "name": "Windsurf",
+        "exe": "/Applications/Windsurf.app/Contents/MacOS/Windsurf",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "codeium",
+        "name": "Codeium / Windsurf",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "server.codeium.com",
+        "ip": "104.18.251.52",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 17559,
+      "bytes_in": 43260,
+      "payload_visible": true,
+      "payload_preview": "Authorization: token ghp_••••••••••••••••••••••••••••••••••AK",
+      "sanctioned": false,
+      "risk_score": 80,
+      "finding_ids": [
+        "fnd_0005"
+      ],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0105",
+      "ts": "2026-10-29T21:00:02Z",
+      "source": "log",
+      "process": {
+        "pid": 46444,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.160.91",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 53262,
+      "bytes_in": 90453,
+      "payload_visible": true,
+      "payload_preview": "Rewrite this paragraph in a friendlier tone.",
+      "sanctioned": false,
+      "risk_score": 55,
+      "finding_ids": [
+        "fnd_0053"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent",
+        "tool-call"
+      ]
+    },
+    {
+      "id": "evt_0106",
+      "ts": "2026-10-29T20:54:17Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 59128,
+        "name": "aider",
+        "exe": "/opt/homebrew/bin/aider",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "aider --yes src/billing.py"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.197.238",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 38798,
+      "bytes_in": 28690,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0107",
+      "ts": "2026-10-29T20:48:28Z",
+      "source": "gateway",
+      "process": {
+        "pid": 80095,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "cursor",
+        "name": "Cursor",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api2.cursor.sh",
+        "ip": "104.18.240.254",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 53203,
+      "bytes_in": 71177,
+      "payload_visible": true,
+      "payload_preview": "DATABASE_URL=post•••••••••••••••••••••••••••••••••••••••••••••••••••••••od\nssn: 219-•••••99",
+      "sanctioned": false,
+      "risk_score": 85,
+      "finding_ids": [
+        "fnd_0016",
+        "fnd_0032"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0108",
+      "ts": "2026-10-29T20:44:25Z",
+      "source": "extension",
+      "process": {
+        "pid": 80527,
+        "name": "ChatGPT",
+        "exe": "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "chatgpt",
+        "name": "ChatGPT",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "chatgpt.com",
+        "ip": "104.18.174.49",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 7470,
+      "bytes_in": 114198,
+      "payload_visible": true,
+      "payload_preview": "ANTHROPIC_API_KEY=sk-a•••••••••••••••••••••••••••••••••PL",
+      "sanctioned": false,
+      "risk_score": 85,
+      "finding_ids": [
+        "fnd_0004"
+      ],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0109",
+      "ts": "2026-10-29T20:22:19Z",
+      "source": "live_conn",
+      "process": {
+        "pid": 22822,
+        "name": "claude",
+        "exe": "/opt/homebrew/bin/claude",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "claude --print"
+      },
+      "provider": {
+        "id": "anthropic",
+        "name": "Anthropic API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.anthropic.com",
+        "ip": "104.18.24.85",
+        "port": 443,
+        "path": null,
+        "protocol": "tcp"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 53039,
+      "bytes_in": 89678,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0110",
+      "ts": "2026-10-29T20:14:41Z",
+      "source": "gateway",
+      "process": {
+        "pid": 79920,
+        "name": "claude",
+        "exe": "/opt/homebrew/bin/claude",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "claude --print"
+      },
+      "provider": {
+        "id": "anthropic",
+        "name": "Anthropic API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.anthropic.com",
+        "ip": "104.18.251.175",
+        "port": 443,
+        "path": "/v1/messages",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "claude-sonnet-4-5",
+      "bytes_out": 56495,
+      "bytes_in": 110594,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0111",
+      "ts": "2026-10-29T19:55:06Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 26401,
+        "name": "Code Helper (Plugin)",
+        "exe": "/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin)",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "copilot",
+        "name": "GitHub Copilot",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api.githubcopilot.com",
+        "ip": "104.18.19.212",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 15828,
+      "bytes_in": 8420,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0112",
+      "ts": "2026-10-29T19:46:59Z",
+      "source": "loopback",
+      "process": {
+        "pid": 39683,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 51404,
+      "bytes_in": 49173,
+      "payload_visible": true,
+      "payload_preview": "HF_TOKEN=hf_F•••••••••••••••••••••••••••••••EF",
+      "sanctioned": true,
+      "risk_score": 40,
+      "finding_ids": [
+        "fnd_0010"
+      ],
+      "tags": []
+    },
+    {
+      "id": "evt_0113",
+      "ts": "2026-10-29T19:45:08Z",
+      "source": "loopback",
+      "process": {
+        "pid": 46421,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "mock_ai",
+        "name": "ShadowScope Mock Provider",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 8788,
+        "path": null,
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 11105,
+      "bytes_in": 71942,
+      "payload_visible": true,
+      "payload_preview": "aadhaar_no: XXXX XXXX 0124",
+      "sanctioned": false,
+      "risk_score": 65,
+      "finding_ids": [
+        "fnd_0025"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0114",
+      "ts": "2026-10-29T19:42:26Z",
+      "source": "pcap",
+      "process": {
+        "pid": 86600,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.28.179",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 2386,
+      "bytes_in": 15813,
+      "payload_visible": true,
+      "payload_preview": "Rewrite this paragraph in a friendlier tone.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0115",
+      "ts": "2026-10-29T19:34:30Z",
+      "source": "pcap",
+      "process": {
+        "pid": 21372,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "cursor",
+        "name": "Cursor",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api2.cursor.sh",
+        "ip": "104.18.218.139",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 41625,
+      "bytes_in": 116423,
+      "payload_visible": true,
+      "payload_preview": "Defa••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••LE",
+      "sanctioned": false,
+      "risk_score": 80,
+      "finding_ids": [
+        "fnd_0017"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0116",
+      "ts": "2026-10-29T19:30:33Z",
+      "source": "live_conn",
+      "process": {
+        "pid": 69999,
+        "name": "Microsoft Edge",
+        "exe": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "ms_copilot",
+        "name": "Microsoft Copilot",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "copilot.microsoft.com",
+        "ip": "104.18.48.242",
+        "port": 443,
+        "path": null,
+        "protocol": "tcp"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 35021,
+      "bytes_in": 44255,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0117",
+      "ts": "2026-10-29T19:23:34Z",
+      "source": "live_conn",
+      "process": {
+        "pid": 54564,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "claude_web",
+        "name": "Claude.ai",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "claude.ai",
+        "ip": "104.18.65.79",
+        "port": 443,
+        "path": null,
+        "protocol": "tcp"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 48008,
+      "bytes_in": 78668,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0118",
+      "ts": "2026-10-29T19:11:27Z",
+      "source": "loopback",
+      "process": {
+        "pid": 85277,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 51060,
+      "bytes_in": 76937,
+      "payload_visible": true,
+      "payload_preview": "Explain the difference between TCP and UDP for a new hire.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0119",
+      "ts": "2026-10-29T18:52:52Z",
+      "source": "log",
+      "process": {
+        "pid": 39215,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "cursor",
+        "name": "Cursor",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api2.cursor.sh",
+        "ip": "104.18.106.167",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 41641,
+      "bytes_in": 65818,
+      "payload_visible": true,
+      "payload_preview": "//registry.npmjs.org/:_authToken=npm_••••••••••••••••••••••••••••••••••AK",
+      "sanctioned": false,
+      "risk_score": 60,
+      "finding_ids": [
+        "fnd_0012"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0120",
+      "ts": "2026-10-29T18:39:04Z",
+      "source": "live_conn",
+      "process": {
+        "pid": 566,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "cursor",
+        "name": "Cursor",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api2.cursor.sh",
+        "ip": "104.18.185.227",
+        "port": 443,
+        "path": null,
+        "protocol": "tcp"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 56790,
+      "bytes_in": 59166,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 20,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0121",
+      "ts": "2026-10-29T18:38:17Z",
+      "source": "extension",
+      "process": {
+        "pid": 87711,
+        "name": "Microsoft Edge",
+        "exe": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "ms_copilot",
+        "name": "Microsoft Copilot",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "copilot.microsoft.com",
+        "ip": "104.18.6.39",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 55298,
+      "bytes_in": 41825,
+      "payload_visible": true,
+      "payload_preview": "Explain the difference between TCP and UDP for a new hire.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0122",
+      "ts": "2026-10-29T18:22:41Z",
+      "source": "pcap",
+      "process": {
+        "pid": 2242,
+        "name": "Windsurf",
+        "exe": "/Applications/Windsurf.app/Contents/MacOS/Windsurf",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "codeium",
+        "name": "Codeium / Windsurf",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "server.codeium.com",
+        "ip": "104.18.102.180",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 36304,
+      "bytes_in": 78134,
+      "payload_visible": true,
+      "payload_preview": "db host 10.2••••44",
+      "sanctioned": false,
+      "risk_score": 28,
+      "finding_ids": [
+        "fnd_0033"
+      ],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0123",
+      "ts": "2026-10-29T18:14:18Z",
+      "source": "extension",
+      "process": {
+        "pid": 18178,
+        "name": "Microsoft Edge",
+        "exe": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "perplexity",
+        "name": "Perplexity",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "api.perplexity.ai",
+        "ip": "104.18.151.8",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 3337,
+      "bytes_in": 50755,
+      "payload_visible": true,
+      "payload_preview": "upi: fake••••••••••is",
+      "sanctioned": false,
+      "risk_score": 45,
+      "finding_ids": [
+        "fnd_0028"
+      ],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0124",
+      "ts": "2026-10-29T18:02:17Z",
+      "source": "live_conn",
+      "process": {
+        "pid": 27715,
+        "name": "aider",
+        "exe": "/opt/homebrew/bin/aider",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "aider --yes src/billing.py"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.15.23",
+        "port": 443,
+        "path": null,
+        "protocol": "tcp"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 49464,
+      "bytes_in": 8410,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0125",
+      "ts": "2026-10-29T17:58:46Z",
+      "source": "gateway",
+      "process": {
+        "pid": 73192,
+        "name": "node",
+        "exe": "/opt/homebrew/bin/node",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "node crewai_worker.js"
+      },
+      "provider": {
+        "id": "groq",
+        "name": "Groq",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.groq.com",
+        "ip": "104.18.56.73",
+        "port": 443,
+        "path": "/openai/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "llama-3.1-8b-instant",
+      "bytes_out": 19398,
+      "bytes_in": 15115,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0126",
+      "ts": "2026-10-29T17:52:30Z",
+      "source": "loopback",
+      "process": {
+        "pid": 22192,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 56843,
+      "bytes_in": 48759,
+      "payload_visible": true,
+      "payload_preview": "Rewrite this paragraph in a friendlier tone.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0127",
+      "ts": "2026-10-29T17:45:55Z",
+      "source": "live_conn",
+      "process": {
+        "pid": 33935,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "gemini_web",
+        "name": "Gemini",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "gemini.google.com",
+        "ip": "104.18.6.44",
+        "port": 443,
+        "path": null,
+        "protocol": "tcp"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 22546,
+      "bytes_in": 118707,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0128",
+      "ts": "2026-10-29T17:25:30Z",
+      "source": "simulator",
+      "process": {
+        "pid": 79937,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 21818,
+      "bytes_in": 23176,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0129",
+      "ts": "2026-10-29T16:33:32Z",
+      "source": "loopback",
+      "process": {
+        "pid": 80933,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 47640,
+      "bytes_in": 71746,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0130",
+      "ts": "2026-10-29T16:23:57Z",
+      "source": "gateway",
+      "process": {
+        "pid": 55965,
+        "name": "aider",
+        "exe": "/opt/homebrew/bin/aider",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "aider --yes src/billing.py"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.1.46",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 49509,
+      "bytes_in": 29790,
+      "payload_visible": true,
+      "payload_preview": "AWS_ACCESS_KEY_ID=AKIA••••••••••••••EE\n# CONF•••••••••••••••••••••••••••••••••••••••••ly",
+      "sanctioned": false,
+      "risk_score": 90,
+      "finding_ids": [
+        "fnd_0001",
+        "fnd_0036"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0131",
+      "ts": "2026-10-29T15:42:48Z",
+      "source": "har",
+      "process": {
+        "pid": 498,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "gemini_web",
+        "name": "Gemini",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "gemini.google.com",
+        "ip": "104.18.136.122",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 49975,
+      "bytes_in": 86600,
+      "payload_visible": true,
+      "payload_preview": "Rewrite this paragraph in a friendlier tone.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0132",
+      "ts": "2026-10-29T15:31:14Z",
+      "source": "extension",
+      "process": {
+        "pid": 4095,
+        "name": "Microsoft Edge",
+        "exe": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "ms_copilot",
+        "name": "Microsoft Copilot",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "copilot.microsoft.com",
+        "ip": "104.18.70.244",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 48520,
+      "bytes_in": 116344,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0133",
+      "ts": "2026-10-29T15:28:07Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 65168,
+        "name": "Google Chrome",
+        "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "chatgpt",
+        "name": "ChatGPT",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "chatgpt.com",
+        "ip": "104.18.254.32",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 11430,
+      "bytes_in": 98896,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0134",
+      "ts": "2026-10-29T15:21:13Z",
+      "source": "pcap",
+      "process": {
+        "pid": 17628,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.31.17",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 6149,
+      "bytes_in": 98937,
+      "payload_visible": true,
+      "payload_preview": "aws_••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••A\"\nOPENAI_API_KEY=sk-p••••••••••••••••••••••••••••••••••PL",
+      "sanctioned": false,
+      "risk_score": 90,
+      "finding_ids": [
+        "fnd_0002",
+        "fnd_0003"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0135",
+      "ts": "2026-10-29T15:12:33Z",
+      "source": "log",
+      "process": {
+        "pid": 7765,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "cursor",
+        "name": "Cursor",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api2.cursor.sh",
+        "ip": "104.18.12.232",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 21360,
+      "bytes_in": 63064,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 20,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0136",
+      "ts": "2026-10-29T14:34:41Z",
+      "source": "extension",
+      "process": {
+        "pid": 71568,
+        "name": "ChatGPT",
+        "exe": "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "chatgpt",
+        "name": "ChatGPT",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "chatgpt.com",
+        "ip": "104.18.54.208",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 41580,
+      "bytes_in": 63217,
+      "payload_visible": true,
+      "payload_preview": "Explain the difference between TCP and UDP for a new hire.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0137",
+      "ts": "2026-10-29T14:17:57Z",
+      "source": "pcap",
+      "process": {
+        "pid": 36242,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.231.155",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 26978,
+      "bytes_in": 68710,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0138",
+      "ts": "2026-10-29T14:08:47Z",
+      "source": "pcap",
+      "process": {
+        "pid": 29775,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.22.246",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 31185,
+      "bytes_in": 80913,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 75,
+      "finding_ids": [
+        "fnd_0042"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent",
+        "tool-call"
+      ]
+    },
+    {
+      "id": "evt_0139",
+      "ts": "2026-10-29T14:03:52Z",
+      "source": "simulator",
+      "process": {
+        "pid": 68398,
+        "name": "aider",
+        "exe": "/opt/homebrew/bin/aider",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "aider --yes src/billing.py"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.10.54",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 37675,
+      "bytes_in": 29405,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0140",
+      "ts": "2026-10-29T14:02:51Z",
+      "source": "simulator",
+      "process": {
+        "pid": 48839,
+        "name": "Code Helper (Plugin)",
+        "exe": "/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin)",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "copilot",
+        "name": "GitHub Copilot",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api.githubcopilot.com",
+        "ip": "104.18.249.45",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 58676,
+      "bytes_in": 25743,
+      "payload_visible": true,
+      "payload_preview": "stripe.api_key = 'sk_t••••••••••••••••••••••••••FA'\n20 customer rows, first: f•••@e•••.com",
+      "sanctioned": true,
+      "risk_score": 45,
+      "finding_ids": [
+        "fnd_0009",
+        "fnd_0022"
+      ],
+      "tags": []
+    },
+    {
+      "id": "evt_0141",
+      "ts": "2026-10-29T14:02:39Z",
+      "source": "loopback",
+      "process": {
+        "pid": 48443,
+        "name": "LM Studio",
+        "exe": "/Applications/LM Studio.app/Contents/MacOS/LM Studio",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "lmstudio",
+        "name": "LM Studio",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 1234,
+        "path": "/v1/*",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "qwen2.5-coder",
+      "bytes_out": 24753,
+      "bytes_in": 35919,
+      "payload_visible": true,
+      "payload_preview": "def •••••••••••••••••••••••••••••):",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [
+        "fnd_0035"
+      ],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0142",
+      "ts": "2026-10-29T14:01:13Z",
+      "source": "gateway",
+      "process": {
+        "pid": 23943,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.138.164",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 31662,
+      "bytes_in": 25914,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0143",
+      "ts": "2026-10-29T13:51:15Z",
+      "source": "dns_sni",
+      "process": {
+        "pid": 62437,
+        "name": "ChatGPT",
+        "exe": "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "chatgpt",
+        "name": "ChatGPT",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "chatgpt.com",
+        "ip": "104.18.99.222",
+        "port": 443,
+        "path": null,
+        "protocol": "tls"
+      },
+      "method": null,
+      "model": null,
+      "bytes_out": 44703,
+      "bytes_in": 114579,
+      "payload_visible": false,
+      "payload_preview": null,
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0144",
+      "ts": "2026-10-29T13:42:08Z",
+      "source": "extension",
+      "process": {
+        "pid": 29876,
+        "name": "Microsoft Edge",
+        "exe": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "perplexity",
+        "name": "Perplexity",
+        "category": "ai_saas"
+      },
+      "dest": {
+        "host": "api.perplexity.ai",
+        "ip": "104.18.197.122",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 18049,
+      "bytes_in": 43354,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0145",
+      "ts": "2026-10-29T13:27:23Z",
+      "source": "simulator",
+      "process": {
+        "pid": 61318,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "mock_ai",
+        "name": "ShadowScope Mock Provider",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 8788,
+        "path": null,
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 17423,
+      "bytes_in": 40033,
+      "payload_visible": true,
+      "payload_preview": "Why is my CSS grid overflowing on mobile?",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    },
+    {
+      "id": "evt_0146",
+      "ts": "2026-10-29T13:18:09Z",
+      "source": "pcap",
+      "process": {
+        "pid": 42666,
+        "name": "python3",
+        "exe": "/usr/bin/python3",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "python3 langchain_agent.py --tools shell,fs"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.80.182",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 42360,
+      "bytes_in": 68983,
+      "payload_visible": true,
+      "payload_preview": "Summarize these meeting notes into three bullet points.",
+      "sanctioned": false,
+      "risk_score": 55,
+      "finding_ids": [
+        "fnd_0045"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent",
+        "tool-call"
+      ]
+    },
+    {
+      "id": "evt_0147",
+      "ts": "2026-10-29T12:58:37Z",
+      "source": "loopback",
+      "process": {
+        "pid": 18899,
+        "name": "ollama",
+        "exe": "/usr/local/bin/ollama",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "ollama serve"
+      },
+      "provider": {
+        "id": "ollama",
+        "name": "Ollama (local)",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 11434,
+        "path": "/api/generate",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "llama3.2:3b",
+      "bytes_out": 30404,
+      "bytes_in": 20413,
+      "payload_visible": true,
+      "payload_preview": "Draft a release note for the login page fix.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0148",
+      "ts": "2026-10-29T12:58:24Z",
+      "source": "loopback",
+      "process": {
+        "pid": 9069,
+        "name": "LM Studio",
+        "exe": "/Applications/LM Studio.app/Contents/MacOS/LM Studio",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "lmstudio",
+        "name": "LM Studio",
+        "category": "local_llm"
+      },
+      "dest": {
+        "host": "localhost",
+        "ip": "127.0.0.1",
+        "port": 1234,
+        "path": "/v1/*",
+        "protocol": "http"
+      },
+      "method": "POST",
+      "model": "qwen2.5-coder",
+      "bytes_out": 33512,
+      "bytes_in": 25049,
+      "payload_visible": true,
+      "payload_preview": "Why is my CSS grid overflowing on mobile?",
+      "sanctioned": false,
+      "risk_score": 25,
+      "finding_ids": [
+        "fnd_0049"
+      ],
+      "tags": [
+        "shadow-ai"
+      ]
+    },
+    {
+      "id": "evt_0149",
+      "ts": "2026-10-29T12:47:20Z",
+      "source": "simulator",
+      "process": {
+        "pid": 76071,
+        "name": "Code Helper (Plugin)",
+        "exe": "/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin)",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": null
+      },
+      "provider": {
+        "id": "copilot",
+        "name": "GitHub Copilot",
+        "category": "ai_coding"
+      },
+      "dest": {
+        "host": "api.githubcopilot.com",
+        "ip": "104.18.6.107",
+        "port": 443,
+        "path": null,
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": null,
+      "bytes_out": 7255,
+      "bytes_in": 23608,
+      "payload_visible": true,
+      "payload_preview": "Write a unit test for a function that parses dates.",
+      "sanctioned": true,
+      "risk_score": 0,
+      "finding_ids": [],
+      "tags": []
+    },
+    {
+      "id": "evt_0150",
+      "ts": "2026-10-29T12:35:03Z",
+      "source": "log",
+      "process": {
+        "pid": 23705,
+        "name": "Cursor Helper",
+        "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+        "user": "dev",
+        "parent": "launchd",
+        "cmdline_hint": "cursor --agent-mode"
+      },
+      "provider": {
+        "id": "openai",
+        "name": "OpenAI API",
+        "category": "cloud_llm"
+      },
+      "dest": {
+        "host": "api.openai.com",
+        "ip": "104.18.29.248",
+        "port": 443,
+        "path": "/v1/chat/completions",
+        "protocol": "https"
+      },
+      "method": "POST",
+      "model": "gpt-4o",
+      "bytes_out": 46567,
+      "bytes_in": 97218,
+      "payload_visible": true,
+      "payload_preview": "stripe.api_key = 'sk_l••••••••••••••••••••••••••FA'",
+      "sanctioned": false,
+      "risk_score": 85,
+      "finding_ids": [
+        "fnd_0008"
+      ],
+      "tags": [
+        "shadow-ai",
+        "agent"
+      ]
+    }
+  ],
+  "next_cursor": null
+}

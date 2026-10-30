@@ -1,0 +1,400 @@
+{
+  "risk_score": 63,
+  "risk_grade": "D",
+  "risk_trend": [
+    {
+      "ts": "2026-10-29T12:00:00Z",
+      "score": 50
+    },
+    {
+      "ts": "2026-10-29T13:00:00Z",
+      "score": 48
+    },
+    {
+      "ts": "2026-10-29T14:00:00Z",
+      "score": 51
+    },
+    {
+      "ts": "2026-10-29T15:00:00Z",
+      "score": 49
+    },
+    {
+      "ts": "2026-10-29T16:00:00Z",
+      "score": 51
+    },
+    {
+      "ts": "2026-10-29T17:00:00Z",
+      "score": 53
+    },
+    {
+      "ts": "2026-10-29T18:00:00Z",
+      "score": 54
+    },
+    {
+      "ts": "2026-10-29T19:00:00Z",
+      "score": 53
+    },
+    {
+      "ts": "2026-10-29T20:00:00Z",
+      "score": 51
+    },
+    {
+      "ts": "2026-10-29T21:00:00Z",
+      "score": 56
+    },
+    {
+      "ts": "2026-10-29T22:00:00Z",
+      "score": 52
+    },
+    {
+      "ts": "2026-10-29T23:00:00Z",
+      "score": 53
+    },
+    {
+      "ts": "2026-10-30T00:00:00Z",
+      "score": 59
+    },
+    {
+      "ts": "2026-10-30T01:00:00Z",
+      "score": 56
+    },
+    {
+      "ts": "2026-10-30T02:00:00Z",
+      "score": 60
+    },
+    {
+      "ts": "2026-10-30T03:00:00Z",
+      "score": 56
+    },
+    {
+      "ts": "2026-10-30T04:00:00Z",
+      "score": 57
+    },
+    {
+      "ts": "2026-10-30T05:00:00Z",
+      "score": 61
+    },
+    {
+      "ts": "2026-10-30T06:00:00Z",
+      "score": 61
+    },
+    {
+      "ts": "2026-10-30T07:00:00Z",
+      "score": 63
+    },
+    {
+      "ts": "2026-10-30T08:00:00Z",
+      "score": 62
+    },
+    {
+      "ts": "2026-10-30T09:00:00Z",
+      "score": 62
+    },
+    {
+      "ts": "2026-10-30T10:00:00Z",
+      "score": 60
+    },
+    {
+      "ts": "2026-10-30T11:00:00Z",
+      "score": 63
+    }
+  ],
+  "totals": {
+    "events": 150,
+    "ai_requests": 113,
+    "findings_open": 38,
+    "critical": 11,
+    "secrets": 21,
+    "pii": 15,
+    "agent_actions": 13,
+    "shadow_tools": 10,
+    "bytes_out": 13195846
+  },
+  "by_provider": [
+    {
+      "provider_id": "openai",
+      "name": "OpenAI API",
+      "count": 35,
+      "bytes_out": 1054521
+    },
+    {
+      "provider_id": "ollama",
+      "name": "Ollama (local)",
+      "count": 17,
+      "bytes_out": 642282
+    },
+    {
+      "provider_id": "chatgpt",
+      "name": "ChatGPT",
+      "count": 14,
+      "bytes_out": 413217
+    },
+    {
+      "provider_id": "copilot",
+      "name": "GitHub Copilot",
+      "count": 12,
+      "bytes_out": 360314
+    },
+    {
+      "provider_id": "lmstudio",
+      "name": "LM Studio",
+      "count": 9,
+      "bytes_out": 277324
+    },
+    {
+      "provider_id": "cursor",
+      "name": "Cursor",
+      "count": 9,
+      "bytes_out": 296409
+    },
+    {
+      "provider_id": "mock_ai",
+      "name": "ShadowScope Mock Provider",
+      "count": 8,
+      "bytes_out": 209781
+    },
+    {
+      "provider_id": "anthropic",
+      "name": "Anthropic API",
+      "count": 8,
+      "bytes_out": 318630
+    },
+    {
+      "provider_id": "claude_web",
+      "name": "Claude.ai",
+      "count": 7,
+      "bytes_out": 253863
+    },
+    {
+      "provider_id": "groq",
+      "name": "Groq",
+      "count": 7,
+      "bytes_out": 242701
+    },
+    {
+      "provider_id": "gemini_web",
+      "name": "Gemini",
+      "count": 7,
+      "bytes_out": 204324
+    },
+    {
+      "provider_id": "perplexity",
+      "name": "Perplexity",
+      "count": 6,
+      "bytes_out": 179116
+    },
+    {
+      "provider_id": "ms_copilot",
+      "name": "Microsoft Copilot",
+      "count": 5,
+      "bytes_out": 220673
+    },
+    {
+      "provider_id": "codeium",
+      "name": "Codeium / Windsurf",
+      "count": 5,
+      "bytes_out": 8509365
+    },
+    {
+      "provider_id": "deepseek",
+      "name": "DeepSeek",
+      "count": 1,
+      "bytes_out": 13326
+    }
+  ],
+  "by_severity": {
+    "critical": 18,
+    "high": 21,
+    "medium": 16,
+    "low": 4,
+    "info": 1
+  },
+  "by_type": {
+    "agent_action": 13,
+    "pii": 15,
+    "source_code": 4,
+    "secret": 21,
+    "policy": 1,
+    "exfil_volume": 1,
+    "shadow_ai": 4,
+    "canary": 1
+  },
+  "timeline": [
+    {
+      "ts": "2026-10-29T12:00:00Z",
+      "requests": 4,
+      "findings": 2
+    },
+    {
+      "ts": "2026-10-29T13:00:00Z",
+      "requests": 4,
+      "findings": 1
+    },
+    {
+      "ts": "2026-10-29T14:00:00Z",
+      "requests": 7,
+      "findings": 4
+    },
+    {
+      "ts": "2026-10-29T15:00:00Z",
+      "requests": 5,
+      "findings": 2
+    },
+    {
+      "ts": "2026-10-29T16:00:00Z",
+      "requests": 2,
+      "findings": 2
+    },
+    {
+      "ts": "2026-10-29T17:00:00Z",
+      "requests": 4,
+      "findings": 0
+    },
+    {
+      "ts": "2026-10-29T18:00:00Z",
+      "requests": 6,
+      "findings": 3
+    },
+    {
+      "ts": "2026-10-29T19:00:00Z",
+      "requests": 8,
+      "findings": 3
+    },
+    {
+      "ts": "2026-10-29T20:00:00Z",
+      "requests": 5,
+      "findings": 3
+    },
+    {
+      "ts": "2026-10-29T21:00:00Z",
+      "requests": 6,
+      "findings": 4
+    },
+    {
+      "ts": "2026-10-29T22:00:00Z",
+      "requests": 7,
+      "findings": 0
+    },
+    {
+      "ts": "2026-10-29T23:00:00Z",
+      "requests": 4,
+      "findings": 0
+    },
+    {
+      "ts": "2026-10-30T00:00:00Z",
+      "requests": 6,
+      "findings": 1
+    },
+    {
+      "ts": "2026-10-30T01:00:00Z",
+      "requests": 7,
+      "findings": 2
+    },
+    {
+      "ts": "2026-10-30T02:00:00Z",
+      "requests": 8,
+      "findings": 4
+    },
+    {
+      "ts": "2026-10-30T03:00:00Z",
+      "requests": 6,
+      "findings": 5
+    },
+    {
+      "ts": "2026-10-30T04:00:00Z",
+      "requests": 10,
+      "findings": 5
+    },
+    {
+      "ts": "2026-10-30T05:00:00Z",
+      "requests": 12,
+      "findings": 5
+    },
+    {
+      "ts": "2026-10-30T06:00:00Z",
+      "requests": 9,
+      "findings": 1
+    },
+    {
+      "ts": "2026-10-30T07:00:00Z",
+      "requests": 6,
+      "findings": 1
+    },
+    {
+      "ts": "2026-10-30T08:00:00Z",
+      "requests": 3,
+      "findings": 2
+    },
+    {
+      "ts": "2026-10-30T09:00:00Z",
+      "requests": 7,
+      "findings": 4
+    },
+    {
+      "ts": "2026-10-30T10:00:00Z",
+      "requests": 7,
+      "findings": 3
+    },
+    {
+      "ts": "2026-10-30T11:00:00Z",
+      "requests": 7,
+      "findings": 3
+    }
+  ],
+  "top_processes": [
+    {
+      "name": "python3",
+      "count": 23,
+      "risk_score": 100
+    },
+    {
+      "name": "aider",
+      "count": 13,
+      "risk_score": 90
+    },
+    {
+      "name": "Cursor Helper",
+      "count": 16,
+      "risk_score": 85
+    },
+    {
+      "name": "ChatGPT",
+      "count": 10,
+      "risk_score": 85
+    },
+    {
+      "name": "node",
+      "count": 7,
+      "risk_score": 85
+    }
+  ],
+  "compliance": {
+    "DPDP": 74,
+    "GDPR": 74,
+    "SOC2": 52,
+    "PCI-DSS": 70,
+    "ISO27001": 57
+  },
+  "collectors": [
+    {
+      "name": "process_conn",
+      "running": true
+    },
+    {
+      "name": "ip_cache",
+      "running": true
+    },
+    {
+      "name": "dns_sni",
+      "running": false
+    },
+    {
+      "name": "loopback",
+      "running": true
+    },
+    {
+      "name": "agent_watch",
+      "running": true
+    }
+  ]
+}
