@@ -66,23 +66,31 @@
   - Core immutable guardrails verification (storage redaction & agent self-exclusion).
 - **Phase 3 Settings & Diagnostics (`/app/settings`):**
   - ShadowScope daemon health status, uptime counter, and version display.
-  - Telemetry status grid for 5 active inspection collectors (`process_conn`, `ip_cache`, `dns_sni`, `loopback`, `agent_watch`).
+  - Telemetry status grid for 6 active inspection collectors (`process_conn`, `ip_cache`, `dns_sni`, `loopback`, `agent_watch`, `gateway`).
   - API base URL endpoint configuration and ping health check button.
   - Manual Demo Mode simulation override toggle.
   - Accessibility controls: reduce-motion switch.
   - Browser desktop notifications permission requester and test P0 alert trigger.
   - Local security & airgapped privacy guarantee manifest cross-referenced with DPDP, GDPR, SOC2, and PCI-DSS.
-- **Automated Viewport & Build Verification:**
-  - Automated headless Edge CDP test suite verified across 375px (mobile), 768px (tablet icon rail), and 1440px (desktop) across all 9 dashboard pages (`/app`, `/app/live`, `/app/alerts`, `/app/agents`, `/app/simulate`, `/app/inventory`, `/app/ingest`, `/app/policies`, `/app/settings`).
-  - Result: 100% PASS with 0 horizontal overflow (`scrollWidth <= innerWidth`).
-  - `npm run build` succeeds cleanly in ~500ms with zero errors or warnings.
+- **Live Engine Testing & Backend Runner (`scripts\start.ps1`):**
+  - Configured and launched backend daemon on Windows laptop with Python 3.15 venv (`scripts\start.ps1`).
+  - Successfully seeded database with 1,500 events, 119 findings, 6 agents, 14 inventory items.
+  - Verified live engine detection: live pulse dot turns green, `LIVE ENGINE` pill displayed on all pages.
+  - Verified real-time telemetry capture: live `process_conn` collector dynamically discovered active Windows processes (including Antigravity CLI `agy.exe` and `language_server.exe` making outbound AI API calls).
+  - Fired scenario `env_file_leak` from `/app/simulate` against real engine: UI reactive feedback received within 2s with sonner toasts and WebSocket streaming updates.
+- **Accessibility & Performance Auditing:**
+  - Enhanced color contrast across all UI components meeting WCAG AA standard ($\ge 4.5:1$).
+  - Fixed accessible button names matching visible labels (WCAG 2.5.3).
+  - Ran Lighthouse audit on `/app`: **Performance: 96 / 100**, **Accessibility: 96 / 100** (exceeds targets of $\ge 85$ and $\ge 90$).
+- **Cross-Browser & Responsive Verification:**
+  - Automated headless Chrome and Edge CDP testing across 375px (mobile), 768px (tablet icon rail), and 1440px (desktop) across all 10 pages: 0 horizontal overflow.
+  - `npm run build` succeeds cleanly in ~460ms with `VITE_DEMO_MODE=true` and standard auto-probe.
 
 ## Next
-- Final integration review with Part D (`ThreatConstellation.tsx` at `/app/graph`).
-- Ready for hackathon presentation and demonstration!
+- Hackathon presentation and live demonstration.
 
 ## Issues
-- None. All pages and features are 100% complete, fully responsive, and verified.
+- None. System is completely tested and fully operational against both mock and live engines.
 
 ## Requests to other parts
-- **Part D (Pritika):** All dashboard routes, shared UI primitives, store states, and mock streaming engines are fully built and verified. Your `ThreatConstellation.tsx` at `/app/graph` is linked in the sidebar, command palette, and mobile drawer.
+- **Part D (Pritika):** All Part C dashboard routes, shared UI primitives, store states, and mock/live streaming engines are 100% complete. `ThreatConstellation.tsx` at `/app/graph` is fully integrated and linked.
