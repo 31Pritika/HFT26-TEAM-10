@@ -12,6 +12,9 @@ dependencies = ["httpx"]
 [project.optional-dependencies]
 dev = ["pytest"]
 
+[project.scripts]
+shadowscope-scan = "shadowscope_detect.cli:main"
+
 [tool.setuptools.packages.find]
 include = ["shadowscope_detect*"]
 

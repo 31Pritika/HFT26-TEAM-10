@@ -1,0 +1,17 @@
+# pre-commit reads this file from a repository root, and this one lives in detector/ (master §3.1 ownership).
+# Until it moves, use the hook from a checkout with `pip install -e detector` and this in .pre-commit-config.yaml:
+#
+#   repos:
+#     - repo: local
+#       hooks:
+#         - id: shadowscope-scan
+#           name: ShadowScope secret and PII scan
+#           entry: shadowscope-scan --fail-on high
+#           language: system
+#           types: [text]
+- id: shadowscope-scan
+  name: ShadowScope secret and PII scan
+  description: Blocks commits that contain secrets or personal data.
+  entry: shadowscope-scan --fail-on high
+  language: python
+  types: [text]

@@ -6,13 +6,13 @@ plain Python with no server, so dry runs show the same replies. FastAPI is only 
 from __future__ import annotations
 
 import json
-import time
 import zlib
 
 from .fakes import ROGUE_PLAN
 
 HOST = "127.0.0.1"
 PORT = 8788
+_CREATED = 1790000000   # a fixed timestamp keeps replies, and so the sample files, reproducible
 _REPLIES = (
     "Happy to help. The configuration looks mostly fine, but check that the variable names match what the app reads.",
     "Here is a cleaned-up version of what you shared, with the duplicate rows removed and the columns normalised.",
@@ -25,7 +25,7 @@ def _text_reply(body: dict) -> str:
     return _REPLIES[zlib.crc32(json.dumps(body, sort_keys=True, default=str).encode()) % len(_REPLIES)]
 
 
-def _next_step(messages: list) -> tuple[str, dict] | None:
+def _next_step(messages: list) -> tuple[int, str, dict] | None:
     made = 0
     for message in messages:
         if not isinstance(message, dict):
@@ -34,17 +34,17 @@ def _next_step(messages: list) -> tuple[str, dict] | None:
         blocks = content if isinstance(content, list) else []
         made += len(message.get("tool_calls") or [])
         made += sum(isinstance(block, dict) and block.get("type") == "tool_use" for block in blocks)
-    return ROGUE_PLAN[made] if made < len(ROGUE_PLAN) else None
+    return (made, *ROGUE_PLAN[made]) if made < len(ROGUE_PLAN) else None
 
 
 def _openai_reply(body: dict) -> dict:
     step = _next_step(body.get("messages") or []) if body.get("tools") else None
     message: dict = {"role": "assistant", "content": _text_reply(body) if step is None else None}
     if step:
-        name, arguments = step
-        message["tool_calls"] = [{"id": f"call_{time.monotonic_ns()}", "type": "function",
+        index, name, arguments = step
+        message["tool_calls"] = [{"id": f"call_{index}", "type": "function",
                                   "function": {"name": name, "arguments": json.dumps(arguments)}}]
-    return {"id": "chatcmpl-mock", "object": "chat.completion", "created": int(time.time()),
+    return {"id": "chatcmpl-mock", "object": "chat.completion", "created": _CREATED,
             "model": body.get("model", "gpt-4o"),
             "choices": [{"index": 0, "message": message, "finish_reason": "tool_calls" if step else "stop"}],
             "usage": {"prompt_tokens": 42, "completion_tokens": 21, "total_tokens": 63}}
@@ -53,7 +53,7 @@ def _openai_reply(body: dict) -> dict:
 def _anthropic_reply(body: dict) -> dict:
     step = _next_step(body.get("messages") or []) if body.get("tools") else None
     content = [{"type": "text", "text": _text_reply(body)}] if step is None else [
-        {"type": "tool_use", "id": f"toolu_{time.monotonic_ns()}", "name": step[0], "input": step[1]}]
+        {"type": "tool_use", "id": f"toolu_{step[0]}", "name": step[1], "input": step[2]}]
     return {"id": "msg_mock", "type": "message", "role": "assistant", "model": body.get("model", "claude-sonnet-5-5"),
             "content": content, "stop_reason": "tool_use" if step else "end_turn",
             "usage": {"input_tokens": 42, "output_tokens": 21}}
@@ -63,7 +63,7 @@ def _ollama_chat_reply(body: dict) -> dict:
     step = _next_step(body.get("messages") or []) if body.get("tools") else None
     message: dict = {"role": "assistant", "content": "" if step else _text_reply(body)}
     if step:
-        message["tool_calls"] = [{"function": {"name": step[0], "arguments": step[1]}}]
+        message["tool_calls"] = [{"function": {"name": step[1], "arguments": step[2]}}]
     return {"model": body.get("model", "llama3.2:3b"), "message": message, "done": True}
 
 
