@@ -235,9 +235,11 @@ export default function Settings() {
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-semibold text-neutral-300 uppercase tracking-wider flex items-center gap-1.5">
                   <Activity className="w-3.5 h-3.5 text-cyan-400" />
-                  Active Inspection Collectors (5/5 Running)
+                  Active Inspection Collectors ({Object.values(health?.collectors ?? {}).filter((c) => c.running).length}/{Object.keys(health?.collectors ?? {}).length || 6} Running)
                 </h3>
-                <span className="text-[11px] font-mono text-emerald-400">All Systems Nominal</span>
+                <span className={`text-[11px] font-mono ${Object.values(health?.collectors ?? {}).every((c) => c.running) ? "text-emerald-400" : "text-amber-400"}`}>
+                  {Object.values(health?.collectors ?? {}).every((c) => c.running) ? "All Systems Nominal" : "Partial (Some on Standby)"}
+                </span>
               </div>
 
               {isLoadingHealth ? (

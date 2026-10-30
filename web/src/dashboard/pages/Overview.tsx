@@ -240,12 +240,19 @@ export default function Overview() {
                     Continuous endpoint inspection without SSL certificate interception
                   </p>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                  <span className="font-mono text-[11px] text-emerald-400 uppercase">
-                    {overview?.collectors?.filter((c) => c.running).length ?? 6} Collectors Active
-                  </span>
-                </div>
+                {(() => {
+                  const runningCount = overview?.collectors?.filter((c) => c.running).length ?? 6;
+                  const totalCount = overview?.collectors?.length ?? 6;
+                  const allRunning = runningCount === totalCount;
+                  return (
+                    <div className="flex items-center gap-1.5">
+                      <span className={`w-2 h-2 rounded-full ${allRunning ? "bg-emerald-400" : "bg-amber-400"}`} />
+                      <span className={`font-mono text-[11px] uppercase ${allRunning ? "text-emerald-400" : "text-amber-400"}`}>
+                        {runningCount} / {totalCount} Collectors Active
+                      </span>
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* Top Risk Vectors Summary Grid */}
@@ -742,42 +749,45 @@ export default function Overview() {
 
               {/* Progress bars by severity */}
               <div className="space-y-4 my-2">
-                {(["critical", "high", "medium", "low", "info"] as Severity[]).map((sev) => {
-                  const count = overview?.by_severity?.[sev] ?? 0;
-                  const total = totals?.findings_open || 1;
-                  const pct = Math.min(100, Math.round((count / total) * 100));
+                {(() => {
+                  const severities: Severity[] = ["critical", "high", "medium", "low", "info"];
+                  const sevSum = severities.reduce((acc, s) => acc + (overview?.by_severity?.[s] ?? 0), 0) || 1;
+                  return severities.map((sev) => {
+                    const count = overview?.by_severity?.[sev] ?? 0;
+                    const pct = Math.min(100, Math.round((count / sevSum) * 100));
 
-                  const colors: Record<Severity, { bar: string; text: string }> = {
-                    critical: { bar: "bg-[#FF3B5C]", text: "text-[#FF3B5C]" },
-                    high: { bar: "bg-[#FF8A3D]", text: "text-[#FF8A3D]" },
-                    medium: { bar: "bg-[#FACC15]", text: "text-[#FACC15]" },
-                    low: { bar: "bg-[#34D399]", text: "text-[#34D399]" },
-                    info: { bar: "bg-[#60A5FA]", text: "text-[#60A5FA]" },
-                  };
+                    const colors: Record<Severity, { bar: string; text: string }> = {
+                      critical: { bar: "bg-[#FF3B5C]", text: "text-[#FF3B5C]" },
+                      high: { bar: "bg-[#FF8A3D]", text: "text-[#FF8A3D]" },
+                      medium: { bar: "bg-[#FACC15]", text: "text-[#FACC15]" },
+                      low: { bar: "bg-[#34D399]", text: "text-[#34D399]" },
+                      info: { bar: "bg-[#60A5FA]", text: "text-[#60A5FA]" },
+                    };
 
-                  return (
-                    <div key={sev} className="space-y-1">
-                      <div className="flex items-center justify-between text-xs font-mono">
-                        <span className="capitalize font-semibold text-text flex items-center gap-1.5">
-                          <span className={`w-2 h-2 rounded-full ${colors[sev].bar}`} />
-                          {sev}
-                        </span>
-                        <div className="flex items-center gap-2">
-                          <span className={colors[sev].text}>{count}</span>
-                          <span className="text-neutral-400 text-[10px]">({pct}%)</span>
+                    return (
+                      <div key={sev} className="space-y-1">
+                        <div className="flex items-center justify-between text-xs font-mono">
+                          <span className="capitalize font-semibold text-text flex items-center gap-1.5">
+                            <span className={`w-2 h-2 rounded-full ${colors[sev].bar}`} />
+                            {sev}
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className={colors[sev].text}>{count}</span>
+                            <span className="text-neutral-400 text-[10px]">({pct}%)</span>
+                          </div>
+                        </div>
+                        <div className="h-1.5 w-full bg-white/[0.06] rounded-full overflow-hidden">
+                          <motion.div
+                            className={`h-full rounded-full ${colors[sev].bar}`}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${pct}%` }}
+                            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                          />
                         </div>
                       </div>
-                      <div className="h-1.5 w-full bg-white/[0.06] rounded-full overflow-hidden">
-                        <motion.div
-                          className={`h-full rounded-full ${colors[sev].bar}`}
-                          initial={{ width: 0 }}
-                          animate={{ width: `${pct}%` }}
-                          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  });
+                })()}
               </div>
             </div>
 
@@ -856,7 +866,7 @@ export default function Overview() {
               },
             ].map((col) => {
               const liveState = overview?.collectors?.find((c) => c.name === col.id);
-              const isRunning = liveState ? liveState.running : true;
+              const isRunning = liveState ? Boolean(liveState.running) : (overview?.collectors ? false : true);
               return (
                 <div
                   key={col.id}
