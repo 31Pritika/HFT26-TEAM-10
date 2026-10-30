@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+/* Design tokens: master spec §10. `static` keeps every token available as a CSS variable. */
+@theme static {
+  --color-bg: #05060a;
+  --color-bg-2: #0a0d16;
+  --color-surface: rgba(17, 22, 39, 0.72);
+  --color-surface-solid: #111627;
+  --color-border: rgba(148, 163, 255, 0.1);
+  --color-border-strong: rgba(148, 163, 255, 0.22);
+  --color-text: #e8ecf5;
+  --color-muted: #8a93a8;
+  --color-faint: #4b5368;
+  --color-primary: #22d3ee;
+  --color-primary-2: #0ea5e9;
+  --color-accent: #8b5cf6;
+  --color-accent-2: #ec4899;
+  --color-critical: #ff3b5c;
+  --color-high: #ff8a3d;
+  --color-medium: #facc15;
+  --color-low: #34d399;
+  --color-info: #60a5fa;
+
+  --shadow-glow-primary: 0 0 24px rgba(34, 211, 238, 0.35);
+  --shadow-glow-critical: 0 0 28px rgba(255, 59, 92, 0.45);
+
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --ease-signal: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-micro: 0.18s;
+  --duration-ui: 0.4s;
+  --duration-hero: 0.8s;
+
+  --breakpoint-xs: 375px;
+}
+
+/* The spec's short names, for hand-written CSS. */
+:root {
+  --bg: var(--color-bg);
+  --bg-2: var(--color-bg-2);
+  --surface: var(--color-surface);
+  --surface-solid: var(--color-surface-solid);
+  --border: var(--color-border);
+  --border-strong: var(--color-border-strong);
+  --text: var(--color-text);
+  --muted: var(--color-muted);
+  --faint: var(--color-faint);
+  --primary: var(--color-primary);
+  --primary-2: var(--color-primary-2);
+  --accent: var(--color-accent);
+  --accent-2: var(--color-accent-2);
+  --critical: var(--color-critical);
+  --high: var(--color-high);
+  --medium: var(--color-medium);
+  --low: var(--color-low);
+  --info: var(--color-info);
+  --glow-primary: var(--shadow-glow-primary);
+  --glow-critical: var(--shadow-glow-critical);
+  color-scheme: dark;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+  }
+
+  code,
+  kbd,
+  pre {
+    font-family: var(--font-mono);
+  }
+
+  ::selection {
+    background: rgba(34, 211, 238, 0.3);
+    color: var(--text);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

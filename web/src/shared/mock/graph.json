@@ -1,0 +1,549 @@
+{
+  "nodes": [
+    {
+      "id": "proc:python3",
+      "label": "python3",
+      "kind": "process",
+      "risk": 100,
+      "size": 23
+    },
+    {
+      "id": "prov:mock_ai",
+      "label": "ShadowScope Mock Provider",
+      "kind": "provider",
+      "risk": 100,
+      "size": 8
+    },
+    {
+      "id": "host:localhost",
+      "label": "localhost",
+      "kind": "host",
+      "risk": 100,
+      "size": 34
+    },
+    {
+      "id": "proc:Google Chrome",
+      "label": "Google Chrome",
+      "kind": "process",
+      "risk": 25,
+      "size": 18
+    },
+    {
+      "id": "prov:chatgpt",
+      "label": "ChatGPT",
+      "kind": "provider",
+      "risk": 85,
+      "size": 14
+    },
+    {
+      "id": "host:chatgpt.com",
+      "label": "chatgpt.com",
+      "kind": "host",
+      "risk": 85,
+      "size": 14
+    },
+    {
+      "id": "proc:Microsoft Edge",
+      "label": "Microsoft Edge",
+      "kind": "process",
+      "risk": 85,
+      "size": 12
+    },
+    {
+      "id": "prov:ms_copilot",
+      "label": "Microsoft Copilot",
+      "kind": "provider",
+      "risk": 33,
+      "size": 5
+    },
+    {
+      "id": "host:copilot.microsoft.com",
+      "label": "copilot.microsoft.com",
+      "kind": "host",
+      "risk": 33,
+      "size": 5
+    },
+    {
+      "id": "proc:claude",
+      "label": "claude",
+      "kind": "process",
+      "risk": 25,
+      "size": 8
+    },
+    {
+      "id": "prov:anthropic",
+      "label": "Anthropic API",
+      "kind": "provider",
+      "risk": 25,
+      "size": 8
+    },
+    {
+      "id": "host:api.anthropic.com",
+      "label": "api.anthropic.com",
+      "kind": "host",
+      "risk": 25,
+      "size": 8
+    },
+    {
+      "id": "proc:ollama",
+      "label": "ollama",
+      "kind": "process",
+      "risk": 65,
+      "size": 17
+    },
+    {
+      "id": "prov:ollama",
+      "label": "Ollama (local)",
+      "kind": "provider",
+      "risk": 65,
+      "size": 17
+    },
+    {
+      "id": "proc:aider",
+      "label": "aider",
+      "kind": "process",
+      "risk": 90,
+      "size": 13
+    },
+    {
+      "id": "prov:openai",
+      "label": "OpenAI API",
+      "kind": "provider",
+      "risk": 95,
+      "size": 35
+    },
+    {
+      "id": "host:api.openai.com",
+      "label": "api.openai.com",
+      "kind": "host",
+      "risk": 95,
+      "size": 35
+    },
+    {
+      "id": "proc:Cursor Helper",
+      "label": "Cursor Helper",
+      "kind": "process",
+      "risk": 85,
+      "size": 16
+    },
+    {
+      "id": "prov:claude_web",
+      "label": "Claude.ai",
+      "kind": "provider",
+      "risk": 25,
+      "size": 7
+    },
+    {
+      "id": "host:claude.ai",
+      "label": "claude.ai",
+      "kind": "host",
+      "risk": 25,
+      "size": 7
+    },
+    {
+      "id": "proc:node",
+      "label": "node",
+      "kind": "process",
+      "risk": 85,
+      "size": 7
+    },
+    {
+      "id": "prov:groq",
+      "label": "Groq",
+      "kind": "provider",
+      "risk": 85,
+      "size": 7
+    },
+    {
+      "id": "host:api.groq.com",
+      "label": "api.groq.com",
+      "kind": "host",
+      "risk": 85,
+      "size": 7
+    },
+    {
+      "id": "proc:ChatGPT",
+      "label": "ChatGPT",
+      "kind": "process",
+      "risk": 85,
+      "size": 10
+    },
+    {
+      "id": "proc:Code Helper (Plugin)",
+      "label": "Code Helper (Plugin)",
+      "kind": "process",
+      "risk": 45,
+      "size": 12
+    },
+    {
+      "id": "prov:copilot",
+      "label": "GitHub Copilot",
+      "kind": "provider",
+      "risk": 45,
+      "size": 12
+    },
+    {
+      "id": "host:api.githubcopilot.com",
+      "label": "api.githubcopilot.com",
+      "kind": "host",
+      "risk": 45,
+      "size": 12
+    },
+    {
+      "id": "prov:gemini_web",
+      "label": "Gemini",
+      "kind": "provider",
+      "risk": 25,
+      "size": 7
+    },
+    {
+      "id": "host:gemini.google.com",
+      "label": "gemini.google.com",
+      "kind": "host",
+      "risk": 25,
+      "size": 7
+    },
+    {
+      "id": "proc:LM Studio",
+      "label": "LM Studio",
+      "kind": "process",
+      "risk": 70,
+      "size": 9
+    },
+    {
+      "id": "prov:lmstudio",
+      "label": "LM Studio",
+      "kind": "provider",
+      "risk": 70,
+      "size": 9
+    },
+    {
+      "id": "prov:perplexity",
+      "label": "Perplexity",
+      "kind": "provider",
+      "risk": 45,
+      "size": 6
+    },
+    {
+      "id": "host:api.perplexity.ai",
+      "label": "api.perplexity.ai",
+      "kind": "host",
+      "risk": 45,
+      "size": 6
+    },
+    {
+      "id": "prov:deepseek",
+      "label": "DeepSeek",
+      "kind": "provider",
+      "risk": 85,
+      "size": 1
+    },
+    {
+      "id": "host:api.deepseek.com",
+      "label": "api.deepseek.com",
+      "kind": "host",
+      "risk": 85,
+      "size": 1
+    },
+    {
+      "id": "prov:cursor",
+      "label": "Cursor",
+      "kind": "provider",
+      "risk": 85,
+      "size": 9
+    },
+    {
+      "id": "host:api2.cursor.sh",
+      "label": "api2.cursor.sh",
+      "kind": "host",
+      "risk": 85,
+      "size": 9
+    },
+    {
+      "id": "proc:Windsurf",
+      "label": "Windsurf",
+      "kind": "process",
+      "risk": 80,
+      "size": 5
+    },
+    {
+      "id": "prov:codeium",
+      "label": "Codeium / Windsurf",
+      "kind": "provider",
+      "risk": 80,
+      "size": 5
+    },
+    {
+      "id": "host:server.codeium.com",
+      "label": "server.codeium.com",
+      "kind": "host",
+      "risk": 80,
+      "size": 5
+    },
+    {
+      "id": "agent:agt_001",
+      "label": "langchain agent",
+      "kind": "agent",
+      "risk": 96,
+      "size": 23
+    },
+    {
+      "id": "agent:agt_002",
+      "label": "cursor agent",
+      "kind": "agent",
+      "risk": 54,
+      "size": 16
+    },
+    {
+      "id": "agent:agt_003",
+      "label": "claude_code agent",
+      "kind": "agent",
+      "risk": 38,
+      "size": 8
+    },
+    {
+      "id": "agent:agt_004",
+      "label": "crewai agent",
+      "kind": "agent",
+      "risk": 61,
+      "size": 7
+    },
+    {
+      "id": "agent:agt_005",
+      "label": "aider agent",
+      "kind": "agent",
+      "risk": 42,
+      "size": 13
+    }
+  ],
+  "links": [
+    {
+      "source": "proc:python3",
+      "target": "prov:mock_ai",
+      "weight": 8,
+      "risk": 100
+    },
+    {
+      "source": "prov:mock_ai",
+      "target": "host:localhost",
+      "weight": 8,
+      "risk": 100
+    },
+    {
+      "source": "proc:Google Chrome",
+      "target": "prov:chatgpt",
+      "weight": 4,
+      "risk": 25
+    },
+    {
+      "source": "prov:chatgpt",
+      "target": "host:chatgpt.com",
+      "weight": 14,
+      "risk": 85
+    },
+    {
+      "source": "proc:Microsoft Edge",
+      "target": "prov:ms_copilot",
+      "weight": 5,
+      "risk": 33
+    },
+    {
+      "source": "prov:ms_copilot",
+      "target": "host:copilot.microsoft.com",
+      "weight": 5,
+      "risk": 33
+    },
+    {
+      "source": "proc:claude",
+      "target": "prov:anthropic",
+      "weight": 8,
+      "risk": 25
+    },
+    {
+      "source": "prov:anthropic",
+      "target": "host:api.anthropic.com",
+      "weight": 8,
+      "risk": 25
+    },
+    {
+      "source": "proc:ollama",
+      "target": "prov:ollama",
+      "weight": 17,
+      "risk": 65
+    },
+    {
+      "source": "prov:ollama",
+      "target": "host:localhost",
+      "weight": 17,
+      "risk": 65
+    },
+    {
+      "source": "proc:aider",
+      "target": "prov:openai",
+      "weight": 13,
+      "risk": 90
+    },
+    {
+      "source": "prov:openai",
+      "target": "host:api.openai.com",
+      "weight": 35,
+      "risk": 95
+    },
+    {
+      "source": "proc:Cursor Helper",
+      "target": "prov:openai",
+      "weight": 7,
+      "risk": 85
+    },
+    {
+      "source": "proc:Google Chrome",
+      "target": "prov:claude_web",
+      "weight": 7,
+      "risk": 25
+    },
+    {
+      "source": "prov:claude_web",
+      "target": "host:claude.ai",
+      "weight": 7,
+      "risk": 25
+    },
+    {
+      "source": "proc:node",
+      "target": "prov:groq",
+      "weight": 7,
+      "risk": 85
+    },
+    {
+      "source": "prov:groq",
+      "target": "host:api.groq.com",
+      "weight": 7,
+      "risk": 85
+    },
+    {
+      "source": "proc:ChatGPT",
+      "target": "prov:chatgpt",
+      "weight": 10,
+      "risk": 85
+    },
+    {
+      "source": "proc:Code Helper (Plugin)",
+      "target": "prov:copilot",
+      "weight": 12,
+      "risk": 45
+    },
+    {
+      "source": "prov:copilot",
+      "target": "host:api.githubcopilot.com",
+      "weight": 12,
+      "risk": 45
+    },
+    {
+      "source": "proc:Google Chrome",
+      "target": "prov:gemini_web",
+      "weight": 7,
+      "risk": 25
+    },
+    {
+      "source": "prov:gemini_web",
+      "target": "host:gemini.google.com",
+      "weight": 7,
+      "risk": 25
+    },
+    {
+      "source": "proc:LM Studio",
+      "target": "prov:lmstudio",
+      "weight": 9,
+      "risk": 70
+    },
+    {
+      "source": "prov:lmstudio",
+      "target": "host:localhost",
+      "weight": 9,
+      "risk": 70
+    },
+    {
+      "source": "proc:Microsoft Edge",
+      "target": "prov:perplexity",
+      "weight": 6,
+      "risk": 45
+    },
+    {
+      "source": "prov:perplexity",
+      "target": "host:api.perplexity.ai",
+      "weight": 6,
+      "risk": 45
+    },
+    {
+      "source": "proc:Microsoft Edge",
+      "target": "prov:deepseek",
+      "weight": 1,
+      "risk": 85
+    },
+    {
+      "source": "prov:deepseek",
+      "target": "host:api.deepseek.com",
+      "weight": 1,
+      "risk": 85
+    },
+    {
+      "source": "proc:python3",
+      "target": "prov:openai",
+      "weight": 15,
+      "risk": 95
+    },
+    {
+      "source": "proc:Cursor Helper",
+      "target": "prov:cursor",
+      "weight": 9,
+      "risk": 85
+    },
+    {
+      "source": "prov:cursor",
+      "target": "host:api2.cursor.sh",
+      "weight": 9,
+      "risk": 85
+    },
+    {
+      "source": "proc:Windsurf",
+      "target": "prov:codeium",
+      "weight": 5,
+      "risk": 80
+    },
+    {
+      "source": "prov:codeium",
+      "target": "host:server.codeium.com",
+      "weight": 5,
+      "risk": 80
+    },
+    {
+      "source": "agent:agt_001",
+      "target": "proc:python3",
+      "weight": 1,
+      "risk": 96
+    },
+    {
+      "source": "agent:agt_002",
+      "target": "proc:Cursor Helper",
+      "weight": 1,
+      "risk": 54
+    },
+    {
+      "source": "agent:agt_003",
+      "target": "proc:claude",
+      "weight": 1,
+      "risk": 38
+    },
+    {
+      "source": "agent:agt_004",
+      "target": "proc:node",
+      "weight": 1,
+      "risk": 61
+    },
+    {
+      "source": "agent:agt_005",
+      "target": "proc:aider",
+      "weight": 1,
+      "risk": 42
+    }
+  ]
+}

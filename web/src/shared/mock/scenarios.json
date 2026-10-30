@@ -1,0 +1,102 @@
+{
+  "items": [
+    {
+      "id": "shadow_saas_sweep",
+      "name": "Shadow SaaS sweep",
+      "description": "Metadata-only TLS connects to five AI providers, with no key and no body.",
+      "icon": "radar",
+      "severity": "high",
+      "tags": [
+        "shadow-ai",
+        "network"
+      ]
+    },
+    {
+      "id": "env_file_leak",
+      "name": "Developer pastes .env",
+      "description": "A .env with fake AWS, OpenAI, Stripe and database secrets goes to the mock provider.",
+      "icon": "key-round",
+      "severity": "critical",
+      "tags": [
+        "secrets"
+      ]
+    },
+    {
+      "id": "customer_pii_dump",
+      "name": "Customer CSV to chatbot",
+      "description": "20 fake Indian customers with Aadhaar, PAN, phone, UPI and email reach a chatbot.",
+      "icon": "users",
+      "severity": "high",
+      "tags": [
+        "pii",
+        "dpdp"
+      ]
+    },
+    {
+      "id": "proprietary_code",
+      "name": "Proprietary code review",
+      "description": "A confidential Python module with a hardcoded JWT goes to the mock Anthropic API.",
+      "icon": "file-code",
+      "severity": "high",
+      "tags": [
+        "source-code",
+        "secrets"
+      ]
+    },
+    {
+      "id": "rogue_agent",
+      "name": "Rogue LangChain agent",
+      "description": "An 8-step machine-speed ReAct loop reads SSH keys and pipes a script to a shell.",
+      "icon": "bot",
+      "severity": "critical",
+      "tags": [
+        "agent",
+        "shell",
+        "tool-call"
+      ]
+    },
+    {
+      "id": "canary_trip",
+      "name": "Honeytoken tripped",
+      "description": "The first policy canary token is sent to an AI provider.",
+      "icon": "bird",
+      "severity": "critical",
+      "tags": [
+        "canary"
+      ]
+    },
+    {
+      "id": "gateway_block",
+      "name": "Gateway blocks a leak",
+      "description": "The .env leak goes through the Local Gateway and is stopped with a 403.",
+      "icon": "shield-x",
+      "severity": "critical",
+      "tags": [
+        "gateway",
+        "secrets"
+      ]
+    },
+    {
+      "id": "exfil_spike",
+      "name": "Exfiltration volume spike",
+      "description": "40 rapid 200 KB payloads leave from one process.",
+      "icon": "trending-up",
+      "severity": "high",
+      "tags": [
+        "exfil",
+        "anomaly"
+      ]
+    },
+    {
+      "id": "local_llm_chat",
+      "name": "Real local Ollama chat",
+      "description": "A real Ollama request containing an email and an internal hostname.",
+      "icon": "cpu",
+      "severity": "medium",
+      "tags": [
+        "local-llm",
+        "pii"
+      ]
+    }
+  ]
+}

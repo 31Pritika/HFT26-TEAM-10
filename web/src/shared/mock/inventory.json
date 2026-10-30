@@ -1,0 +1,214 @@
+{
+  "items": [
+    {
+      "id": "inv_001",
+      "process_name": "Cursor Helper",
+      "exe": "/Applications/Cursor.app/Contents/MacOS/Cursor Helper",
+      "category": "ai_coding",
+      "provider_ids": [
+        "cursor",
+        "openai"
+      ],
+      "first_seen": "2026-10-29T12:35:03Z",
+      "last_seen": "2026-10-30T10:57:52Z",
+      "request_count": 16,
+      "bytes_out": 515813,
+      "sanctioned": false,
+      "risk_score": 85,
+      "findings_count": 5,
+      "is_agent": true
+    },
+    {
+      "id": "inv_002",
+      "process_name": "claude",
+      "exe": "/opt/homebrew/bin/claude",
+      "category": "ai_coding",
+      "provider_ids": [
+        "anthropic"
+      ],
+      "first_seen": "2026-10-29T20:14:41Z",
+      "last_seen": "2026-10-30T11:22:20Z",
+      "request_count": 8,
+      "bytes_out": 318630,
+      "sanctioned": false,
+      "risk_score": 25,
+      "findings_count": 0,
+      "is_agent": true
+    },
+    {
+      "id": "inv_003",
+      "process_name": "ollama",
+      "exe": "/usr/local/bin/ollama",
+      "category": "local_llm",
+      "provider_ids": [
+        "ollama"
+      ],
+      "first_seen": "2026-10-29T12:58:37Z",
+      "last_seen": "2026-10-30T11:12:09Z",
+      "request_count": 17,
+      "bytes_out": 642282,
+      "sanctioned": true,
+      "risk_score": 65,
+      "findings_count": 5,
+      "is_agent": false
+    },
+    {
+      "id": "inv_004",
+      "process_name": "python3",
+      "exe": "/usr/bin/python3",
+      "category": "cloud_llm",
+      "provider_ids": [
+        "openai",
+        "mock_ai"
+      ],
+      "first_seen": "2026-10-29T13:18:09Z",
+      "last_seen": "2026-10-30T11:36:47Z",
+      "request_count": 23,
+      "bytes_out": 672511,
+      "sanctioned": false,
+      "risk_score": 100,
+      "findings_count": 23,
+      "is_agent": true
+    },
+    {
+      "id": "inv_005",
+      "process_name": "Google Chrome",
+      "exe": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      "category": "ai_saas",
+      "provider_ids": [
+        "chatgpt",
+        "gemini_web",
+        "claude_web"
+      ],
+      "first_seen": "2026-10-29T15:28:07Z",
+      "last_seen": "2026-10-30T11:34:34Z",
+      "request_count": 18,
+      "bytes_out": 536789,
+      "sanctioned": false,
+      "risk_score": 25,
+      "findings_count": 0,
+      "is_agent": false
+    },
+    {
+      "id": "inv_006",
+      "process_name": "Code Helper (Plugin)",
+      "exe": "/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin)",
+      "category": "ai_coding",
+      "provider_ids": [
+        "copilot"
+      ],
+      "first_seen": "2026-10-29T12:47:20Z",
+      "last_seen": "2026-10-30T10:22:44Z",
+      "request_count": 12,
+      "bytes_out": 360314,
+      "sanctioned": true,
+      "risk_score": 45,
+      "findings_count": 3,
+      "is_agent": false
+    },
+    {
+      "id": "inv_007",
+      "process_name": "Windsurf",
+      "exe": "/Applications/Windsurf.app/Contents/MacOS/Windsurf",
+      "category": "ai_coding",
+      "provider_ids": [
+        "codeium"
+      ],
+      "first_seen": "2026-10-29T18:22:41Z",
+      "last_seen": "2026-10-30T05:00:21Z",
+      "request_count": 5,
+      "bytes_out": 8509365,
+      "sanctioned": false,
+      "risk_score": 80,
+      "findings_count": 5,
+      "is_agent": false
+    },
+    {
+      "id": "inv_008",
+      "process_name": "LM Studio",
+      "exe": "/Applications/LM Studio.app/Contents/MacOS/LM Studio",
+      "category": "local_llm",
+      "provider_ids": [
+        "lmstudio"
+      ],
+      "first_seen": "2026-10-29T12:58:24Z",
+      "last_seen": "2026-10-30T09:52:27Z",
+      "request_count": 9,
+      "bytes_out": 277324,
+      "sanctioned": false,
+      "risk_score": 70,
+      "findings_count": 5,
+      "is_agent": false
+    },
+    {
+      "id": "inv_009",
+      "process_name": "aider",
+      "exe": "/opt/homebrew/bin/aider",
+      "category": "ai_coding",
+      "provider_ids": [
+        "openai"
+      ],
+      "first_seen": "2026-10-29T14:03:52Z",
+      "last_seen": "2026-10-30T11:09:34Z",
+      "request_count": 13,
+      "bytes_out": 372387,
+      "sanctioned": false,
+      "risk_score": 90,
+      "findings_count": 5,
+      "is_agent": true
+    },
+    {
+      "id": "inv_010",
+      "process_name": "ChatGPT",
+      "exe": "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT",
+      "category": "ai_saas",
+      "provider_ids": [
+        "chatgpt"
+      ],
+      "first_seen": "2026-10-29T13:51:15Z",
+      "last_seen": "2026-10-30T10:40:30Z",
+      "request_count": 10,
+      "bytes_out": 334615,
+      "sanctioned": false,
+      "risk_score": 85,
+      "findings_count": 5,
+      "is_agent": false
+    },
+    {
+      "id": "inv_011",
+      "process_name": "node",
+      "exe": "/opt/homebrew/bin/node",
+      "category": "cloud_llm",
+      "provider_ids": [
+        "groq"
+      ],
+      "first_seen": "2026-10-29T17:58:46Z",
+      "last_seen": "2026-10-30T10:46:13Z",
+      "request_count": 7,
+      "bytes_out": 242701,
+      "sanctioned": false,
+      "risk_score": 85,
+      "findings_count": 1,
+      "is_agent": true
+    },
+    {
+      "id": "inv_012",
+      "process_name": "Microsoft Edge",
+      "exe": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+      "category": "ai_saas",
+      "provider_ids": [
+        "ms_copilot",
+        "perplexity",
+        "deepseek"
+      ],
+      "first_seen": "2026-10-29T13:42:08Z",
+      "last_seen": "2026-10-30T11:25:35Z",
+      "request_count": 12,
+      "bytes_out": 413115,
+      "sanctioned": false,
+      "risk_score": 85,
+      "findings_count": 3,
+      "is_agent": false
+    }
+  ]
+}

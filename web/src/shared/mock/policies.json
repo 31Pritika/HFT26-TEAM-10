@@ -1,0 +1,25 @@
+{
+  "sanctioned_providers": [
+    "copilot",
+    "ollama"
+  ],
+  "sanctioned_processes": [
+    "Code Helper (Plugin)",
+    "ollama"
+  ],
+  "blocked_providers": [
+    "deepseek"
+  ],
+  "canary_tokens": [
+    "CANARY-SS-7F3A9"
+  ],
+  "entropy_threshold": 4.0,
+  "alert_min_severity": "medium",
+  "redact_in_storage": true,
+  "llm_triage": {
+    "enabled": true,
+    "engine": "auto",
+    "model": null
+  },
+  "self_exclude": true
+}

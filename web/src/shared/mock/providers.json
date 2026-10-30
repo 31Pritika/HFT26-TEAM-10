@@ -1,0 +1,404 @@
+{
+  "items": [
+    {
+      "id": "openai",
+      "name": "OpenAI API",
+      "category": "cloud_llm",
+      "hosts": [
+        "api.openai.com"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": [
+        "/v1/chat/completions",
+        "/v1/responses",
+        "/v1/embeddings"
+      ]
+    },
+    {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "category": "ai_saas",
+      "hosts": [
+        "chatgpt.com",
+        "chat.openai.com"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "anthropic",
+      "name": "Anthropic API",
+      "category": "cloud_llm",
+      "hosts": [
+        "api.anthropic.com"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": [
+        "/v1/messages"
+      ]
+    },
+    {
+      "id": "claude_web",
+      "name": "Claude.ai",
+      "category": "ai_saas",
+      "hosts": [
+        "claude.ai"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "gemini",
+      "name": "Google Gemini API",
+      "category": "cloud_llm",
+      "hosts": [
+        "generativelanguage.googleapis.com"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": [
+        ":generateContent"
+      ]
+    },
+    {
+      "id": "gemini_web",
+      "name": "Gemini",
+      "category": "ai_saas",
+      "hosts": [
+        "gemini.google.com",
+        "aistudio.google.com"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "azure_openai",
+      "name": "Azure OpenAI",
+      "category": "cloud_llm",
+      "hosts": [
+        "*.openai.azure.com"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "huggingface",
+      "name": "Hugging Face",
+      "category": "cloud_llm",
+      "hosts": [
+        "api-inference.huggingface.co",
+        "router.huggingface.co",
+        "huggingface.co"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "featherless",
+      "name": "Featherless",
+      "category": "cloud_llm",
+      "hosts": [
+        "api.featherless.ai"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": [
+        "/v1/chat/completions"
+      ]
+    },
+    {
+      "id": "groq",
+      "name": "Groq",
+      "category": "cloud_llm",
+      "hosts": [
+        "api.groq.com"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": [
+        "/openai/v1/chat/completions"
+      ]
+    },
+    {
+      "id": "mistral",
+      "name": "Mistral",
+      "category": "cloud_llm",
+      "hosts": [
+        "api.mistral.ai",
+        "chat.mistral.ai"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "cohere",
+      "name": "Cohere",
+      "category": "cloud_llm",
+      "hosts": [
+        "api.cohere.ai",
+        "api.cohere.com"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "together",
+      "name": "Together AI",
+      "category": "cloud_llm",
+      "hosts": [
+        "api.together.xyz"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "openrouter",
+      "name": "OpenRouter",
+      "category": "cloud_llm",
+      "hosts": [
+        "openrouter.ai"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": [
+        "/api/v1/chat/completions"
+      ]
+    },
+    {
+      "id": "perplexity",
+      "name": "Perplexity",
+      "category": "ai_saas",
+      "hosts": [
+        "api.perplexity.ai",
+        "perplexity.ai"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "deepseek",
+      "name": "DeepSeek",
+      "category": "cloud_llm",
+      "hosts": [
+        "api.deepseek.com",
+        "chat.deepseek.com"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "xai",
+      "name": "xAI / Grok",
+      "category": "cloud_llm",
+      "hosts": [
+        "api.x.ai",
+        "grok.com"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "replicate",
+      "name": "Replicate",
+      "category": "cloud_llm",
+      "hosts": [
+        "api.replicate.com"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "copilot",
+      "name": "GitHub Copilot",
+      "category": "ai_coding",
+      "hosts": [
+        "api.githubcopilot.com",
+        "copilot-proxy.githubusercontent.com"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "ms_copilot",
+      "name": "Microsoft Copilot",
+      "category": "ai_saas",
+      "hosts": [
+        "copilot.microsoft.com"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "category": "ai_coding",
+      "hosts": [
+        "api2.cursor.sh",
+        "*.cursor.sh"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "codeium",
+      "name": "Codeium / Windsurf",
+      "category": "ai_coding",
+      "hosts": [
+        "server.codeium.com",
+        "*.codeium.com"
+      ],
+      "ports": [
+        443
+      ],
+      "paths": []
+    },
+    {
+      "id": "ollama",
+      "name": "Ollama (local)",
+      "category": "local_llm",
+      "hosts": [
+        "localhost",
+        "127.0.0.1"
+      ],
+      "ports": [
+        11434
+      ],
+      "paths": [
+        "/api/generate",
+        "/api/chat",
+        "/api/embeddings",
+        "/v1/chat/completions"
+      ]
+    },
+    {
+      "id": "lmstudio",
+      "name": "LM Studio",
+      "category": "local_llm",
+      "hosts": [
+        "localhost"
+      ],
+      "ports": [
+        1234
+      ],
+      "paths": [
+        "/v1/*"
+      ]
+    },
+    {
+      "id": "llamacpp",
+      "name": "llama.cpp server",
+      "category": "local_llm",
+      "hosts": [
+        "localhost"
+      ],
+      "ports": [
+        8080
+      ],
+      "paths": [
+        "/completion",
+        "/v1/*"
+      ]
+    },
+    {
+      "id": "vllm",
+      "name": "vLLM",
+      "category": "local_llm",
+      "hosts": [
+        "localhost"
+      ],
+      "ports": [
+        8000
+      ],
+      "paths": [
+        "/v1/*"
+      ]
+    },
+    {
+      "id": "textgen",
+      "name": "text-generation-webui / Gradio",
+      "category": "local_llm",
+      "hosts": [
+        "localhost"
+      ],
+      "ports": [
+        5000,
+        7860
+      ],
+      "paths": []
+    },
+    {
+      "id": "jan",
+      "name": "Jan",
+      "category": "local_llm",
+      "hosts": [
+        "localhost"
+      ],
+      "ports": [
+        1337
+      ],
+      "paths": []
+    },
+    {
+      "id": "gpt4all",
+      "name": "GPT4All",
+      "category": "local_llm",
+      "hosts": [
+        "localhost"
+      ],
+      "ports": [
+        4891
+      ],
+      "paths": []
+    },
+    {
+      "id": "mock_ai",
+      "name": "ShadowScope Mock Provider",
+      "category": "cloud_llm",
+      "hosts": [
+        "localhost"
+      ],
+      "ports": [
+        8788
+      ],
+      "paths": []
+    }
+  ]
+}
