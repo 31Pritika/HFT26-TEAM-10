@@ -288,3 +288,4 @@ export function Constellation2D({
     </div>
   );
 }
+

@@ -73,14 +73,42 @@
     - Interactive "Re-run Diagnostic Probe" animation and quick recovery CTAs linking to Home (`/`), Threat Console (`/app`), and Playground (`/playground`).
   - **Verification**: `npm run build` succeeds cleanly in ~3.1s; oxlint passes with 0 errors; responsive design verified across 375px, 768px, and 1440px.
 
+- **Phase 4: Architecture Page, Polish & Documentation completed per Spec D5, D7, D8**:
+  - **Interactive Architecture Page (`web/src/experience/pages/Architecture.tsx`)**:
+    - Multi-layer animated SVG pipeline topology featuring dynamic packet flow across all 6 collectors, central pipeline, detection engine, redaction gate, LLM triage chain, SQLite storage, and live console.
+    - Interactive node selection with detailed inspection card: source file paths, privilege requirements, operational logic, and telemetry models.
+    - "Why No SSL Decryption?" section detailing certificate pinning failure in CLI tools, regulatory privacy liabilities, and localhost model blindness, alongside a structured comparison matrix.
+    - Strict redaction and air-gapped intelligence model explanation with triple-pass sanitization guarantees.
+    - Complete technology stack badges and team attribution cards for Team "git push n pray".
+  - **Page Polish & Quality Assurance**:
+    - Fixed initial mount state flip in `Landing.tsx` (`useWebGL`, `useReducedMotion`, `useMobile` initialized synchronously) to resolve React root unmount warning during hydration.
+    - Verified all pages on Chrome and Microsoft Edge with zero horizontal overflow at 375px, 768px, and 1440px.
+    - Set custom `document.title` across all pages (`Landing`, `Playground`, `Report`, `Architecture`, `ThreatConstellation`, `NotFound`).
+    - Respects `prefers-reduced-motion` everywhere (disables 3D canvas, smooth Lenis scroll, and auto-rotation).
+  - **Favicon & OpenGraph Assets (`web/public/experience/`)**:
+    - Created `favicon.svg`: crisp vector scope ring with cyan targeting reticle, purple center focal point, and red intercepted packet blip.
+    - Created `og-image.svg`: high-resolution 1200×630 OpenGraph card with cyber grid, scope ring geometry, feature badges, and hackathon team attribution.
+  - **Root Documentation (`README.md`)**:
+    - Preserved all organizers' starter sections (Team Information table, members, submission workflow, rules).
+    - Set Problem Track to "AI Shadow IT & Agentic Data Exfiltration Scanner".
+    - Added banner, one-line pitch, problem statement, key features, Mermaid architecture diagram, "How we see traffic without SSL decryption" comparison table, screenshot placeholders (`docs/media/`), tech stack, macOS/Linux and Windows quickstart setup instructions, optional sudo/Npcap instructions, local Ollama setup, Chrome/Edge extension loading guide, `.env` keys, cloud demo mode (`SHADOWSCOPE_CLOUD=1`), team table with GitHub handles, and MIT License.
+  - **Video Demo Script (`docs/DEMO_SCRIPT.md`)**:
+    - Under-3-minute video presentation guide with timestamps from 0:00 to 2:55.
+    - Exact on-screen actions and spoken narration lines covering hook, problem, console overview, attack simulation, AI analyst triage with redaction proof, rogue agent kill switch, local gateway 403 block, browser sensor paste toast, threat playground, compliance report PDF download, and zero-decryption architecture close.
+  - **Long Architecture Write-Up (`docs/architecture.md`)**:
+    - Comprehensive technical document detailing system architecture, zero-decryption mechanics, 6 collector specifications, 32+ detection rules catalog, mathematical redaction protocol, Master Spec §9 risk formula, and deployment topologies.
+
 ## Next
-- **Phase 4: Architecture Page, Polish & Docs (Spec D5, D7, D8)**:
-  - Architecture page (`/architecture`) with interactive SVG diagram of ShadowScope's multi-layered capture pipeline.
-  - Per-page `document.title` and favicon / OG image files in `web/public/experience/`.
-  - Final documentation updates: root `README.md` (keeping organizers' table, adding architecture, setup for macOS/Windows, etc.), `docs/DEMO_SCRIPT.md`, and `docs/architecture.md`.
+- Final team checkpoint and submission PR review. All Part D deliverables are 100% complete!
 
 ## Issues
 - None.
 
 ## Requests to other parts
-- None.
+- **Part C (Kevin):** In `web/index.html`, please link the new favicon and OpenGraph metadata created in `web/public/experience/`:
+  ```html
+  <link rel="icon" type="image/svg+xml" href="/experience/favicon.svg" />
+  <meta property="og:image" content="/experience/og-image.svg" />
+  <meta property="og:title" content="ShadowScope — AI Shadow IT & Agentic Data Exfiltration Scanner" />
+  <meta property="og:description" content="Passive zero-decryption scanner for shadow AI tools, unencrypted prompt leaks, and rogue autonomous agent exfiltration." />
+  ```

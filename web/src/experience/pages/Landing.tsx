@@ -65,24 +65,25 @@ function GithubIcon({ className = "w-4 h-4" }: { className?: string }) {
 }
 
 function useWebGL() {
-  const [supported, setSupported] = useState<boolean | null>(null);
-  useEffect(() => {
+  const [supported] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
     try {
       const canvas = document.createElement("canvas");
-      const gl = canvas.getContext("webgl2") ?? canvas.getContext("webgl");
-      setSupported(!!gl);
+      return !!(canvas.getContext("webgl2") ?? canvas.getContext("webgl"));
     } catch {
-      setSupported(false);
+      return false;
     }
-  }, []);
+  });
   return supported;
 }
 
 function useReducedMotion() {
-  const [reduced, setReduced] = useState(false);
+  const [reduced, setReduced] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
     const listener = (e: MediaQueryListEvent) => setReduced(e.matches);
     mq.addEventListener("change", listener);
     return () => mq.removeEventListener("change", listener);
@@ -91,10 +92,12 @@ function useReducedMotion() {
 }
 
 function useMobile() {
-  const [mobile, setMobile] = useState(false);
+  const [mobile, setMobile] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.innerWidth < 768;
+  });
   useEffect(() => {
     const check = () => setMobile(window.innerWidth < 768);
-    check();
     window.addEventListener("resize", check, { passive: true });
     return () => window.removeEventListener("resize", check);
   }, []);

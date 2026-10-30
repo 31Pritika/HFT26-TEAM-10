@@ -31,6 +31,10 @@ export default function ThreatConstellation() {
   const [forced2D, setForced2D] = useState(false);
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
 
+  useEffect(() => {
+    document.title = "Threat Constellation — ShadowScope";
+  }, []);
+
   // Environment checks
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   const prefersReducedMotion =

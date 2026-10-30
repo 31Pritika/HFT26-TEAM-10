@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   ShieldAlert,
@@ -15,6 +15,10 @@ export default function NotFound() {
   const location = useLocation();
   const [runningDiag, setRunningDiag] = useState(false);
   const [diagComplete, setDiagComplete] = useState(false);
+
+  useEffect(() => {
+    document.title = "404 Not Found — ShadowScope";
+  }, []);
 
   const handleRunDiag = () => {
     setRunningDiag(true);

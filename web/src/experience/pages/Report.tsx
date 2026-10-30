@@ -27,6 +27,10 @@ export default function Report() {
   const [timeWindow, setTimeWindow] = useState("7d");
 
   useEffect(() => {
+    document.title = "Compliance Audit Report — ShadowScope";
+  }, []);
+
+  useEffect(() => {
     let mounted = true;
     const fetchReport = async () => {
       setLoading(true);
