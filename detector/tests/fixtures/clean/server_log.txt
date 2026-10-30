@@ -1,0 +1,3 @@
+2026-10-30T10:30:45.123Z INFO req=550e8400-e29b-41d4-a716-446655440000 ip=8.8.8.8 status=200 latency=123ms
+2026-10-30T10:30:46.456Z WARN retry attempt=3 backoff=1500ms path=/api/v1/users/42
+2026-10-30 10:30:47,789 ERROR Traceback in /usr/local/lib/python3.11/site-packages/widgets/core/handlers.py line 42

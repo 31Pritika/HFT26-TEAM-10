@@ -1,0 +1,158 @@
+import asyncio
+import types
+
+import pytest
+
+from app.engine import detect_adapter as adapter
+
+AWS = "AKIAFAKEFAKEFAKE1234"
+AWS_2 = "AKIAEXAMPLEEXAMPLE99"
+OPENAI = "sk-proj-FAKEEXAMPLEFAKEEXAMPLE1234"
+POLICY = {"canary_tokens": ["CANARY-SS-7F3A9"]}
+
+
+@pytest.fixture
+def builtin():
+    original = adapter._detector
+    adapter.use_detector(None)
+    yield
+    adapter.use_detector(original)
+
+
+def test_package_is_found():
+    assert adapter.status()["active"] == "shadowscope_detect"
+
+
+def test_fallback_detects_the_spec_set(builtin):
+    text = f"{AWS} {OPENAI} a.b@example.com -----BEGIN RSA PRIVATE KEY----- eyJhbGciOiJIUzI1.eyJzdWIiOiJGQUtF.FAKEsignature"
+    result = adapter.scan_text(text)
+    assert {f["subtype"] for f in result["findings"]} == {"aws_access_key", "openai_key", "email", "private_key", "jwt"}
+    assert adapter.status()["active"] == "builtin"
+    for raw in (AWS, OPENAI, "a.b@example.com"):
+        assert raw not in str(result)
+
+
+@pytest.mark.parametrize("gap", range(0, 80, 3))
+def test_snippets_never_contain_a_cut_off_secret(gap):
+    text = f"{AWS} {'x' * gap} {AWS_2} {'y' * gap} fake.person@example.com"
+    for finding in adapter.scan_text(text)["findings"]:
+        snippet = finding["evidence"]["redacted_snippet"]
+        assert "AKIAFA" not in snippet and "AKIAEX" not in snippet and "fake.p" not in snippet
+
+
+def test_secret_the_detector_missed_is_still_masked():
+    result = adapter.scan_text(f"token {OPENAI}")
+    assert OPENAI not in result["redacted_text"]
+
+
+@pytest.mark.parametrize("value", [
+    OPENAI, "ghp_FAKEEXAMPLEFAKEEXAMPLEFAKEEXAMPLEFAKE", "postgres://fake:FAKEpass123@db.internal/prod",
+    'password = "FAKEexamplePass1"', "2345 6789 0124", "FAKPF1234E", "4111 1111 1111 1111", "219-09-9999", "+91 9876543210",
+])
+def test_harden_masks_common_shapes(value):
+    raw = value.split('"')[1] if '"' in value else value
+    assert raw not in adapter.harden(f"before {value} after")
+
+
+def test_harden_is_stable_on_masked_text():
+    once = adapter.harden(f"{AWS} password=FAKEexamplePass1 a@example.com")
+    assert adapter.harden(once) == once
+
+
+def test_private_key_block_is_masked_whole():
+    body = "\n".join(["FAKEEXAMPLE" * 5] * 3)
+    for block in (f"-----BEGIN RSA PRIVATE KEY-----\n{body}\n-----END RSA PRIVATE KEY-----",
+                  f"-----BEGIN RSA PRIVATE KEY-----\n{body}\n",
+                  f"----••••••••--\n{body}\n"):
+        assert "FAKEEXAMPLEFAKE" not in adapter.harden(block)
+
+
+def test_canary_is_added_once_and_masked():
+    result = adapter.scan_text("ref CANARY-SS-7F3A9", policy=POLICY)
+    canaries = [f for f in result["findings"] if f["type"] == "canary"]
+    assert len(canaries) == 1 and canaries[0]["severity"] == "critical"
+    assert "CANARY-SS-7F3A9" not in str(result)
+
+
+def test_broken_detector_falls_back():
+    original = adapter._detector
+    def boom(*args, **kwargs):
+        raise RuntimeError("boom")
+    adapter.use_detector(types.SimpleNamespace(scan_text=boom, redact=boom, classify_process=boom, analyze_agent_payload=boom, triage=boom))
+    try:
+        assert adapter.scan_text(AWS)["findings"][0]["subtype"] == "aws_access_key"
+        assert AWS not in adapter.redact(AWS)
+        assert adapter.classify_process("aider")["framework"] == "aider"
+        assert adapter.analyze_agent_payload("x", direction="request")["is_agent"] is False
+        assert asyncio.run(adapter.triage({"severity": "high"}, AWS, engine_cfg={}))["engine"] == "rules"
+    finally:
+        adapter.use_detector(original)
+
+
+@pytest.mark.parametrize("name,cmdline,framework", [
+    ("claude", None, "claude_code"), ("Cursor Helper", None, "cursor"), ("python3", ["python3", "langchain_agent.py"], "langchain"),
+    ("node", ["node", "crewai_worker.js"], "crewai"), ("python3", ["python3", "manage.py"], None), ("Claude", None, None),
+])
+def test_process_classification(name, cmdline, framework):
+    assert adapter.classify_process(name, cmdline)["framework"] == framework
+
+
+def test_triage_only_receives_hardened_text(builtin):
+    result = asyncio.run(adapter.triage({"severity": "high", "remediation": ["x"]}, f"key {AWS}", engine_cfg={}))
+    assert AWS not in result["redacted_input_preview"] and result["engine"] == "rules"
+
+
+def test_real_detector_is_active_with_its_real_functions():
+    assert adapter.status()["version"] != "0.1.0"
+    assert adapter.classify_process("python3", ["python3", "langchain_agent.py"])["framework"] == "langchain"
+
+
+def test_canary_from_the_real_detector_is_not_doubled():
+    assert sum(f["type"] == "canary" for f in adapter.scan_text("ref CANARY-SS-7F3A9", policy=POLICY)["findings"]) == 1
+
+
+@pytest.mark.parametrize("text,expected", [
+    ("pan FAKPF1234E", "pan"), ("aadhaar 2345 6789 0124", "aadhaar"), ("password=FAKEexample1", "generic_secret_assignment"),
+])
+def test_snippets_keep_context_with_real_masks(text, expected):
+    finding = next(f for f in adapter.scan_text(text + " trailing words")["findings"] if f["subtype"] == expected)
+    assert finding["evidence"]["match_redacted"] in finding["evidence"]["redacted_snippet"]
+    assert "trailing" in finding["evidence"]["redacted_snippet"]
+
+
+def test_remediation_comes_from_part_b_when_available():
+    assert adapter.remediation_steps("aws_access_key")
+    assert adapter.remediation_steps("no_such_subtype") == []
+
+
+# ---- Hostile input -----------------------------------------------------------------------------------------
+HOSTILE = {
+    "one word": "x" * 3_000_000, "digits": "1" * 3_000_000, "base64": "QUJD" * 750_000, "dots": "a." * 1_500_000,
+    "spaces": "ab " * 1_000_000, "assignments": "password=" * 330_000, "headers": "-----BEGIN RSA PRIVATE KEY-----\n" * 100_000,
+    "at signs": "a@" * 1_500_000, "hyphens": "sk-" * 1_000_000, "newlines": "\n" * 3_000_000,
+}
+
+
+@pytest.mark.parametrize("name", HOSTILE)
+def test_redaction_stays_fast_on_hostile_input(name):
+    import time
+    started = time.perf_counter()
+    adapter.harden(HOSTILE[name])
+    assert time.perf_counter() - started < 3, name
+
+
+def test_scanning_a_large_hostile_payload_finishes():
+    import time
+    started = time.perf_counter()
+    adapter.scan_text("x" * 3_000_000)
+    assert time.perf_counter() - started < 5
+
+
+@pytest.mark.parametrize("address", ["fake.person@example.com", "a+tag@mail.example.co.in", "x" * 100 + "@example.com"])
+def test_emails_are_still_masked_after_the_rewrite(address):
+    masked = adapter.harden(f"mail {address}, please")
+    assert address not in masked and "•••@" in masked and masked.startswith("mail ") and masked.endswith(", please")
+
+
+def test_a_key_after_a_long_word_is_still_masked():
+    assert AWS not in adapter.harden("x" * 500 + f" {AWS}")
