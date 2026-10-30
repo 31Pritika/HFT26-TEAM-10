@@ -4,7 +4,14 @@ import { RouterProvider } from "react-router-dom";
 import { Toaster } from "sonner";
 import { router } from "./routes";
 
-const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 10_000 } } });
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 10_000,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export default function App() {
   return (
@@ -12,7 +19,21 @@ export default function App() {
       <Suspense fallback={null}>
         <RouterProvider router={router} />
       </Suspense>
-      <Toaster theme="dark" richColors />
+      <Toaster
+        theme="dark"
+        position="top-right"
+        richColors
+        closeButton
+        toastOptions={{
+          style: {
+            background: "#090d18",
+            border: "1px solid rgba(148, 163, 255, 0.15)",
+            color: "#e8ecf5",
+            backdropFilter: "blur(16px)",
+            fontFamily: "Inter, sans-serif",
+          },
+        }}
+      />
     </QueryClientProvider>
   );
 }

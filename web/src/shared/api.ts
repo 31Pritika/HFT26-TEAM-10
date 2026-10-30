@@ -2,7 +2,6 @@ import type {
   AgentSession, AIEvent, ComplianceReport, ExtensionEvent, Finding, GraphData, Health, IngestResult, InventoryItem,
   Observation, Overview, Page, Policy, Provider, ScanResult, Scenario, TriageResult,
 } from "./types";
-import { triggerMockScenario, injectMockEvent, injectMockFinding } from "./mock/stream";
 
 export const API_BASE: string = import.meta.env.VITE_API_BASE ?? "http://localhost:8787/api";
 const DEMO_FORCED = import.meta.env.VITE_DEMO_MODE === "true";
@@ -250,7 +249,6 @@ export const api = {
       () => request<Overview>(`/overview${qs({ window })}`),
       async () => {
         const data = await mock<Overview>("overview");
-        // Apply status overrides to totals count
         let resolvedCount = 0;
         findingOverrides.forEach((val) => {
           if (val.status === "resolved" || val.status === "false_positive") resolvedCount++;
@@ -403,7 +401,8 @@ export const api = {
   postObservations: (observations: Observation | Observation[]) =>
     live(
       () => request<{ accepted: number; event_ids: string[] }>("/observations", json("POST", observations)),
-      () => {
+      async () => {
+        const { injectMockEvent } = await import("./mock/stream");
         const obsList = Array.isArray(observations) ? observations : [observations];
         obsList.forEach((obs) => {
           injectMockEvent({
@@ -424,7 +423,8 @@ export const api = {
   simulate: (scenario_id: string, intensity = 1) =>
     live(
       () => request<{ run_id: string; started: true }>("/simulate", json("POST", { scenario_id, intensity })),
-      () => {
+      async () => {
+        const { triggerMockScenario } = await import("./mock/stream");
         triggerMockScenario(scenario_id);
         return { run_id: `run_sim_${Date.now()}`, started: true as const };
       },
@@ -438,7 +438,8 @@ export const api = {
   postExtensionEvent: (event: ExtensionEvent) =>
     live(
       () => request<{ event_id: string; findings: Finding[] }>("/extension/event", json("POST", event)),
-      () => {
+      async () => {
+        const { injectMockEvent, injectMockFinding } = await import("./mock/stream");
         const scan = clientSideScan(event.text);
         const evt = injectMockEvent({
           source: "extension",
