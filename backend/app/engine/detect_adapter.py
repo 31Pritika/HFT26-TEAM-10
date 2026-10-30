@@ -66,10 +66,13 @@ def mask_email(value: str) -> str:
     return f"{local[:1]}{MASK_CHAR * 3}@{domain[:1]}{MASK_CHAR * 3}.{domain.rstrip('.').rsplit('.', 1)[-1]}"
 
 
-_EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
+# These run on every payload, so each must stay linear on hostile input such as megabytes with no spaces.
+_EMAIL = re.compile(r"[\w.+-]{1,64}@[\w-]{1,253}\.[\w.-]{1,253}")
+_EMAIL_DOMAIN = re.compile(r"(?<=[\w.+-])@[\w-]{1,253}\.[\w.-]{1,253}")
+_EMAIL_LOCAL_CHARS = re.compile(r"[\w.+-]")
+MAX_EMAIL_LOCAL = 256
 _REDACT_PATTERNS = [re.compile(pattern) for pattern in (
-    r"(?s)-----BEGIN [A-Z ]*PRIVATE KEY(?: BLOCK)?-----(?:.*?-----END [A-Z ]*PRIVATE KEY(?: BLOCK)?-----|[A-Za-z0-9+/=\s]*)",
-    r"(?:[A-Za-z0-9+/=]{40,}\s+){2,}",  # A key body left behind when only the header was masked.
+    r"(?<![A-Za-z0-9+/=])(?:[A-Za-z0-9+/=]{40,}\s+){2,}",  # A key body left behind when only the header was masked.
     r"\b(?:AKIA|ASIA)[0-9A-Z]{16}",
     r"\bsk-(?:ant-|proj-)?[A-Za-z0-9_-]{20,}",
     r"\bgh[pousr]_[A-Za-z0-9]{36,}",
@@ -90,6 +93,10 @@ _REDACT_PATTERNS = [re.compile(pattern) for pattern in (
     r"\b(?!000|666|9\d\d)\d{3}-(?!00)\d{2}-(?!0000)\d{4}\b",
     r"(?:\+91[\s-]?)?\b[6-9]\d{9}\b",
 )]
+_KEY_HEADER = re.compile(r"-----BEGIN [A-Z ]{0,40}PRIVATE KEY(?: BLOCK)?-----")
+_KEY_FOOTER = re.compile(r"-----END [A-Z ]{0,40}PRIVATE KEY(?: BLOCK)?-----")
+_KEY_BODY = re.compile(r"[A-Za-z0-9+/=\s]*")
+MAX_KEY_BYTES = 65_536
 _ASSIGNMENT = re.compile(
     r"(?i)\b(password|passwd|pwd|secret|api[_-]?key|access[_-]?token|auth[_-]?token|client[_-]?secret)\b(\s*[:=]\s*['\"]?)([^\s'\"]{8,})")
 
@@ -99,15 +106,49 @@ def _mask_match(match: re.Match) -> str:
     return value if MASK_CHAR in value else mask(value)
 
 
+def _mask_private_keys(text: str) -> str:
+    """Masks each key up to its END line, or to the end of the base64 body if it was cut off.
+
+    The next END line is remembered between headers, so a payload of repeated headers cannot rescan the text.
+    """
+    parts, position = [], 0
+    footer, footers_left = None, True
+    for header in _KEY_HEADER.finditer(text):
+        if header.start() < position:
+            continue
+        if footers_left and (footer is None or footer.start() < header.end()):
+            footer = _KEY_FOOTER.search(text, header.end())
+            footers_left = footer is not None
+        closed = footers_left and footer is not None and footer.start() - header.end() <= MAX_KEY_BYTES
+        end = footer.end() if closed and footer is not None else _KEY_BODY.match(text, header.end()).end()  # type: ignore[union-attr]
+        parts += [text[position:header.start()], mask(text[header.start():end])]
+        position = end
+    return "".join([*parts, text[position:]])
+
+
+def _mask_emails(text: str) -> str:
+    """Finds the `@domain` first and walks back to the start of the address, which never rescans long words."""
+    parts, position = [], 0
+    for match in _EMAIL_DOMAIN.finditer(text):
+        start = match.start()
+        while start > position and match.start() - start < MAX_EMAIL_LOCAL and _EMAIL_LOCAL_CHARS.fullmatch(text[start - 1]):
+            start -= 1
+        address = text[start:match.end()]
+        parts += [text[position:start], address if MASK_CHAR in address else mask_email(address)]
+        position = match.end()
+    return "".join([*parts, text[position:]])
+
+
 def harden(text: str, canaries: list[str] | None = None) -> str:
     """Masks anything still secret-shaped. Safe to run on text that is already redacted."""
     for token in canaries or []:
         if token:
             text = text.replace(token, mask(token))
+    text = _mask_private_keys(text)
     for pattern in _REDACT_PATTERNS:
         text = pattern.sub(_mask_match, text)
     text = _ASSIGNMENT.sub(lambda m: m.group(0) if MASK_CHAR in m.group(3) else f"{m.group(1)}{m.group(2)}{mask(m.group(3))}", text)
-    return _EMAIL.sub(lambda m: m.group(0) if MASK_CHAR in m.group(0) else mask_email(m.group(0)), text)
+    return _mask_emails(text)
 
 
 def redact(text: str, canaries: list[str] | None = None) -> str:
