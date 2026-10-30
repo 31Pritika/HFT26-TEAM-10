@@ -143,7 +143,7 @@ def _resolve_overlaps(candidates: list[_Candidate]) -> list[_Candidate]:
     return sorted(kept, key=lambda c: c.start)
 
 
-def _fingerprint(value: str) -> str:
+def fingerprint(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8", "replace")).hexdigest()[:12]
 
 
@@ -168,11 +168,11 @@ class _Evidence:
             "entropy": round(entropy.shannon(value), 2),
             "line": bisect_left(self.newlines, candidate.start) + 1,
             "offset": candidate.start,
-            "fingerprint": _fingerprint(value),
+            "fingerprint": fingerprint(value),
         }
 
 
-def _finding(rule: Rule, *, severity: Severity, confidence: float, title: str, description: str,
+def make_finding(rule: Rule, *, severity: Severity, confidence: float, title: str, description: str,
              evidence: dict) -> DetFinding:
     return {
         "type": rule.type, "subtype": rule.id, "severity": severity, "confidence": confidence,
@@ -184,7 +184,7 @@ def _finding(rule: Rule, *, severity: Severity, confidence: float, title: str, d
 def _candidate_finding(candidate: _Candidate, evidence: dict) -> DetFinding:
     rule, verdict = candidate.rule, candidate.verdict
     title = rule.title.format(**verdict.fields)
-    return _finding(
+    return make_finding(
         rule, severity=candidate.severity,
         confidence=rule.confidence if verdict.confidence is None else verdict.confidence,
         title=title, description=f"{title}. {verdict.detail}" if verdict.detail else f"{title}.", evidence=evidence,
@@ -199,8 +199,8 @@ def _bulk_finding(text: str, kept: list[_Candidate], evidence: _Evidence) -> Det
     first = min((*emails.values(), *documents.values()), key=lambda c: c.start)
     block = evidence.build(first)
     block["entropy"] = None
-    block["fingerprint"] = _fingerprint("\n".join(sorted((*emails, *documents))))
-    return _finding(
+    block["fingerprint"] = fingerprint("\n".join(sorted((*emails, *documents))))
+    return make_finding(
         BULK_PII, severity=BULK_PII.severity, confidence=BULK_PII.confidence, title=BULK_PII.title,
         description=f"{BULK_PII.title}: {len(emails)} email addresses, {len(documents)} Aadhaar/PAN numbers.",
         evidence=block,
@@ -214,11 +214,11 @@ def _code_finding(redacted: str) -> DetFinding | None:
     if code is None:
         return None
     excerpt = mask_value(code.excerpt)
-    return _finding(
+    return make_finding(
         code.rule, severity=code.rule.severity, confidence=code.rule.confidence, title=code.rule.title,
         description=f"{code.rule.title}.",
         evidence={"redacted_snippet": excerpt, "match_redacted": excerpt, "entropy": None, "line": None, "offset": None,
-                  "fingerprint": _fingerprint(redacted)},
+                  "fingerprint": fingerprint(redacted)},
     )
 
 

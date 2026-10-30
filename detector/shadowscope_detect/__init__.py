@@ -1,6 +1,7 @@
-"""Public detection API (spec 01 §A9). Signatures are frozen; agent analysis and triage are still stubs."""
+"""Public detection API (spec 01 §A9). Signatures are frozen; triage is still a stub."""
 from __future__ import annotations
 
+from .agent_analyzer import analyze_agent_payload as _analyze_agent_payload
 from .classify import classify_process as _classify_process
 from .scanner import scan_text
 
@@ -14,8 +15,8 @@ def redact(text: str) -> str:
 
 
 def analyze_agent_payload(payload: dict | str, *, direction: str) -> dict:
-    """Stub: reports no agent activity. `direction` is "request" or "response"."""
-    return {"is_agent": False, "framework": "unknown", "tools_declared": [], "actions": [], "findings": []}
+    """Tools, tool calls and risky behaviour in a body. `direction` is "request" or "response"."""
+    return _analyze_agent_payload(payload, direction=direction)
 
 
 def classify_process(name: str, cmdline: list[str] | None) -> dict:
