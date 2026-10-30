@@ -86,14 +86,15 @@
   - Automated headless Chrome and Edge CDP testing across 375px (mobile), 768px (tablet icon rail), and 1440px (desktop) across all 10 pages: 0 horizontal overflow.
   - `npm run build` succeeds cleanly in ~460ms with `VITE_DEMO_MODE=true` and standard auto-probe.
 
-- **Integration Checkpoint & Teammate Alignment:**
+- **Integration Checkpoint & Pull Request:**
   - Merged `origin/main` (PR #1 from Vishwak + Part B detector by Aaraadhyaa) into `kevin/dashboard`.
   - Harmonized `scripts/start.ps1` with Python 3.15 path detection and comprehensive background daemon management.
   - Handled Part A requests: normalized `Overview.tsx` severity distribution calculation to divide by `sum(by_severity)`, and made all collector status indicators and count strips dynamic to `overview.collectors` / `health.collectors` (supporting all 6 collectors including `gateway`).
   - Re-verified `npm run build`: cleanly passes with zero errors in ~560ms.
+  - Opened Pull Request #3: [PR #3 — feat(dashboard): Part C Command Console](https://github.com/31Pritika/HFT26-TEAM-10/pull/3).
 
 ## Next
-- Hackathon presentation and live demonstration.
+- Hackathon presentation and live demonstration. Ready for teammate merge into `main`.
 
 ## Issues
 - None. System is completely tested and fully operational against both mock and live engines.
