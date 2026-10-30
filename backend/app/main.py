@@ -10,6 +10,7 @@ from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import collectors, config, db, seed
+from .api.middleware import BodyLimitMiddleware, RateLimitMiddleware
 from .api import (errors, routes_events, routes_findings, routes_health, routes_ingest, routes_inventory, routes_overview, routes_policies,
                   routes_report, routes_scan, routes_scenarios, ws)
 from .bus import bus
@@ -46,6 +47,8 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
         await asyncio.to_thread(seed.seed_if_empty)
     if config.COLLECTORS_ENABLED:
         await asyncio.to_thread(collectors.start_all)
+    elif config.CLOUD:
+        collectors.disable_all("Disabled in cloud mode: no local traffic to observe")
     tasks = [asyncio.create_task(job()) for job in (_publish_stats, _record_risk, _prune_events)]
     yield
     for task in tasks:
@@ -56,6 +59,9 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 
 app = FastAPI(title="ShadowScope Engine", version=config.VERSION, lifespan=lifespan)
+app.add_middleware(BodyLimitMiddleware)
+if config.CLOUD:
+    app.add_middleware(RateLimitMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=config.ALLOWED_ORIGINS,

@@ -90,9 +90,12 @@ async def proxy(request: Request) -> Response:
     host = upstream_host(provider)
     if provider is None or host is None:
         return _error(404, "unknown_provider", f"No forwardable provider called {request.path_params['provider_id']}")
-    body = await request.body()
-    if len(body) > MAX_BODY_BYTES:
-        return _error(413, "payload_too_large", "Request body is too large for the gateway")
+    received = bytearray()
+    async for chunk in request.stream():
+        received += chunk
+        if len(received) > MAX_BODY_BYTES:
+            return _error(413, "payload_too_large", "Request body is too large for the gateway")
+    body = bytes(received)
 
     path = request.path_params["path"]
     is_self = request.headers.get(SELF_HEADER) == "1"

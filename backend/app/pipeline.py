@@ -322,13 +322,25 @@ def process(observation: Observation | dict, *, prescan: dict | None = None, for
     return Result(event, findings, created)
 
 
+def _unsaved_finding(raw: dict, process_name: str) -> dict:
+    """A complete Finding that is never stored: a public cloud deployment keeps nothing people paste into it."""
+    return Finding.model_validate({
+        **raw, "id": new_id("fnd"), "ts": now_iso(), "event_id": None, "provider_id": None, "process_name": process_name,
+        "status": "open", "triage": None,
+        "compliance": raw.get("compliance") or compliance.tags_for(raw["type"], raw["subtype"]),
+        "remediation": raw.get("remediation") or compliance.remediation_for(raw["type"], raw["subtype"]),
+    }).model_dump()
+
+
 def scan_text(text: str, source: str = "api", context: dict[str, Any] | None = None) -> dict:
     """POST /scan. Text with findings becomes an event through the normal pipeline."""
     context = context or {}
     policy = db.get_policy()
     scan = detect_adapter.scan_text(text, context=context, policy=policy)
     findings: list[dict] = []
-    if scan["findings"]:
+    if scan["findings"] and config.CLOUD:
+        findings = [_unsaved_finding(raw, source) for raw in scan["findings"]]
+    elif scan["findings"]:
         url = context.get("url") or ""
         parts = urlsplit(url if "//" in url else f"//{url}")
         result = process(

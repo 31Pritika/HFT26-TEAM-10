@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from .. import db, pipeline
 from ..models import Policy, PolicyUpdate
+from .errors import require_local_engine
 
 router = APIRouter()
 
@@ -13,7 +14,7 @@ def get_policies() -> dict:
     return db.get_policy()
 
 
-@router.put("/policies", response_model=Policy)
+@router.put("/policies", response_model=Policy, dependencies=[Depends(require_local_engine)])
 def update_policies(body: PolicyUpdate) -> dict:
     changes = {key: value for key, value in body.model_dump(exclude_unset=True).items() if value is not None}
     before = db.get_policy()

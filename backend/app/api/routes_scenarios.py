@@ -18,7 +18,7 @@ _cache: tuple[float, list[dict]] | None = None
 
 
 def simulator_available() -> bool:
-    return (config.SIMULATOR_DIR / "run.py").is_file()
+    return not config.CLOUD and (config.SIMULATOR_DIR / "run.py").is_file()
 
 
 def _from_simulator() -> list[dict] | None:

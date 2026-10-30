@@ -13,7 +13,7 @@ from .. import config
 log = logging.getLogger("shadowscope.api")
 LOOPBACK_CLIENTS = {"127.0.0.1", "::1", "localhost", "testclient"}
 CODES = {400: "bad_request", 403: "forbidden", 404: "not_found", 405: "method_not_allowed", 409: "conflict",
-         413: "payload_too_large", 415: "unsupported_media_type", 422: "validation_error", 502: "bad_gateway"}
+         413: "payload_too_large", 415: "unsupported_media_type", 422: "validation_error", 429: "rate_limited", 502: "bad_gateway"}
 
 
 class ApiError(Exception):
@@ -31,7 +31,14 @@ def not_found(kind: str, item_id: str) -> ApiError:
     return ApiError(404, f"{kind} {item_id} not found")
 
 
+def require_local_engine() -> None:
+    """For features that only make sense on a machine running the engine for itself."""
+    if config.CLOUD:
+        raise ApiError(403, "This endpoint is disabled in cloud mode")
+
+
 def require_loopback(request: Request) -> None:
+    require_local_engine()  # Behind a proxy the client address cannot be trusted to mean "this machine".
     client = request.client.host if request.client else ""
     if client not in LOOPBACK_CLIENTS and not config.ALLOW_REMOTE:
         raise ApiError(403, "This endpoint only accepts requests from this machine")

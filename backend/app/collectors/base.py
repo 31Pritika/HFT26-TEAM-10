@@ -58,6 +58,10 @@ class Collector(ABC):
             log.exception("%s stopped", self.name)
             self._set(enabled=True, running=False, reason=f"{type(error).__name__}: {error}"[:200])
 
+    def disable(self, reason: str) -> None:
+        """Marks this collector as deliberately not started."""
+        self._set(enabled=False, running=False, reason=reason)
+
     def stop(self) -> None:
         self._stop.set()
         if self._thread is not None:

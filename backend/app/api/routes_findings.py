@@ -47,7 +47,8 @@ async def triage_finding(finding_id: str, body: TriageRequest | None = None) -> 
     finding = _require(finding_id)
     requested = body.engine if body else None
     settings = db.get_policy()["llm_triage"]
-    engine = requested or settings["engine"] if settings["enabled"] else "rules"
+    # In cloud mode a public caller must not be able to spend the LLM keys.
+    engine = requested or settings["engine"] if settings["enabled"] and not config.CLOUD else "rules"
     cached = finding["triage"]
     # A rules answer may only mean an engine was slow, so asking again retries the LLM.
     if cached and (requested in (None, "auto", cached["engine"])) and (cached["engine"] != "rules" or engine == "rules"):
