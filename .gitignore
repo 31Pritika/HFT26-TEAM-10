@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+build/
+dist/
+
+# Node
+node_modules/
+*.tsbuildinfo
+
+# Env & local data
+.env
+.env.*
+!.env.example
+*.db
+*.db-shm
+*.db-wal
+backend/data/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# simulator/samples/ holds fake demo fixtures and must stay tracked
+!simulator/samples/
+!simulator/samples/**

@@ -12,7 +12,7 @@
 | **Team Name** | **git push n pray** |
 | **Team Number** | `TEAM-10` (`HFT26-TEAM-10`) |
 | **Registration ID** | `HFEST26-4KLZUH37` |
-| **Problem Track** | **Track Selection in Progress** |
+| **Problem Track** | **AI Shadow IT & Agentic Data Exfiltration Scanner** |
 | **Domain** | `General Track` |
 | **Team Leader** | Pritika Agarwal (pritikaagarwal0731@gmail.com) |
 | **Institution** | CBIT Hyderabad |
@@ -21,9 +21,16 @@
 
 | # | Name | Email | Institution |
 | :--- | :--- | :--- | :--- |
+| 0 | Pritika Agarwal (Team Leader) | pritikaagarwal0731@gmail.com | CBIT Hyderabad |
 | 1 | Vishwak Boddukuri | vishwak.boddukuri@gmail.com | CBIT Hyderabad |
 | 2 | Kevin Tejas | kevintejas07@gmail.com | CBIT Hyderabad |
 | 3 | Aaraadhyaa Reddy | vanamakraken07@gmail.com | CBIT Hyderabad |
+
+## 🛡️ Project: ShadowScope
+
+See every AI your company talks to — without breaking TLS: a privacy-first scanner for shadow AI tools, leaked data and risky autonomous agents.
+
+Full documentation coming.
 
 ---
 
