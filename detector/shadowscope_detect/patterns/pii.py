@@ -5,14 +5,9 @@ import re
 
 from . import TIER_INFRA, Rule
 
-_COMPLIANCE = ("DPDP", "GDPR", "ISO27001")
-_PURGE = ("Purge from AI provider history", "Notify DPO under DPDP Act 2023", "Enable masking in source system")
 
-
-def _pii(id: str, pattern: str, severity: str, title: str, *, flags: int = re.ASCII,
-         compliance: tuple[str, ...] = _COMPLIANCE, remediation: tuple[str, ...] = _PURGE, **kw) -> Rule:
-    return Rule(id=id, type="pii", regex=re.compile(pattern, flags), severity=severity, title=title,
-                compliance=compliance, remediation=remediation, **kw)
+def _pii(id: str, pattern: str, severity: str, title: str, *, flags: int = re.ASCII, **kw) -> Rule:
+    return Rule(id=id, type="pii", regex=re.compile(pattern, flags), severity=severity, title=title, **kw)
 
 
 EMAIL = _pii(
@@ -50,9 +45,7 @@ PASSPORT_IN = _pii(
 )
 CREDIT_CARD = _pii(
     "credit_card", r"\b(?:\d[ -]?){13,19}\b", "critical", "Credit card number (Luhn valid)", validator="card",
-    compliance=("DPDP", "GDPR", "ISO27001", "PCI-DSS"), confidence=0.95, detector="validator",
-    remediation=("Purge from AI provider history", "Open a PCI-DSS incident review",
-                 "Block card numbers at the gateway"),
+    confidence=0.95, detector="validator",
 )
 US_SSN = _pii(
     "us_ssn", r"\b(?!000|666|9\d\d)\d{3}-(?!00)\d{2}-(?!0000)\d{4}\b", "high", "US social security number",
@@ -61,20 +54,17 @@ US_SSN = _pii(
 PRIVATE_IP = _pii(
     "private_ip", r"(?<![\w.])(?:10\.\d+|172\.(?:1[6-9]|2\d|3[01])|192\.168)\.\d+\.\d+\b(?!\.?\d)", "low",
     "Internal IP address", validator="private_ip", keywords=("10.", "172.", "192.168."), tier=TIER_INFRA,
-    confidence=0.8, remediation=("Remove internal addressing from prompts", "Restrict AI tool access to internal docs"),
+    confidence=0.8,
 )
 INTERNAL_HOST = _pii(
     "internal_host",
     r"(?<![\w.-])[\w-]+(?:\.[\w-]+)*\.(?:internal|corp|intranet|local|lan)\b(?![\w-]|\.\w|\()", "low",
     "Internal hostname", validator="internal_host", tier=TIER_INFRA, confidence=0.75,
     keywords=(".internal", ".corp", ".intranet", ".local", ".lan"),
-    remediation=("Remove internal hostnames from prompts", "Restrict AI tool access to internal docs"),
 )
 BULK_PII = Rule(
     id="bulk_pii", type="pii", regex=None, severity="high", title="Bulk customer PII in one payload",
-    compliance=_COMPLIANCE, detector="heuristic", confidence=0.9,
-    remediation=("Purge from AI provider history", "Notify DPO under DPDP Act 2023",
-                 "Block bulk exports to AI tools"),
+    detector="heuristic", confidence=0.9,
 )
 
 BULK_EMAILS = 5        # distinct addresses

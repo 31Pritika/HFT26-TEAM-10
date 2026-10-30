@@ -14,8 +14,6 @@ class Rule:
     regex: re.Pattern[str] | None       # None = not regex-driven (high_entropy_string, bulk_pii)
     severity: Severity
     title: str                          # format template, filled from the validator's Verdict.fields
-    compliance: tuple[str, ...]
-    remediation: tuple[str, ...]
     validator: str | None = None        # key into validators.VALIDATORS
     keywords: tuple[str, ...] = ()      # lowercase literals; the regex only runs if one is in the text
     value_groups: tuple[str, ...] = ()  # named groups holding the sensitive value (default: whole match)

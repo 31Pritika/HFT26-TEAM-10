@@ -12,6 +12,7 @@ from .patterns import Rule
 from .patterns.pii import BULK_EMAILS, BULK_IDENTITY_DOCS, BULK_PII, PII_RULES
 from .patterns.secrets import HIGH_ENTROPY_STRING, SECRET_RULES
 from .redact import MASK_CHAR, Region, Span, apply_masks, merge_spans
+from .remediation import compliance_for, remediation_for
 from .types import DetFinding, ScanResult, Severity
 from .validators import VALIDATORS, Verdict
 
@@ -164,7 +165,7 @@ def _finding(rule: Rule, *, severity: Severity, confidence: float, title: str, d
     return {
         "type": rule.type, "subtype": rule.id, "severity": severity, "confidence": confidence,
         "title": title, "description": description, "evidence": evidence, "detector": rule.detector,
-        "compliance": list(rule.compliance), "remediation": list(rule.remediation),
+        "compliance": compliance_for(rule.id), "remediation": remediation_for(rule.id),
     }
 
 
