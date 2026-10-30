@@ -207,8 +207,9 @@ def _jwt(value: str, text: str, start: int) -> Verdict:
 
 
 _PEM_END = re.compile(r"-----END [A-Z0-9 ]*PRIVATE KEY(?: BLOCK)?-----")
-_PEM_BODY = re.compile(
-    r"(?:(?:[ \t]*[A-Za-z0-9+/=]+|[A-Za-z][\w-]*: [^\n]*)?(?:\r?\n|\\r?\\n))*[ \t]*[A-Za-z0-9+/=]*"
+_PEM_BODY = re.compile(  # armor headers and base64 lines, then a last line that must end where the base64 does
+    r"(?:(?:[ \t]*[A-Za-z0-9+/=]+[ \t]*|[A-Za-z][\w-]*: [^\n]*)?(?:\r?\n|(?:\\r)?\\n))*"
+    r"(?:[ \t]*[A-Za-z0-9+/=]+(?=[ \t]*(?:[\r\n\"'\\]|\Z)))?"
 )
 _PEM_MAX = 64 * 1024
 
@@ -218,7 +219,9 @@ def _private_key(value: str, text: str, start: int) -> Verdict:
     limit = start + _PEM_MAX
     header_end = start + len(value)
     end = _PEM_END.search(text, header_end, limit) if text.find("-----END ", header_end, limit) >= 0 else None
-    return Verdict(span=(start, end.end() if end else _PEM_BODY.match(text, header_end, limit).end()))
+    if end:
+        return Verdict(span=(start, end.end()))
+    return Verdict(span=(start, header_end + len(_PEM_BODY.match(text, header_end, limit).group().rstrip())))
 
 
 def _db_url(value: str, text: str, start: int) -> Verdict | None:

@@ -20,8 +20,9 @@ _UUID = re.compile(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}
 _DIGEST_PREFIX = re.compile(r"sha(?:1|224|256|384|512)-", re.IGNORECASE)
 _SEPARATORS = re.compile(r"[/_-]")
 
-_HASH_CONTEXT = re.compile(r"\b(?:commit|sha\w*|rev|revision|merge|parent|tree|blob|digest|checksum|hash|md5|integrity)\b",
-                           re.IGNORECASE)
+_HASH_CONTEXT = re.compile(
+    r"\b(?:commit|sha\w*|rev|revision|merge|parent|tree|blob|digest|checksum|hash|md5|integrity)\b", re.IGNORECASE
+)
 _KEY_CONTEXT = re.compile(r"key|token|secret|passw|credential|auth", re.IGNORECASE)
 _CONTEXT_CHARS = 32
 

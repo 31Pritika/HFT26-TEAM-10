@@ -28,7 +28,7 @@ PHONE_INTL = _pii(
     keywords=("+",), confidence=0.7,
 )
 AADHAAR = _pii(
-    "aadhaar", r"(?<![\d-])\b[2-9]\d{3}[ -]?\d{4}[ -]?\d{4}\b(?![ -]?\d)", "high", "Aadhaar number (Verhoeff valid)",
+    "aadhaar", r"(?<![\d-])\b[2-9]\d{3}[ -]?\d{4}[ -]?\d{4}\b", "high", "Aadhaar number (Verhoeff valid)",
     validator="aadhaar", confidence=0.97, detector="validator", mask="aadhaar",
 )
 PAN = _pii(
