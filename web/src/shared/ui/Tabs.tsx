@@ -95,3 +95,4 @@ export function Tabs({
     </div>
   );
 }
+
