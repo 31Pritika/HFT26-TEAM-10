@@ -45,11 +45,39 @@
     - If clean: Packet safely glides through and delivers with a **CLEAN · TRANSMISSION OK** stamp.
   - **Verification**: `npm run build` succeeds cleanly in < 3.1s; oxlint passes with 0 errors; responsive layout verified for 375px, 768px, and 1440px.
 
+- **Phase 3: Threat Constellation (`/app/graph`), Compliance Report (`/report`), and NotFound (`*`) completed per Spec D4, D5b, D6**:
+  - **Threat Constellation (`web/src/experience/constellation/ThreatConstellation.tsx` + helpers)**:
+    - Lazy-loaded `react-force-graph-3d` visualization integrated cleanly into Kevin's dashboard shell (`AppShell.tsx`) without duplicate sidebars.
+    - Nodes represented by distinct 3D geometries and glowing meshes: AI providers (spheres with radiant halos), autonomous agents (octahedral diamonds), active processes (rounded tech cubes), and network hosts (icosahedrons).
+    - Sized by communication volume and colored dynamically by threat risk (Cyan <20, Yellow 20-50, Orange 50-80, Red >80).
+    - Directional particles streaming along graph edges toward AI providers with particle frequency, speed, and line thickness proportional to payload egress and risk.
+    - Orbital auto-rotation with manual toggle.
+    - Search bar with autocomplete dropdown and 3D camera fly-to transition (`cameraPosition`).
+    - Filtering controls by entity kind (`All`, `Processes`, `Providers`, `Agents`, `Hosts`) and minimum risk threshold slider.
+    - Slide-over obsidian glass detail panel (`NodeDetailPanel.tsx`) showing entity metrics, severity tier, traffic weight, active incoming/outgoing connections with click-to-focus navigation, and direct deep-links to `/app/alerts?process=...` or `/app/inventory`.
+    - High-fidelity 2D SVG topology fallback (`Constellation2D.tsx`) with layered concentric layout, pulsing glowing filters, and interactive node selection for mobile (<768px), reduced-motion, WebGL-disabled environments, or manual view toggle.
+    - Auto-refreshes data from `api.getGraph("24h")` every 10 seconds.
+  - **Compliance Report (`web/src/experience/pages/Report.tsx`)**:
+    - Executive cover displaying organization name, audit window, and large animated letter grade (A–F) surrounded by an SVG progress ring.
+    - Telemetry metrics strip: Total Events, AI Invocations, Data Egress, Shadow Tools, Open Findings, and Critical Leaks.
+    - Regulatory Framework Scorecards covering India DPDP Act 2023, EU GDPR, AICPA SOC 2, PCI-DSS v4.0, and ISO/IEC 27001:2022 with pass/warn/fail badges and live telemetry evidence.
+    - Top Findings & Evidence Registry table with severity indicators, process/destination pairs, redacted code/secret snippets, compliance tags, and remediation guidance.
+    - Shadow AI Inventory table auditing unapproved and approved tools, communication volume, and risk ratings.
+    - Autonomous Agent Sessions audit table detailing permission matrices (Shell, FS Write, Network) and autonomy scores.
+    - Prioritized Remediation Roadmap categorized into P0 (Immediate Containment / 24h), P1 (Architectural Guardrails / 7d), and P2 (Governance & Policy / 30d).
+    - High-contrast, clean `@media print` stylesheet with white background, readable monochrome tables, page break rules, and hidden UI action bars.
+    - Action handlers for "Download PDF" (`window.print()`), "Export JSON" (full report object), and "Export CSV" (controls and findings matrix).
+  - **Glitch-Themed 404 Page (`web/src/experience/pages/NotFound.tsx`)**:
+    - Cyber diagnostic terminal aesthetic displaying "404 — This endpoint isn't in our fingerprint DB".
+    - Interceptor diagnostics block simulating eBPF scan across 22 canonical AI provider signatures.
+    - Interactive "Re-run Diagnostic Probe" animation and quick recovery CTAs linking to Home (`/`), Threat Console (`/app`), and Playground (`/playground`).
+  - **Verification**: `npm run build` succeeds cleanly in ~3.1s; oxlint passes with 0 errors; responsive design verified across 375px, 768px, and 1440px.
+
 ## Next
-- **Phase 3: Threat Constellation (`/app/graph`), Compliance Report (`/report`), and NotFound (`*`) per Spec D4, D5b, D6**:
-  - 3D Threat Constellation with `react-force-graph-3d`, directional particles, risk coloring, node inspection panel, and 2D fallback.
-  - Compliance Report (`/report`) with DPDP, GDPR, SOC 2 scorecards and clean print-to-PDF stylesheet (`@media print`).
-  - Glitch-themed NotFound page (`*`).
+- **Phase 4: Architecture Page, Polish & Docs (Spec D5, D7, D8)**:
+  - Architecture page (`/architecture`) with interactive SVG diagram of ShadowScope's multi-layered capture pipeline.
+  - Per-page `document.title` and favicon / OG image files in `web/public/experience/`.
+  - Final documentation updates: root `README.md` (keeping organizers' table, adding architecture, setup for macOS/Windows, etc.), `docs/DEMO_SCRIPT.md`, and `docs/architecture.md`.
 
 ## Issues
 - None.
