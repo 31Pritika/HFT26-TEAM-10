@@ -10,7 +10,7 @@ from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import config, db
-from .api import (errors, routes_events, routes_findings, routes_health, routes_inventory, routes_overview, routes_policies,
+from .api import (errors, routes_events, routes_findings, routes_health, routes_ingest, routes_inventory, routes_overview, routes_policies,
                   routes_report, routes_scan, routes_scenarios, ws)
 from .bus import bus
 from .engine import stats
@@ -55,6 +55,6 @@ errors.register(app)
 
 api = APIRouter(prefix="/api")
 for module in (routes_health, routes_overview, routes_events, routes_findings, routes_inventory, routes_policies,
-               routes_scan, routes_scenarios, routes_report, ws):
+               routes_scan, routes_scenarios, routes_report, routes_ingest, ws):
     api.include_router(module.router)
 app.include_router(api)
