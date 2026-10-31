@@ -1,0 +1,211 @@
+/* Stage Light Launch Page · INSTALANDING.AI (MIT) · https://instalanding.ai/prompt/stage-light-launch-page
+   The conic spotlights, wordmark sweep and rotated-square ridge are adapted from that page and recoloured. */
+@property --sweep {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: -40%;
+}
+
+.stage {
+  --flare: var(--primary);
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 7rem 1.5rem 11rem;
+  text-align: center;
+}
+.stage[data-lamp="warm"] {
+  --flare: var(--chart-2);
+}
+
+.beams {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.stage[data-lamp="off"] .beams {
+  opacity: 0;
+}
+.beam {
+  position: absolute;
+  top: 2.1rem;
+  left: 50%;
+  width: min(60rem, 170vw);
+  height: 96svh;
+  margin-left: calc(min(60rem, 170vw) / -2);
+  transform-origin: 50% 0;
+  background: conic-gradient(
+    from 0deg at 50% -2%,
+    transparent 45%,
+    color-mix(in srgb, var(--flare) 24%, transparent) 49%,
+    color-mix(in srgb, var(--flare) 42%, transparent) 50%,
+    color-mix(in srgb, var(--flare) 24%, transparent) 51%,
+    transparent 55%
+  );
+  filter: blur(10px);
+  opacity: 0.5;
+  transition: background 0.5s ease;
+  animation: beam-drift 19s ease-in-out infinite;
+}
+.beam:nth-child(1) {
+  rotate: 16deg;
+  animation-duration: 23s;
+}
+.beam:nth-child(2) {
+  rotate: -16deg;
+  animation-duration: 17s;
+  animation-delay: -6s;
+}
+@keyframes beam-drift {
+  0%,
+  100% {
+    transform: rotateZ(0deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: rotateZ(2deg);
+    opacity: 0.38;
+  }
+}
+
+.frame-mark {
+  position: absolute;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 0 solid var(--border-strong);
+  pointer-events: none;
+}
+.frame-mark:nth-of-type(1) {
+  top: 1.25rem;
+  left: 1.25rem;
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+.frame-mark:nth-of-type(2) {
+  top: 1.25rem;
+  right: 1.25rem;
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+.frame-mark:nth-of-type(3) {
+  bottom: 1.25rem;
+  left: 1.25rem;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+.frame-mark:nth-of-type(4) {
+  bottom: 1.25rem;
+  right: 1.25rem;
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+
+.ruler {
+  position: absolute;
+  top: 12%;
+  bottom: 12%;
+  left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  pointer-events: none;
+}
+.ruler span::before {
+  content: "";
+  display: inline-block;
+  width: 0.6rem;
+  height: 1px;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  background: var(--muted);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.9rem, 11.5vw, 9.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: transparent;
+  background: linear-gradient(100deg, var(--primary) calc(var(--sweep) - 22%), var(--text) var(--sweep), var(--primary) calc(var(--sweep) + 22%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: sweep 7s var(--ease-signal) infinite;
+}
+@keyframes sweep {
+  0% {
+    --sweep: -40%;
+  }
+  60%,
+  100% {
+    --sweep: 140%;
+  }
+}
+
+.ridge {
+  position: absolute;
+  left: 50%;
+  bottom: -9rem;
+  width: 0;
+  height: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.ridge i {
+  position: absolute;
+  display: block;
+  width: 15rem;
+  height: 15rem;
+  rotate: 45deg;
+  border: 1px solid var(--border-strong);
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--primary) 8%, transparent) 0 1px, var(--bg) 1px 6px);
+}
+.ridge i:nth-child(1) {
+  left: -15rem;
+  top: -10rem;
+  width: 11rem;
+  height: 11rem;
+}
+.ridge i:nth-child(2) {
+  left: -9rem;
+  top: -13rem;
+  width: 18rem;
+  height: 18rem;
+}
+.ridge i:nth-child(3) {
+  left: 3rem;
+  top: -9rem;
+  width: 12rem;
+  height: 12rem;
+}
+
+@media (max-width: 767px) {
+  .ruler,
+  .frame-mark {
+    display: none;
+  }
+  .stage {
+    padding-bottom: 9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beam,
+  .wordmark {
+    animation: none;
+  }
+  .wordmark {
+    color: var(--primary);
+    background: none;
+  }
+}

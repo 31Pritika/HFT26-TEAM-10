@@ -66,26 +66,26 @@ export function Drawer({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.18 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 bg-scrim/60"
           />
 
           {/* Drawer content */}
           {isMobile ? (
             // Mobile Bottom Sheet
             <motion.div
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100%" }}
-              transition={{ type: "spring", stiffness: 280, damping: 28 }}
+              initial={{ opacity: 0, y: 24, scale: 0.985 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 16, scale: 0.99 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               className={cn(
-                "fixed bottom-0 inset-x-0 z-50 flex max-h-[88vh] flex-col rounded-t-2xl border-t border-white/10 bg-[#090c16]/98 p-5 shadow-2xl backdrop-blur-2xl",
+                "fixed bottom-0 inset-x-0 z-50 flex max-h-[88vh] flex-col rounded-t-md border-t border-border bg-surface p-5",
                 className,
               )}
             >
               {/* Drag Handle Indicator */}
-              <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-white/20" />
+              <div className="mx-auto mb-3 h-1.5 w-12 rounded-sm bg-border-strong" />
               
               <div className="flex items-center justify-between pb-3 border-b border-border">
                 <div>
@@ -94,7 +94,7 @@ export function Drawer({
                 </div>
                 <button
                   onClick={onClose}
-                  className="rounded-lg p-1.5 text-muted hover:text-text hover:bg-white/10 transition-colors"
+                  className="rounded-lg p-1.5 text-muted hover:text-text hover:bg-elevated transition-colors"
                   aria-label="Close drawer"
                 >
                   <X className="w-5 h-5" />
@@ -106,24 +106,24 @@ export function Drawer({
           ) : (
             // Desktop / Tablet Right Slide-over
             <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 280, damping: 28 }}
+              initial={{ opacity: 0, x: 20, scale: 0.985 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: 12, scale: 0.99 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               className={cn(
-                "fixed right-0 top-0 bottom-0 z-50 flex w-full flex-col border-l border-white/10 bg-[#090c16]/95 shadow-2xl backdrop-blur-2xl",
+                "fixed right-0 top-0 bottom-0 z-50 flex w-full flex-col border-l border-border bg-surface",
                 width,
                 className,
               )}
             >
-              <div className="flex items-center justify-between p-5 border-b border-white/[0.08]">
+              <div className="flex items-center justify-between p-5 border-b border-border">
                 <div>
                   {title && <h3 className="font-display text-xl font-semibold text-text">{title}</h3>}
                   {description && <p className="text-xs text-muted mt-1">{description}</p>}
                 </div>
                 <button
                   onClick={onClose}
-                  className="rounded-lg p-2 text-muted hover:text-text hover:bg-white/10 transition-colors"
+                  className="rounded-lg p-2 text-muted hover:text-text hover:bg-elevated transition-colors"
                   aria-label="Close drawer"
                 >
                   <X className="w-5 h-5" />

@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useReducedMotion } from "motion/react";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -30,6 +31,7 @@ export function CountUp({
   formatter,
   className,
 }: CountUpProps) {
+  const reducedMotion = useReducedMotion();
   const [displayValue, setDisplayValue] = useState(0);
   const startRef = useRef(0);
   const frameRef = useRef<number | null>(null);
@@ -38,7 +40,7 @@ export function CountUp({
   useEffect(() => {
     const startVal = startRef.current;
     const endVal = value;
-    const animDuration = duration * 1000;
+    const animDuration = reducedMotion ? 0 : duration * 1000;
 
     const animate = (timestamp: number) => {
       if (!startTimeRef.current) startTimeRef.current = timestamp;
@@ -64,7 +66,7 @@ export function CountUp({
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
       startTimeRef.current = null;
     };
-  }, [value, duration]);
+  }, [value, duration, reducedMotion]);
 
   const formatted = formatter
     ? formatter(displayValue)
@@ -73,7 +75,7 @@ export function CountUp({
     : Math.round(displayValue).toLocaleString();
 
   return (
-    <span className={cn("font-mono tabular-nums tracking-tight", className)}>
+    <span className={cn("tabular-nums tracking-tight", className)}>
       {prefix}
       {formatted}
       {suffix}

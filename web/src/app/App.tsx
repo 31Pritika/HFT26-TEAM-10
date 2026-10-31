@@ -1,8 +1,10 @@
 import { Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "react-router-dom";
+import { MotionConfig } from "motion/react";
 import { Toaster } from "sonner";
 import { router } from "./routes";
+import { useTheme } from "../shared/theme";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,23 +16,25 @@ const queryClient = new QueryClient({
 });
 
 export default function App() {
+  const theme = useTheme();
+
   return (
     <QueryClientProvider client={queryClient}>
-      <Suspense fallback={null}>
-        <RouterProvider router={router} />
-      </Suspense>
+      <MotionConfig reducedMotion="user">
+        <Suspense fallback={null}>
+          <RouterProvider router={router} />
+        </Suspense>
+      </MotionConfig>
       <Toaster
-        theme="dark"
+        theme={theme}
         position="top-right"
-        richColors
         closeButton
         toastOptions={{
           style: {
-            background: "#111111",
-            border: "1px solid rgba(255, 255, 255, 0.16)",
-            color: "#f5f2ec",
-            fontFamily: "var(--font-sans), system-ui, sans-serif",
-            borderRadius: "var(--radius)",
+            background: "var(--elevated)",
+            border: "1px solid var(--border)",
+            color: "var(--text)",
+            fontFamily: "var(--font-sans)",
           },
         }}
       />

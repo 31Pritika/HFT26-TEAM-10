@@ -1,4 +1,3 @@
-import { useDocumentTitle } from "../../shared/useDocumentTitle";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -21,6 +20,7 @@ import {
 } from "lucide-react";
 import { api } from "../../shared/api";
 import {
+  Select,
   GlassCard,
   Badge,
   SeverityPill,
@@ -31,7 +31,6 @@ import type { Finding, TriageResult } from "../../shared/types";
 import { toast } from "sonner";
 
 export default function AlertDetail() {
-  
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -55,9 +54,6 @@ export default function AlertDetail() {
   });
 
   const finding = findingDetail as (Finding & { event: unknown }) | undefined;
-
-  const pageTitle = finding?.title ? (finding.title + " · ShadowScope") : id ? ("Alert " + id + " · ShadowScope") : "Alerts · ShadowScope";
-  useDocumentTitle(pageTitle);
 
   // Initialize triageData from finding if already triaged
   useEffect(() => {
@@ -137,12 +133,12 @@ export default function AlertDetail() {
 
   if (isLoading) {
     return (
-      <div className="space-y-6 max-w-5xl mx-auto">
+      <div className="space-y-6">
         <Skeleton className="h-10 w-48 rounded-lg" />
-        <Skeleton className="h-28 w-full rounded-[var(--radius)]" />
+        <Skeleton className="h-28 w-full rounded-2xl" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Skeleton className="h-64 rounded-[var(--radius)]" />
-          <Skeleton className="h-64 rounded-[var(--radius)]" />
+          <Skeleton className="h-64 rounded-xl" />
+          <Skeleton className="h-64 rounded-xl" />
         </div>
       </div>
     );
@@ -152,7 +148,7 @@ export default function AlertDetail() {
     return (
       <div className="max-w-2xl mx-auto p-12 text-center">
         <ShieldAlert className="w-12 h-12 text-red-400 mx-auto mb-3" />
-        <h2 className="text-xl font-bold text-text">Alert Not Found</h2>
+        <h2 className="text-xl font-semibold text-text">Alert Not Found</h2>
         <p className="text-xs text-muted mt-1">
           Finding with ID &ldquo;{id}&rdquo; does not exist or has been archived.
         </p>
@@ -168,12 +164,12 @@ export default function AlertDetail() {
   const entropy = evidence?.entropy ?? null;
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto pb-12">
+    <div className="space-y-6 pb-12">
       {/* Back button link */}
       <div>
         <button
           onClick={() => navigate("/app/alerts")}
-          className="inline-flex items-center gap-2 text-xs font-mono text-muted hover:text-primary transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 text-xs text-muted hover:text-cyan-400 transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Alerts Center</span>
@@ -184,38 +180,38 @@ export default function AlertDetail() {
       {/* 1. SEVERITY HERO BAND                                                */}
       {/* ==================================================================== */}
       <div
-        className={`rounded-[var(--radius)] border p-5 sm:p-6  relative overflow-hidden ${
+        className={`rounded-2xl border p-5 sm:p-6 relative overflow-hidden ${
           isCritical
-            ? "border-red-500/40 bg-gradient-to-r from-red-950/40 via-surface/90 to-surface/90 "
+            ? "border-red-500/40 bg-red-950/40 "
             : finding.severity === "high"
-            ? "border-orange-500/35 bg-gradient-to-r from-orange-950/30 via-surface/90 to-surface/90"
-            : "border-primary/30 bg-gradient-to-r from-cyan-950/30 via-surface/90 to-surface/90"
+            ? "border-orange-500/35 bg-orange-950/30 "
+            : "border-cyan-500/30 bg-cyan-950/30 "
         }`}
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2.5">
               <SeverityPill severity={finding.severity} size="sm" pulse={isCritical} />
-              <span className="font-mono text-xs text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/30">
+              <span className="font-mono text-xs text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/25">
                 {finding.id}
               </span>
-              <span className="font-mono text-xs text-muted">
+              <span className=" text-xs text-muted">
                 {new Date(finding.ts).toLocaleString()}
               </span>
               <span
-                className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase font-mono ${
+                className={`text-[11px] px-2 py-0.5 rounded-sm font-semibold  ${
                   finding.status === "open"
-                    ? "bg-red-500/20 text-red-300 border border-red-500/40"
+                    ? "bg-red-500/20 text-text border border-red-500/40"
                     : finding.status === "acknowledged"
-                    ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
-                    : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                    ? "bg-amber-500/20 text-text border border-amber-500/40"
+                    : "bg-emerald-500/20 text-text border border-emerald-500/40"
                 }`}
               >
                 Status: {finding.status}
               </span>
             </div>
 
-            <h1 className="font-display text-xl sm:text-2xl font-bold text-text leading-tight">
+            <h1 className="font-display text-xl sm:text-2xl font-semibold text-text leading-tight">
               {finding.title}
             </h1>
             <p className="text-xs sm:text-sm text-muted leading-relaxed max-w-3xl">
@@ -261,28 +257,28 @@ export default function AlertDetail() {
         </div>
 
         {/* Metadata Badges strip */}
-        <div className="mt-4 pt-4 border-t border-white/[0.08] flex flex-wrap items-center gap-3 text-xs font-mono">
+        <div className="mt-4 pt-4 border-t border-border flex flex-wrap items-center gap-3 text-xs">
           <div className="flex items-center gap-1.5 text-muted">
-            <span className="text-muted/60">Type:</span>
+            <span className="text-muted">Type:</span>
             <Badge variant="mono" size="xs">
               {finding.type}
             </Badge>
           </div>
           <div className="flex items-center gap-1.5 text-muted">
-            <span className="text-muted/60">Subtype:</span>
+            <span className="text-muted">Subtype:</span>
             <Badge variant="cyan" size="xs">
               {finding.subtype}
             </Badge>
           </div>
           <div className="flex items-center gap-1.5 text-muted">
-            <span className="text-muted/60">Detector:</span>
+            <span className="text-muted">Detector:</span>
             <Badge variant="violet" size="xs">
               {finding.detector}
             </Badge>
           </div>
           <div className="flex items-center gap-1.5 text-muted">
-            <span className="text-muted/60">Confidence:</span>
-            <span className="font-bold text-text">
+            <span className="text-muted">Confidence:</span>
+            <span className="font-semibold text-text">
               {Math.round(finding.confidence * 100)}%
             </span>
           </div>
@@ -290,7 +286,7 @@ export default function AlertDetail() {
           {finding.event_id && (
             <button
               onClick={() => navigate(`/app/live`)}
-              className="ml-auto inline-flex items-center gap-1 text-primary hover:underline cursor-pointer"
+              className="ml-auto inline-flex items-center gap-1 text-cyan-400 hover:underline cursor-pointer"
             >
               <span>Linked Event {finding.event_id}</span>
               <ExternalLink className="w-3 h-3" />
@@ -303,42 +299,42 @@ export default function AlertDetail() {
       {/* 2. EVIDENCE INSPECTION BLOCK                                         */}
       {/* ==================================================================== */}
       <GlassCard variant="default" className="p-5 sm:p-6 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/[0.08] pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
           <div className="flex items-center gap-2">
-            <Lock className="w-5 h-5 text-primary" />
-            <h3 className="font-display text-base font-bold text-text">
+            <Lock className="w-5 h-5 text-cyan-400" />
+            <h3 className="font-display text-base font-semibold text-text">
               Exfiltration Evidence & Payload Analysis
             </h3>
           </div>
-          <span className="font-mono text-xs text-muted">
+          <span className=" text-xs text-muted">
             Target Match Automatically Redacted
           </span>
         </div>
 
         {/* Highlighted Match Box */}
-        <div className="relative rounded-[var(--radius)] border border-white/10 bg-[var(--surface)] p-4 font-mono text-xs leading-relaxed overflow-x-auto">
-          <div className="text-muted/60 text-[10px] uppercase tracking-wider mb-2 flex items-center justify-between">
+        <div className="relative rounded-xl border border-border bg-surface-solid p-4 text-xs leading-relaxed ">
+          <div className="text-muted text-[11px] mb-2 flex items-center justify-between">
             <span>Redacted Snippet Captured</span>
             {evidence?.fingerprint && (
               <button
                 onClick={() => copyFingerprint(evidence.fingerprint!)}
-                className="flex items-center gap-1 text-muted hover:text-primary transition-colors"
+                className="flex items-center gap-1 text-muted hover:text-cyan-400 transition-colors"
                 title="Copy SHA-256 fingerprint"
               >
                 <Fingerprint className="w-3.5 h-3.5" />
-                <span>SHA-256: {evidence.fingerprint}</span>
-                {copiedFingerprint && <span className="text-emerald-400 font-bold">Copied!</span>}
+                <span className="font-mono">SHA-256: {evidence.fingerprint}</span>
+                {copiedFingerprint && <span className="text-emerald-400 font-semibold">Copied!</span>}
               </button>
             )}
           </div>
 
-          <pre className="text-text whitespace-pre-wrap font-mono text-xs bg-black/40 p-3 rounded-lg border border-white/5">
+          <pre className="text-text whitespace-pre-wrap font-mono text-xs bg-surface-solid p-3 rounded-lg border border-border">
             {evidence?.redacted_snippet ? (
               evidence.redacted_snippet.split(evidence.match_redacted).map((part, i, arr) => (
                 <span key={i}>
                   {part}
                   {i < arr.length - 1 && (
-                    <mark className="bg-red-500/30 text-red-300 font-bold px-1.5 py-0.5 rounded border border-red-500/40">
+                    <mark className="bg-red-500/30 text-text font-semibold px-1.5 py-0.5 rounded border border-red-500/40">
                       {evidence.match_redacted}
                     </mark>
                   )}
@@ -351,50 +347,50 @@ export default function AlertDetail() {
         </div>
 
         {/* Entropy Meter & Offset Info */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 font-mono text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs">
           {/* Shannon Entropy Bar */}
-          <div className="rounded-[var(--radius)] border border-white/[0.06] bg-surface-solid/60 p-3">
+          <div className="rounded-xl border border-border bg-surface-solid p-3">
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-muted text-[11px] flex items-center gap-1">
-                <Gauge className="w-3.5 h-3.5 text-primary" />
+                <Gauge className="w-3.5 h-3.5 text-cyan-400" />
                 Shannon Entropy
               </span>
-              <span className="font-bold text-text">
+              <span className="font-semibold text-text">
                 {entropy !== null ? entropy.toFixed(2) : "N/A"}
               </span>
             </div>
             {entropy !== null ? (
-              <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+              <div className="h-1.5 w-full bg-text/10 rounded-sm overflow-hidden">
                 <div
-                  className={`h-full rounded-full ${
-                    entropy >= 4.0 ? "bg-red-400 " : "bg-primary"
+                  className={`h-full rounded-sm ${
+                    entropy >= 4.0 ? "bg-red-400 " : "bg-cyan-400"
                   }`}
                   style={{ width: `${Math.min(100, (entropy / 6) * 100)}%` }}
                 />
               </div>
             ) : (
-              <span className="text-[10px] text-muted/60">Regex Pattern Match</span>
+              <span className="text-[11px] text-muted">Regex Pattern Match</span>
             )}
           </div>
 
           {/* Line & Offset */}
-          <div className="rounded-[var(--radius)] border border-white/[0.06] bg-surface-solid/60 p-3 flex flex-col justify-between">
+          <div className="rounded-xl border border-border bg-surface-solid p-3 flex flex-col justify-between">
             <span className="text-muted text-[11px]">Payload Offset</span>
-            <div className="flex items-center gap-3 text-text font-bold mt-1">
+            <div className="flex items-center gap-3 text-text font-semibold mt-1">
               <span>Line {evidence?.line ?? 1}</span>
-              <span className="text-muted/40">|</span>
+              <span className="text-muted">|</span>
               <span>Byte Offset {evidence?.offset ?? 0}</span>
             </div>
           </div>
 
           {/* Regulatory Compliance Mappings */}
-          <div className="rounded-[var(--radius)] border border-white/[0.06] bg-surface-solid/60 p-3 flex flex-col justify-between">
+          <div className="rounded-xl border border-border bg-surface-solid p-3 flex flex-col justify-between">
             <span className="text-muted text-[11px]">Impacted Compliance</span>
             <div className="flex flex-wrap gap-1.5 mt-1">
               {finding.compliance?.map((c) => (
                 <span
                   key={c}
-                  className="px-2 py-0.5 rounded bg-surface border border-primary/30 text-primary font-bold text-[10px]"
+                  className="px-2 py-0.5 rounded bg-surface border border-cyan-500/30 text-cyan-300 font-semibold text-[11px]"
                 >
                   {c}
                 </span>
@@ -409,35 +405,35 @@ export default function AlertDetail() {
       {/* ==================================================================== */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Process Card */}
-        <GlassCard variant="default" className="p-5 space-y-3 font-mono text-xs">
-          <div className="flex items-center gap-2 pb-2 border-b border-white/[0.08]">
-            <Cpu className="w-4 h-4 text-primary" />
-            <h4 className="font-display text-sm font-bold text-text">Process Context</h4>
+        <GlassCard variant="default" className="p-5 space-y-3 text-xs">
+          <div className="flex items-center gap-2 pb-2 border-b border-border">
+            <Cpu className="w-4 h-4 text-cyan-400" />
+            <h4 className="font-display text-sm font-semibold text-text">Process Context</h4>
           </div>
           <div className="grid grid-cols-2 gap-2 text-muted">
             <div>
-              <span className="text-[10px] uppercase text-muted/60 block">Process</span>
-              <span className="text-text font-semibold">{finding.process_name ?? "Unknown"}</span>
+              <span className="text-[11px] text-muted block">Process</span>
+              <span className="font-mono text-text font-medium">{finding.process_name ?? "Unknown"}</span>
             </div>
             <div>
-              <span className="text-[10px] uppercase text-muted/60 block">Provider ID</span>
+              <span className="text-[11px] text-muted block">Provider ID</span>
               <span className="text-text">{finding.provider_id ?? "Direct API"}</span>
             </div>
           </div>
-          <div className="mt-2 pt-2 border-t border-white/[0.06] text-muted">
-            <span className="text-[10px] uppercase text-muted/60 block">Status</span>
+          <div className="mt-2 pt-2 border-t border-border text-muted">
+            <span className="text-[11px] text-muted block">Status</span>
             <span className="text-amber-400">Unmonitored Local Execution</span>
           </div>
         </GlassCard>
 
         {/* Compliance & Governance Checklist Card */}
         <GlassCard variant="default" className="p-5 space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-white/[0.08]">
+          <div className="flex items-center justify-between pb-2 border-b border-border">
             <div className="flex items-center gap-2">
               <FileCheck2 className="w-4 h-4 text-emerald-400" />
-              <h4 className="font-display text-sm font-bold text-text">Remediation Checklist</h4>
+              <h4 className="font-display text-sm font-semibold text-text">Remediation Checklist</h4>
             </div>
-            <span className="font-mono text-[10px] text-muted">
+            <span className=" text-[11px] text-muted">
               {checkedRemediations.size} of {finding.remediation.length} completed
             </span>
           </div>
@@ -452,14 +448,14 @@ export default function AlertDetail() {
                   className={`flex items-start gap-2.5 p-2 rounded-lg border transition-colors cursor-pointer select-none text-xs ${
                     isDone
                       ? "bg-emerald-950/20 border-emerald-500/30 text-muted line-through"
-                      : "bg-surface-solid/60 border-white/[0.06] text-text hover:bg-surface-solid"
+                      : "bg-surface-solid border-border text-text hover:bg-surface-solid"
                   }`}
                 >
                   <input
                     type="checkbox"
                     checked={isDone}
                     onChange={() => {}}
-                    className="mt-0.5 rounded border-white/20 bg-white/5 text-emerald-400 focus:ring-0 cursor-pointer"
+                    className="mt-0.5 rounded-xs cursor-pointer"
                   />
                   <span className="leading-relaxed">{step}</span>
                 </div>
@@ -477,13 +473,13 @@ export default function AlertDetail() {
         glow={triageData ? "violet" : "none"}
         className="p-5 sm:p-6 space-y-5 relative overflow-hidden"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
           <div>
             <div className="flex items-center gap-2">
               <div className="p-1.5 rounded-lg bg-violet-500/20 text-violet-400 border border-violet-500/30">
                 <Sparkles className="w-4 h-4" />
               </div>
-              <h3 className="font-display text-base font-bold text-text">
+              <h3 className="font-display text-base font-semibold text-text">
                 ShadowScope AI Security Analyst
               </h3>
             </div>
@@ -494,18 +490,20 @@ export default function AlertDetail() {
 
           {/* Engine selector and triage trigger */}
           <div className="flex items-center gap-2">
-            <select
+            <Select
+              aria-label="Triage engine"
               value={triageEngine}
-              onChange={(e) => setTriageEngine(e.target.value as typeof triageEngine)}
+              onValueChange={(value) => setTriageEngine(value as typeof triageEngine)}
               disabled={isTriaging}
-              className="bg-[var(--surface)] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-text focus:outline-none focus:border-violet-400 font-mono"
-            >
-              <option value="auto">Auto (Best Available)</option>
-              <option value="featherless">Featherless Cloud LLM</option>
-              <option value="groq">Groq Fast Inference</option>
-              <option value="ollama">Ollama (100% Local)</option>
-              <option value="rules">Rules Fallback</option>
-            </select>
+              className="w-auto min-w-44"
+              options={[
+                { value: "auto", label: "Auto (Best Available)" },
+                { value: "featherless", label: "Featherless Cloud LLM" },
+                { value: "groq", label: "Groq Fast Inference" },
+                { value: "ollama", label: "Ollama (100% Local)" },
+                { value: "rules", label: "Rules Fallback" },
+              ]}
+            />
 
             <Button
               variant="primary"
@@ -525,13 +523,13 @@ export default function AlertDetail() {
           <div className="py-8 flex flex-col items-center justify-center text-center space-y-3">
             <div className="relative w-16 h-16 flex items-center justify-center">
               <div className="absolute inset-0 rounded-full border-2 border-violet-400/30 border-t-violet-400 animate-spin" />
-              <Sparkles className="w-6 h-6 text-violet-400 animate-pulse" />
+              <Sparkles className="w-6 h-6 text-violet-400" />
             </div>
             <div>
               <p className="font-display font-semibold text-text text-sm">
                 Redacting Tokens & Consulting Intelligence Model...
               </p>
-              <p className="font-mono text-xs text-muted mt-0.5">
+              <p className=" text-xs text-muted mt-0.5">
                 Zero raw secrets sent to external endpoint
               </p>
             </div>
@@ -547,35 +545,35 @@ export default function AlertDetail() {
             className="space-y-4"
           >
             {/* Header: Verdict Badge & Engine / Latency Chips */}
-            <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-[var(--radius)] border border-white/[0.08] bg-surface-solid/80">
+            <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl border border-border bg-surface-solid">
               <div className="flex items-center gap-2.5">
-                <span className="text-xs font-mono uppercase text-muted">Verdict:</span>
+                <span className="text-xs text-muted">Verdict:</span>
                 <span
-                  className={`font-mono text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${
+                  className={` text-xs font-semibold px-3 py-1 rounded-sm   ${
                     triageData.verdict === "true_positive"
-                      ? "bg-red-500/20 text-red-400 border border-red-500/40 "
+                      ? "bg-red-500/20 text-text border border-red-500/40 "
                       : triageData.verdict === "likely_false_positive"
-                      ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
-                      : "bg-amber-500/20 text-amber-300 border border-amber-500/40"
+                      ? "bg-emerald-500/20 text-text border border-emerald-500/40"
+                      : "bg-amber-500/20 text-text border border-amber-500/40"
                   }`}
                 >
                   {triageData.verdict.replace(/_/g, " ")}
                 </span>
               </div>
 
-              <div className="flex items-center gap-2 font-mono text-xs text-muted">
-                <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-violet-300">
+              <div className="flex items-center gap-2 text-xs text-muted">
+                <span className="px-2 py-0.5 rounded bg-text/5 border border-border text-violet-300">
                   {triageData.engine} ({triageData.model})
                 </span>
-                <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-primary">
+                <span className="px-2 py-0.5 rounded bg-text/5 border border-border text-cyan-300">
                   {triageData.latency_ms}ms
                 </span>
               </div>
             </div>
 
             {/* Typewriter Reasoning Box */}
-            <div className="p-4 rounded-[var(--radius)] border border-white/10 bg-[#070a16] space-y-2">
-              <span className="text-[10px] font-mono uppercase text-muted/70 tracking-wider block">
+            <div className="p-4 rounded-xl border border-border bg-surface-solid space-y-2">
+              <span className="text-[11px] text-muted block">
                 Analyst Reasoning
               </span>
               <p className="font-sans text-sm text-text leading-relaxed font-normal min-h-[3rem]">
@@ -585,29 +583,29 @@ export default function AlertDetail() {
 
             {/* Policy Suggestion Card */}
             {triageData.policy_suggestion && (
-              <div className="p-4 rounded-[var(--radius)] border border-primary/30 bg-surface space-y-1">
-                <div className="flex items-center gap-2 text-primary text-xs font-bold font-mono">
-                  <Layers className="w-4 h-4 text-primary" />
+              <div className="p-4 rounded-xl border border-cyan-500/30 bg-cyan-950/15 space-y-1">
+                <div className="flex items-center gap-2 text-cyan-300 text-xs font-semibold">
+                  <Layers className="w-4 h-4 text-cyan-400" />
                   Recommended Governance Policy Update
                 </div>
-                <p className="text-xs text-text/90 leading-relaxed font-mono">
+                <p className="text-xs text-text leading-relaxed">
                   {triageData.policy_suggestion}
                 </p>
               </div>
             )}
 
             {/* Collapsible Privacy Proof Box */}
-            <div className="border border-white/10 rounded-[var(--radius)] overflow-hidden bg-[var(--surface)]">
+            <div className="border border-border rounded-xl overflow-hidden bg-surface-solid">
               <button
                 onClick={() => setProofExpanded(!proofExpanded)}
-                className="w-full flex items-center justify-between p-3.5 text-xs font-mono text-muted hover:text-text transition-colors bg-white/[0.02]"
+                className="w-full flex items-center justify-between p-3.5 text-xs text-muted hover:text-text transition-colors bg-text/[0.02]"
               >
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-emerald-400" />
                   <span className="font-semibold text-text">
                     Privacy Proof: What was sent to the LLM
                   </span>
-                  <span className="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.2 rounded font-bold">
+                  <span className="text-[11px] bg-emerald-500/10 text-text border border-emerald-500/30 px-1.5 py-0.2 rounded font-semibold">
                     Zero-Exposure Verified
                   </span>
                 </div>
@@ -620,14 +618,14 @@ export default function AlertDetail() {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    className="p-4 border-t border-white/[0.08] text-xs font-mono space-y-2 text-muted"
+                    className="p-4 border-t border-border text-xs space-y-2 text-muted"
                   >
-                    <p className="text-[11px] leading-relaxed text-muted/80">
+                    <p className="text-[11px] leading-relaxed text-muted">
                       Before sending this snippet to the intelligence engine, ShadowScope&apos;s on-device
                       regex scrubber replaced all secrets and customer identifiers with cryptographic hashes
                       or redacted placeholders.
                     </p>
-                    <pre className="p-3 bg-black/60 rounded border border-white/5 text-[11px] text-emerald-300 overflow-x-auto whitespace-pre-wrap">
+                    <pre className="p-3 bg-surface-solid rounded border border-border text-[11px] text-emerald-300 whitespace-pre-wrap break-words whitespace-pre-wrap">
                       {triageData.redacted_input_preview}
                     </pre>
                   </motion.div>

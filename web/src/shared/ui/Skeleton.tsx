@@ -24,14 +24,14 @@ export function Skeleton({
   const variantStyles = {
     text: "h-4 w-full rounded",
     circle: "rounded-full aspect-square",
-    rect: "rounded-lg w-full",
-    card: "rounded-xl border border-white/[0.05] p-5 w-full h-32",
+    rect: "rounded-md w-full",
+    card: "rounded-md border border-border p-5 w-full h-32",
   };
 
   return (
     <div
       className={cn(
-        "relative overflow-hidden bg-[#0d1222]/80 before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/[0.05] before:to-transparent",
+        "relative overflow-hidden bg-surface before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-text/[0.05] before:to-transparent",
         variantStyles[variant],
         className,
       )}

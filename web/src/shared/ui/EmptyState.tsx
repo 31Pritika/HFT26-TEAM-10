@@ -32,22 +32,20 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center p-8 text-center rounded-[var(--radius)] border border-dashed border-border bg-surface",
+        "flex flex-col items-center justify-center p-8 text-center rounded-md border border-dashed border-border bg-surface",
         className,
       )}
     >
-      <div className="relative mb-4 flex items-center justify-center">
-        <div className="w-11 h-11 rounded-[var(--radius)] bg-surface-solid border border-border flex items-center justify-center text-primary">
-          <Icon className="w-5 h-5" />
-        </div>
+      <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-md border border-border bg-surface-solid text-muted">
+        <Icon className="w-5 h-5" />
       </div>
 
-      <h3 className="font-display text-base font-medium text-text">{title}</h3>
-      <p className="mt-1 max-w-sm text-sm text-muted leading-relaxed font-sans">{description}</p>
+      <h3 className="font-display text-base font-semibold text-text">{title}</h3>
+      <p className="mt-1 max-w-sm text-sm text-muted leading-relaxed">{description}</p>
 
       {action && (
         <div className="mt-5">
-          <Button variant="primary" size="sm" onClick={action.onClick}>
+          <Button variant="primary" size="sm" onClick={action.onClick} magnetic>
             {ActionIcon && <ActionIcon className="w-4 h-4" />}
             {action.label}
           </Button>
@@ -56,3 +54,4 @@ export function EmptyState({
     </div>
   );
 }
+

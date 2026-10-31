@@ -1,4 +1,3 @@
-import { useDocumentTitle } from "../../shared/useDocumentTitle";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
@@ -23,6 +22,7 @@ import {
 import { api } from "../../shared/api";
 import { useAppStore } from "../../shared/store";
 import {
+  Select,
   GlassCard,
   Badge,
   SeverityPill,
@@ -69,8 +69,6 @@ const SOURCE_CONFIG: Record<
 };
 
 export default function LiveTraffic() {
-  useDocumentTitle("Live Traffic · ShadowScope");
-
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -98,6 +96,7 @@ export default function LiveTraffic() {
   const [showFilters, setShowFilters] = useState(false);
 
   const tableContainerRef = useRef<HTMLDivElement>(null);
+  const [settled, setSettled] = useState(false);
 
   // Seed initial events from API on mount
   useEffect(() => {
@@ -171,6 +170,13 @@ export default function LiveTraffic() {
     });
   }, [allEvents, providerFilter, sourceFilter, processFilter, minRisk]);
 
+  // Rows only stagger on the first load.
+  useEffect(() => {
+    if (allEvents.length === 0 || settled) return;
+    const timer = window.setTimeout(() => setSettled(true), 600);
+    return () => window.clearTimeout(timer);
+  }, [allEvents.length, settled]);
+
   // Auto-scroll on new items when enabled
   useEffect(() => {
     if (autoScroll && !isPaused && tableContainerRef.current) {
@@ -205,7 +211,7 @@ export default function LiveTraffic() {
 
   // Redacted highlight formatter
   const renderMaskedPayload = (text: string | null) => {
-    if (!text) return <span className="text-muted/60 italic">No payload captured (TLS encrypted handshake)</span>;
+    if (!text) return <span className="text-muted italic">No payload captured (TLS encrypted handshake)</span>;
     // Highlight masked substrings like AKIA**************** or sk-******************** or ***@***.*** or ~/.ssh/...
     const parts = text.split(/([A-Z0-9_*]{10,}|\b[a-zA-Z0-9._%+-]+@\S+\b|\b\/?(?:~|\.ssh|\.aws|\.env)\S*)/g);
     return (
@@ -221,7 +227,7 @@ export default function LiveTraffic() {
             return (
               <mark
                 key={i}
-                className="bg-red-500/25 text-red-300 px-1 py-0.5 rounded border border-red-500/30 font-semibold"
+                className="bg-red-500/25 text-text px-1 py-0.5 rounded border border-red-500/30 font-semibold"
               >
                 {part}
               </mark>
@@ -234,7 +240,7 @@ export default function LiveTraffic() {
   };
 
   return (
-    <div className="space-y-4 max-w-7xl mx-auto flex flex-col h-[calc(100vh-6.5rem)]">
+    <div className="space-y-4 flex flex-col h-[calc(100dvh-10rem)] md:h-[calc(100dvh-8.25rem)]">
       {/* ==================================================================== */}
       {/* 1. HEADER CONTROLS STRIP                                            */}
       {/* ==================================================================== */}
@@ -242,19 +248,19 @@ export default function LiveTraffic() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           {/* Title & Live Status */}
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-[var(--radius)] bg-primary/10 border border-primary/30 text-primary">
-              <Radio className="w-5 h-5 animate-pulse" />
+            <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+              <Radio className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="font-display text-lg font-bold text-text">
+                <h1 className="font-display text-lg font-semibold text-text">
                   Live Traffic Telemetry
                 </h1>
-                <span className="font-mono text-xs px-2 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/30">
+                <span className=" text-xs px-2 py-0.5 rounded-sm bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
                   {filteredEvents.length} events
                 </span>
                 {isPaused && (
-                  <span className="font-mono text-xs px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 animate-pulse">
+                  <span className=" text-xs px-2 py-0.5 rounded-sm bg-amber-500/15 text-text border border-amber-500/30">
                     STREAM PAUSED
                   </span>
                 )}
@@ -276,7 +282,7 @@ export default function LiveTraffic() {
               {isPaused ? <Play className="w-4 h-4 text-emerald-400" /> : <Pause className="w-4 h-4 text-amber-400" />}
               <span>{isPaused ? "Resume Stream" : "Pause Stream"}</span>
               {isPaused && pausedBuffer.length > 0 && (
-                <span className="font-mono text-[10px] bg-amber-400 text-black px-1.5 py-0.2 rounded-full font-bold">
+                <span className=" text-[11px] bg-medium text-bg px-1.5 py-0.2 rounded-sm font-semibold">
                   +{pausedBuffer.length}
                 </span>
               )}
@@ -289,7 +295,7 @@ export default function LiveTraffic() {
               onClick={() => setAutoScroll(!autoScroll)}
               title={autoScroll ? "Auto-scroll is ON (jumps to newest)" : "Auto-scroll is OFF"}
             >
-              <ArrowDown className={`w-4 h-4 ${autoScroll ? "text-primary" : "text-muted"}`} />
+              <ArrowDown className={`w-4 h-4 ${autoScroll ? "text-cyan-400" : "text-muted"}`} />
               <span className="hidden sm:inline">Auto-scroll</span>
             </Button>
 
@@ -302,7 +308,7 @@ export default function LiveTraffic() {
               <Filter className="w-4 h-4 text-muted" />
               <span>Filters</span>
               {(providerFilter !== "all" || sourceFilter !== "all" || minRisk > 0 || processFilter) && (
-                <span className="w-2 h-2 rounded-full bg-primary" />
+                <span className="w-2 h-2 rounded-sm bg-cyan-400" />
               )}
             </Button>
           </div>
@@ -312,16 +318,16 @@ export default function LiveTraffic() {
         <AnimatePresence>
           {showFilters && (
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="overflow-hidden pt-3 border-t border-white/[0.08]"
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="pt-3 border-t border-border"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
                 {/* Search / Process */}
                 <div>
-                  <label className="font-mono text-[11px] text-muted block mb-1">Process / Host Search</label>
+                  <label className=" text-[11px] text-muted block mb-1">Process / Host Search</label>
                   <div className="relative">
                     <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-muted" />
                     <input
@@ -329,54 +335,56 @@ export default function LiveTraffic() {
                       placeholder="e.g. python3, cursor, openai..."
                       value={processFilter}
                       onChange={(e) => setProcessFilter(e.target.value)}
-                      className="w-full bg-[var(--surface)] border border-white/10 rounded-lg pl-8 pr-3 py-1.5 text-xs text-text placeholder:text-muted/60 focus:outline-none focus:border-primary font-mono"
+                      className="ui-input w-full pl-8 pr-3 py-1.5 text-xs"
                     />
                   </div>
                 </div>
 
                 {/* Provider select */}
                 <div>
-                  <label className="font-mono text-[11px] text-muted block mb-1">Provider</label>
-                  <select
+                  <label className=" text-[11px] text-muted block mb-1">Provider</label>
+                  <Select
+                    aria-label="Provider"
                     value={providerFilter}
-                    onChange={(e) => setProviderFilter(e.target.value)}
-                    className="w-full bg-[var(--surface)] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-text focus:outline-none focus:border-primary font-mono"
-                  >
-                    <option value="all">All Providers</option>
-                    <option value="mock_ai">ShadowScope Mock Provider</option>
-                    <option value="openai">OpenAI API</option>
-                    <option value="anthropic">Anthropic API</option>
-                    <option value="ollama">Ollama (Local)</option>
-                    <option value="cursor">Cursor AI Coding</option>
-                    <option value="gemini">Google Gemini API</option>
-                  </select>
+                    onValueChange={setProviderFilter}
+                    options={[
+                      { value: "all", label: "All Providers" },
+                      { value: "mock_ai", label: "ShadowScope Mock Provider" },
+                      { value: "openai", label: "OpenAI API" },
+                      { value: "anthropic", label: "Anthropic API" },
+                      { value: "ollama", label: "Ollama (Local)" },
+                      { value: "cursor", label: "Cursor AI Coding" },
+                      { value: "gemini", label: "Google Gemini API" },
+                    ]}
+                  />
                 </div>
 
                 {/* Source select */}
                 <div>
-                  <label className="font-mono text-[11px] text-muted block mb-1">Capture Source</label>
-                  <select
+                  <label className=" text-[11px] text-muted block mb-1">Capture Source</label>
+                  <Select
+                    aria-label="Capture source"
                     value={sourceFilter}
-                    onChange={(e) => setSourceFilter(e.target.value)}
-                    className="w-full bg-[var(--surface)] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-text focus:outline-none focus:border-primary font-mono"
-                  >
-                    <option value="all">All Sources</option>
-                    <option value="live_conn">LIVE (Sockets)</option>
-                    <option value="loopback">LOOPBACK (Plaintext)</option>
-                    <option value="dns_sni">SNI (TLS Handshake)</option>
-                    <option value="gateway">GATEWAY (Local Tap)</option>
-                    <option value="extension">EXT (Browser Paste)</option>
-                    <option value="simulator">SIM (Simulator)</option>
-                    <option value="har">HAR (DevTools Upload)</option>
-                    <option value="pcap">PCAP (Packet Capture)</option>
-                  </select>
+                    onValueChange={setSourceFilter}
+                    options={[
+                      { value: "all", label: "All Sources" },
+                      { value: "live_conn", label: "LIVE (Sockets)" },
+                      { value: "loopback", label: "LOOPBACK (Plaintext)" },
+                      { value: "dns_sni", label: "SNI (TLS Handshake)" },
+                      { value: "gateway", label: "GATEWAY (Local Tap)" },
+                      { value: "extension", label: "EXT (Browser Paste)" },
+                      { value: "simulator", label: "SIM (Simulator)" },
+                      { value: "har", label: "HAR (DevTools Upload)" },
+                      { value: "pcap", label: "PCAP (Packet Capture)" },
+                    ]}
+                  />
                 </div>
 
                 {/* Min Risk Slider */}
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="font-mono text-[11px] text-muted">Min Risk Score</label>
-                    <span className="font-mono font-bold text-xs text-primary">{minRisk}+</span>
+                    <label className=" text-[11px] text-muted">Min Risk Score</label>
+                    <span className=" font-semibold text-xs text-cyan-400">{minRisk}+</span>
                   </div>
                   <input
                     type="range"
@@ -385,7 +393,7 @@ export default function LiveTraffic() {
                     step="5"
                     value={minRisk}
                     onChange={(e) => setMinRisk(Number(e.target.value))}
-                    className="w-full accent-primary bg-white/10 rounded h-1.5 cursor-pointer"
+                    className="w-full bg-text/10 rounded h-1.5 cursor-pointer"
                   />
                 </div>
               </div>
@@ -399,7 +407,7 @@ export default function LiveTraffic() {
                       setMinRisk(0);
                       setProcessFilter("");
                     }}
-                    className="font-mono text-[11px] text-rose-400 hover:underline cursor-pointer"
+                    className=" text-[11px] text-rose-400 hover:underline cursor-pointer"
                   >
                     Reset all filters
                   </button>
@@ -422,7 +430,7 @@ export default function LiveTraffic() {
           </div>
         ) : filteredEvents.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
-            <Radio className="w-12 h-12 text-muted/30 mb-3 animate-pulse" />
+            <Radio className="w-12 h-12 text-muted mb-3" />
             <h3 className="font-display text-base font-semibold text-text">No Telemetry Matches Filters</h3>
             <p className="text-xs text-muted max-w-sm mt-1">
               Adjust your search keywords or decrease the minimum risk slider to view live AI connections.
@@ -445,7 +453,7 @@ export default function LiveTraffic() {
           <div ref={tableContainerRef} className="flex-1 overflow-y-auto scrollbar-thin">
             {/* Desktop Table View (>= 768px) */}
             <table className="hidden md:table w-full text-left text-xs border-collapse">
-              <thead className="sticky top-0 z-10 bg-[#090d19] border-b border-white/[0.08] text-muted font-mono uppercase text-[10px] tracking-wider">
+              <thead className="sticky top-0 z-10 bg-surface-solid border-b border-border text-muted text-[11px]">
                 <tr>
                   <th className="py-3 px-4">Time</th>
                   <th className="py-3 px-4">Risk</th>
@@ -458,22 +466,22 @@ export default function LiveTraffic() {
                   <th className="py-3 px-4 text-center">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.04] font-mono">
+              <tbody className="divide-y divide-border">
                 {filteredEvents.map((evt, idx) => {
                   const sourceMeta = SOURCE_CONFIG[evt.source] ?? { label: evt.source, variant: "default" };
                   const isHighRisk = evt.risk_score >= 70;
                   const hasFindings = evt.finding_ids && evt.finding_ids.length > 0;
-                  // Animate only the newest 10 rows
-                  const shouldAnimate = idx < 10;
+                  // New rows fade in; rows already on screen stay put. Only the first load staggers.
+                  const delay = !settled && idx < 12 ? idx * 0.025 : 0;
 
                   return (
                     <motion.tr
                       key={evt.id}
-                      initial={shouldAnimate ? { opacity: 0, backgroundColor: "rgba(34, 211, 238, 0.15)" } : false}
-                      animate={shouldAnimate ? { opacity: 1, backgroundColor: "transparent" } : undefined}
-                      transition={{ duration: 0.6 }}
+                      initial={idx < 12 ? { opacity: 0 } : false}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.25, delay }}
                       onClick={() => handleInspectRow(evt)}
-                      className={`group hover:bg-white/[0.04] cursor-pointer transition-colors ${
+                      className={`group hover:bg-elevated cursor-pointer transition-colors ${
                         isHighRisk ? "bg-red-950/10" : ""
                       }`}
                     >
@@ -485,12 +493,12 @@ export default function LiveTraffic() {
                       {/* Risk Score Pill */}
                       <td className="py-2.5 px-4 whitespace-nowrap">
                         <span
-                          className={`inline-block px-2 py-0.5 rounded text-[11px] font-bold ${
+                          className={`inline-block px-2 py-0.5 rounded text-[11px] font-semibold ${
                             evt.risk_score >= 80
-                              ? "bg-red-500/20 text-[#ff3b5c] border border-red-500/40 "
+                              ? "bg-red-500/20 text-text border border-red-500/40 "
                               : evt.risk_score >= 50
-                              ? "bg-amber-500/20 text-amber-300 border border-amber-500/35"
-                              : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                              ? "bg-amber-500/20 text-text border border-amber-500/35"
+                              : "bg-emerald-500/15 text-text border border-emerald-500/30"
                           }`}
                         >
                           {evt.risk_score}
@@ -500,10 +508,10 @@ export default function LiveTraffic() {
                       {/* Process */}
                       <td className="py-2.5 px-4 whitespace-nowrap">
                         <div className="flex items-center gap-1.5">
-                          <Cpu className="w-3.5 h-3.5 text-muted group-hover:text-primary transition-colors" />
-                          <span className="font-semibold text-text text-xs">{evt.process.name}</span>
+                          <Cpu className="w-3.5 h-3.5 text-muted group-hover:text-cyan-400 transition-colors" />
+                          <span className="font-mono font-medium text-text text-xs">{evt.process.name}</span>
                           {evt.process.pid && (
-                            <span className="text-[10px] text-muted">:{evt.process.pid}</span>
+                            <span className="font-mono text-[11px] text-muted">:{evt.process.pid}</span>
                           )}
                         </div>
                       </td>
@@ -515,7 +523,7 @@ export default function LiveTraffic() {
                             {evt.provider?.name ?? "Unknown Provider"}
                           </span>
                           {evt.model && (
-                            <span className="text-[10px] text-muted/70 truncate max-w-[140px]">
+                            <span className="font-mono text-[11px] text-muted truncate max-w-[140px]">
                               {evt.model}
                             </span>
                           )}
@@ -523,9 +531,9 @@ export default function LiveTraffic() {
                       </td>
 
                       {/* Destination */}
-                      <td className="py-2.5 px-4 whitespace-nowrap text-muted truncate max-w-[150px]">
+                      <td className="py-2.5 px-4 whitespace-nowrap font-mono text-xs text-muted truncate max-w-[150px]">
                         {evt.dest.host}
-                        <span className="text-muted/50">:{evt.dest.port}</span>
+                        <span>:{evt.dest.port}</span>
                       </td>
 
                       {/* Capture Source Badge */}
@@ -543,7 +551,7 @@ export default function LiveTraffic() {
                             <span>Plaintext</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-[11px] text-muted/60">
+                          <span className="inline-flex items-center gap-1 text-[11px] text-muted">
                             <EyeOff className="w-3.5 h-3.5" />
                             <span>Encrypted</span>
                           </span>
@@ -560,13 +568,13 @@ export default function LiveTraffic() {
                         <div className="flex items-center justify-center gap-1.5">
                           {hasFindings && (
                             <span
-                              className="p-1 rounded bg-red-500/20 text-red-400 border border-red-500/30"
+                              className="p-1 rounded bg-red-500/20 text-text border border-red-500/30"
                               title={`${evt.finding_ids.length} linked finding(s)`}
                             >
                               <ShieldAlert className="w-3 h-3" />
                             </span>
                           )}
-                          <ChevronRight className="w-4 h-4 text-muted group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                          <ChevronRight className="w-4 h-4 text-muted group-hover:text-cyan-400 transition-colors" />
                         </div>
                       </td>
                     </motion.tr>
@@ -576,7 +584,7 @@ export default function LiveTraffic() {
             </table>
 
             {/* Mobile Card List View (< 768px) */}
-            <div className="md:hidden divide-y divide-white/[0.06] p-2 space-y-2">
+            <div className="md:hidden divide-y divide-border p-2 space-y-2">
               {filteredEvents.map((evt) => {
                 const sourceMeta = SOURCE_CONFIG[evt.source] ?? { label: evt.source, variant: "default" };
                 const isHighRisk = evt.risk_score >= 70;
@@ -584,10 +592,10 @@ export default function LiveTraffic() {
                   <div
                     key={evt.id}
                     onClick={() => handleInspectRow(evt)}
-                    className={`p-3 rounded-[var(--radius)] border transition-colors cursor-pointer ${
+                    className={`p-3 rounded-xl border transition-colors cursor-pointer ${
                       isHighRisk
                         ? "bg-red-950/20 border-red-500/30"
-                        : "bg-surface-solid/50 border-white/[0.06] hover:bg-surface-solid"
+                        : "bg-surface-solid border-border hover:bg-surface-solid"
                     }`}
                   >
                     <div className="flex items-center justify-between gap-2 mb-1.5">
@@ -600,12 +608,12 @@ export default function LiveTraffic() {
                         </Badge>
                       </div>
                       <span
-                        className={`font-mono text-xs font-bold px-2 py-0.5 rounded ${
+                        className={` text-xs font-semibold px-2 py-0.5 rounded ${
                           evt.risk_score >= 80
-                            ? "bg-red-500/20 text-[#ff3b5c]"
+                            ? "bg-red-500/20 text-text"
                             : evt.risk_score >= 50
-                            ? "bg-amber-500/20 text-amber-300"
-                            : "bg-emerald-500/20 text-emerald-400"
+                            ? "bg-amber-500/20 text-text"
+                            : "bg-emerald-500/20 text-text"
                         }`}
                       >
                         Risk {evt.risk_score}
@@ -638,7 +646,7 @@ export default function LiveTraffic() {
           selectedEvent ? (
             <div className="flex items-center gap-2">
               <span>Event Details</span>
-              <span className="font-mono text-xs text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/30">
+              <span className="font-mono text-xs text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/25">
                 {selectedEvent.id}
               </span>
             </div>
@@ -651,14 +659,14 @@ export default function LiveTraffic() {
         {selectedEvent && (
           <div className="space-y-6">
             {/* Quick Status Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-[var(--radius)] border border-white/[0.08] bg-surface-solid/80">
+            <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl border border-border bg-surface-solid">
               <div className="flex items-center gap-2">
-                <span className="text-xs text-muted font-mono uppercase">Risk Score:</span>
+                <span className="text-xs text-muted">Risk Score:</span>
                 <span
-                  className={`font-mono text-sm font-bold px-2.5 py-0.5 rounded ${
+                  className={` text-sm font-semibold px-2.5 py-0.5 rounded ${
                     selectedEvent.risk_score >= 80
-                      ? "bg-red-500/20 text-[#ff3b5c] border border-red-500/40"
-                      : "bg-amber-500/20 text-amber-300 border border-amber-500/35"
+                      ? "bg-red-500/20 text-text border border-red-500/40"
+                      : "bg-amber-500/20 text-text border border-amber-500/35"
                   }`}
                 >
                   {selectedEvent.risk_score} / 100
@@ -682,28 +690,28 @@ export default function LiveTraffic() {
             </div>
 
             {/* Destination & Connection Card */}
-            <div className="rounded-[var(--radius)] border border-white/[0.08] bg-[#0c101d] p-4 space-y-3 font-mono text-xs">
-              <h4 className="font-display text-sm font-bold text-text flex items-center gap-2">
-                <Server className="w-4 h-4 text-primary" />
+            <div className="rounded-xl border border-border bg-surface p-4 space-y-3 text-xs">
+              <h4 className="font-display text-sm font-semibold text-text flex items-center gap-2">
+                <Server className="w-4 h-4 text-cyan-400" />
                 Network Destination
               </h4>
               <div className="grid grid-cols-2 gap-2 text-muted">
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">Host</span>
+                  <span className="text-[11px] text-muted block">Host</span>
                   <span className="text-text font-semibold">{selectedEvent.dest.host}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">IP / Port</span>
+                  <span className="text-[11px] text-muted block">IP / Port</span>
                   <span className="text-text">
                     {selectedEvent.dest.ip ?? "Resolved DNS"} : {selectedEvent.dest.port}
                   </span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">Protocol</span>
-                  <span className="text-primary uppercase">{selectedEvent.dest.protocol}</span>
+                  <span className="text-[11px] text-muted block">Protocol</span>
+                  <span className="text-cyan-400">{selectedEvent.dest.protocol}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">Data Transferred</span>
+                  <span className="text-[11px] text-muted block">Data Transferred</span>
                   <span className="text-text">
                     ↑ {formatBytes(selectedEvent.bytes_out)} / ↓ {formatBytes(selectedEvent.bytes_in)}
                   </span>
@@ -712,34 +720,34 @@ export default function LiveTraffic() {
             </div>
 
             {/* Process Card */}
-            <div className="rounded-[var(--radius)] border border-white/[0.08] bg-[#0c101d] p-4 space-y-3 font-mono text-xs">
-              <h4 className="font-display text-sm font-bold text-text flex items-center gap-2">
+            <div className="rounded-xl border border-border bg-surface p-4 space-y-3 text-xs">
+              <h4 className="font-display text-sm font-semibold text-text flex items-center gap-2">
                 <Cpu className="w-4 h-4 text-violet-400" />
                 Endpoint Process Lineage
               </h4>
               <div className="grid grid-cols-2 gap-2 text-muted">
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">Process Name</span>
+                  <span className="text-[11px] text-muted block">Process Name</span>
                   <span className="text-text font-semibold">{selectedEvent.process.name}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">PID</span>
+                  <span className="text-[11px] text-muted block">PID</span>
                   <span className="text-text">{selectedEvent.process.pid ?? "Unknown"}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">Parent Process</span>
+                  <span className="text-[11px] text-muted block">Parent Process</span>
                   <span className="text-text">{selectedEvent.process.parent ?? "None / System"}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">User</span>
+                  <span className="text-[11px] text-muted block">User</span>
                   <span className="text-text">{selectedEvent.process.user ?? "Current User"}</span>
                 </div>
               </div>
 
               {selectedEvent.process.cmdline_hint && (
-                <div className="mt-2 pt-2 border-t border-white/[0.06]">
-                  <span className="text-[10px] uppercase text-muted/60 block mb-1">Command-Line Execution</span>
-                  <pre className="bg-[var(--surface)] p-2 rounded border border-white/10 text-[11px] text-primary overflow-x-auto whitespace-pre-wrap">
+                <div className="mt-2 pt-2 border-t border-border">
+                  <span className="text-[11px] text-muted block mb-1">Command-Line Execution</span>
+                  <pre className="bg-surface-solid p-2 rounded border border-border text-[11px] text-cyan-300 whitespace-pre-wrap break-words whitespace-pre-wrap">
                     {selectedEvent.process.cmdline_hint}
                   </pre>
                 </div>
@@ -749,16 +757,16 @@ export default function LiveTraffic() {
             {/* Redacted Payload Preview Block */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <h4 className="font-display text-sm font-bold text-text flex items-center gap-2">
-                  <Terminal className="w-4 h-4 text-primary" />
+                <h4 className="font-display text-sm font-semibold text-text flex items-center gap-2">
+                  <Terminal className="w-4 h-4 text-cyan-400" />
                   Payload Preview (Redacted)
                 </h4>
-                <span className="text-[10px] font-mono text-muted">
+                <span className="text-[11px] text-muted">
                   Secrets automatically masked
                 </span>
               </div>
 
-              <div className="relative rounded-[var(--radius)] border border-white/10 bg-[var(--surface)] p-4 font-mono text-xs text-text/90 leading-relaxed overflow-x-auto max-h-48 scrollbar-thin">
+              <div className="relative rounded-xl border border-border bg-surface-solid p-4 font-mono text-xs text-text leading-relaxed max-h-48 scrollbar-thin">
                 {renderMaskedPayload(selectedEvent.payload_preview)}
               </div>
             </div>
@@ -766,7 +774,7 @@ export default function LiveTraffic() {
             {/* Linked Findings */}
             {linkedFindings.length > 0 && (
               <div className="space-y-2">
-                <h4 className="font-display text-sm font-bold text-text flex items-center gap-2">
+                <h4 className="font-display text-sm font-semibold text-text flex items-center gap-2">
                   <ShieldAlert className="w-4 h-4 text-red-400" />
                   Linked Findings ({linkedFindings.length})
                 </h4>
@@ -781,7 +789,7 @@ export default function LiveTraffic() {
                         <SeverityPill severity={finding.severity} size="xs" />
                         <div>
                           <p className="font-semibold text-xs text-text">{finding.title}</p>
-                          <p className="font-mono text-[10px] text-muted truncate max-w-xs">
+                          <p className="font-mono text-[11px] text-muted truncate max-w-xs">
                             {finding.evidence?.redacted_snippet || finding.description}
                           </p>
                         </div>
@@ -796,14 +804,14 @@ export default function LiveTraffic() {
             {/* Tags Strip */}
             {selectedEvent.tags && selectedEvent.tags.length > 0 && (
               <div>
-                <span className="text-[10px] font-mono uppercase text-muted block mb-1.5">
+                <span className="text-[11px] text-muted block mb-1.5">
                   Classifier Tags
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {selectedEvent.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="font-mono text-[10px] px-2 py-0.5 rounded bg-surface border border-white/10 text-muted"
+                      className=" text-[11px] px-2 py-0.5 rounded bg-surface border border-border text-muted"
                     >
                       #{tag}
                     </span>
@@ -813,7 +821,7 @@ export default function LiveTraffic() {
             )}
 
             {/* Drawer Actions */}
-            <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between gap-3">
+            <div className="pt-4 border-t border-border flex items-center justify-between gap-3">
               <Button variant="ghost" size="sm" onClick={copyJson}>
                 {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                 <span>{copied ? "Copied JSON" : "Copy Telemetry JSON"}</span>

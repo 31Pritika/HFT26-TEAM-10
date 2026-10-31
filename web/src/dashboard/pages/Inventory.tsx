@@ -1,4 +1,3 @@
-import { useDocumentTitle } from "../../shared/useDocumentTitle";
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -17,6 +16,7 @@ import {
 } from "lucide-react";
 import { api } from "../../shared/api";
 import {
+  Select,
   GlassCard,
   Badge,
   Button,
@@ -56,8 +56,6 @@ const CATEGORY_META: Record<ProviderCategory, { label: string; variant: "cyan" |
 type FilterChip = "all" | "shadow" | "sanctioned" | "agents" | "high_risk";
 
 export default function Inventory() {
-  useDocumentTitle("AI Inventory · ShadowScope");
-
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -155,11 +153,11 @@ export default function Inventory() {
 
   if (isLoading) {
     return (
-      <div className="space-y-6 max-w-7xl mx-auto">
-        <Skeleton className="h-28 w-full rounded-[var(--radius)]" />
+      <div className="space-y-6">
+        <Skeleton className="h-28 w-full rounded-2xl" />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="h-48 rounded-[var(--radius)]" />
+            <Skeleton key={i} className="h-48 rounded-xl" />
           ))}
         </div>
       </div>
@@ -167,18 +165,18 @@ export default function Inventory() {
   }
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12">
+    <div className="space-y-6 pb-12">
       {/* ==================================================================== */}
       {/* 1. HEADER & SUMMARY SPLIT BAR                                        */}
       {/* ==================================================================== */}
       <GlassCard variant="default" className="p-5 sm:p-6 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-[var(--radius)] bg-primary/10 border border-primary/30 text-primary">
-              <Layers className="w-5 h-5 animate-pulse" />
+            <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+              <Layers className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="font-display text-xl font-bold text-text">
+              <h1 className="font-display text-xl font-semibold text-text">
                 Shadow AI & Discovered Tools Inventory
               </h1>
               <p className="text-xs text-muted mt-0.5">
@@ -187,18 +185,18 @@ export default function Inventory() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 font-mono text-xs shrink-0">
-            <span className="px-3 py-1 rounded-full border border-red-500/30 bg-red-500/10 text-red-400 font-bold">
+          <div className="flex items-center gap-2 text-xs shrink-0">
+            <span className="px-3 py-1 rounded-sm border border-red-500/30 bg-red-500/10 text-text font-semibold">
               {shadowCount} Shadow AI
             </span>
-            <span className="px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 font-bold">
+            <span className="px-3 py-1 rounded-sm border border-emerald-500/30 bg-emerald-500/10 text-text font-semibold">
               {sanctionedCount} Sanctioned
             </span>
           </div>
         </div>
 
         {/* Animated Split Summary Bar */}
-        <div className="pt-2 border-t border-white/[0.08] space-y-1.5 font-mono text-xs">
+        <div className="pt-2 border-t border-border space-y-1.5 text-xs">
           <div className="flex items-center justify-between text-muted">
             <span className="flex items-center gap-1.5 text-emerald-400">
               <ShieldCheck className="w-4 h-4" />
@@ -210,15 +208,15 @@ export default function Inventory() {
             </span>
           </div>
 
-          <div className="h-2.5 w-full bg-white/[0.06] rounded-full overflow-hidden flex">
+          <div className="h-2.5 w-full bg-text/[0.06] rounded-sm overflow-hidden flex">
             <motion.div
-              className="h-full bg-emerald-400 "
+              className="h-full bg-emerald-400"
               initial={{ width: 0 }}
               animate={{ width: `${sanctionedPct}%` }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             />
             <motion.div
-              className="h-full bg-red-500 "
+              className="h-full bg-red-500"
               initial={{ width: 0 }}
               animate={{ width: `${shadowPct}%` }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -233,7 +231,7 @@ export default function Inventory() {
       <GlassCard variant="default" className="p-4 space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           {/* Filter Chips */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none font-mono text-xs">
+          <div className="flex items-center gap-1.5 flex-wrap pb-1 sm:pb-0 scrollbar-none text-xs">
             {[
               { id: "all" as const, label: "All Discovered" },
               { id: "shadow" as const, label: `Shadow AI (${shadowCount})` },
@@ -246,12 +244,17 @@ export default function Inventory() {
                 <button
                   key={id}
                   onClick={() => setActiveFilter(id)}
-                  className={`px-3 py-1.5 rounded-lg border whitespace-nowrap transition-colors cursor-pointer ${
-                    active
-                      ? "bg-primary/15 text-primary border-primary/30 font-bold "
-                      : "bg-surface border-white/10 text-muted hover:text-text hover:bg-white/[0.04]"
+                  className={`relative z-0 px-3 py-1.5 rounded-sm whitespace-nowrap transition-colors cursor-pointer ${
+                    active ? "text-text" : "text-muted hover:text-text hover:bg-elevated"
                   }`}
                 >
+                  {active && (
+                    <motion.span
+                      layoutId="inventory-filter"
+                      className="absolute inset-0 -z-10 rounded-sm bg-elevated"
+                      transition={{ type: "spring", stiffness: 420, damping: 38 }}
+                    />
+                  )}
                   {label}
                 </button>
               );
@@ -260,29 +263,31 @@ export default function Inventory() {
 
           {/* Category Dropdown */}
           <div className="shrink-0">
-            <select
+            <Select
+              aria-label="Category"
               value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="bg-[var(--surface)] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-text focus:outline-none focus:border-primary font-mono"
-            >
-              <option value="all">All Categories</option>
-              <option value="ai_coding">AI Coding Assistants</option>
-              <option value="cloud_llm">Cloud LLM Inference</option>
-              <option value="local_llm">Local LLM Servers</option>
-              <option value="ai_saas">AI SaaS Web Apps</option>
-            </select>
+              onValueChange={setCategoryFilter}
+              className="w-auto min-w-44"
+              options={[
+                { value: "all", label: "All Categories" },
+                { value: "ai_coding", label: "AI Coding Assistants" },
+                { value: "cloud_llm", label: "Cloud LLM Inference" },
+                { value: "local_llm", label: "Local LLM Servers" },
+                { value: "ai_saas", label: "AI SaaS Web Apps" },
+              ]}
+            />
           </div>
         </div>
 
         {/* Search text input */}
-        <div className="relative pt-2 border-t border-white/[0.06]">
+        <div className="relative pt-2 border-t border-border">
           <Search className="w-3.5 h-3.5 absolute left-3 top-5 text-muted" />
           <input
             type="text"
             placeholder="Filter by process name, binary executable, or provider ID..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[var(--surface)] border border-white/10 rounded-lg pl-9 pr-3 py-2 text-xs text-text placeholder:text-muted/60 focus:outline-none focus:border-primary font-mono"
+            className="ui-input w-full pl-9 pr-3 py-2 text-xs"
           />
         </div>
       </GlassCard>
@@ -300,15 +305,15 @@ export default function Inventory() {
             <GlassCard
               key={item.id}
               variant="default"
-              className={`p-5 flex flex-col justify-between transition-all relative overflow-hidden ${
+              className={`p-5 flex flex-col justify-between transition-colors relative overflow-hidden ${
                 !item.sanctioned && isHighRisk
                   ? "border-red-500/35 bg-red-950/15 "
-                  : "hover:border-white/20"
+                  : "hover:border-border-strong"
               }`}
             >
               {/* "NEW" Ribbon in upper right */}
               {isNew && (
-                <div className="absolute top-2 right-2 flex items-center gap-1 font-mono text-[9px] font-bold px-2 py-0.5 rounded-full bg-primary text-black  uppercase">
+                <div className="absolute top-2 right-2 flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-sm bg-primary text-bg">
                   <Sparkles className="w-2.5 h-2.5" />
                   New This Session
                 </div>
@@ -318,11 +323,11 @@ export default function Inventory() {
                 {/* Header: Process & Category */}
                 <div className="flex items-start justify-between gap-2 mb-2 pr-16">
                   <div>
-                    <h3 className="font-display font-bold text-base text-text flex items-center gap-2">
-                      <Cpu className="w-4 h-4 text-primary shrink-0" />
-                      <span className="truncate">{item.process_name}</span>
+                    <h3 className="font-display font-semibold text-base text-text flex items-center gap-2">
+                      <Cpu className="w-4 h-4 text-cyan-400 shrink-0" />
+                      <span className="truncate font-mono">{item.process_name}</span>
                     </h3>
-                    <p className="font-mono text-[10px] text-muted truncate max-w-xs mt-0.5" title={item.exe || ""}>
+                    <p className="font-mono text-[11px] text-muted truncate max-w-xs mt-0.5" title={item.exe || ""}>
                       {item.exe || "Endpoint native executable"}
                     </p>
                   </div>
@@ -333,16 +338,16 @@ export default function Inventory() {
                     {cat.label}
                   </Badge>
                   {item.is_agent && (
-                    <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30 flex items-center gap-1">
+                    <span className=" text-[11px] px-2 py-0.5 rounded-sm bg-violet-500/20 text-violet-300 border border-violet-500/30 flex items-center gap-1">
                       <Bot className="w-3 h-3" />
                       Agent
                     </span>
                   )}
                   <span
-                    className={`font-mono text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                    className={` text-[11px] px-2 py-0.5 rounded-sm font-semibold ${
                       isHighRisk
-                        ? "bg-red-500/20 text-red-400 border border-red-500/30"
-                        : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                        ? "bg-red-500/20 text-text border border-red-500/30"
+                        : "bg-emerald-500/15 text-text border border-emerald-500/30"
                     }`}
                   >
                     Risk {item.risk_score}
@@ -351,14 +356,14 @@ export default function Inventory() {
 
                 {/* Provider Chips */}
                 <div className="mt-3 space-y-1">
-                  <span className="text-[10px] font-mono uppercase text-muted/70 block">
+                  <span className="text-[11px] text-muted block">
                     Contacted AI Providers:
                   </span>
                   <div className="flex flex-wrap gap-1">
                     {item.provider_ids.map((p) => (
                       <span
                         key={p}
-                        className="font-mono text-[10px] px-2 py-0.5 rounded bg-surface-solid border border-white/10 text-primary"
+                        className=" text-[11px] px-2 py-0.5 rounded bg-surface-solid border border-border text-cyan-300"
                       >
                         {p}
                       </span>
@@ -367,30 +372,30 @@ export default function Inventory() {
                 </div>
 
                 {/* Telemetry Metrics Grid */}
-                <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-white/[0.06] font-mono text-xs">
+                <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-border text-xs">
                   <div>
-                    <span className="text-[10px] uppercase text-muted block">Inference Reqs</span>
-                    <span className="text-text font-bold">{item.request_count}</span>
+                    <span className="text-[11px] text-muted block">Inference Reqs</span>
+                    <span className="text-text font-semibold">{item.request_count}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase text-muted block">Data Egress</span>
-                    <span className="text-text font-bold">{formatBytes(item.bytes_out)}</span>
+                    <span className="text-[11px] text-muted block">Data Egress</span>
+                    <span className="text-text font-semibold">{formatBytes(item.bytes_out)}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase text-muted block">Exfiltrations</span>
-                    <span className={`font-bold ${item.findings_count > 0 ? "text-red-400" : "text-emerald-400"}`}>
+                    <span className="text-[11px] text-muted block">Exfiltrations</span>
+                    <span className={`font-semibold ${item.findings_count > 0 ? "text-red-400" : "text-emerald-400"}`}>
                       {item.findings_count} findings
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase text-muted block">Last Active</span>
+                    <span className="text-[11px] text-muted block">Last Active</span>
                     <span className="text-muted">{timeAgo(item.last_seen)}</span>
                   </div>
                 </div>
               </div>
 
               {/* Sanctioned Toggle & Actions Footer */}
-              <div className="mt-5 pt-3 border-t border-white/[0.08] flex items-center justify-between gap-2">
+              <div className="mt-5 pt-3 border-t border-border flex items-center justify-between gap-2">
                 {/* Interactive Sanctioned Toggle Switch */}
                 <button
                   onClick={() =>
@@ -399,10 +404,10 @@ export default function Inventory() {
                       nextState: !item.sanctioned,
                     })
                   }
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-lg border font-mono text-xs font-bold transition-all cursor-pointer ${
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-lg border text-xs font-semibold transition-colors cursor-pointer ${
                     item.sanctioned
-                      ? "bg-emerald-500/15 border-emerald-500/35 text-emerald-300 hover:bg-emerald-500/25 "
-                      : "bg-red-500/15 border-red-500/35 text-red-400 hover:bg-red-500/25"
+                      ? "bg-emerald-500/15 border-emerald-500/35 text-text hover:bg-emerald-500/25 "
+                      : "bg-red-500/15 border-red-500/35 text-text hover:bg-red-500/25"
                   }`}
                   title="Click to toggle Sanctioned vs Unsanctioned policy"
                 >
@@ -425,7 +430,7 @@ export default function Inventory() {
                   size="xs"
                   onClick={() => navigate(`/app/live?process=${encodeURIComponent(item.process_name)}`)}
                 >
-                  <Radio className="w-3.5 h-3.5 text-primary" />
+                  <Radio className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Traffic</span>
                 </Button>
               </div>

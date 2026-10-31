@@ -1,4 +1,3 @@
-import { useDocumentTitle } from "../../shared/useDocumentTitle";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -22,7 +21,7 @@ import { Button } from "../../shared/ui/Button";
 import { Badge } from "../../shared/ui/Badge";
 import { Skeleton } from "../../shared/ui/Skeleton";
 import { useAppStore } from "../../shared/store";
-import { api, API_BASE, setManualDemoMode } from "../../shared/api";
+import { api, API_BASE, setApiBaseOverride, setManualDemoMode } from "../../shared/api";
 import { toast } from "sonner";
 
 function formatUptime(seconds: number): string {
@@ -66,8 +65,6 @@ const COLLECTOR_DESCRIPTIONS: Record<string, { label: string; desc: string; icon
 };
 
 export default function Settings() {
-  useDocumentTitle("Settings · ShadowScope");
-
   const { engineStatus, setEngineStatus, demoModeOverride, setDemoModeOverride } = useAppStore();
 
   const [apiBaseInput, setApiBaseInput] = useState(API_BASE);
@@ -168,14 +165,14 @@ export default function Settings() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl font-bold tracking-tight text-white font-[Space_Grotesk]">
+            <h1 className="text-2xl font-semibold tracking-tight text-text font-display">
               Settings &amp; Diagnostics
             </h1>
             <Badge variant="cyan" dot>
               Engine Core
             </Badge>
           </div>
-          <p className="text-xs sm:text-sm text-neutral-400 mt-1">
+          <p className="text-xs sm:text-sm text-muted mt-1">
             Engine health telemetry, inspection collectors, demo mode toggle, and privacy assurances.
           </p>
         </div>
@@ -201,33 +198,33 @@ export default function Settings() {
           <GlassCard className="p-6 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-[var(--radius)] bg-primary/10 border border-primary/30 flex items-center justify-center shrink-0">
-                  <Server className="w-6 h-6 text-primary" />
+                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0">
+                  <Server className="w-6 h-6 text-cyan-400" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h2 className="text-lg font-bold text-white font-[Space_Grotesk]">
+                    <h2 className="text-lg font-semibold text-text font-display">
                       ShadowScope Daemon
                     </h2>
                     <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase ${
+                      className={`px-2 py-0.5 rounded text-[11px] font-semibold  ${
                         engineStatus === "live"
-                          ? "bg-emerald-500/15 text-emerald-300 border border-emerald-500/30"
-                          : "bg-amber-500/15 text-amber-300 border border-amber-500/30"
+                          ? "bg-emerald-500/15 text-text border border-emerald-500/30"
+                          : "bg-amber-500/15 text-text border border-amber-500/30"
                       }`}
                     >
                       {engineStatus === "live" ? "ONLINE (DAEMON UP)" : "DEMO SIMULATION"}
                     </span>
                   </div>
-                  <p className="text-xs text-neutral-400 font-mono mt-0.5">
+                  <p className="text-xs text-muted mt-0.5">
                     Engine Version: {health?.version ?? "0.9.4-demo"} • Triage Backend: {health?.llm_engine ?? "rules"}
                   </p>
                 </div>
               </div>
 
               <div className="text-right sm:text-right">
-                <div className="text-[11px] font-mono text-neutral-400 uppercase">Engine Uptime</div>
-                <div className="text-base font-bold font-mono text-primary">
+                <div className="text-[11px] text-muted">Engine Uptime</div>
+                <div className="text-base font-semibold text-cyan-400">
                   {health ? formatUptime(health.uptime_s) : "0h 0m 0s"}
                 </div>
               </div>
@@ -236,11 +233,11 @@ export default function Settings() {
             {/* Collectors Status Grid */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-semibold text-neutral-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <Activity className="w-3.5 h-3.5 text-primary" />
+                <h3 className="text-xs font-semibold text-text flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5 text-cyan-400" />
                   Active Inspection Collectors ({Object.values(health?.collectors ?? {}).filter((c) => c.running).length}/{Object.keys(health?.collectors ?? {}).length || 6} Running)
                 </h3>
-                <span className={`text-[11px] font-mono ${Object.values(health?.collectors ?? {}).every((c) => c.running) ? "text-emerald-400" : "text-amber-400"}`}>
+                <span className={`text-[11px] ${Object.values(health?.collectors ?? {}).every((c) => c.running) ? "text-emerald-400" : "text-amber-400"}`}>
                   {Object.values(health?.collectors ?? {}).every((c) => c.running) ? "All Systems Nominal" : "Partial (Some on Standby)"}
                 </span>
               </div>
@@ -263,29 +260,29 @@ export default function Settings() {
                     return (
                       <div
                         key={key}
-                        className="p-3.5 rounded-[var(--radius)] bg-surface border border-border hover:border-border transition-all flex flex-col justify-between space-y-2"
+                        className="p-3.5 rounded-xl bg-surface-solid border border-border hover:border-border-strong transition-colors flex flex-col justify-between space-y-2"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <div className="p-1.5 rounded-lg bg-neutral-800 text-primary shrink-0">
+                            <div className="p-1.5 rounded-lg bg-elevated text-cyan-400 shrink-0">
                               <Icon className="w-3.5 h-3.5" />
                             </div>
-                            <span className="text-xs font-semibold text-white">
+                            <span className="text-xs font-semibold text-text">
                               {meta.label}
                             </span>
                           </div>
 
                           <span
-                            className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold shrink-0 ${
+                            className={`px-1.5 py-0.5 rounded text-[11px] font-semibold shrink-0 ${
                               col.running
-                                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
-                                : "bg-neutral-800 text-neutral-400"
+                                ? "bg-emerald-500/15 text-text border border-emerald-500/30"
+                                : "bg-elevated text-muted"
                             }`}
                           >
                             {col.running ? "ACTIVE" : "STANDBY"}
                           </span>
                         </div>
-                        <p className="text-[11px] text-neutral-400 leading-relaxed">
+                        <p className="text-[11px] text-muted leading-relaxed">
                           {meta.desc}
                         </p>
                       </div>
@@ -299,14 +296,14 @@ export default function Settings() {
           {/* Engine Connection & API Base Override */}
           <GlassCard className="p-6 space-y-5">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-primary/10 border border-cyan-500/20 flex items-center justify-center text-primary">
+              <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
                 <Globe className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-base font-semibold text-white font-[Space_Grotesk]">
+                <h3 className="text-base font-semibold text-text font-display">
                   Daemon API Connection
                 </h3>
-                <p className="text-xs text-neutral-400">
+                <p className="text-xs text-muted">
                   Configure local REST endpoint target and fallback demo options
                 </p>
               </div>
@@ -314,7 +311,7 @@ export default function Settings() {
 
             <div className="space-y-4">
               <div>
-                <label className="text-xs font-mono text-neutral-400 block mb-1.5">
+                <label className="text-xs text-muted block mb-1.5">
                   API Base URL Endpoint
                 </label>
                 <div className="flex gap-2">
@@ -322,32 +319,36 @@ export default function Settings() {
                     type="text"
                     value={apiBaseInput}
                     onChange={(e) => setApiBaseInput(e.target.value)}
-                    className="flex-1 px-3 py-1.5 rounded-lg bg-surface border border-border text-xs font-mono text-white placeholder-neutral-500 focus:outline-none focus:border-cyan-500/50"
+                    className="flex-1 px-3 py-1.5 ui-input text-xs text-text placeholder-neutral-500"
                   />
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      toast.info("Active Base Endpoint", {
-                        description: `Using ${apiBaseInput}. Restart dev server to switch target host.`,
-                      });
+                      const url = apiBaseInput.trim().replace(/\/$/, "");
+                      if (url && !/^https?:\/\//.test(url)) {
+                        toast.error("Use a full URL, such as http://localhost:8787/api");
+                        return;
+                      }
+                      setApiBaseOverride(url);
+                      window.location.reload();
                     }}
                   >
-                    Confirm
+                    Apply
                   </Button>
                 </div>
               </div>
 
               {/* Demo Mode Toggle Switch */}
-              <div className="p-4 rounded-[var(--radius)] bg-surface border border-border flex items-center justify-between gap-4">
+              <div className="p-4 rounded-xl bg-surface-solid border border-border flex items-center justify-between gap-4">
                 <div className="space-y-0.5">
-                  <div className="text-xs font-semibold text-white flex items-center gap-2">
+                  <div className="text-xs font-semibold text-text flex items-center gap-2">
                     <span>Demo Mode Simulation Override</span>
                     {demoModeOverride === true && (
                       <Badge variant="medium" size="xs">FORCED DEMO</Badge>
                     )}
                   </div>
-                  <p className="text-[11px] text-neutral-400">
+                  <p className="text-[11px] text-muted">
                     When active, the UI runs on bundled mock telemetry without querying the local daemon.
                   </p>
                 </div>
@@ -375,39 +376,39 @@ export default function Settings() {
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-base font-semibold text-white font-[Space_Grotesk]">
+                <h3 className="text-base font-semibold text-text font-display">
                   Interface Preferences
                 </h3>
-                <p className="text-xs text-neutral-400">
+                <p className="text-xs text-muted">
                   Motion dynamics and desktop alerting
                 </p>
               </div>
             </div>
 
             {/* Reduce Motion */}
-            <div className="p-3 rounded-[var(--radius)] bg-surface border border-border flex items-center justify-between">
+            <div className="p-3 rounded-xl bg-surface-solid border border-border flex items-center justify-between">
               <div>
-                <div className="text-xs font-semibold text-white">Reduce Motion</div>
-                <div className="text-[11px] text-neutral-400">Disable complex spring animations</div>
+                <div className="text-xs font-semibold text-text">Reduce Motion</div>
+                <div className="text-[11px] text-muted">Disable complex spring animations</div>
               </div>
               <input
                 type="checkbox"
                 checked={reduceMotion}
                 onChange={(e) => setReduceMotion(e.target.checked)}
-                className="w-4 h-4 rounded border-border bg-surface accent-primary cursor-pointer"
+                className="w-4 h-4 rounded border-border-strong bg-surface-solid cursor-pointer"
               />
             </div>
 
             {/* Browser Notifications */}
-            <div className="p-3 rounded-[var(--radius)] bg-surface border border-border space-y-2.5">
+            <div className="p-3 rounded-xl bg-surface-solid border border-border space-y-2.5">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-semibold text-white flex items-center gap-1.5">
-                    <Bell className="w-3.5 h-3.5 text-primary" />
+                  <div className="text-xs font-semibold text-text flex items-center gap-1.5">
+                    <Bell className="w-3.5 h-3.5 text-cyan-400" />
                     Critical Incident Alerts
                   </div>
-                  <div className="text-[11px] text-neutral-400">
-                    Status: <strong className="text-neutral-200 capitalize">{notificationPermission}</strong>
+                  <div className="text-[11px] text-muted">
+                    Status: <strong className="text-text capitalize">{notificationPermission}</strong>
                   </div>
                 </div>
 
@@ -421,7 +422,7 @@ export default function Settings() {
                     Enable
                   </Button>
                 ) : (
-                  <span className="flex items-center gap-1 text-[11px] text-emerald-400 font-mono">
+                  <span className="flex items-center gap-1 text-[11px] text-emerald-400">
                     <Check className="w-3 h-3" /> Enabled
                   </span>
                 )}
@@ -431,7 +432,7 @@ export default function Settings() {
                 variant="ghost"
                 size="sm"
                 onClick={handleTestNotification}
-                className="w-full text-xs text-neutral-400 hover:text-white justify-center h-7"
+                className="w-full text-xs text-muted hover:text-white justify-center h-7"
               >
                 Send Test Alert Notification
               </Button>
@@ -439,53 +440,53 @@ export default function Settings() {
           </GlassCard>
 
           {/* Privacy Statement & On-Device Security Architecture */}
-          <GlassCard className="p-6 space-y-4 border-emerald-500/30 bg-gradient-to-b from-emerald-950/20 via-neutral-900/90 to-neutral-950 shadow-xl shadow-emerald-950/10">
+          <GlassCard className="p-6 space-y-4 border-emerald-500/30 bg-emerald-950/20">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-text">
                 <ShieldCheck className="w-4.5 h-4.5" />
               </div>
               <div>
-                <h3 className="text-base font-semibold text-white font-[Space_Grotesk]">
+                <h3 className="text-base font-semibold text-text font-display">
                   Local Security Guarantee
                 </h3>
                 <Badge variant="low" size="xs">AIRGAPPED ARCHITECTURE</Badge>
               </div>
             </div>
 
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              <strong className="text-white">All analysis executes locally on this host machine.</strong> Raw API keys, private passwords, and sensitive customer PII are redacted on-device before storage and before any LLM triage evaluation.
+            <p className="text-xs text-text leading-relaxed">
+              <strong className="text-text">All analysis executes locally on this host machine.</strong> Raw API keys, private passwords, and sensitive customer PII are redacted on-device before storage and before any LLM triage evaluation.
             </p>
 
-            <ul className="text-[11px] text-neutral-400 space-y-2 pt-1 border-t border-border">
+            <ul className="text-[11px] text-muted space-y-2 pt-1 border-t border-border">
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
                 <span>
-                  <strong className="text-neutral-200">Zero Cloud Exfiltration:</strong> ShadowScope transmits no telemetry, logs, or unredacted payloads to any cloud service.
+                  <strong className="text-text">Zero Cloud Exfiltration:</strong> ShadowScope transmits no telemetry, logs, or unredacted payloads to any cloud service.
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
                 <span>
-                  <strong className="text-neutral-200">Forensic Redaction:</strong> High-entropy tokens are masked in volatile memory with SHA-256 fingerprints.
+                  <strong className="text-text">Forensic Redaction:</strong> High-entropy tokens are masked in volatile memory with SHA-256 fingerprints.
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
                 <span>
-                  <strong className="text-neutral-200">Agent Self-Exclusion:</strong> Defensive monitoring avoids inspection cycles on authorized triage queries.
+                  <strong className="text-text">Agent Self-Exclusion:</strong> Defensive monitoring avoids inspection cycles on authorized triage queries.
                 </span>
               </li>
             </ul>
 
             <div className="pt-2 border-t border-border">
-              <div className="text-[10px] text-neutral-400 uppercase tracking-wider mb-1.5">
+              <div className="text-[11px] text-muted mb-1.5">
                 Compliance Standards Cross-Reference:
               </div>
-              <div className="flex flex-wrap gap-1.5 font-mono text-[10px]">
-                <span className="px-1.5 py-0.5 rounded bg-surface border border-border text-neutral-300">DPDP Act 2023 §8</span>
-                <span className="px-1.5 py-0.5 rounded bg-surface border border-border text-neutral-300">GDPR Art. 25</span>
-                <span className="px-1.5 py-0.5 rounded bg-surface border border-border text-neutral-300">SOC2 Type II</span>
-                <span className="px-1.5 py-0.5 rounded bg-surface border border-border text-neutral-300">PCI-DSS v4.0</span>
+              <div className="flex flex-wrap gap-1.5 text-[11px]">
+                <span className="px-1.5 py-0.5 rounded bg-surface-solid border border-border text-text">DPDP Act 2023 §8</span>
+                <span className="px-1.5 py-0.5 rounded bg-surface-solid border border-border text-text">GDPR Art. 25</span>
+                <span className="px-1.5 py-0.5 rounded bg-surface-solid border border-border text-text">SOC2 Type II</span>
+                <span className="px-1.5 py-0.5 rounded bg-surface-solid border border-border text-text">PCI-DSS v4.0</span>
               </div>
             </div>
           </GlassCard>
