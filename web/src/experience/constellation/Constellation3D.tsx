@@ -77,17 +77,17 @@ export function Constellation3D({
 
   // Color mapping helper
   const getNodeColorHex = (risk: number) => {
-    if (risk >= 80) return "#FF3B5C"; // Critical
-    if (risk >= 50) return "#FF8A3D"; // High
-    if (risk >= 20) return "#FACC15"; // Medium
-    return "#22D3EE"; // Low
+    if (risk >= 80) return "#df6a68"; // Critical
+    if (risk >= 50) return "#d4915a"; // High
+    if (risk >= 20) return "#c9b467"; // Medium
+    return "#bad6f7"; // Low
   };
 
   const getLinkColorRgba = (risk: number, opacity = 0.3) => {
-    if (risk >= 80) return `rgba(255, 59, 92, ${opacity})`;
-    if (risk >= 50) return `rgba(255, 138, 61, ${opacity})`;
-    if (risk >= 20) return `rgba(250, 204, 21, ${opacity})`;
-    return `rgba(34, 211, 238, ${opacity})`;
+    if (risk >= 80) return `rgba(223,106,104, ${opacity})`;
+    if (risk >= 50) return `rgba(212,145,90, ${opacity})`;
+    if (risk >= 20) return `rgba(201,180,103, ${opacity})`;
+    return `rgba(186,215,247, ${opacity})`;
   };
 
   // Formatted graph data for react-force-graph-3d
@@ -99,18 +99,18 @@ export function Constellation3D({
   }, [nodes, links]);
 
   return (
-    <div ref={containerRef} className="relative w-full h-full min-h-[550px] bg-[#05060A] overflow-hidden">
+    <div ref={containerRef} className="relative w-full h-full min-h-[550px] bg-[#0b0d13] overflow-hidden">
       <ForceGraph3D
         ref={fgRef}
         width={dimensions.width}
         height={dimensions.height}
         graphData={graphData}
-        backgroundColor="#05060A"
+        backgroundColor="#0b0d13"
         showNavInfo={false}
         enableNodeDrag={true}
         nodeLabel={(node: any) =>
           `<div style="background: rgba(11, 13, 20, 0.95); border: 1px solid rgba(255, 255, 255, 0.15); padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 11px; color: #E6EDF3; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
-            <div style="font-weight: 600; color: #22D3EE;">${node.label}</div>
+            <div style="font-weight: 600; color: #bad6f7;">${node.label}</div>
             <div style="color: #8B949E; text-transform: uppercase; font-size: 9px;">${node.kind} · Risk ${node.risk}/100</div>
           </div>`
         }
@@ -163,7 +163,7 @@ export function Constellation3D({
           if (ctx) {
             ctx.clearRect(0, 0, 256, 64);
             ctx.font = "bold 22px 'JetBrains Mono', monospace";
-            ctx.fillStyle = node.risk >= 80 ? "#FF3B5C" : "#E6EDF3";
+            ctx.fillStyle = node.risk >= 80 ? "#df6a68" : "#E6EDF3";
             ctx.textAlign = "center";
             const text = node.label.length > 15 ? `${node.label.slice(0, 13)}…` : node.label;
             ctx.fillText(text, 128, 40);

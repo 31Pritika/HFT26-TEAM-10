@@ -37,6 +37,8 @@ function timeAgo(dateString: string): string {
 type SeverityTab = "all" | Severity;
 type StatusFilter = "all" | "open" | "acknowledged" | "resolved" | "false_positive";
 
+const MAX_FINDINGS = 5000;
+
 export default function Alerts() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -62,11 +64,20 @@ export default function Alerts() {
   // Fetch all findings initially
   useEffect(() => {
     let active = true;
-    api
-      .getFindings({ limit: 100 })
-      .then((res) => {
+    const loadAll = async () => {
+      const items: Finding[] = [];
+      let cursor: string | null = null;
+      do {
+        const page = await api.getFindings({ limit: 100, ...(cursor ? { cursor } : {}) });
+        items.push(...page.items);
+        cursor = page.next_cursor;
+      } while (cursor && items.length < MAX_FINDINGS);
+      return items;
+    };
+    loadAll()
+      .then((items) => {
         if (active) {
-          setInitialFindings(res.items);
+          setInitialFindings(items);
           setLoading(false);
         }
       })
@@ -88,6 +99,8 @@ export default function Alerts() {
     if (stat && ["open", "acknowledged", "resolved", "false_positive", "all"].includes(stat)) {
       setStatusFilter(stat as StatusFilter);
     }
+    const process = searchParams.get("process");
+    if (process) setSearchQuery(process);
   }, [searchParams]);
 
   // Combine store stream with fetched findings
@@ -238,14 +251,14 @@ export default function Alerts() {
           {/* Header Title */}
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400">
-              <ShieldAlert className="w-5 h-5 animate-pulse" />
+              <ShieldAlert className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="font-display text-lg font-bold text-text">
                   Alerts & Exfiltration Center
                 </h1>
-                <span className="font-mono text-xs px-2 py-0.5 rounded-full bg-red-500/15 text-red-300 border border-red-500/30 font-bold">
+                <span className="font-mono text-xs px-2 py-0.5 rounded-sm bg-red-500/15 text-red-300 border border-red-500/30 font-bold">
                   {countsBySeverity.critical} Critical
                 </span>
               </div>
@@ -288,18 +301,18 @@ export default function Alerts() {
         </div>
 
         {/* Severity Tabs with Animated layoutId Indicator */}
-        <div className="flex items-center gap-1 border-b border-white/[0.08] overflow-x-auto pb-px scrollbar-none">
+        <div className="flex items-center gap-1 border-b border-white/[0.08] flex-wrap pb-px scrollbar-none">
           {(["all", "critical", "high", "medium", "low", "info"] as SeverityTab[]).map((tab) => {
             const active = selectedSeverity === tab;
             const count = countsBySeverity[tab];
 
             const tabColors: Record<SeverityTab, string> = {
               all: "text-text",
-              critical: "text-[#FF3B5C]",
-              high: "text-[#FF8A3D]",
-              medium: "text-[#FACC15]",
-              low: "text-[#34D399]",
-              info: "text-[#60A5FA]",
+              critical: "text-[#df6a68]",
+              high: "text-[#d4915a]",
+              medium: "text-[#c9b467]",
+              low: "text-[#86b69a]",
+              info: "text-[#8fb0d8]",
             };
 
             return (
@@ -309,13 +322,13 @@ export default function Alerts() {
                   setSelectedSeverity(tab);
                   setSearchParams({ severity: tab, status: statusFilter });
                 }}
-                className={`relative flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-mono uppercase tracking-wider transition-colors select-none whitespace-nowrap cursor-pointer ${
+                className={`relative flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-mono   transition-colors select-none whitespace-nowrap cursor-pointer ${
                   active ? "text-text font-bold" : "text-muted hover:text-text"
                 }`}
               >
                 <span className={active ? tabColors[tab] : ""}>{tab}</span>
                 <span
-                  className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                  className={`px-1.5 py-0.2 rounded-sm text-[10px] ${
                     active ? "bg-white/15 text-text font-bold" : "bg-white/5 text-muted"
                   }`}
                 >
@@ -325,7 +338,7 @@ export default function Alerts() {
                 {active && (
                   <motion.div
                     layoutId="active-severity-tab"
-                    className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-primary via-cyan-400 to-primary-2 shadow-[0_0_8px_rgba(34,211,238,0.7)]"
+                    className="absolute bottom-0 inset-x-0 h-0.5 bg-primary"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -344,7 +357,7 @@ export default function Alerts() {
               placeholder="Search by title, secret subtype, process..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#080c18] border border-white/10 rounded-lg pl-9 pr-3 py-2 text-xs text-text placeholder:text-muted/60 focus:outline-none focus:border-cyan-400 font-mono"
+              className="w-full bg-[#0d0f16] border border-white/10 rounded-lg pl-9 pr-3 py-2 text-xs text-text placeholder:text-muted/60 focus:outline-none focus:border-cyan-400 font-mono"
             />
           </div>
 
@@ -353,7 +366,7 @@ export default function Alerts() {
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="w-full bg-[#080c18] border border-white/10 rounded-lg px-3 py-2 text-xs text-text focus:outline-none focus:border-cyan-400 font-mono"
+              className="w-full bg-[#0d0f16] border border-white/10 rounded-lg px-3 py-2 text-xs text-text focus:outline-none focus:border-cyan-400 font-mono"
             >
               <option value="all">All Finding Types</option>
               <option value="secret">Secrets & Credentials</option>
@@ -374,7 +387,7 @@ export default function Alerts() {
                 setStatusFilter(e.target.value as StatusFilter);
                 setSearchParams({ severity: selectedSeverity, status: e.target.value });
               }}
-              className="w-full bg-[#080c18] border border-white/10 rounded-lg px-3 py-2 text-xs text-text focus:outline-none focus:border-cyan-400 font-mono"
+              className="w-full bg-[#0d0f16] border border-white/10 rounded-lg px-3 py-2 text-xs text-text focus:outline-none focus:border-cyan-400 font-mono"
             >
               <option value="all">All Statuses</option>
               <option value="open">Open Only</option>
@@ -395,7 +408,7 @@ export default function Alerts() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="p-3 rounded-xl border border-cyan-500/40 bg-[#0c1428]/95 shadow-[0_0_24px_rgba(34,211,238,0.2)] backdrop-blur-xl flex flex-wrap items-center justify-between gap-3 z-20"
+            className="p-3 rounded-xl border border-cyan-500/40 bg-[#0c1428]/95 flex flex-wrap items-center justify-between gap-3 z-20"
           >
             <div className="flex items-center gap-3">
               <span className="font-mono text-xs font-bold text-cyan-300">
@@ -471,7 +484,7 @@ export default function Alerts() {
         /* List View */
         <GlassCard variant="default" className="p-0 overflow-hidden flex-1">
           {/* Header Row */}
-          <div className="flex items-center justify-between px-4 py-2.5 bg-[#090d19] border-b border-white/[0.08] text-[10px] font-mono uppercase text-muted tracking-wider">
+          <div className="flex items-center justify-between px-4 py-2.5 bg-[#0d0f16] border-b border-white/[0.08] text-[10px] font-mono text-muted">
             <div className="flex items-center gap-3">
               <input
                 type="checkbox"
@@ -503,7 +516,7 @@ export default function Alerts() {
                     isSelected ? "bg-cyan-500/10" : isHighlighted ? "bg-white/[0.04]" : ""
                   } ${
                     isCritical && finding.status === "open"
-                      ? "bg-red-950/15 border-l-2 border-red-500 shadow-[inset_0_0_20px_rgba(255,59,92,0.06)]"
+                      ? "bg-red-950/15 border-l-2 border-red-500 "
                       : ""
                   }`}
                 >
@@ -555,7 +568,7 @@ export default function Alerts() {
 
                     {/* Status Pill */}
                     <span
-                      className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${
+                      className={`text-[10px] px-2 py-0.5 rounded-sm font-bold  ${
                         finding.status === "open"
                           ? "bg-red-500/15 text-red-400 border border-red-500/30"
                           : finding.status === "acknowledged"
@@ -594,7 +607,7 @@ export default function Alerts() {
                   isSelected ? "border-cyan-400/50 bg-cyan-950/20" : ""
                 } ${
                   isCritical && finding.status === "open"
-                    ? "border-red-500/35 bg-red-950/10 shadow-[0_0_20px_rgba(255,59,92,0.15)]"
+                    ? "border-red-500/35 bg-red-950/10 "
                     : ""
                 }`}
               >
@@ -619,7 +632,7 @@ export default function Alerts() {
                     {finding.title}
                   </h3>
 
-                  <p className="font-mono text-[11px] text-muted line-clamp-2 mt-1.5 leading-relaxed bg-[#060812] p-2 rounded border border-white/10">
+                  <p className="font-mono text-[11px] text-muted line-clamp-2 mt-1.5 leading-relaxed bg-[#0b0d13] p-2 rounded border border-white/10">
                     {finding.evidence?.redacted_snippet || finding.description}
                   </p>
                 </div>
@@ -631,7 +644,7 @@ export default function Alerts() {
                   </div>
 
                   <span
-                    className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${
+                    className={`text-[10px] px-2 py-0.5 rounded-sm font-bold  ${
                       finding.status === "open"
                         ? "bg-red-500/15 text-red-400"
                         : "bg-emerald-500/15 text-emerald-400"

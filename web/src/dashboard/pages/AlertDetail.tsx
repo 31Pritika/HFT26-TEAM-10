@@ -179,12 +179,12 @@ export default function AlertDetail() {
       {/* 1. SEVERITY HERO BAND                                                */}
       {/* ==================================================================== */}
       <div
-        className={`rounded-2xl border p-5 sm:p-6 backdrop-blur-xl relative overflow-hidden ${
+        className={`rounded-2xl border p-5 sm:p-6 relative overflow-hidden ${
           isCritical
-            ? "border-red-500/40 bg-gradient-to-r from-red-950/40 via-surface/90 to-surface/90 shadow-[0_0_35px_rgba(255,59,92,0.2)]"
+            ? "border-red-500/40 bg-red-950/40 "
             : finding.severity === "high"
-            ? "border-orange-500/35 bg-gradient-to-r from-orange-950/30 via-surface/90 to-surface/90"
-            : "border-cyan-500/30 bg-gradient-to-r from-cyan-950/30 via-surface/90 to-surface/90"
+            ? "border-orange-500/35 bg-orange-950/30 "
+            : "border-cyan-500/30 bg-cyan-950/30 "
         }`}
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -198,7 +198,7 @@ export default function AlertDetail() {
                 {new Date(finding.ts).toLocaleString()}
               </span>
               <span
-                className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase font-mono ${
+                className={`text-[10px] px-2 py-0.5 rounded-sm font-bold  font-mono ${
                   finding.status === "open"
                     ? "bg-red-500/20 text-red-300 border border-red-500/40"
                     : finding.status === "acknowledged"
@@ -311,8 +311,8 @@ export default function AlertDetail() {
         </div>
 
         {/* Highlighted Match Box */}
-        <div className="relative rounded-xl border border-white/10 bg-[#060812] p-4 font-mono text-xs leading-relaxed overflow-x-auto">
-          <div className="text-muted/60 text-[10px] uppercase tracking-wider mb-2 flex items-center justify-between">
+        <div className="relative rounded-xl border border-white/10 bg-[#0b0d13] p-4 font-mono text-xs leading-relaxed ">
+          <div className="text-muted/60 text-[10px] mb-2 flex items-center justify-between">
             <span>Redacted Snippet Captured</span>
             {evidence?.fingerprint && (
               <button
@@ -359,10 +359,10 @@ export default function AlertDetail() {
               </span>
             </div>
             {entropy !== null ? (
-              <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+              <div className="h-1.5 w-full bg-white/10 rounded-sm overflow-hidden">
                 <div
-                  className={`h-full rounded-full ${
-                    entropy >= 4.0 ? "bg-red-400 shadow-[0_0_8px_rgba(255,59,92,0.8)]" : "bg-cyan-400"
+                  className={`h-full rounded-sm ${
+                    entropy >= 4.0 ? "bg-red-400 " : "bg-cyan-400"
                   }`}
                   style={{ width: `${Math.min(100, (entropy / 6) * 100)}%` }}
                 />
@@ -411,16 +411,16 @@ export default function AlertDetail() {
           </div>
           <div className="grid grid-cols-2 gap-2 text-muted">
             <div>
-              <span className="text-[10px] uppercase text-muted/60 block">Process</span>
+              <span className="text-[10px] text-muted/60 block">Process</span>
               <span className="text-text font-semibold">{finding.process_name ?? "Unknown"}</span>
             </div>
             <div>
-              <span className="text-[10px] uppercase text-muted/60 block">Provider ID</span>
+              <span className="text-[10px] text-muted/60 block">Provider ID</span>
               <span className="text-text">{finding.provider_id ?? "Direct API"}</span>
             </div>
           </div>
           <div className="mt-2 pt-2 border-t border-white/[0.06] text-muted">
-            <span className="text-[10px] uppercase text-muted/60 block">Status</span>
+            <span className="text-[10px] text-muted/60 block">Status</span>
             <span className="text-amber-400">Unmonitored Local Execution</span>
           </div>
         </GlassCard>
@@ -493,7 +493,7 @@ export default function AlertDetail() {
               value={triageEngine}
               onChange={(e) => setTriageEngine(e.target.value as typeof triageEngine)}
               disabled={isTriaging}
-              className="bg-[#080c18] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-text focus:outline-none focus:border-violet-400 font-mono"
+              className="bg-[#0d0f16] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-text focus:outline-none focus:border-violet-400 font-mono"
             >
               <option value="auto">Auto (Best Available)</option>
               <option value="featherless">Featherless Cloud LLM</option>
@@ -520,7 +520,7 @@ export default function AlertDetail() {
           <div className="py-8 flex flex-col items-center justify-center text-center space-y-3">
             <div className="relative w-16 h-16 flex items-center justify-center">
               <div className="absolute inset-0 rounded-full border-2 border-violet-400/30 border-t-violet-400 animate-spin" />
-              <Sparkles className="w-6 h-6 text-violet-400 animate-pulse" />
+              <Sparkles className="w-6 h-6 text-violet-400" />
             </div>
             <div>
               <p className="font-display font-semibold text-text text-sm">
@@ -544,11 +544,11 @@ export default function AlertDetail() {
             {/* Header: Verdict Badge & Engine / Latency Chips */}
             <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl border border-white/[0.08] bg-surface-solid/80">
               <div className="flex items-center gap-2.5">
-                <span className="text-xs font-mono uppercase text-muted">Verdict:</span>
+                <span className="text-xs font-mono text-muted">Verdict:</span>
                 <span
-                  className={`font-mono text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${
+                  className={`font-mono text-xs font-bold px-3 py-1 rounded-sm   ${
                     triageData.verdict === "true_positive"
-                      ? "bg-red-500/20 text-red-400 border border-red-500/40 shadow-[0_0_12px_rgba(255,59,92,0.3)]"
+                      ? "bg-red-500/20 text-red-400 border border-red-500/40 "
                       : triageData.verdict === "likely_false_positive"
                       ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
                       : "bg-amber-500/20 text-amber-300 border border-amber-500/40"
@@ -570,7 +570,7 @@ export default function AlertDetail() {
 
             {/* Typewriter Reasoning Box */}
             <div className="p-4 rounded-xl border border-white/10 bg-[#070a16] space-y-2">
-              <span className="text-[10px] font-mono uppercase text-muted/70 tracking-wider block">
+              <span className="text-[10px] font-mono text-muted/70 block">
                 Analyst Reasoning
               </span>
               <p className="font-sans text-sm text-text leading-relaxed font-normal min-h-[3rem]">
@@ -592,7 +592,7 @@ export default function AlertDetail() {
             )}
 
             {/* Collapsible Privacy Proof Box */}
-            <div className="border border-white/10 rounded-xl overflow-hidden bg-[#060812]">
+            <div className="border border-white/10 rounded-xl overflow-hidden bg-[#0b0d13]">
               <button
                 onClick={() => setProofExpanded(!proofExpanded)}
                 className="w-full flex items-center justify-between p-3.5 text-xs font-mono text-muted hover:text-text transition-colors bg-white/[0.02]"
@@ -622,7 +622,7 @@ export default function AlertDetail() {
                       regex scrubber replaced all secrets and customer identifiers with cryptographic hashes
                       or redacted placeholders.
                     </p>
-                    <pre className="p-3 bg-black/60 rounded border border-white/5 text-[11px] text-emerald-300 overflow-x-auto whitespace-pre-wrap">
+                    <pre className="p-3 bg-black/60 rounded border border-white/5 text-[11px] text-emerald-300 whitespace-pre-wrap break-words whitespace-pre-wrap">
                       {triageData.redacted_input_preview}
                     </pre>
                   </motion.div>

@@ -1,6 +1,5 @@
 import { useState, useEffect, Suspense } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { motion } from "motion/react";
 import {
   LayoutDashboard,
   Radio,
@@ -16,14 +15,12 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
-  Activity,
   MoreHorizontal,
-  Shield,
 } from "lucide-react";
 import { useAppStore } from "../shared/store";
 import { setManualDemoMode } from "../shared/api";
 import { connectStream } from "../shared/ws";
-import { RiskGauge } from "../shared/ui/RiskGauge";
+import { ScopeMark } from "../shared/ui/ScopeMark";
 import { Drawer } from "../shared/ui/Drawer";
 import { CommandPalette } from "./CommandPalette";
 import { NotificationsPopover } from "./NotificationsPopover";
@@ -39,19 +36,19 @@ interface NavItem {
 }
 
 const PRIMARY_LINKS: NavItem[] = [
-  { to: "/app", label: "Overview", icon: LayoutDashboard, end: true },
-  { to: "/app/live", label: "Live Traffic", icon: Radio },
-  { to: "/app/alerts", label: "Alerts Center", icon: ShieldAlert },
-  { to: "/app/inventory", label: "AI Inventory", icon: Layers },
-  { to: "/app/agents", label: "Agents", icon: Bot },
-  { to: "/app/graph", label: "Threat Graph", icon: Network },
+  { to: "/app", label: "overview", icon: LayoutDashboard, end: true },
+  { to: "/app/live", label: "live traffic", icon: Radio },
+  { to: "/app/alerts", label: "alerts", icon: ShieldAlert },
+  { to: "/app/inventory", label: "ai inventory", icon: Layers },
+  { to: "/app/agents", label: "agents", icon: Bot },
+  { to: "/app/graph", label: "threat graph", icon: Network },
 ];
 
 const SECONDARY_LINKS: NavItem[] = [
-  { to: "/app/simulate", label: "Simulator", icon: Crosshair },
-  { to: "/app/ingest", label: "Evidence Ingest", icon: FileUp },
-  { to: "/app/policies", label: "Policies", icon: Sliders },
-  { to: "/app/settings", label: "Settings", icon: Settings },
+  { to: "/app/simulate", label: "simulator", icon: Crosshair },
+  { to: "/app/ingest", label: "evidence ingest", icon: FileUp },
+  { to: "/app/policies", label: "policies", icon: Sliders },
+  { to: "/app/settings", label: "settings", icon: Settings },
 ];
 
 const MOBILE_BOTTOM_TABS = [
@@ -60,6 +57,32 @@ const MOBILE_BOTTOM_TABS = [
   { to: "/app/alerts", label: "Alerts", icon: ShieldAlert },
   { to: "/app/agents", label: "Agents", icon: Bot },
 ];
+
+function SidebarLink({ item, index, collapsed, alerts }: { item: NavItem; index: number; collapsed: boolean; alerts: number }) {
+  const { to, label, icon: Icon, end } = item;
+  return (
+    <NavLink
+      to={to}
+      end={end}
+      title={label}
+      className={({ isActive }) =>
+        `relative flex h-8 [@media(max-height:430px)]:h-6 items-center gap-2.5 px-2.5 border-l-2 transition-colors ${
+          isActive ? "border-primary text-primary bg-primary/[0.06]" : "border-transparent text-muted hover:text-text"
+        } ${collapsed ? "justify-center" : "justify-center lg:justify-start"}`
+      }
+    >
+      <Icon className="w-4 h-4 shrink-0" />
+      {!collapsed && (
+        <span className="hidden lg:inline truncate">
+          <span className="text-faint">{String(index).padStart(2, "0")}</span> {label}
+        </span>
+      )}
+      {alerts > 0 && (
+        <span className={`text-[10px] text-red-400 ${collapsed ? "absolute top-0 right-0.5" : "hidden lg:inline ml-auto"}`}>{alerts}</span>
+      )}
+    </NavLink>
+  );
+}
 
 export default function AppShell() {
   const location = useLocation();
@@ -82,25 +105,31 @@ export default function AppShell() {
     return () => disconnect();
   }, []);
 
-  const riskScore = stats?.risk_score ?? 63;
-  const riskGrade = stats?.risk_grade ?? "D";
+  const riskScore = stats?.risk_score;
+  const riskGrade = stats?.risk_grade;
 
-  // Derive breadcrumb text
-  const getBreadcrumb = () => {
+  // Page name for the tab title, and the path shown in the top bar.
+  const pageTitle = (() => {
     const path = location.pathname;
     if (path === "/app") return "Overview";
-    if (path.startsWith("/app/live")) return "Live Traffic Stream";
-    if (path.startsWith("/app/alerts/")) return `Alert / ${path.replace("/app/alerts/", "")}`;
-    if (path.startsWith("/app/alerts")) return "Alerts Center";
-    if (path.startsWith("/app/inventory")) return "Shadow AI Inventory";
-    if (path.startsWith("/app/agents")) return "Agents & Permissions";
-    if (path.startsWith("/app/graph")) return "Threat Constellation";
+    if (path.startsWith("/app/live")) return "Live Traffic";
+    if (path.startsWith("/app/alerts/")) return `Alert ${path.replace("/app/alerts/", "")}`;
+    if (path.startsWith("/app/alerts")) return "Alerts";
+    if (path.startsWith("/app/inventory")) return "AI Inventory";
+    if (path.startsWith("/app/agents")) return "Agents";
+    if (path.startsWith("/app/graph")) return "Threat Graph";
     if (path.startsWith("/app/simulate")) return "Attack Simulator";
     if (path.startsWith("/app/ingest")) return "Evidence Ingest";
-    if (path.startsWith("/app/policies")) return "Security Policies";
-    if (path.startsWith("/app/settings")) return "Settings & Engine";
+    if (path.startsWith("/app/policies")) return "Policies";
+    if (path.startsWith("/app/settings")) return "Settings";
     return "Console";
-  };
+  })();
+  const consolePath = location.pathname.replace(/^\/app/, "console");
+  const riskTone = riskGrade === "A" || riskGrade === "B" ? "text-emerald-400" : riskGrade === "C" ? "text-amber-400" : "text-red-400";
+
+  useEffect(() => {
+    document.title = `${pageTitle} · ShadowScope`;
+  }, [pageTitle]);
 
   const handleToggleDemo = () => {
     const next = demoModeOverride === true ? null : true;
@@ -110,164 +139,74 @@ export default function AppShell() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#05060a] text-text flex flex-col antialiased selection:bg-cyan-500/30 overflow-x-hidden">
-      {/* Background Animated Subtle Grid + Radial Glows */}
-      <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-        {/* Obsidian subtle grid */}
-        <div
-          className="absolute inset-0 opacity-[0.035]"
-          style={{
-            backgroundImage: `linear-gradient(to right, #8a93a8 1px, transparent 1px), linear-gradient(to bottom, #8a93a8 1px, transparent 1px)`,
-            backgroundSize: "40px 40px",
-          }}
-        />
-        {/* Cyan Ambient Radial Glow - Top Left */}
-        <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-cyan-500/10 blur-[120px]" />
-        {/* Violet Ambient Radial Glow - Bottom Right */}
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-violet-600/10 blur-[130px]" />
-      </div>
+    <div className="relative min-h-screen bg-bg text-text flex flex-col antialiased">
+      <div className="fixed inset-0 pointer-events-none -z-10 hairline-grid" />
 
       <div className="flex flex-1 min-h-screen">
         {/* ======================================================================== */}
         {/* Desktop & Tablet Sidebar (Hidden on <768px Mobile)                       */}
         {/* ======================================================================== */}
         <aside
-          className={`hidden md:flex flex-col border-r border-white/[0.08] bg-[#070a14]/80 backdrop-blur-2xl transition-all duration-300 z-30 shrink-0 ${
-            collapsed ? "w-16" : "w-16 lg:w-64"
+          className={`hidden md:flex sticky top-0 h-dvh flex-col overflow-hidden border-r border-border bg-bg transition-[width] duration-150 z-30 shrink-0 ${
+            collapsed ? "w-14" : "w-14 lg:w-52"
           }`}
         >
-          {/* Logo & Brand Header */}
-          <div className="flex h-16 items-center justify-between px-4 border-b border-white/[0.08]">
-            <NavLink to="/app" className="flex items-center gap-2.5 overflow-hidden group">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-violet-600 p-0.5 shrink-0 shadow-[0_0_16px_rgba(34,211,238,0.35)] group-hover:shadow-[0_0_24px_rgba(34,211,238,0.55)] transition-shadow">
-                <div className="w-full h-full bg-[#070a14] rounded-[6px] flex items-center justify-center">
-                  <Shield className="w-4 h-4 text-cyan-400" />
-                </div>
-              </div>
+          <div className="flex h-14 shrink-0 items-center justify-between px-3 border-b border-border">
+            <NavLink to="/" className="flex items-center gap-2.5 min-w-0 text-primary" aria-label="ShadowScope home">
+              <ScopeMark className="w-6 h-6 shrink-0" />
               {!collapsed && (
-                <div className="hidden lg:flex flex-col">
-                  <span className="font-display font-bold text-base tracking-tight text-white leading-none">
-                    Shadow<span className="text-cyan-400">Scope</span>
-                  </span>
-                  <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-300 mt-0.5">
-                    Security Console
-                  </span>
-                </div>
+                <span className="hidden lg:inline font-mono text-[13px] font-medium text-text truncate">shadowscope</span>
               )}
             </NavLink>
+            {!collapsed && (
+              <button
+                onClick={() => setCollapsed(true)}
+                className="hidden lg:flex p-1 text-muted hover:text-text transition-colors cursor-pointer"
+                aria-label="Collapse sidebar"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+            )}
+          </div>
 
-            {/* Collapse toggle (Desktop only) */}
+          {collapsed && (
             <button
-              onClick={() => setCollapsed(!collapsed)}
-              className="hidden lg:flex p-1.5 rounded-lg text-muted hover:text-text hover:bg-white/[0.06] transition-colors cursor-pointer"
-              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              onClick={() => setCollapsed(false)}
+              className="hidden lg:flex h-8 shrink-0 items-center justify-center border-b border-border text-muted hover:text-text cursor-pointer"
+              aria-label="Expand sidebar"
             >
-              {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+              <ChevronRight className="w-4 h-4" />
             </button>
-          </div>
+          )}
 
-          {/* Navigation Links */}
-          <div className="flex-1 overflow-y-auto py-4 px-2 space-y-6 scrollbar-thin">
-            <div>
-              {!collapsed && (
-                <p className="hidden lg:block px-3 mb-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-neutral-300">
-                  Detection &amp; Auditing
-                </p>
-              )}
-              <ul className="space-y-1">
-                {PRIMARY_LINKS.map(({ to, label, icon: Icon, end }) => (
-                  <li key={to}>
-                    <NavLink
-                      to={to}
-                      end={end}
-                      className={({ isActive }) =>
-                        `relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 select-none ${
-                          isActive
-                            ? "text-cyan-300 bg-cyan-500/10 font-semibold"
-                            : "text-muted hover:text-text hover:bg-white/[0.05]"
-                        } ${collapsed ? "justify-center" : "justify-center lg:justify-start"}`
-                      }
-                      title={collapsed ? label : undefined}
-                    >
-                      {({ isActive }) => (
-                        <>
-                          <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-cyan-400" : "text-muted"}`} />
-                          {!collapsed && <span className="hidden lg:inline">{label}</span>}
-                          {to === "/app/alerts" && unreadCriticals.length > 0 && (
-                            <span
-                              className={`ml-auto rounded-full bg-red-500/20 px-1.5 py-0.5 font-mono text-[10px] font-bold text-red-400 border border-red-500/30 ${
-                                collapsed ? "absolute top-1 right-1 px-1 py-0 text-[8px]" : "hidden lg:inline-flex"
-                              }`}
-                            >
-                              {unreadCriticals.length}
-                            </span>
-                          )}
-                          {isActive && (
-                            <motion.div
-                              layoutId="active-sidebar-pill"
-                              className="absolute left-0 top-1 bottom-1 w-1 rounded-r bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]"
-                              transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                            />
-                          )}
-                        </>
-                      )}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <nav aria-label="Console" className="flex-1 min-h-0 overflow-hidden px-1.5 py-2 font-mono text-xs">
+            <ul>
+              {PRIMARY_LINKS.map((item, index) => (
+                <li key={item.to}>
+                  <SidebarLink item={item} index={index + 1} collapsed={collapsed} alerts={unreadCriticals.length} />
+                </li>
+              ))}
+            </ul>
+            <div className="my-2 h-px bg-border" />
+            <ul>
+              {SECONDARY_LINKS.map((item, index) => (
+                <li key={item.to}>
+                  <SidebarLink item={item} index={PRIMARY_LINKS.length + index + 1} collapsed={collapsed} alerts={0} />
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-            <div>
-              {!collapsed && (
-                <p className="hidden lg:block px-3 mb-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-neutral-300">
-                  Control &amp; Policies
-                </p>
-              )}
-              <ul className="space-y-1">
-                {SECONDARY_LINKS.map(({ to, label, icon: Icon }) => (
-                  <li key={to}>
-                    <NavLink
-                      to={to}
-                      className={({ isActive }) =>
-                        `relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 select-none ${
-                          isActive
-                            ? "text-cyan-300 bg-cyan-500/10 font-semibold"
-                            : "text-muted hover:text-text hover:bg-white/[0.05]"
-                        } ${collapsed ? "justify-center" : "justify-center lg:justify-start"}`
-                      }
-                      title={collapsed ? label : undefined}
-                    >
-                      {({ isActive }) => (
-                        <>
-                          <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-cyan-400" : "text-muted"}`} />
-                          {!collapsed && <span className="hidden lg:inline">{label}</span>}
-                          {isActive && (
-                            <motion.div
-                              layoutId="active-sidebar-pill"
-                              className="absolute left-0 top-1 bottom-1 w-1 rounded-r bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]"
-                              transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                            />
-                          )}
-                        </>
-                      )}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Sidebar Footer Posture Card */}
           {!collapsed && (
-            <div className="hidden lg:block p-3 border-t border-white/[0.08] bg-[#05070e]/60">
-              <div className="rounded-xl border border-white/[0.08] bg-surface/50 p-3 flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <RiskGauge score={riskScore} grade={riskGrade} size="compact" showLabel={false} />
-                  <div>
-                    <p className="font-display text-xs font-semibold text-text">Security Posture</p>
-                    <p className="font-mono text-[10px] text-muted">Grade {riskGrade} ({riskScore}/100)</p>
-                  </div>
-                </div>
+            <div className="hidden lg:block [@media(max-height:520px)]:!hidden shrink-0 border-t border-border px-3 py-2.5 font-mono text-[11px] text-muted">
+              <div className="flex items-baseline justify-between">
+                <span>risk</span>
+                <span className="text-text">
+                  {riskScore ?? "–"}/100 <span className="text-primary">{riskGrade ?? ""}</span>
+                </span>
+              </div>
+              <div className="mt-1.5 h-0.5 bg-border">
+                <div className="h-full bg-primary" style={{ width: `${Math.min(100, riskScore ?? 0)}%` }} />
               </div>
             </div>
           )}
@@ -278,97 +217,54 @@ export default function AppShell() {
         {/* ======================================================================== */}
         <div className="flex-1 flex flex-col min-w-0 pb-16 md:pb-0">
           {/* Top Bar */}
-          <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-white/[0.08] bg-[#05060a]/85 backdrop-blur-xl px-4 lg:px-6">
-            {/* Left: Mobile menu toggle / Breadcrumbs */}
-            <div className="flex items-center gap-3">
+          <header className="sticky top-0 z-20 flex h-14 items-center justify-between gap-2 border-b border-border bg-bg px-3 sm:px-6">
+            <div className="flex items-center gap-2 min-w-0">
               <button
                 onClick={() => setMoreDrawerOpen(true)}
-                className="md:hidden p-2 rounded-lg text-muted hover:text-text hover:bg-white/[0.08]"
+                className="md:hidden p-1.5 text-muted hover:text-text cursor-pointer"
                 aria-label="Open navigation drawer"
               >
                 <Menu className="w-5 h-5" />
               </button>
-
-              <div className="flex items-center gap-2 text-sm">
-                <span className="font-mono text-xs font-semibold text-cyan-400 uppercase tracking-widest hidden sm:inline">
-                  ShadowScope
-                </span>
-                <span className="text-muted/40 hidden sm:inline">/</span>
-                <span className="font-display font-medium text-text text-sm sm:text-base">
-                  {getBreadcrumb()}
-                </span>
-              </div>
+              <span className="font-mono text-xs sm:text-[13px] text-text truncate">
+                <span className="text-muted">~/</span>
+                {consolePath}
+              </span>
             </div>
 
-            {/* Right: Status Pills & Action Buttons */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              {/* Global Risk Pill */}
-              <div
-                className={`hidden sm:flex items-center gap-2 rounded-full px-3 py-1 border backdrop-blur-md font-mono text-xs font-semibold select-none ${
-                  riskGrade === "A" || riskGrade === "B"
-                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
-                    : riskGrade === "C"
-                    ? "border-amber-500/30 bg-amber-500/10 text-amber-400"
-                    : "border-red-500/35 bg-red-500/15 text-[#ff3b5c] shadow-[0_0_12px_rgba(255,59,92,0.25)]"
-                }`}
-              >
-                <span className="text-muted text-[10px] uppercase tracking-wider font-sans">Org Risk</span>
-                <span className="font-bold">{riskScore}</span>
-                <span className="rounded bg-black/30 px-1 py-0.2 text-[10px]">{riskGrade}</span>
-              </div>
+            <div className="flex items-center gap-2 sm:gap-3 font-mono text-[11px] shrink-0">
+              <span className="hidden sm:inline text-muted">
+                risk <span className={riskTone}>{riskScore ?? "–"}</span> <span className={riskTone}>{riskGrade ?? ""}</span>
+              </span>
 
-              {/* Engine Status Pill */}
               <button
                 onClick={handleToggleDemo}
-                className={`flex items-center gap-2 rounded-full px-2.5 sm:px-3 py-1 border font-mono text-[11px] font-semibold transition-all cursor-pointer ${
-                  engineStatus === "live"
-                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 shadow-[0_0_10px_rgba(52,211,153,0.2)]"
-                    : "border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20"
-                }`}
-                title="Click to toggle between Live Engine and Mock Demo Mode"
+                className="flex items-center gap-1.5 rounded-sm border border-border px-2 py-1 text-text hover:border-primary cursor-pointer transition-colors"
+                title="Switch between the live engine and demo data"
               >
-                <span
-                  className={`w-2 h-2 rounded-full shrink-0 ${
-                    engineStatus === "live" ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
-                  }`}
-                />
-                <span className="hidden xs:inline">
-                  {engineStatus === "live" ? "LIVE ENGINE" : "DEMO DATA"}
-                </span>
+                <span className={`w-1.5 h-1.5 shrink-0 ${engineStatus === "live" ? "bg-emerald-400" : "bg-amber-400"}`} />
+                <span>{engineStatus === "live" ? "LIVE ENGINE" : "DEMO DATA"}</span>
               </button>
 
-              {/* Live telemetry pulse indicator */}
-              <div className="flex items-center gap-1.5 px-2 py-1 text-muted text-xs font-mono" title="Live Telemetry Stream Active">
-                <Activity className="w-4 h-4 text-cyan-400 animate-pulse" />
-              </div>
-
-              {/* ⌘K Command Palette Button */}
               <button
                 onClick={() => setCmdOpen(true)}
-                className="flex items-center gap-2 rounded-lg border border-white/10 bg-surface/60 px-2.5 py-1.5 text-xs text-muted hover:border-white/20 hover:text-text transition-colors cursor-pointer"
-                aria-label="Search command palette"
+                className="flex items-center gap-1.5 rounded-sm border border-border px-2 py-1 text-muted hover:text-text hover:border-primary cursor-pointer transition-colors"
+                aria-label="Open command palette"
               >
-                <Search className="w-3.5 h-3.5 text-muted" />
-                <span className="hidden sm:inline font-sans">Search</span>
-                <kbd className="hidden sm:inline font-mono text-[10px] text-neutral-200 bg-white/10 px-1.5 py-0.5 rounded border border-white/15">
-                  ⌘K
-                </kbd>
+                <Search className="w-3.5 h-3.5" />
+                <kbd className="hidden sm:inline">⌘K</kbd>
               </button>
 
-              {/* Notifications Bell */}
               <NotificationsPopover />
             </div>
           </header>
 
           {/* Page View with Smooth Animated PageTransition */}
-          <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+          <main className="flex-1 min-w-0 p-4 sm:p-6">
             <Suspense
               fallback={
-                <div className="flex items-center justify-center min-h-[50vh]">
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="w-8 h-8 border-2 border-cyan-400/20 border-t-cyan-400 rounded-full animate-spin" />
-                    <span className="font-mono text-xs text-muted">Loading telemetry modules...</span>
-                  </div>
+                <div className="flex items-center justify-center min-h-[50vh] font-mono text-xs text-muted">
+                  loading…
                 </div>
               }
             >
@@ -377,6 +273,15 @@ export default function AppShell() {
               </PageTransition>
             </Suspense>
           </main>
+
+          <footer className="hidden md:flex sticky bottom-0 z-20 h-7 items-center gap-5 border-t border-border bg-bg px-6 font-mono text-[11px] text-muted">
+            <span>{engineStatus === "live" ? "engine: live" : "engine: demo"}</span>
+            <span>open: {stats?.totals?.findings_open ?? "–"}</span>
+            <span>critical: {stats?.totals?.critical ?? "–"}</span>
+            <span className="ml-auto">
+              <kbd>⌘K</kbd> palette
+            </span>
+          </footer>
         </div>
       </div>
 
@@ -385,7 +290,7 @@ export default function AppShell() {
       {/* ======================================================================== */}
       <nav
         aria-label="Mobile Navigation"
-        className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t border-white/[0.08] bg-[#070a14]/95 backdrop-blur-2xl px-2 py-1 flex items-center justify-around"
+        className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t border-border bg-bg px-2 py-1 flex items-center justify-around"
       >
         {MOBILE_BOTTOM_TABS.map(({ to, label, icon: Icon, end }) => (
           <NavLink
@@ -417,60 +322,25 @@ export default function AppShell() {
       <Drawer
         open={moreDrawerOpen}
         onClose={() => setMoreDrawerOpen(false)}
-        title="Command Navigation"
-        description="All ShadowScope monitoring & policy tools"
+        title="Navigate"
       >
-        <div className="space-y-4">
-          <div>
-            <p className="font-mono text-[11px] font-semibold uppercase text-muted tracking-wider mb-2">
-              Primary Tools
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              {PRIMARY_LINKS.map(({ to, label, icon: Icon, end }) => (
-                <NavLink
-                  key={to}
-                  to={to}
-                  end={end}
-                  onClick={() => setMoreDrawerOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center gap-2.5 p-3 rounded-xl border text-xs font-medium transition-colors ${
-                      isActive
-                        ? "bg-cyan-500/15 border-cyan-500/30 text-cyan-300 font-semibold"
-                        : "bg-surface-solid/60 border-white/[0.06] text-text hover:bg-surface"
-                    }`
-                  }
-                >
-                  <Icon className="w-4 h-4 text-cyan-400 shrink-0" />
-                  <span className="truncate">{label}</span>
-                </NavLink>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <p className="font-mono text-[11px] font-semibold uppercase text-muted tracking-wider mb-2">
-              Operations & Policies
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              {SECONDARY_LINKS.map(({ to, label, icon: Icon }) => (
-                <NavLink
-                  key={to}
-                  to={to}
-                  onClick={() => setMoreDrawerOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center gap-2.5 p-3 rounded-xl border text-xs font-medium transition-colors ${
-                      isActive
-                        ? "bg-cyan-500/15 border-cyan-500/30 text-cyan-300 font-semibold"
-                        : "bg-surface-solid/60 border-white/[0.06] text-text hover:bg-surface"
-                    }`
-                  }
-                >
-                  <Icon className="w-4 h-4 text-violet-400 shrink-0" />
-                  <span className="truncate">{label}</span>
-                </NavLink>
-              ))}
-            </div>
-          </div>
+        <div className="grid grid-cols-2 gap-1.5 font-mono text-xs">
+          {[...PRIMARY_LINKS, ...SECONDARY_LINKS].map(({ to, label, icon: Icon, end }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={end}
+              onClick={() => setMoreDrawerOpen(false)}
+              className={({ isActive }) =>
+                `flex items-center gap-2 p-2.5 rounded-sm border transition-colors ${
+                  isActive ? "border-primary text-primary" : "border-border text-text"
+                }`
+              }
+            >
+              <Icon className="w-4 h-4 shrink-0" />
+              <span className="truncate">{label}</span>
+            </NavLink>
+          ))}
         </div>
       </Drawer>
 

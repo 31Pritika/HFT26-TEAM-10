@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useAppStore } from "../shared/store";
 import { api, setManualDemoMode } from "../shared/api";
+import type { Finding } from "../shared/types";
 import { toast } from "sonner";
 
 interface CommandPaletteProps {
@@ -29,6 +30,7 @@ interface CommandPaletteProps {
 export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const [findings, setFindings] = useState<Finding[]>([]);
   const { demoModeOverride, setDemoModeOverride, clearUnreadCriticals, unreadCriticals } = useAppStore();
 
   useEffect(() => {
@@ -49,6 +51,14 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   };
 
   const nav = (path: string) => runCommand(() => navigate(path));
+
+  useEffect(() => {
+    if (!open) return;
+    api
+      .getFindings({ limit: 100 })
+      .then((page) => setFindings(page.items))
+      .catch(() => setFindings([]));
+  }, [open]);
 
   const handleLaunchScenario = async (id: string, name: string) => {
     runCommand(async () => {
@@ -78,12 +88,12 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/75 backdrop-blur-md transition-opacity"
+        className="fixed inset-0 bg-black/75 transition-opacity"
         onClick={() => onOpenChange(false)}
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-white/15 bg-[#090d18]/95 p-0 shadow-[0_0_50px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
+      <div className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-white/15 bg-[#090d18]/95 p-0">
         <Command
           className="flex flex-col w-full"
           filter={(value, search) => {
@@ -113,7 +123,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
             </Command.Empty>
 
             {/* Navigation Group */}
-            <Command.Group heading="Navigation" className="px-2 py-1.5 text-[11px] font-mono uppercase tracking-wider text-muted">
+            <Command.Group heading="Navigation" className="px-2 py-1.5 text-[11px] font-mono text-muted">
               <Command.Item
                 value="Overview Dashboard /app"
                 onSelect={() => nav("/app")}
@@ -217,25 +227,44 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 
             <Command.Separator className="my-1.5 h-px bg-white/10" />
 
+            {search.trim() && findings.length > 0 && (
+              <>
+                <Command.Group heading="Alerts" className="px-2 py-1.5 text-[11px] font-mono text-muted">
+                  {findings.map((finding) => (
+                    <Command.Item
+                      key={finding.id}
+                      value={`${finding.id} ${finding.title} ${finding.subtype}`}
+                      onSelect={() => nav(`/app/alerts/${finding.id}`)}
+                      className="flex items-center gap-3 rounded-sm px-3 py-2 text-sm text-text cursor-pointer data-[selected=true]:bg-primary/10"
+                    >
+                      <span className="truncate">{finding.title}</span>
+                      <span className="ml-auto shrink-0 font-mono text-xs text-muted">{finding.id}</span>
+                    </Command.Item>
+                  ))}
+                </Command.Group>
+                <Command.Separator className="my-1.5 h-px bg-border" />
+              </>
+            )}
+
             {/* Quick Actions Group */}
-            <Command.Group heading="Quick Actions" className="px-2 py-1.5 text-[11px] font-mono uppercase tracking-wider text-muted">
+            <Command.Group heading="Quick Actions" className="px-2 py-1.5 text-[11px] font-mono text-muted">
               <Command.Item
-                value="Simulate Rogue Agent Shell Exfiltration"
-                onSelect={() => handleLaunchScenario("rogue_agent_shell", "Rogue Agent Shell Exfiltration")}
+                value="Simulate Rogue LangChain agent"
+                onSelect={() => handleLaunchScenario("rogue_agent", "Rogue LangChain agent")}
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-text cursor-pointer hover:bg-white/10 transition-colors aria-selected:bg-red-500/20 aria-selected:text-red-300"
               >
                 <Crosshair className="w-4 h-4 text-red-400" />
-                <span>Simulate: Rogue Agent Shell Exfil</span>
+                <span>Simulate: Rogue LangChain agent</span>
                 <span className="ml-auto font-mono text-xs text-red-400/80">Critical</span>
               </Command.Item>
 
               <Command.Item
-                value="Simulate AWS Credentials Leak in Cursor"
-                onSelect={() => handleLaunchScenario("cursor_aws_leak", "AWS Credentials Leak in Cursor")}
+                value="Simulate Developer pastes .env"
+                onSelect={() => handleLaunchScenario("env_file_leak", "Developer pastes .env")}
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-text cursor-pointer hover:bg-white/10 transition-colors aria-selected:bg-amber-500/20 aria-selected:text-amber-300"
               >
                 <Crosshair className="w-4 h-4 text-amber-400" />
-                <span>Simulate: AWS Credentials Leak</span>
+                <span>Simulate: Developer pastes .env</span>
                 <span className="ml-auto font-mono text-xs text-amber-400/80">High</span>
               </Command.Item>
 
@@ -270,7 +299,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
             <Command.Separator className="my-1.5 h-px bg-white/10" />
 
             {/* Public / Experience Pages */}
-            <Command.Group heading="Public Pages (Experience)" className="px-2 py-1.5 text-[11px] font-mono uppercase tracking-wider text-muted">
+            <Command.Group heading="Public Pages (Experience)" className="px-2 py-1.5 text-[11px] font-mono text-muted">
               <Command.Item
                 value="Landing Page Hero /"
                 onSelect={() => nav("/")}
@@ -311,7 +340,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               <span>ESC Close</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-sm bg-cyan-400" />
               <span className="font-mono text-[11px] text-cyan-300">ShadowScope ⌘K</span>
             </div>
           </div>

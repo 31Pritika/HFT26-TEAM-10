@@ -76,10 +76,10 @@ export function Constellation2D({
   }, [nodes]);
 
   const getNodeColor = (risk: number) => {
-    if (risk >= 80) return "#FF3B5C"; // Critical (red)
-    if (risk >= 50) return "#FF8A3D"; // High (orange)
-    if (risk >= 20) return "#FACC15"; // Med (yellow)
-    return "#22D3EE"; // Low (cyan)
+    if (risk >= 80) return "#df6a68"; // Critical (red)
+    if (risk >= 50) return "#d4915a"; // High (orange)
+    if (risk >= 20) return "#c9b467"; // Med (yellow)
+    return "#bad6f7"; // Low (cyan)
   };
 
   return (
@@ -92,9 +92,9 @@ export function Constellation2D({
         <defs>
           {/* Radial radar rings */}
           <radialGradient id="radarGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#22D3EE" stopOpacity="0.08" />
-            <stop offset="60%" stopColor="#8B5CF6" stopOpacity="0.03" />
-            <stop offset="100%" stopColor="#05060A" stopOpacity="0" />
+            <stop offset="0%" stopColor="#bad6f7" stopOpacity="0.08" />
+            <stop offset="60%" stopColor="#9dadc2" stopOpacity="0.03" />
+            <stop offset="100%" stopColor="#0b0d13" stopOpacity="0" />
           </radialGradient>
 
           {/* Glow filter */}
@@ -226,7 +226,7 @@ export function Constellation2D({
                     y={-radius}
                     width={radius * 2}
                     height={radius * 2}
-                    rx="3"
+                    rx="1"
                     fill={color}
                     fillOpacity={0.8}
                     stroke="#ffffff"
@@ -257,7 +257,7 @@ export function Constellation2D({
                   className={`text-[9px] font-mono pointer-events-none select-none ${
                     isSelected ? "fill-text font-bold" : isHovered ? "fill-primary" : "fill-muted"
                   }`}
-                  style={{ textShadow: "0 2px 4px rgba(0,0,0,0.9)" }}
+                 
                 >
                   {node.label.length > 14 ? `${node.label.slice(0, 12)}…` : node.label}
                 </text>
@@ -270,15 +270,15 @@ export function Constellation2D({
       {/* Floating Hover Card */}
       {hoveredNode && !selectedNode && (
         <div
-          className="absolute bottom-4 left-4 z-10 rounded-lg border border-border bg-bg-2/90 px-3 py-2 backdrop-blur-md shadow-lg pointer-events-none"
+          className="absolute bottom-4 left-4 z-10 rounded-lg border border-border bg-bg-2/90 px-3 py-2 pointer-events-none"
         >
           <div className="flex items-center gap-2">
             <span
-              className="h-2 w-2 rounded-full"
+              className="h-2 w-2 rounded-sm"
               style={{ backgroundColor: getNodeColor(hoveredNode.risk) }}
             />
             <span className="font-mono text-xs font-semibold text-text">{hoveredNode.label}</span>
-            <span className="font-mono text-[10px] uppercase text-muted">[{hoveredNode.kind}]</span>
+            <span className="font-mono text-[10px] text-muted">[{hoveredNode.kind}]</span>
           </div>
           <div className="text-[10px] font-mono text-muted mt-1">
             Risk: <span className="text-text font-semibold">{hoveredNode.risk}</span>/100 · Size: {hoveredNode.size}

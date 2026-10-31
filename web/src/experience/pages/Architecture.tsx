@@ -4,7 +4,6 @@ import {
   ShieldCheck,
   ShieldAlert,
   ArrowLeft,
-  Cpu,
   Layers,
   Lock,
   Zap,
@@ -142,7 +141,7 @@ const NODES_DATA: Record<string, NodeDetail> = {
     title: "High-Throughput Detection Engine",
     layer: "Layer 3: Cryptographic Scanner",
     file: "detector/shadowscope_detect/scanner.py",
-    badge: "Pure Python / 5.5 MB/s",
+    badge: "Pure Python",
     description: "Executes 32+ vulnerability heuristics across secrets, high-entropy tokens, personal identification numbers, proprietary code, and autonomous agent loops.",
     privilege: "In-memory sandboxed execution",
     details: [
@@ -213,7 +212,7 @@ export default function Architecture() {
   const [selectedNodeId, setSelectedNodeId] = useState<string>("detector");
 
   useEffect(() => {
-    document.title = "Architecture & Engine Internals — ShadowScope";
+    document.title = "Architecture · ShadowScope";
   }, []);
 
   const activeNode = NODES_DATA[selectedNodeId] || NODES_DATA.detector;
@@ -221,7 +220,7 @@ export default function Architecture() {
   return (
     <div className="min-h-screen bg-bg text-text selection:bg-primary/20 selection:text-primary">
       {/* Top Navigation */}
-      <header className="sticky top-0 z-30 border-b border-border bg-bg/85 backdrop-blur-xl px-4 py-3 sm:px-8">
+      <header className="sticky top-0 z-30 border-b border-border bg-bg/85 px-4 py-3 sm:px-8">
         <div className="mx-auto max-w-7xl flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Link
@@ -253,16 +252,11 @@ export default function Architecture() {
 
       {/* Hero Header */}
       <section className="relative px-4 py-12 sm:px-8 sm:py-16 border-b border-border bg-bg-2/50 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(34,211,238,0.08)_0%,_transparent_70%)] pointer-events-none" />
         <div className="mx-auto max-w-5xl text-center space-y-4 relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-xs font-mono text-primary">
-            <Cpu className="h-3.5 w-3.5" />
-            <span>Zero-Decryption Kernel & Network Architecture</span>
-          </div>
 
           <h1 className="font-display text-3xl sm:text-5xl font-black tracking-tight text-text">
             How ShadowScope Sees AI Exfiltration <br className="hidden sm:inline" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-danger">
+            <span className="text-primary">
               Without Breaking TLS Encryption
             </span>
           </h1>
@@ -286,15 +280,12 @@ export default function Architecture() {
               Select any component to inspect its implementation, file path, privilege requirements, and telemetry model.
             </p>
           </div>
-          <span className="text-xs font-mono text-primary px-3 py-1 rounded-full border border-primary/30 bg-primary/10">
-            Click / Tap Node for Deep Inspection
-          </span>
         </div>
 
         {/* Diagram + Node Explanation Card Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* SVG Diagram Canvas */}
-          <div className="lg:col-span-8 rounded-2xl border border-border bg-bg-2 p-4 sm:p-6 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+          <div className="lg:col-span-8 rounded-2xl border border-border bg-bg-2 p-4 sm:p-6 relative overflow-hidden">
             {/* Ambient Background Grid */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]" />
 
@@ -305,13 +296,13 @@ export default function Architecture() {
             >
               <defs>
                 <linearGradient id="cyanLine" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#22D3EE" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.8" />
+                  <stop offset="0%" stopColor="#bad6f7" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#9dadc2" stopOpacity="0.8" />
                 </linearGradient>
 
                 <linearGradient id="accentLine" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#FF3B5C" stopOpacity="0.8" />
+                  <stop offset="0%" stopColor="#9dadc2" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#df6a68" stopOpacity="0.8" />
                 </linearGradient>
 
                 <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
@@ -331,7 +322,7 @@ export default function Architecture() {
                     key={`c-p-${i}`}
                     d={`M 180 ${y} C 220 ${y}, 230 250, 270 250`}
                     fill="none"
-                    stroke="#22D3EE"
+                    stroke="#bad6f7"
                     strokeWidth="1.5"
                     strokeDasharray="4 4"
                   />
@@ -341,7 +332,7 @@ export default function Architecture() {
                 <path
                   d="M 390 250 L 460 250"
                   fill="none"
-                  stroke="#22D3EE"
+                  stroke="#bad6f7"
                   strokeWidth="2"
                 />
 
@@ -349,14 +340,14 @@ export default function Architecture() {
                 <path
                   d="M 520 285 L 520 370"
                   fill="none"
-                  stroke="#8B5CF6"
+                  stroke="#9dadc2"
                   strokeWidth="1.8"
                   strokeDasharray="3 3"
                 />
                 <path
                   d="M 580 250 L 650 250"
                   fill="none"
-                  stroke="#8B5CF6"
+                  stroke="#9dadc2"
                   strokeWidth="2"
                 />
 
@@ -364,7 +355,7 @@ export default function Architecture() {
                 <path
                   d="M 580 400 L 650 400"
                   fill="none"
-                  stroke="#FF3B5C"
+                  stroke="#df6a68"
                   strokeWidth="1.5"
                 />
 
@@ -372,20 +363,20 @@ export default function Architecture() {
                 <path
                   d="M 770 250 L 800 250"
                   fill="none"
-                  stroke="#34D399"
+                  stroke="#86b69a"
                   strokeWidth="2"
                 />
               </g>
 
               {/* Animated telemetry dots along pipeline */}
-              <circle r="3" fill="#22D3EE" filter="url(#softGlow)">
+              <circle r="3" fill="#bad6f7" filter="url(#softGlow)">
                 <animateMotion
                   path="M 180 115 C 220 115, 230 250, 270 250 L 460 250 L 650 250 L 800 250"
                   dur="4s"
                   repeatCount="indefinite"
                 />
               </circle>
-              <circle r="3" fill="#FF3B5C" filter="url(#softGlow)">
+              <circle r="3" fill="#df6a68" filter="url(#softGlow)">
                 <animateMotion
                   path="M 180 295 C 220 295, 230 250, 270 250 L 520 250 L 520 370 L 650 400"
                   dur="3.2s"
@@ -394,7 +385,7 @@ export default function Architecture() {
               </circle>
 
               {/* LAYER 1: COLLECTORS (Column 1) */}
-              <text x="30" y="24" className="text-[10px] font-mono fill-muted uppercase tracking-wider">
+              <text x="30" y="24" className="text-[10px] font-mono fill-muted">
                 Telemetry Sources & Collectors
               </text>
 
@@ -418,9 +409,9 @@ export default function Architecture() {
                     <rect
                       width="150"
                       height="46"
-                      rx="6"
-                      fill={isSelected ? "#121622" : "#0B0D14"}
-                      stroke={isSelected ? "#22D3EE" : "rgba(255,255,255,0.12)"}
+                      rx="1"
+                      fill={isSelected ? "#11141c" : "#0f1219"}
+                      stroke={isSelected ? "#bad6f7" : "rgba(255,255,255,0.12)"}
                       strokeWidth={isSelected ? "1.8" : "1"}
                       className="transition-all"
                     />
@@ -443,9 +434,9 @@ export default function Architecture() {
                 <rect
                   width="120"
                   height="70"
-                  rx="8"
-                  fill={selectedNodeId === "pipeline" ? "#121622" : "#0B0D14"}
-                  stroke={selectedNodeId === "pipeline" ? "#22D3EE" : "rgba(34,211,238,0.4)"}
+                  rx="1"
+                  fill={selectedNodeId === "pipeline" ? "#11141c" : "#0f1219"}
+                  stroke={selectedNodeId === "pipeline" ? "#bad6f7" : "rgba(186,215,247,0.4)"}
                   strokeWidth={selectedNodeId === "pipeline" ? "2" : "1.2"}
                 />
                 <text x="15" y="28" className="text-[12px] font-mono font-bold fill-primary">
@@ -468,9 +459,9 @@ export default function Architecture() {
                 <rect
                   width="120"
                   height="70"
-                  rx="8"
-                  fill={selectedNodeId === "detector" ? "#121622" : "#0B0D14"}
-                  stroke={selectedNodeId === "detector" ? "#8B5CF6" : "rgba(139,92,246,0.5)"}
+                  rx="1"
+                  fill={selectedNodeId === "detector" ? "#11141c" : "#0f1219"}
+                  stroke={selectedNodeId === "detector" ? "#9dadc2" : "rgba(157,173,194,0.5)"}
                   strokeWidth={selectedNodeId === "detector" ? "2" : "1.5"}
                 />
                 <text x="15" y="28" className="text-[12px] font-mono font-bold fill-accent">
@@ -493,9 +484,9 @@ export default function Architecture() {
                 <rect
                   width="120"
                   height="60"
-                  rx="8"
-                  fill={selectedNodeId === "redactor" ? "#121622" : "#0B0D14"}
-                  stroke={selectedNodeId === "redactor" ? "#FF3B5C" : "rgba(255,59,92,0.4)"}
+                  rx="1"
+                  fill={selectedNodeId === "redactor" ? "#11141c" : "#0f1219"}
+                  stroke={selectedNodeId === "redactor" ? "#df6a68" : "rgba(223,106,104,0.4)"}
                   strokeWidth={selectedNodeId === "redactor" ? "2" : "1"}
                 />
                 <text x="15" y="25" className="text-[11px] font-mono font-bold fill-danger">
@@ -517,9 +508,9 @@ export default function Architecture() {
                 <rect
                   width="130"
                   height="60"
-                  rx="8"
-                  fill={selectedNodeId === "triage" ? "#121622" : "#0B0D14"}
-                  stroke={selectedNodeId === "triage" ? "#FF3B5C" : "rgba(255,59,92,0.4)"}
+                  rx="1"
+                  fill={selectedNodeId === "triage" ? "#11141c" : "#0f1219"}
+                  stroke={selectedNodeId === "triage" ? "#df6a68" : "rgba(223,106,104,0.4)"}
                   strokeWidth={selectedNodeId === "triage" ? "2" : "1"}
                 />
                 <text x="15" y="25" className="text-[11px] font-mono font-bold fill-amber-400">
@@ -542,9 +533,9 @@ export default function Architecture() {
                 <rect
                   width="120"
                   height="70"
-                  rx="8"
-                  fill={selectedNodeId === "sqlite" ? "#121622" : "#0B0D14"}
-                  stroke={selectedNodeId === "sqlite" ? "#34D399" : "rgba(52,211,153,0.4)"}
+                  rx="1"
+                  fill={selectedNodeId === "sqlite" ? "#11141c" : "#0f1219"}
+                  stroke={selectedNodeId === "sqlite" ? "#86b69a" : "rgba(134,182,154,0.4)"}
                   strokeWidth={selectedNodeId === "sqlite" ? "2" : "1.2"}
                 />
                 <text x="15" y="28" className="text-[12px] font-mono font-bold fill-emerald-400">
@@ -567,9 +558,9 @@ export default function Architecture() {
                 <rect
                   width="70"
                   height="70"
-                  rx="8"
-                  fill={selectedNodeId === "console" ? "#121622" : "#0B0D14"}
-                  stroke={selectedNodeId === "console" ? "#22D3EE" : "rgba(34,211,238,0.5)"}
+                  rx="1"
+                  fill={selectedNodeId === "console" ? "#11141c" : "#0f1219"}
+                  stroke={selectedNodeId === "console" ? "#bad6f7" : "rgba(186,215,247,0.5)"}
                   strokeWidth={selectedNodeId === "console" ? "2" : "1.2"}
                 />
                 <text x="10" y="32" className="text-[11px] font-mono font-bold fill-primary">
@@ -586,9 +577,9 @@ export default function Architecture() {
           </div>
 
           {/* Node Detail Explanation Card */}
-          <div className="lg:col-span-4 rounded-2xl border border-border bg-bg-2/95 p-6 backdrop-blur-xl shadow-2xl relative">
+          <div className="lg:col-span-4 rounded-2xl border border-border bg-bg-2/95 p-6 relative">
             <div className="flex items-center justify-between border-b border-border pb-3 mb-4">
-              <span className="font-mono text-xs uppercase px-2 py-0.5 rounded border border-primary/30 bg-primary/10 text-primary">
+              <span className="font-mono text-xs px-2 py-0.5 rounded border border-primary/30 bg-primary/10 text-primary">
                 {activeNode.layer}
               </span>
               <span className="font-mono text-[10px] text-muted">Node ID: {activeNode.id}</span>
@@ -605,21 +596,21 @@ export default function Architecture() {
 
             <div className="space-y-3 pt-3 border-t border-border">
               <div>
-                <span className="text-[10px] font-mono uppercase text-muted block mb-1">Source Code Location</span>
+                <span className="text-[10px] font-mono text-muted block mb-1">Source Code Location</span>
                 <code className="text-xs font-mono text-primary bg-surface-solid px-2 py-1 rounded block truncate border border-border">
                   {activeNode.file}
                 </code>
               </div>
 
               <div>
-                <span className="text-[10px] font-mono uppercase text-muted block mb-1">Execution Privileges</span>
+                <span className="text-[10px] font-mono text-muted block mb-1">Execution Privileges</span>
                 <p className="text-xs text-text font-mono bg-surface/50 p-2 rounded border border-border/60">
                   {activeNode.privilege}
                 </p>
               </div>
 
               <div>
-                <span className="text-[10px] font-mono uppercase text-muted block mb-1.5">Architectural Capabilities</span>
+                <span className="text-[10px] font-mono text-muted block mb-1.5">Architectural Capabilities</span>
                 <ul className="space-y-1.5">
                   {activeNode.details.map((detail, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-xs text-muted">
@@ -638,9 +629,6 @@ export default function Architecture() {
       <section className="px-4 py-16 sm:px-8 border-t border-border bg-bg-2/40">
         <div className="mx-auto max-w-6xl space-y-10">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="font-mono text-xs uppercase px-3 py-1 rounded-full border border-danger/30 bg-danger/10 text-danger">
-              Architectural Paradigm
-            </span>
             <h2 className="font-display text-2xl sm:text-4xl font-black text-text">
               Why Zero SSL Decryption is the Future of AI Security
             </h2>
@@ -652,7 +640,7 @@ export default function Architecture() {
 
           {/* 4 Pillars of Failure */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="rounded-xl border border-border bg-surface/40 p-5 backdrop-blur-md">
+            <div className="rounded-xl border border-border bg-surface/40 p-5">
               <div className="h-9 w-9 rounded-lg border border-danger/30 bg-danger/10 flex items-center justify-center text-danger mb-3">
                 <ShieldAlert className="h-5 w-5" />
               </div>
@@ -662,7 +650,7 @@ export default function Architecture() {
               </p>
             </div>
 
-            <div className="rounded-xl border border-border bg-surface/40 p-5 backdrop-blur-md">
+            <div className="rounded-xl border border-border bg-surface/40 p-5">
               <div className="h-9 w-9 rounded-lg border border-amber-500/30 bg-amber-500/10 flex items-center justify-center text-amber-400 mb-3">
                 <Lock className="h-5 w-5" />
               </div>
@@ -672,7 +660,7 @@ export default function Architecture() {
               </p>
             </div>
 
-            <div className="rounded-xl border border-border bg-surface/40 p-5 backdrop-blur-md">
+            <div className="rounded-xl border border-border bg-surface/40 p-5">
               <div className="h-9 w-9 rounded-lg border border-primary/30 bg-primary/10 flex items-center justify-center text-primary mb-3">
                 <Laptop className="h-5 w-5" />
               </div>
@@ -682,7 +670,7 @@ export default function Architecture() {
               </p>
             </div>
 
-            <div className="rounded-xl border border-border bg-surface/40 p-5 backdrop-blur-md">
+            <div className="rounded-xl border border-border bg-surface/40 p-5">
               <div className="h-9 w-9 rounded-lg border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-3">
                 <Zap className="h-5 w-5" />
               </div>
@@ -694,10 +682,10 @@ export default function Architecture() {
           </div>
 
           {/* Comparison Matrix Table */}
-          <div className="overflow-x-auto rounded-xl border border-border bg-bg-2 shadow-xl">
+          <div className=" rounded-xl border border-border bg-bg-2">
             <table className="w-full text-left text-xs font-mono">
               <thead>
-                <tr className="border-b border-border bg-surface/80 text-[10px] uppercase text-muted">
+                <tr className="border-b border-border bg-surface/80 text-[10px] text-muted">
                   <th className="p-3.5">Security Dimension</th>
                   <th className="p-3.5 text-danger">Traditional Decryption Proxy (MITM)</th>
                   <th className="p-3.5 text-primary">ShadowScope Passive Egress Monitor</th>
@@ -737,8 +725,7 @@ export default function Architecture() {
 
       {/* SECTION 3: PRIVACY & AIR-GAPPED SECURITY MODEL */}
       <section className="px-4 py-16 sm:px-8 mx-auto max-w-6xl">
-        <div className="rounded-2xl border border-primary/30 bg-primary/5 p-8 sm:p-10 relative overflow-hidden backdrop-blur-xl">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="rounded-2xl border border-primary/30 bg-primary/5 p-8 sm:p-10 relative overflow-hidden">
 
           <div className="max-w-3xl space-y-4 relative z-10">
             <div className="flex items-center gap-2 text-primary font-mono text-xs">
@@ -814,7 +801,7 @@ export default function Architecture() {
       {/* SECTION 5: TEAM CREDITS */}
       <section className="px-4 py-16 sm:px-8 border-t border-border mx-auto max-w-6xl">
         <div className="text-center space-y-3 mb-10">
-          <span className="font-mono text-xs uppercase px-3 py-1 rounded-full border border-border bg-surface text-muted">
+          <span className="font-mono text-xs px-3 py-1 rounded-sm border border-border bg-surface text-muted">
             Hacktoberfest @ CBIT
           </span>
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-text">Team "git push n pray"</h2>
@@ -844,7 +831,7 @@ export default function Architecture() {
               focus: "Cinematic Landing with 3D hero, Threat Constellation, Threat Playground, Compliance Report PDF",
             },
           ].map((m) => (
-            <div key={m.name} className="rounded-xl border border-border bg-bg-2 p-5 backdrop-blur-md flex flex-col justify-between">
+            <div key={m.name} className="rounded-xl border border-border bg-bg-2 p-5 flex flex-col justify-between">
               <div>
                 <h3 className="font-display font-semibold text-text text-base">{m.name}</h3>
                 <div className="font-mono text-xs text-primary mt-0.5 mb-2.5">{m.role}</div>

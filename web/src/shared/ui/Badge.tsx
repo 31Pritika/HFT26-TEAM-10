@@ -32,15 +32,15 @@ export function Badge({
     low: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30",
     info: "bg-blue-500/10 text-blue-300 border border-blue-500/30",
     outline: "border border-border text-muted bg-transparent",
-    mono: "font-mono bg-[#0c101d] text-cyan-400/90 border border-cyan-900/40",
+    mono: "font-mono bg-[#11141c] text-cyan-400/90 border border-cyan-900/40",
   };
 
   const dotStyles = {
     default: "bg-muted",
-    cyan: "bg-cyan-400 animate-pulse",
-    violet: "bg-violet-400 animate-pulse",
+    cyan: "bg-cyan-400 ",
+    violet: "bg-violet-400 ",
     critical: "bg-red-400 animate-ping",
-    high: "bg-orange-400 animate-pulse",
+    high: "bg-orange-400 ",
     medium: "bg-amber-400",
     low: "bg-emerald-400",
     info: "bg-blue-400",
@@ -57,14 +57,14 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center font-medium rounded-full transition-colors whitespace-nowrap",
+        "inline-flex items-center font-medium rounded-sm transition-colors whitespace-nowrap",
         sizeStyles[size],
         variantStyles[variant],
         className,
       )}
       {...props}
     >
-      {dot && <span className={cn("inline-block w-1.5 h-1.5 rounded-full shrink-0", dotStyles[variant])} />}
+      {dot && <span className={cn("inline-block w-1.5 h-1.5 rounded-sm shrink-0", dotStyles[variant])} />}
       {children}
     </span>
   );

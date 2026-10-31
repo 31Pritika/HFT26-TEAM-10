@@ -236,12 +236,9 @@ export default function Policies() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl font-bold tracking-tight text-white font-[Space_Grotesk]">
+            <h1 className="text-2xl font-bold tracking-tight text-white font-display">
               Security Policies &amp; Guardrails
             </h1>
-            <Badge variant="violet" dot>
-              Active Guardrails
-            </Badge>
           </div>
           <p className="text-xs sm:text-sm text-neutral-400 mt-1">
             Configure organizational AI authorization policies, canary honeytokens, entropy sensitivity, and automated triage.
@@ -253,7 +250,7 @@ export default function Policies() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-sm bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono"
             >
               <Info className="w-3.5 h-3.5 text-amber-400" />
               <span>Unsaved changes</span>
@@ -276,7 +273,7 @@ export default function Policies() {
             size="sm"
             onClick={handleSave}
             disabled={!hasUnsavedChanges || updateMutation.isPending}
-            className="shadow-lg shadow-cyan-500/20"
+            className=""
           >
             <Save className="w-3.5 h-3.5 mr-1.5" />
             {updateMutation.isPending ? "Saving..." : "Save Policies"}
@@ -295,7 +292,7 @@ export default function Policies() {
                   <ShieldCheck className="w-4 h-4" />
                 </div>
                 <div>
-                  <h2 className="text-base font-semibold text-white font-[Space_Grotesk]">
+                  <h2 className="text-base font-semibold text-white font-display">
                     AI Provider Authorization Matrix
                   </h2>
                   <p className="text-xs text-neutral-400">
@@ -328,7 +325,7 @@ export default function Policies() {
                 />
               </div>
 
-              <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0 text-xs">
+              <div className="flex items-center gap-1 flex-wrap pb-1 sm:pb-0 text-xs">
                 {(["all", "cloud_llm", "ai_coding", "local_llm", "ai_saas"] as const).map((cat) => (
                   <button
                     key={cat}
@@ -365,7 +362,7 @@ export default function Policies() {
                         <span className="text-xs font-semibold text-white">
                           {provider.name}
                         </span>
-                        <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-neutral-800/80 text-neutral-400">
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-neutral-800/80 text-neutral-400">
                           {provider.category.replace("_", " ")}
                         </span>
                       </div>
@@ -425,7 +422,7 @@ export default function Policies() {
                   <Sliders className="w-4 h-4" />
                 </div>
                 <div>
-                  <h2 className="text-base font-semibold text-white font-[Space_Grotesk]">
+                  <h2 className="text-base font-semibold text-white font-display">
                     Shannon Entropy Threshold &amp; Live Analyzer
                   </h2>
                   <p className="text-xs text-neutral-400">
@@ -493,14 +490,14 @@ export default function Policies() {
               </div>
 
               {/* Render highlighted preview text */}
-              <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800 font-mono text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap">
+              <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800 font-mono text-xs leading-relaxed whitespace-pre-wrap">
                 {tokenAnalysis.analyzed.map((item) => {
                   if (item.isFlagged) {
                     return (
                       <span
                         key={item.key}
                         title={`Shannon Entropy: ${item.entropy} (Exceeds threshold ${draft.entropy_threshold.toFixed(1)})`}
-                        className="px-1 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold transition-all shadow-sm shadow-rose-950"
+                        className="px-1 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold transition-all"
                       >
                         {item.token}
                         <span className="text-[9px] ml-1 px-1 rounded bg-rose-900/60 text-rose-200">
@@ -534,7 +531,7 @@ export default function Policies() {
                 <KeyRound className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-base font-semibold text-white font-[Space_Grotesk]">
+                <h3 className="text-base font-semibold text-white font-display">
                   Canary Honeytokens
                 </h3>
                 <p className="text-xs text-neutral-400">
@@ -632,7 +629,7 @@ export default function Policies() {
                 <Shield className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-base font-semibold text-white font-[Space_Grotesk]">
+                <h3 className="text-base font-semibold text-white font-display">
                   Alert Minimum Severity
                 </h3>
                 <p className="text-xs text-neutral-400">
@@ -648,7 +645,7 @@ export default function Policies() {
                   <button
                     key={sev}
                     onClick={() => setDraft({ ...draft, alert_min_severity: sev })}
-                    className={`py-1.5 rounded-lg text-xs font-mono uppercase transition-all ${
+                    className={`py-1.5 rounded-lg text-xs font-mono  transition-all ${
                       isActive
                         ? sev === "critical"
                           ? "bg-rose-500/20 text-rose-300 border border-rose-500/50 font-bold"
@@ -673,7 +670,7 @@ export default function Policies() {
                   <Bot className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-base font-semibold text-white font-[Space_Grotesk]">
+                  <h3 className="text-base font-semibold text-white font-display">
                     Automated AI Triage
                   </h3>
                   <p className="text-xs text-neutral-400">
@@ -740,7 +737,7 @@ export default function Policies() {
           <GlassCard className="p-5 space-y-3 bg-neutral-950/40 border border-neutral-800">
             <div className="flex items-center gap-2">
               <Lock className="w-4 h-4 text-cyan-400" />
-              <h4 className="text-xs font-semibold text-white uppercase tracking-wider">
+              <h4 className="text-xs font-semibold text-white">
                 Immutable Core Guardrails
               </h4>
             </div>

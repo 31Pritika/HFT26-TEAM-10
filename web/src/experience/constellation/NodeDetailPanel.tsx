@@ -53,10 +53,10 @@ export function NodeDetailPanel({
   });
 
   const getRiskColor = (risk: number) => {
-    if (risk >= 80) return { text: "text-danger", border: "border-danger/40", bg: "bg-danger/10", fill: "#FF3B5C", label: "Critical" };
-    if (risk >= 50) return { text: "text-amber-400", border: "border-amber-500/40", bg: "bg-amber-500/10", fill: "#FF8A3D", label: "High" };
-    if (risk >= 20) return { text: "text-warning", border: "border-warning/40", bg: "bg-warning/10", fill: "#FACC15", label: "Medium" };
-    return { text: "text-primary", border: "border-primary/40", bg: "bg-primary/10", fill: "#22D3EE", label: "Low" };
+    if (risk >= 80) return { text: "text-danger", border: "border-danger/40", bg: "bg-danger/10", fill: "#df6a68", label: "Critical" };
+    if (risk >= 50) return { text: "text-amber-400", border: "border-amber-500/40", bg: "bg-amber-500/10", fill: "#d4915a", label: "High" };
+    if (risk >= 20) return { text: "text-warning", border: "border-warning/40", bg: "bg-warning/10", fill: "#c9b467", label: "Medium" };
+    return { text: "text-primary", border: "border-primary/40", bg: "bg-primary/10", fill: "#bad6f7", label: "Low" };
   };
 
   const riskInfo = getRiskColor(node.risk);
@@ -76,7 +76,7 @@ export function NodeDetailPanel({
 
   return (
     <div
-      className="absolute top-4 right-4 z-20 w-80 sm:w-96 max-h-[calc(100%-2rem)] flex flex-col rounded-xl border border-border bg-bg-2/95 p-5 backdrop-blur-xl shadow-2xl overflow-y-auto"
+      className="absolute top-4 right-4 z-20 w-80 sm:w-96 max-h-[calc(100%-2rem)] flex flex-col rounded-xl border border-border bg-bg-2/95 p-5 overflow-y-auto"
       role="dialog"
       aria-label={`Details for ${node.label}`}
     >
@@ -91,7 +91,7 @@ export function NodeDetailPanel({
               {node.label}
             </h3>
             <div className="flex items-center gap-2 mt-0.5">
-              <span className="font-mono text-xs uppercase px-1.5 py-0.5 rounded border border-border bg-surface text-muted">
+              <span className="font-mono text-xs px-1.5 py-0.5 rounded border border-border bg-surface text-muted">
                 {node.kind}
               </span>
               <span className="font-mono text-xs text-muted truncate">{node.id}</span>
@@ -110,29 +110,29 @@ export function NodeDetailPanel({
       {/* Risk Gauge & Metrics */}
       <div className="py-4 border-b border-border space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs uppercase tracking-wider text-muted font-mono">Threat Score</span>
+          <span className="text-xs text-muted font-mono">Threat Score</span>
           <span
-            className={`font-mono text-xs font-semibold px-2 py-0.5 rounded-full border ${riskInfo.border} ${riskInfo.bg} ${riskInfo.text}`}
+            className={`font-mono text-xs font-semibold px-2 py-0.5 rounded-sm border ${riskInfo.border} ${riskInfo.bg} ${riskInfo.text}`}
           >
             {riskInfo.label} · {node.risk}/100
           </span>
         </div>
 
         {/* Meter bar */}
-        <div className="h-2 w-full rounded-full bg-surface-solid overflow-hidden border border-border/50">
+        <div className="h-2 w-full rounded-sm bg-surface-solid overflow-hidden border border-border/50">
           <div
-            className="h-full rounded-full transition-all duration-500"
+            className="h-full rounded-sm transition-all duration-500"
             style={{ width: `${Math.max(5, node.risk)}%`, backgroundColor: riskInfo.fill }}
           />
         </div>
 
         <div className="grid grid-cols-2 gap-2 pt-1">
           <div className="rounded-lg border border-border/60 bg-surface/50 p-2.5">
-            <div className="text-[10px] font-mono uppercase text-muted">Traffic Weight</div>
+            <div className="text-[10px] font-mono text-muted">Traffic Weight</div>
             <div className="text-sm font-semibold font-mono text-text mt-0.5">{node.size} units</div>
           </div>
           <div className="rounded-lg border border-border/60 bg-surface/50 p-2.5">
-            <div className="text-[10px] font-mono uppercase text-muted">Connections</div>
+            <div className="text-[10px] font-mono text-muted">Connections</div>
             <div className="text-sm font-semibold font-mono text-text mt-0.5">{connectedLinks.length} active</div>
           </div>
         </div>
@@ -170,7 +170,7 @@ export function NodeDetailPanel({
 
         {outgoing.length > 0 && (
           <div>
-            <div className="text-[10px] font-mono uppercase text-primary mb-1.5 flex items-center gap-1">
+            <div className="text-[10px] font-mono text-primary mb-1.5 flex items-center gap-1">
               <span>Outgoing Egress →</span>
             </div>
             <div className="space-y-1.5 max-h-28 overflow-y-auto pr-1">
@@ -199,7 +199,7 @@ export function NodeDetailPanel({
 
         {incoming.length > 0 && (
           <div>
-            <div className="text-[10px] font-mono uppercase text-accent mb-1.5 flex items-center gap-1">
+            <div className="text-[10px] font-mono text-accent mb-1.5 flex items-center gap-1">
               <span>← Incoming Sources</span>
             </div>
             <div className="space-y-1.5 max-h-28 overflow-y-auto pr-1">

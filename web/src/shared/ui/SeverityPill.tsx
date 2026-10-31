@@ -29,33 +29,33 @@ const CONFIG: Record<
   critical: {
     label: "CRITICAL",
     icon: ShieldAlert,
-    pillClass: "bg-red-500/15 text-[#ff3b5c] border-red-500/40 shadow-[0_0_12px_rgba(255,59,92,0.25)]",
-    iconClass: "text-[#ff3b5c]",
-    pulseClass: "animate-pulse",
+    pillClass: "bg-red-500/15 text-[#df6a68] border-red-500/40 ",
+    iconClass: "text-[#df6a68]",
+    pulseClass: "",
   },
   high: {
     label: "HIGH",
     icon: AlertTriangle,
-    pillClass: "bg-orange-500/15 text-[#ff8a3d] border-orange-500/35",
-    iconClass: "text-[#ff8a3d]",
+    pillClass: "bg-orange-500/15 text-[#d4915a] border-orange-500/35",
+    iconClass: "text-[#d4915a]",
   },
   medium: {
     label: "MEDIUM",
     icon: AlertCircle,
-    pillClass: "bg-amber-500/15 text-[#facc15] border-amber-500/35",
-    iconClass: "text-[#facc15]",
+    pillClass: "bg-amber-500/15 text-[#c9b467] border-amber-500/35",
+    iconClass: "text-[#c9b467]",
   },
   low: {
     label: "LOW",
     icon: ShieldCheck,
-    pillClass: "bg-emerald-500/15 text-[#34d399] border-emerald-500/35",
-    iconClass: "text-[#34d399]",
+    pillClass: "bg-emerald-500/15 text-[#86b69a] border-emerald-500/35",
+    iconClass: "text-[#86b69a]",
   },
   info: {
     label: "INFO",
     icon: Info,
-    pillClass: "bg-blue-500/15 text-[#60a5fa] border-blue-500/35",
-    iconClass: "text-[#60a5fa]",
+    pillClass: "bg-blue-500/15 text-[#8fb0d8] border-blue-500/35",
+    iconClass: "text-[#8fb0d8]",
   },
 };
 
@@ -71,9 +71,9 @@ export function SeverityPill({
   const Icon = meta.icon;
 
   const sizeStyles = {
-    xs: "text-[10px] px-1.5 py-0.5 gap-1 font-mono tracking-wider font-semibold",
-    sm: "text-xs px-2.5 py-1 gap-1.5 font-mono tracking-wider font-semibold",
-    md: "text-sm px-3 py-1.5 gap-2 font-mono tracking-wider font-semibold",
+    xs: "text-[10px] px-1.5 py-0.5 gap-1 font-mono  font-semibold",
+    sm: "text-xs px-2.5 py-1 gap-1.5 font-mono  font-semibold",
+    md: "text-sm px-3 py-1.5 gap-2 font-mono  font-semibold",
   };
 
   const iconSizes = {
@@ -85,7 +85,7 @@ export function SeverityPill({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-md border uppercase whitespace-nowrap transition-all select-none",
+        "inline-flex items-center rounded-md border  whitespace-nowrap transition-all select-none",
         sizeStyles[size],
         meta.pillClass,
         severity === "critical" && pulse && meta.pulseClass,

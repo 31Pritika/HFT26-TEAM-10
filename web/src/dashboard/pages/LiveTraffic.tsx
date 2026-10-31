@@ -240,18 +240,18 @@ export default function LiveTraffic() {
           {/* Title & Live Status */}
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
-              <Radio className="w-5 h-5 animate-pulse" />
+              <Radio className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="font-display text-lg font-bold text-text">
                   Live Traffic Telemetry
                 </h1>
-                <span className="font-mono text-xs px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+                <span className="font-mono text-xs px-2 py-0.5 rounded-sm bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
                   {filteredEvents.length} events
                 </span>
                 {isPaused && (
-                  <span className="font-mono text-xs px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 animate-pulse">
+                  <span className="font-mono text-xs px-2 py-0.5 rounded-sm bg-amber-500/15 text-amber-300 border border-amber-500/30">
                     STREAM PAUSED
                   </span>
                 )}
@@ -273,7 +273,7 @@ export default function LiveTraffic() {
               {isPaused ? <Play className="w-4 h-4 text-emerald-400" /> : <Pause className="w-4 h-4 text-amber-400" />}
               <span>{isPaused ? "Resume Stream" : "Pause Stream"}</span>
               {isPaused && pausedBuffer.length > 0 && (
-                <span className="font-mono text-[10px] bg-amber-400 text-black px-1.5 py-0.2 rounded-full font-bold">
+                <span className="font-mono text-[10px] bg-amber-400 text-black px-1.5 py-0.2 rounded-sm font-bold">
                   +{pausedBuffer.length}
                 </span>
               )}
@@ -299,7 +299,7 @@ export default function LiveTraffic() {
               <Filter className="w-4 h-4 text-muted" />
               <span>Filters</span>
               {(providerFilter !== "all" || sourceFilter !== "all" || minRisk > 0 || processFilter) && (
-                <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                <span className="w-2 h-2 rounded-sm bg-cyan-400" />
               )}
             </Button>
           </div>
@@ -326,7 +326,7 @@ export default function LiveTraffic() {
                       placeholder="e.g. python3, cursor, openai..."
                       value={processFilter}
                       onChange={(e) => setProcessFilter(e.target.value)}
-                      className="w-full bg-[#080c18] border border-white/10 rounded-lg pl-8 pr-3 py-1.5 text-xs text-text placeholder:text-muted/60 focus:outline-none focus:border-cyan-400 font-mono"
+                      className="w-full bg-[#0d0f16] border border-white/10 rounded-lg pl-8 pr-3 py-1.5 text-xs text-text placeholder:text-muted/60 focus:outline-none focus:border-cyan-400 font-mono"
                     />
                   </div>
                 </div>
@@ -337,7 +337,7 @@ export default function LiveTraffic() {
                   <select
                     value={providerFilter}
                     onChange={(e) => setProviderFilter(e.target.value)}
-                    className="w-full bg-[#080c18] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-text focus:outline-none focus:border-cyan-400 font-mono"
+                    className="w-full bg-[#0d0f16] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-text focus:outline-none focus:border-cyan-400 font-mono"
                   >
                     <option value="all">All Providers</option>
                     <option value="mock_ai">ShadowScope Mock Provider</option>
@@ -355,7 +355,7 @@ export default function LiveTraffic() {
                   <select
                     value={sourceFilter}
                     onChange={(e) => setSourceFilter(e.target.value)}
-                    className="w-full bg-[#080c18] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-text focus:outline-none focus:border-cyan-400 font-mono"
+                    className="w-full bg-[#0d0f16] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-text focus:outline-none focus:border-cyan-400 font-mono"
                   >
                     <option value="all">All Sources</option>
                     <option value="live_conn">LIVE (Sockets)</option>
@@ -419,7 +419,7 @@ export default function LiveTraffic() {
           </div>
         ) : filteredEvents.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
-            <Radio className="w-12 h-12 text-muted/30 mb-3 animate-pulse" />
+            <Radio className="w-12 h-12 text-muted/30 mb-3" />
             <h3 className="font-display text-base font-semibold text-text">No Telemetry Matches Filters</h3>
             <p className="text-xs text-muted max-w-sm mt-1">
               Adjust your search keywords or decrease the minimum risk slider to view live AI connections.
@@ -442,7 +442,7 @@ export default function LiveTraffic() {
           <div ref={tableContainerRef} className="flex-1 overflow-y-auto scrollbar-thin">
             {/* Desktop Table View (>= 768px) */}
             <table className="hidden md:table w-full text-left text-xs border-collapse">
-              <thead className="sticky top-0 z-10 bg-[#090d19] border-b border-white/[0.08] text-muted font-mono uppercase text-[10px] tracking-wider">
+              <thead className="sticky top-0 z-10 bg-[#0d0f16] border-b border-white/[0.08] text-muted font-mono text-[10px]">
                 <tr>
                   <th className="py-3 px-4">Time</th>
                   <th className="py-3 px-4">Risk</th>
@@ -466,7 +466,7 @@ export default function LiveTraffic() {
                   return (
                     <motion.tr
                       key={evt.id}
-                      initial={shouldAnimate ? { opacity: 0, backgroundColor: "rgba(34, 211, 238, 0.15)" } : false}
+                      initial={shouldAnimate ? { opacity: 0, backgroundColor: "rgba(186,215,247, 0.15)" } : false}
                       animate={shouldAnimate ? { opacity: 1, backgroundColor: "transparent" } : undefined}
                       transition={{ duration: 0.6 }}
                       onClick={() => handleInspectRow(evt)}
@@ -484,7 +484,7 @@ export default function LiveTraffic() {
                         <span
                           className={`inline-block px-2 py-0.5 rounded text-[11px] font-bold ${
                             evt.risk_score >= 80
-                              ? "bg-red-500/20 text-[#ff3b5c] border border-red-500/40 shadow-[0_0_8px_rgba(255,59,92,0.3)]"
+                              ? "bg-red-500/20 text-[#df6a68] border border-red-500/40 "
                               : evt.risk_score >= 50
                               ? "bg-amber-500/20 text-amber-300 border border-amber-500/35"
                               : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
@@ -599,7 +599,7 @@ export default function LiveTraffic() {
                       <span
                         className={`font-mono text-xs font-bold px-2 py-0.5 rounded ${
                           evt.risk_score >= 80
-                            ? "bg-red-500/20 text-[#ff3b5c]"
+                            ? "bg-red-500/20 text-[#df6a68]"
                             : evt.risk_score >= 50
                             ? "bg-amber-500/20 text-amber-300"
                             : "bg-emerald-500/20 text-emerald-400"
@@ -650,11 +650,11 @@ export default function LiveTraffic() {
             {/* Quick Status Bar */}
             <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl border border-white/[0.08] bg-surface-solid/80">
               <div className="flex items-center gap-2">
-                <span className="text-xs text-muted font-mono uppercase">Risk Score:</span>
+                <span className="text-xs text-muted font-mono">Risk Score:</span>
                 <span
                   className={`font-mono text-sm font-bold px-2.5 py-0.5 rounded ${
                     selectedEvent.risk_score >= 80
-                      ? "bg-red-500/20 text-[#ff3b5c] border border-red-500/40"
+                      ? "bg-red-500/20 text-[#df6a68] border border-red-500/40"
                       : "bg-amber-500/20 text-amber-300 border border-amber-500/35"
                   }`}
                 >
@@ -679,28 +679,28 @@ export default function LiveTraffic() {
             </div>
 
             {/* Destination & Connection Card */}
-            <div className="rounded-xl border border-white/[0.08] bg-[#0c101d] p-4 space-y-3 font-mono text-xs">
+            <div className="rounded-xl border border-white/[0.08] bg-[#11141c] p-4 space-y-3 font-mono text-xs">
               <h4 className="font-display text-sm font-bold text-text flex items-center gap-2">
                 <Server className="w-4 h-4 text-cyan-400" />
                 Network Destination
               </h4>
               <div className="grid grid-cols-2 gap-2 text-muted">
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">Host</span>
+                  <span className="text-[10px] text-muted/60 block">Host</span>
                   <span className="text-text font-semibold">{selectedEvent.dest.host}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">IP / Port</span>
+                  <span className="text-[10px] text-muted/60 block">IP / Port</span>
                   <span className="text-text">
                     {selectedEvent.dest.ip ?? "Resolved DNS"} : {selectedEvent.dest.port}
                   </span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">Protocol</span>
-                  <span className="text-cyan-400 uppercase">{selectedEvent.dest.protocol}</span>
+                  <span className="text-[10px] text-muted/60 block">Protocol</span>
+                  <span className="text-cyan-400">{selectedEvent.dest.protocol}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">Data Transferred</span>
+                  <span className="text-[10px] text-muted/60 block">Data Transferred</span>
                   <span className="text-text">
                     ↑ {formatBytes(selectedEvent.bytes_out)} / ↓ {formatBytes(selectedEvent.bytes_in)}
                   </span>
@@ -709,34 +709,34 @@ export default function LiveTraffic() {
             </div>
 
             {/* Process Card */}
-            <div className="rounded-xl border border-white/[0.08] bg-[#0c101d] p-4 space-y-3 font-mono text-xs">
+            <div className="rounded-xl border border-white/[0.08] bg-[#11141c] p-4 space-y-3 font-mono text-xs">
               <h4 className="font-display text-sm font-bold text-text flex items-center gap-2">
                 <Cpu className="w-4 h-4 text-violet-400" />
                 Endpoint Process Lineage
               </h4>
               <div className="grid grid-cols-2 gap-2 text-muted">
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">Process Name</span>
+                  <span className="text-[10px] text-muted/60 block">Process Name</span>
                   <span className="text-text font-semibold">{selectedEvent.process.name}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">PID</span>
+                  <span className="text-[10px] text-muted/60 block">PID</span>
                   <span className="text-text">{selectedEvent.process.pid ?? "Unknown"}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">Parent Process</span>
+                  <span className="text-[10px] text-muted/60 block">Parent Process</span>
                   <span className="text-text">{selectedEvent.process.parent ?? "None / System"}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase text-muted/60 block">User</span>
+                  <span className="text-[10px] text-muted/60 block">User</span>
                   <span className="text-text">{selectedEvent.process.user ?? "Current User"}</span>
                 </div>
               </div>
 
               {selectedEvent.process.cmdline_hint && (
                 <div className="mt-2 pt-2 border-t border-white/[0.06]">
-                  <span className="text-[10px] uppercase text-muted/60 block mb-1">Command-Line Execution</span>
-                  <pre className="bg-[#05070e] p-2 rounded border border-white/10 text-[11px] text-cyan-300 overflow-x-auto whitespace-pre-wrap">
+                  <span className="text-[10px] text-muted/60 block mb-1">Command-Line Execution</span>
+                  <pre className="bg-[#0b0d13] p-2 rounded border border-white/10 text-[11px] text-cyan-300 whitespace-pre-wrap break-words whitespace-pre-wrap">
                     {selectedEvent.process.cmdline_hint}
                   </pre>
                 </div>
@@ -755,7 +755,7 @@ export default function LiveTraffic() {
                 </span>
               </div>
 
-              <div className="relative rounded-xl border border-white/10 bg-[#060812] p-4 font-mono text-xs text-text/90 leading-relaxed overflow-x-auto max-h-48 scrollbar-thin">
+              <div className="relative rounded-xl border border-white/10 bg-[#0b0d13] p-4 font-mono text-xs text-text/90 leading-relaxed max-h-48 scrollbar-thin">
                 {renderMaskedPayload(selectedEvent.payload_preview)}
               </div>
             </div>
@@ -793,7 +793,7 @@ export default function LiveTraffic() {
             {/* Tags Strip */}
             {selectedEvent.tags && selectedEvent.tags.length > 0 && (
               <div>
-                <span className="text-[10px] font-mono uppercase text-muted block mb-1.5">
+                <span className="text-[10px] font-mono text-muted block mb-1.5">
                   Classifier Tags
                 </span>
                 <div className="flex flex-wrap gap-1.5">

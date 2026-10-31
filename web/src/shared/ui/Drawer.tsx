@@ -68,7 +68,7 @@ export function Drawer({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/70"
           />
 
           {/* Drawer content */}
@@ -80,12 +80,12 @@ export function Drawer({
               exit={{ y: "100%" }}
               transition={{ type: "spring", stiffness: 280, damping: 28 }}
               className={cn(
-                "fixed bottom-0 inset-x-0 z-50 flex max-h-[88vh] flex-col rounded-t-2xl border-t border-white/10 bg-[#090c16]/98 p-5 shadow-2xl backdrop-blur-2xl",
+                "fixed bottom-0 inset-x-0 z-50 flex max-h-[88vh] flex-col rounded-t-2xl border-t border-white/10 bg-[#090c16]/98 p-5  ",
                 className,
               )}
             >
               {/* Drag Handle Indicator */}
-              <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-white/20" />
+              <div className="mx-auto mb-3 h-1.5 w-12 rounded-sm bg-white/20" />
               
               <div className="flex items-center justify-between pb-3 border-b border-border">
                 <div>
@@ -111,7 +111,7 @@ export function Drawer({
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 280, damping: 28 }}
               className={cn(
-                "fixed right-0 top-0 bottom-0 z-50 flex w-full flex-col border-l border-white/10 bg-[#090c16]/95 shadow-2xl backdrop-blur-2xl",
+                "fixed right-0 top-0 bottom-0 z-50 flex w-full flex-col border-l border-white/10 bg-[#090c16]/95  ",
                 width,
                 className,
               )}

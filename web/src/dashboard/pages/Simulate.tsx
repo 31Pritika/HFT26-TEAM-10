@@ -19,7 +19,7 @@ import {
   ChevronRight,
   Flame,
 } from "lucide-react";
-import { api } from "../../shared/api";
+import { api, isEngineLive } from "../../shared/api";
 import { useAppStore } from "../../shared/store";
 import {
   GlassCard,
@@ -60,6 +60,7 @@ export default function Simulate() {
 
   // Simulation execution tracking
   const [activeScenarioId, setActiveScenarioId] = useState<string | null>(null);
+  const [runTags, setRunTags] = useState<string[]>([]);
   const [launchingId, setLaunchingId] = useState<string | null>(null);
 
   // Full demo sequence runner state
@@ -76,7 +77,8 @@ export default function Simulate() {
     toast.info(`Launching attack vector: ${scenario.name}...`);
 
     try {
-      await api.simulate(scenario.id, 2);
+      const { run_id } = await api.simulate(scenario.id, 2);
+      setRunTags((tags) => [...tags, `run:${run_id}`]);
       setTimeout(() => {
         setLaunchingId(null);
         toast.success(`Simulation active: Telemetry packets streaming to Live Traffic.`);
@@ -100,7 +102,10 @@ export default function Simulate() {
 
     const currentScenario = scenarios[sequenceIndex];
     setActiveScenarioId(currentScenario.id);
-    api.simulate(currentScenario.id, 2).catch(() => {});
+    api
+      .simulate(currentScenario.id, 2)
+      .then(({ run_id }) => setRunTags((tags) => [...tags, `run:${run_id}`]))
+      .catch(() => {});
     toast.info(`Sequence [${sequenceIndex + 1}/${scenarios.length}]: ${currentScenario.name}`);
 
     // 4 second countdown
@@ -135,8 +140,10 @@ export default function Simulate() {
   };
 
   // Filter recent telemetry for this session
-  const recentEvents = storeEvents.slice(0, 6);
-  const recentFindings = storeFindings.slice(0, 6);
+  const runEvents = isEngineLive() ? storeEvents.filter((event) => event.tags.some((tag) => runTags.includes(tag))) : storeEvents;
+  const runEventIds = new Set(runEvents.map((event) => event.id));
+  const recentEvents = runEvents.slice(0, 6);
+  const recentFindings = (isEngineLive() ? storeFindings.filter((f) => f.event_id && runEventIds.has(f.event_id)) : storeFindings).slice(0, 6);
 
   if (isLoading) {
     return (
@@ -165,12 +172,12 @@ export default function Simulate() {
           <div>
             <div className="flex items-center gap-2 mb-1.5">
               <div className="p-1.5 rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30">
-                <Crosshair className="w-5 h-5 animate-pulse" />
+                <Crosshair className="w-5 h-5" />
               </div>
               <h1 className="font-display text-xl font-bold text-text">
                 Attack & Exfiltration Simulator
               </h1>
-              <span className="font-mono text-xs px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
+              <span className="font-mono text-xs px-2 py-0.5 rounded-sm bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
                 {scenarios.length} Attack Vectors
               </span>
             </div>
@@ -213,7 +220,7 @@ export default function Simulate() {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                  <span className="w-2 h-2 rounded-sm bg-cyan-400 animate-ping" />
                   <span className="font-bold text-cyan-300">
                     Executing Step {sequenceIndex + 1} of {scenarios.length}:{" "}
                     {scenarios[sequenceIndex]?.name}
@@ -229,11 +236,11 @@ export default function Simulate() {
                 {scenarios.map((_, i) => (
                   <div
                     key={i}
-                    className={`rounded-full transition-all duration-300 ${
+                    className={`rounded-sm transition-all duration-300 ${
                       i < sequenceIndex
-                        ? "bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]"
+                        ? "bg-emerald-400 "
                         : i === sequenceIndex
-                        ? "bg-cyan-400 animate-pulse"
+                        ? "bg-cyan-400 "
                         : "bg-white/10"
                     }`}
                   />
@@ -250,10 +257,6 @@ export default function Simulate() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Scenario Cards Grid (8 cols) */}
         <div className="lg:col-span-8 space-y-4">
-          <div className="flex items-center justify-between text-xs font-mono text-muted uppercase tracking-wider px-1">
-            <span>Available Attack Vectors</span>
-            <span>Click to Trigger Packet Injection</span>
-          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
             {scenarios.map((sc) => {
@@ -267,7 +270,7 @@ export default function Simulate() {
                   variant="default"
                   className={`p-4 flex flex-col justify-between transition-all relative overflow-hidden group ${
                     isActive
-                      ? "border-amber-500/50 bg-amber-950/20 shadow-[0_0_20px_rgba(245,158,11,0.2)]"
+                      ? "border-amber-500/50 bg-amber-950/20 "
                       : "hover:border-white/20"
                   }`}
                 >
@@ -277,7 +280,7 @@ export default function Simulate() {
                       initial={{ scale: 0, opacity: 0.8 }}
                       animate={{ scale: 3, opacity: 0 }}
                       transition={{ duration: 0.8, ease: "easeOut" }}
-                      className="absolute inset-0 bg-cyan-400/30 rounded-full pointer-events-none"
+                      className="absolute inset-0 bg-cyan-400/30 rounded-sm pointer-events-none"
                     />
                   )}
 
@@ -331,12 +334,11 @@ export default function Simulate() {
           <GlassCard variant="default" className="p-5 flex flex-col justify-between space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
-                <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
+                <Radio className="w-4 h-4 text-cyan-400" />
                 <h3 className="font-display text-sm font-bold text-text">
                   Simulation Telemetry Feed
                 </h3>
               </div>
-              <span className="font-mono text-[10px] text-muted">Real-Time Detections</span>
             </div>
 
             {/* Findings & Events incoming from simulation */}
@@ -347,6 +349,15 @@ export default function Simulate() {
                   <p className="font-medium text-text mb-0.5">Idle Simulator</p>
                   <p>Click &ldquo;Launch&rdquo; on any scenario to inject live exfiltration traffic.</p>
                 </div>
+              ) : recentFindings.length === 0 ? (
+                recentEvents.map((event) => (
+                  <div key={event.id} className="p-3 rounded-sm border border-border font-mono text-[11px] text-muted">
+                    <p className="text-text truncate">{event.provider?.name ?? event.dest.host}</p>
+                    <p className="truncate">
+                      {event.source} · {new Date(event.ts).toLocaleTimeString()}
+                    </p>
+                  </div>
+                ))
               ) : (
                 recentFindings.map((finding) => (
                   <div

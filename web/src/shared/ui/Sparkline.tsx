@@ -18,15 +18,17 @@ export interface SparklineProps {
 
 export function Sparkline({
   data,
-  color = "#22d3ee",
+  color = "#bad6f7",
   height = 32,
   width = 96,
   strokeWidth = 2,
   showArea = true,
   className,
 }: SparklineProps) {
+  const gradientId = React.useId();
+
   if (!data || data.length < 2) {
-    return <div style={{ height, width }} className={cn("opacity-20 bg-muted/20 rounded", className)} />;
+    return <div style={{ height, width }} className={cn("opacity-20 bg-muted/20", className)} />;
   }
 
   const min = Math.min(...data);
@@ -51,7 +53,6 @@ export function Sparkline({
   }
 
   const areaD = `${pathD} L ${width} ${height} L 0 ${height} Z`;
-  const gradientId = React.useId();
 
   return (
     <svg

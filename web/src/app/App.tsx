@@ -22,15 +22,14 @@ export default function App() {
       <Toaster
         theme="dark"
         position="top-right"
-        richColors
         closeButton
         toastOptions={{
           style: {
             background: "#090d18",
-            border: "1px solid rgba(148, 163, 255, 0.15)",
-            color: "#e8ecf5",
+            border: "1px solid rgba(186,215,247, 0.15)",
+            color: "#d8e2ee",
             backdropFilter: "blur(16px)",
-            fontFamily: "Inter, sans-serif",
+            fontFamily: "Archivo, sans-serif",
           },
         }}
       />

@@ -12,7 +12,6 @@ import {
   XCircle,
   Building2,
   Calendar,
-  Lock,
   Layers,
   Bot,
   Activity,
@@ -27,7 +26,7 @@ export default function Report() {
   const [timeWindow, setTimeWindow] = useState("7d");
 
   useEffect(() => {
-    document.title = "Compliance Audit Report — ShadowScope";
+    document.title = "Compliance Report · ShadowScope";
   }, []);
 
   useEffect(() => {
@@ -102,15 +101,15 @@ export default function Report() {
   const getGradeColor = (grade: string) => {
     switch (grade) {
       case "A":
-        return { text: "text-emerald-400", ring: "#34D399", bg: "bg-emerald-500/10", border: "border-emerald-500/40" };
+        return { text: "text-emerald-400", ring: "#86b69a", bg: "bg-emerald-500/10", border: "border-emerald-500/40" };
       case "B":
-        return { text: "text-primary", ring: "#22D3EE", bg: "bg-primary/10", border: "border-primary/40" };
+        return { text: "text-primary", ring: "#bad6f7", bg: "bg-primary/10", border: "border-primary/40" };
       case "C":
-        return { text: "text-warning", ring: "#FACC15", bg: "bg-warning/10", border: "border-warning/40" };
+        return { text: "text-warning", ring: "#c9b467", bg: "bg-warning/10", border: "border-warning/40" };
       case "D":
-        return { text: "text-amber-500", ring: "#FF8A3D", bg: "bg-amber-500/10", border: "border-amber-500/40" };
+        return { text: "text-amber-500", ring: "#d4915a", bg: "bg-amber-500/10", border: "border-amber-500/40" };
       default:
-        return { text: "text-danger", ring: "#FF3B5C", bg: "bg-danger/10", border: "border-danger/40" };
+        return { text: "text-danger", ring: "#df6a68", bg: "bg-danger/10", border: "border-danger/40" };
     }
   };
 
@@ -153,7 +152,7 @@ export default function Report() {
       </div>
 
       {/* Screen Navigation & Action Bar */}
-      <header className="sticky top-0 z-30 border-b border-border bg-bg/85 backdrop-blur-xl px-4 py-3 sm:px-8 print:hidden">
+      <header className="sticky top-0 z-30 border-b border-border bg-bg/85 px-4 py-3 sm:px-8 print:hidden">
         <div className="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Link
@@ -226,9 +225,8 @@ export default function Report() {
       {/* Main Report Container */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-8 space-y-10 print:px-0 print:py-0 print:space-y-6">
         {/* SECTION 1: EXECUTIVE COVER & SCORECARD */}
-        <section className="rounded-2xl border border-border bg-bg-2/80 p-6 sm:p-8 backdrop-blur-xl relative overflow-hidden shadow-2xl print:border print:border-gray-300 print:bg-white print:p-6 print:shadow-none">
+        <section className="rounded-2xl border border-border bg-bg-2/80 p-6 sm:p-8 relative overflow-hidden print:border print:border-gray-300 print:bg-white print:p-6 print:shadow-none">
           {/* Subtle Cyber Grid Glow */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none print:hidden" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Narrative */}
@@ -241,10 +239,6 @@ export default function Report() {
                 <span className="flex items-center gap-1 px-2.5 py-1 rounded-md border border-border bg-surface text-muted">
                   <Calendar className="h-3.5 w-3.5" />
                   Window: {report.window.from.slice(0, 10)} to {report.window.to.slice(0, 10)}
-                </span>
-                <span className="flex items-center gap-1 px-2.5 py-1 rounded-md border border-amber-500/30 bg-amber-500/10 text-amber-400">
-                  <Lock className="h-3.5 w-3.5" />
-                  Confidential Audit
                 </span>
               </div>
 
@@ -260,37 +254,37 @@ export default function Report() {
               {/* Stats Strip */}
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-3">
                 <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
-                  <div className="text-[10px] font-mono uppercase text-muted">Events Analyzed</div>
+                  <div className="text-[10px] font-mono text-muted">Events Analyzed</div>
                   <div className="font-mono text-base font-bold text-text mt-0.5 print:text-black">
                     {report.stats.events.toLocaleString()}
                   </div>
                 </div>
                 <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
-                  <div className="text-[10px] font-mono uppercase text-muted">AI Requests</div>
+                  <div className="text-[10px] font-mono text-muted">AI Requests</div>
                   <div className="font-mono text-base font-bold text-text mt-0.5 print:text-black">
                     {report.stats.ai_requests.toLocaleString()}
                   </div>
                 </div>
                 <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
-                  <div className="text-[10px] font-mono uppercase text-muted">Data Egress</div>
+                  <div className="text-[10px] font-mono text-muted">Data Egress</div>
                   <div className="font-mono text-base font-bold text-text mt-0.5 print:text-black">
                     {formatBytes(report.stats.bytes_out)}
                   </div>
                 </div>
                 <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
-                  <div className="text-[10px] font-mono uppercase text-muted">Shadow AI Tools</div>
+                  <div className="text-[10px] font-mono text-muted">Shadow AI Tools</div>
                   <div className="font-mono text-base font-bold text-amber-400 mt-0.5 print:text-black">
                     {report.stats.shadow_tools}
                   </div>
                 </div>
                 <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
-                  <div className="text-[10px] font-mono uppercase text-muted">Open Findings</div>
+                  <div className="text-[10px] font-mono text-muted">Open Findings</div>
                   <div className="font-mono text-base font-bold text-danger mt-0.5 print:text-black">
                     {report.stats.findings_open}
                   </div>
                 </div>
                 <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
-                  <div className="text-[10px] font-mono uppercase text-muted">Critical Leaks</div>
+                  <div className="text-[10px] font-mono text-muted">Critical Leaks</div>
                   <div className="font-mono text-base font-bold text-danger mt-0.5 print:text-black">
                     {report.stats.critical}
                   </div>
@@ -334,13 +328,10 @@ export default function Report() {
 
               <div className="mt-4 text-center">
                 <span
-                  className={`inline-block font-mono text-xs font-semibold px-3 py-1 rounded-full border ${gradeStyle.border} ${gradeStyle.bg} ${gradeStyle.text} print:border-black print:text-black`}
+                  className={`inline-block font-mono text-xs font-semibold px-3 py-1 rounded-sm border ${gradeStyle.border} ${gradeStyle.bg} ${gradeStyle.text} print:border-black print:text-black`}
                 >
                   Postured: Grade {report.overall.grade} ({report.overall.score}%)
                 </span>
-                <p className="text-[11px] font-mono text-muted mt-1.5 print:text-gray-500">
-                  Calculated per Master Spec §9 Risk Matrix
-                </p>
               </div>
             </div>
           </div>
@@ -355,9 +346,6 @@ export default function Report() {
                 Evaluation across data protection, privacy, credit card, and cybersecurity governance mandates
               </p>
             </div>
-            <span className="font-mono text-xs text-muted hidden sm:inline">
-              5 Frameworks Monitored
-            </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -369,7 +357,7 @@ export default function Report() {
               return (
                 <div
                   key={fw.id}
-                  className="rounded-xl border border-border bg-bg-2 p-5 backdrop-blur-md flex flex-col justify-between shadow-lg print:border-gray-300 print:bg-white print:shadow-none print:break-inside-avoid"
+                  className="rounded-xl border border-border bg-bg-2 p-5 flex flex-col justify-between print:border-gray-300 print:bg-white print:shadow-none print:break-inside-avoid"
                 >
                   <div>
                     {/* Header */}
@@ -390,13 +378,13 @@ export default function Report() {
                     </div>
 
                     {/* Progress Bar */}
-                    <div className="my-3 h-1.5 w-full rounded-full bg-surface-solid overflow-hidden print:bg-gray-200">
+                    <div className="my-3 h-1.5 w-full rounded-sm bg-surface-solid overflow-hidden print:bg-gray-200">
                       <div
-                        className="h-full rounded-full transition-all duration-700"
+                        className="h-full rounded-sm transition-all duration-700"
                         style={{
                           width: `${fw.score}%`,
                           backgroundColor:
-                            fw.score >= 80 ? "#34D399" : fw.score >= 60 ? "#FACC15" : "#FF3B5C",
+                            fw.score >= 80 ? "#86b69a" : fw.score >= 60 ? "#c9b467" : "#df6a68",
                         }}
                       />
                     </div>
@@ -413,7 +401,7 @@ export default function Report() {
                               {ctrl.id}: {ctrl.name}
                             </span>
                             <span
-                              className={`shrink-0 flex items-center gap-1 text-[10px] uppercase font-bold px-1.5 py-0.5 rounded ${
+                              className={`shrink-0 flex items-center gap-1 text-[10px]  font-bold px-1.5 py-0.5 rounded ${
                                 ctrl.status === "pass"
                                   ? "border border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
                                   : ctrl.status === "warn"
@@ -470,10 +458,10 @@ export default function Report() {
             </span>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-border bg-bg-2 shadow-xl print:border-gray-300 print:bg-white print:shadow-none">
+          <div className=" rounded-xl border border-border bg-bg-2 print:border-gray-300 print:bg-white print:shadow-none">
             <table className="w-full text-left border-collapse text-xs font-mono">
               <thead>
-                <tr className="border-b border-border bg-surface/80 text-muted uppercase text-[10px] tracking-wider print:border-gray-300 print:bg-gray-100 print:text-black">
+                <tr className="border-b border-border bg-surface/80 text-muted text-[10px] print:border-gray-300 print:bg-gray-100 print:text-black">
                   <th className="p-3">Severity</th>
                   <th className="p-3">Title & Classification</th>
                   <th className="p-3">Origin / Destination</th>
@@ -487,7 +475,7 @@ export default function Report() {
                   <tr key={finding.id} className="hover:bg-surface/30 transition-colors print:hover:bg-transparent">
                     <td className="p-3 whitespace-nowrap">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] uppercase font-bold ${
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px]  font-bold ${
                           finding.severity === "critical"
                             ? "border border-danger/40 bg-danger/10 text-danger"
                             : finding.severity === "high"
@@ -562,10 +550,10 @@ export default function Report() {
               </span>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-border bg-bg-2 p-1 shadow-lg print:border-gray-300 print:bg-white print:shadow-none">
+            <div className=" rounded-xl border border-border bg-bg-2 p-1 print:border-gray-300 print:bg-white print:shadow-none">
               <table className="w-full text-left text-xs font-mono">
                 <thead>
-                  <tr className="border-b border-border bg-surface/50 text-[10px] uppercase text-muted print:border-gray-200 print:text-black">
+                  <tr className="border-b border-border bg-surface/50 text-[10px] text-muted print:border-gray-200 print:text-black">
                     <th className="p-2.5">Process</th>
                     <th className="p-2.5">Category</th>
                     <th className="p-2.5">Traffic</th>
@@ -587,7 +575,7 @@ export default function Report() {
                       </td>
                       <td className="p-2.5">
                         <span
-                          className={`px-1.5 py-0.5 rounded text-[10px] uppercase font-bold ${
+                          className={`px-1.5 py-0.5 rounded text-[10px]  font-bold ${
                             item.sanctioned
                               ? "border border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
                               : "border border-danger/30 bg-danger/10 text-danger"
@@ -621,10 +609,10 @@ export default function Report() {
               </span>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-border bg-bg-2 p-1 shadow-lg print:border-gray-300 print:bg-white print:shadow-none">
+            <div className=" rounded-xl border border-border bg-bg-2 p-1 print:border-gray-300 print:bg-white print:shadow-none">
               <table className="w-full text-left text-xs font-mono">
                 <thead>
-                  <tr className="border-b border-border bg-surface/50 text-[10px] uppercase text-muted print:border-gray-200 print:text-black">
+                  <tr className="border-b border-border bg-surface/50 text-[10px] text-muted print:border-gray-200 print:text-black">
                     <th className="p-2.5">Agent / Process</th>
                     <th className="p-2.5">Permissions Matrix</th>
                     <th className="p-2.5">Autonomy</th>
@@ -679,7 +667,7 @@ export default function Report() {
                       </td>
                       <td className="p-2.5 text-right">
                         <span
-                          className={`px-1.5 py-0.5 rounded text-[10px] uppercase font-bold ${
+                          className={`px-1.5 py-0.5 rounded text-[10px]  font-bold ${
                             agent.status === "blocked"
                               ? "border border-danger/30 bg-danger/10 text-danger"
                               : agent.status === "active"
@@ -714,7 +702,7 @@ export default function Report() {
             {report.recommendations.map((rec, index) => (
               <div
                 key={index}
-                className={`rounded-xl border p-5 backdrop-blur-md shadow-lg transition-all ${
+                className={`rounded-xl border p-5 transition-all ${
                   rec.priority === "P0"
                     ? "border-danger/40 bg-danger/5 print:border-red-400 print:bg-white"
                     : rec.priority === "P1"

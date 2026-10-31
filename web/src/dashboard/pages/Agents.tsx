@@ -20,7 +20,7 @@ import {
   Button,
   Skeleton,
 } from "../../shared/ui";
-import type { AgentSession, Severity } from "../../shared/types";
+import type { Severity } from "../../shared/types";
 import { toast } from "sonner";
 
 function timeAgo(dateString: string): string {
@@ -47,6 +47,24 @@ const FRAMEWORK_META: Record<string, { label: string; color: string }> = {
   custom: { label: "Custom Agent", color: "text-muted border-white/10 bg-surface" },
 };
 
+const MARKED_KEY = "shadowscope_marked_agents";
+
+function loadMarkedAgents(): Set<string> {
+  try {
+    return new Set<string>(JSON.parse(localStorage.getItem(MARKED_KEY) ?? "[]"));
+  } catch {
+    return new Set();
+  }
+}
+
+function saveMarkedAgents(ids: Set<string>) {
+  try {
+    localStorage.setItem(MARKED_KEY, JSON.stringify([...ids]));
+  } catch {
+    // Storage can be blocked; the mark then lasts until reload.
+  }
+}
+
 export default function Agents() {
   const { data, isLoading } = useQuery({
     queryKey: ["agents"],
@@ -58,10 +76,7 @@ export default function Agents() {
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
 
   // Local optimistic permission & status overrides
-  const [blockedAgents, setBlockedAgents] = useState<Set<string>>(new Set());
-  const [permissionOverrides, setPermissionOverrides] = useState<
-    Record<string, AgentSession["permissions"]>
-  >({});
+  const [blockedAgents, setBlockedAgents] = useState<Set<string>>(loadMarkedAgents);
 
   // Auto-select first agent once data loads
   useEffect(() => {
@@ -73,30 +88,18 @@ export default function Agents() {
   const activeAgent = agents.find((a) => a.id === selectedAgentId) || agents[0];
 
   const isBlocked = activeAgent ? blockedAgents.has(activeAgent.id) || activeAgent.status === "blocked" : false;
-  const currentPermissions = activeAgent
-    ? permissionOverrides[activeAgent.id] || activeAgent.permissions
-    : null;
+  const currentPermissions = activeAgent ? activeAgent.permissions : null;
 
-  // Kill Switch action
-  const handleKillSwitch = (agentId: string) => {
-    setBlockedAgents((prev) => new Set(prev).add(agentId));
-    toast.error(`KILL SWITCH ENGAGED: Terminated Agent PID ${activeAgent?.pid}`, {
-      description: "Process execution revoked and blocked via ShadowScope endpoint rule.",
+  // ShadowScope watches agents and has no way to stop them, so this only marks the session for the analyst.
+  const handleMarkBlocked = (agentId: string) => {
+    setBlockedAgents((prev) => {
+      const next = new Set(prev).add(agentId);
+      saveMarkedAgents(next);
+      return next;
     });
-  };
-
-  // Toggle individual permission
-  const handleTogglePermission = (key: keyof AgentSession["permissions"]) => {
-    if (!activeAgent || !currentPermissions) return;
-    const nextPerms = {
-      ...currentPermissions,
-      [key]: !currentPermissions[key],
-    };
-    setPermissionOverrides((prev) => ({
-      ...prev,
-      [activeAgent.id]: nextPerms,
-    }));
-    toast.info(`Updated agent capability: ${key} = ${nextPerms[key] ? "ENABLED" : "DISABLED"}`);
+    toast.info("Marked as blocked in this browser", {
+      description: "ShadowScope only observes. Stop the process yourself, or block its provider in Policies.",
+    });
   };
 
   if (isLoading) {
@@ -118,14 +121,14 @@ export default function Agents() {
         <div>
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-xl bg-violet-500/10 border border-violet-500/30 text-violet-400">
-              <Bot className="w-5 h-5 animate-pulse" />
+              <Bot className="w-5 h-5" />
             </div>
             <div>
               <h1 className="font-display text-xl font-bold text-text">
                 Autonomous Agents & Permission Governance
               </h1>
               <p className="text-xs text-muted mt-0.5">
-                Supervise tool calls, enforce sandboxing, and monitor machine-speed autonomous loops
+                Tool calls, permissions and autonomy for each agent session.
               </p>
             </div>
           </div>
@@ -133,10 +136,10 @@ export default function Agents() {
 
         {/* Aggregate Stats Badges */}
         <div className="flex items-center gap-2 font-mono text-xs">
-          <span className="px-3 py-1 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-300">
+          <span className="px-3 py-1 rounded-sm border border-violet-500/30 bg-violet-500/10 text-violet-300">
             {agents.length} Agent Sessions
           </span>
-          <span className="px-3 py-1 rounded-full border border-red-500/30 bg-red-500/10 text-red-400 font-bold">
+          <span className="px-3 py-1 rounded-sm border border-red-500/30 bg-red-500/10 text-red-400 font-bold">
             {agents.filter((a) => a.risk_score >= 80).length} High Risk
           </span>
         </div>
@@ -148,7 +151,7 @@ export default function Agents() {
         {/* Left: Agent Session List (4 cols)                                    */}
         {/* ==================================================================== */}
         <div className="lg:col-span-4 space-y-3">
-          <div className="flex items-center justify-between px-1 text-xs font-mono text-muted uppercase tracking-wider">
+          <div className="flex items-center justify-between px-1 text-xs font-mono text-muted">
             <span>Discovered Agents ({agents.length})</span>
             <span>Autonomy / Risk</span>
           </div>
@@ -167,7 +170,7 @@ export default function Agents() {
                   onClick={() => setSelectedAgentId(agent.id)}
                   className={`p-3.5 flex flex-col gap-2 transition-all cursor-pointer ${
                     selected
-                      ? "border-cyan-400/50 bg-cyan-950/20 shadow-[0_0_20px_rgba(34,211,238,0.15)]"
+                      ? "border-cyan-400/50 bg-cyan-950/20 "
                       : "hover:border-white/20"
                   } ${blocked ? "opacity-60 grayscale-[40%]" : ""}`}
                 >
@@ -186,7 +189,7 @@ export default function Agents() {
 
                     {/* Status Pill */}
                     <span
-                      className={`text-[9px] font-mono px-2 py-0.2 rounded-full font-bold uppercase ${
+                      className={`text-[9px] font-mono px-2 py-0.2 rounded-sm font-bold  ${
                         blocked
                           ? "bg-red-500/20 text-red-400 border border-red-500/30"
                           : agent.status === "active"
@@ -194,14 +197,14 @@ export default function Agents() {
                           : "bg-white/10 text-muted"
                       }`}
                     >
-                      {blocked ? "BLOCKED" : agent.status}
+                      {blocked ? "marked" : agent.status}
                     </span>
                   </div>
 
                   {/* Autonomy Meter & Risk Indicators */}
                   <div className="flex items-center justify-between text-xs font-mono pt-1 border-t border-white/[0.04]">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] uppercase text-muted">Autonomy:</span>
+                      <span className="text-[10px] text-muted">Autonomy:</span>
                       <span
                         className={`font-bold ${
                           agent.autonomy_score >= 80
@@ -216,7 +219,7 @@ export default function Agents() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] uppercase text-muted">Risk:</span>
+                      <span className="text-[10px] text-muted">Risk:</span>
                       <span
                         className={`font-bold px-1.5 py-0.2 rounded ${
                           agent.risk_score >= 80
@@ -257,13 +260,13 @@ export default function Agents() {
                       {activeAgent.id}
                     </span>
                     <span
-                      className={`text-xs px-2.5 py-0.5 rounded-full font-mono font-bold uppercase ${
+                      className={`text-xs px-2.5 py-0.5 rounded-sm font-mono font-bold  ${
                         isBlocked
-                          ? "bg-red-500/20 text-red-300 border border-red-500/40 animate-pulse"
+                          ? "bg-red-500/20 text-red-300 border border-red-500/40 "
                           : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
                       }`}
                     >
-                      {isBlocked ? "STATUS: BLOCKED / SANDBOXED" : "STATUS: ACTIVE RUNTIME"}
+                      {isBlocked ? "status: marked blocked" : `status: ${activeAgent.status}`}
                     </span>
                     <span className="font-mono text-xs text-muted">
                       PID: {activeAgent.pid ?? "N/A"}
@@ -289,20 +292,20 @@ export default function Agents() {
                     variant={isBlocked ? "secondary" : "danger"}
                     size="sm"
                     disabled={isBlocked}
-                    onClick={() => handleKillSwitch(activeAgent.id)}
-                    className="w-full sm:w-auto font-bold uppercase tracking-wider"
+                    onClick={() => handleMarkBlocked(activeAgent.id)}
+                    className="w-full sm:w-auto font-bold"
                     magnetic
                   >
                     <Power className="w-4 h-4 text-red-400" />
-                    {isBlocked ? "Process Terminated" : "Kill Switch (Block)"}
+                    {isBlocked ? "Marked Blocked" : "Mark as Blocked"}
                   </Button>
                 </div>
               </div>
 
               {/* Autonomy vs Risk Score Dial strip */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-white/[0.08] font-mono text-xs">
-                <div className="p-3 rounded-xl border border-white/[0.06] bg-[#0c101d]">
-                  <span className="text-[10px] uppercase text-muted block mb-1">Autonomy Score</span>
+                <div className="p-3 rounded-xl border border-white/[0.06] bg-[#11141c]">
+                  <span className="text-[10px] text-muted block mb-1">Autonomy Score</span>
                   <div className="flex items-baseline gap-2">
                     <span className="text-2xl font-bold text-red-400">{activeAgent.autonomy_score}</span>
                     <span className="text-muted/60">/ 100</span>
@@ -310,17 +313,17 @@ export default function Agents() {
                   <span className="text-[10px] text-muted mt-1 block">Machine-speed execution</span>
                 </div>
 
-                <div className="p-3 rounded-xl border border-white/[0.06] bg-[#0c101d]">
-                  <span className="text-[10px] uppercase text-muted block mb-1">Risk Score</span>
+                <div className="p-3 rounded-xl border border-white/[0.06] bg-[#11141c]">
+                  <span className="text-[10px] text-muted block mb-1">Risk Score</span>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold text-[#ff3b5c]">{activeAgent.risk_score}</span>
+                    <span className="text-2xl font-bold text-[#df6a68]">{activeAgent.risk_score}</span>
                     <span className="text-muted/60">/ 100</span>
                   </div>
                   <span className="text-[10px] text-muted mt-1 block">Exfiltration hazard</span>
                 </div>
 
-                <div className="p-3 rounded-xl border border-white/[0.06] bg-[#0c101d]">
-                  <span className="text-[10px] uppercase text-muted block mb-1">Inference Requests</span>
+                <div className="p-3 rounded-xl border border-white/[0.06] bg-[#11141c]">
+                  <span className="text-[10px] text-muted block mb-1">Inference Requests</span>
                   <div className="flex items-baseline gap-2">
                     <span className="text-2xl font-bold text-cyan-400">{activeAgent.requests}</span>
                     <span className="text-muted/60">total</span>
@@ -342,7 +345,7 @@ export default function Agents() {
                   </h3>
                 </div>
                 <span className="font-mono text-[11px] text-muted">
-                  Click to enforce sandbox policy
+                  Inferred from declared tools
                 </span>
               </div>
 
@@ -395,11 +398,10 @@ export default function Agents() {
                   return (
                     <div
                       key={key}
-                      onClick={() => handleTogglePermission(key)}
-                      className={`p-3 rounded-xl border transition-all cursor-pointer select-none flex flex-col justify-between ${
+                      className={`p-3 rounded-xl border flex flex-col justify-between ${
                         enabled
                           ? danger
-                            ? "bg-red-950/25 border-red-500/40 shadow-[0_0_15px_rgba(255,59,92,0.15)]"
+                            ? "bg-red-950/25 border-red-500/40 "
                             : "bg-cyan-950/20 border-cyan-500/30"
                           : "bg-surface-solid/60 border-white/[0.06] opacity-60"
                       }`}
@@ -411,7 +413,7 @@ export default function Agents() {
                           }`}
                         />
                         <span
-                          className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[9px] font-bold ${
+                          className={`w-3.5 h-3.5 rounded-sm flex items-center justify-center text-[9px] font-bold ${
                             enabled ? (danger ? "bg-red-500 text-white" : "bg-cyan-400 text-black") : "bg-white/10 text-muted"
                           }`}
                         >
@@ -456,11 +458,11 @@ export default function Agents() {
                             <SeverityPill severity={tool.severity as Severity} size="xs" />
                           </div>
                         </div>
-                        <div className="h-1.5 w-full bg-white/[0.06] rounded-full overflow-hidden">
+                        <div className="h-1.5 w-full bg-white/[0.06] rounded-sm overflow-hidden">
                           <div
-                            className={`h-full rounded-full ${
+                            className={`h-full rounded-sm ${
                               tool.severity === "critical"
-                                ? "bg-red-500 shadow-[0_0_8px_rgba(255,59,92,0.8)]"
+                                ? "bg-red-500 "
                                 : "bg-cyan-400"
                             }`}
                             style={{ width: `${pct}%` }}
@@ -493,7 +495,7 @@ export default function Agents() {
                     <div key={idx} className="relative group">
                       {/* Timeline Node Dot */}
                       <div
-                        className={`absolute -left-6 top-1.5 w-2.5 h-2.5 rounded-full border-2 border-[#05060A] ${
+                        className={`absolute -left-6 top-1.5 w-2.5 h-2.5 rounded-sm border-2 border-[#0b0d13] ${
                           act.severity === "critical"
                             ? "bg-red-500 ring-4 ring-red-500/20"
                             : act.severity === "high"
@@ -505,7 +507,7 @@ export default function Agents() {
                       <div className="rounded-xl border border-white/[0.08] bg-surface-solid/70 p-3 space-y-2">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-bold text-cyan-300 uppercase">
+                            <span className="font-mono text-xs font-bold text-cyan-300">
                               {act.kind}
                             </span>
                             <SeverityPill severity={act.severity as Severity} size="xs" />
@@ -522,7 +524,7 @@ export default function Agents() {
                         </div>
 
                         {/* Executed Command in Mono */}
-                        <pre className="p-2 rounded bg-[#060812] border border-white/5 font-mono text-xs text-text overflow-x-auto whitespace-pre-wrap">
+                        <pre className="p-2 rounded bg-[#0b0d13] border border-white/5 font-mono text-xs text-text whitespace-pre-wrap break-words whitespace-pre-wrap">
                           {act.detail}
                         </pre>
                       </div>

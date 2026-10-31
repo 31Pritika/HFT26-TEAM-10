@@ -3,7 +3,27 @@ import type {
   Observation, Overview, Page, Policy, Provider, ScanResult, Scenario, TriageResult,
 } from "./types";
 
-export const API_BASE: string = import.meta.env.VITE_API_BASE ?? "http://localhost:8787/api";
+const API_BASE_KEY = "shadowscope_api_base";
+
+function storedApiBase(): string | null {
+  try {
+    return localStorage.getItem(API_BASE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/** Saves the override from Settings, or clears it when empty. The page reloads to reconnect. */
+export function setApiBaseOverride(url: string) {
+  try {
+    if (url) localStorage.setItem(API_BASE_KEY, url);
+    else localStorage.removeItem(API_BASE_KEY);
+  } catch {
+    // Storage can be blocked; the default base stays in use.
+  }
+}
+
+export const API_BASE: string = storedApiBase() ?? import.meta.env.VITE_API_BASE ?? "http://localhost:8787/api";
 const DEMO_FORCED = import.meta.env.VITE_DEMO_MODE === "true";
 const PROBE_TIMEOUT_MS = 1500;
 const PROBE_INTERVAL_MS = 15_000;

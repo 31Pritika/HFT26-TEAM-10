@@ -35,7 +35,7 @@ export function Tabs({
     <div
       role="tablist"
       className={cn(
-        "flex items-center gap-1 overflow-x-auto",
+        "flex flex-wrap items-center gap-1",
         variant === "underline" ? "border-b border-border pb-px" : "bg-surface-solid/80 p-1 rounded-xl border border-border",
         className,
       )}
@@ -78,13 +78,13 @@ export function Tabs({
               variant === "underline" ? (
                 <motion.div
                   layoutId={layoutId}
-                  className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-primary via-cyan-400 to-primary-2 shadow-[0_0_8px_rgba(34,211,238,0.5)]"
+                  className="absolute bottom-0 inset-x-0 h-0.5 bg-primary"
                   transition={{ type: "spring", stiffness: 350, damping: 30 }}
                 />
               ) : (
                 <motion.div
                   layoutId={layoutId}
-                  className="absolute inset-0 rounded-lg bg-surface border border-white/10 -z-10 shadow-sm"
+                  className="absolute inset-0 rounded-lg bg-surface border border-white/10 -z-10"
                   transition={{ type: "spring", stiffness: 350, damping: 30 }}
                 />
               )

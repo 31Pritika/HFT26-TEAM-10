@@ -17,7 +17,7 @@ export default function NotFound() {
   const [diagComplete, setDiagComplete] = useState(false);
 
   useEffect(() => {
-    document.title = "404 Not Found — ShadowScope";
+    document.title = "Page Not Found · ShadowScope";
   }, []);
 
   const handleRunDiag = () => {
@@ -32,20 +32,19 @@ export default function NotFound() {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center bg-bg text-text p-4 sm:p-6 overflow-hidden selection:bg-primary/20 selection:text-primary">
       {/* Background Cyber Grid & Vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(34,211,238,0.06)_0%,_rgba(5,6,10,0.95)_70%)] pointer-events-none" />
       <div
         className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:32px_32px]"
       />
 
       <div className="relative z-10 w-full max-w-2xl mx-auto flex flex-col items-center text-center">
         {/* Status Pill */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-danger/30 bg-danger/10 text-xs font-mono text-danger mb-6 animate-pulse">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm border border-danger/30 bg-danger/10 text-xs font-mono text-danger mb-6">
           <ShieldAlert className="h-3.5 w-3.5" />
           <span>STATUS: UNKNOWN_ENDPOINT_DETECTED</span>
         </div>
 
         {/* Big Glitch 404 */}
-        <div className="relative font-display font-black text-7xl sm:text-9xl tracking-tighter select-none my-2 text-transparent bg-clip-text bg-gradient-to-b from-text via-text/80 to-muted/40">
+        <div className="relative font-display font-black text-7xl sm:text-9xl tracking-tighter select-none my-2 text-transparent bg-clip-text bg-text from-text via-text/80 to-muted/40">
           <span>404</span>
           {/* Cyber chromatic aberration layer */}
           <span
@@ -76,13 +75,13 @@ export default function NotFound() {
         </p>
 
         {/* Terminal Diagnostics Card */}
-        <div className="w-full text-left rounded-xl border border-border bg-bg-2/95 p-4 sm:p-5 backdrop-blur-xl font-mono text-xs shadow-2xl mb-8 overflow-hidden">
+        <div className="w-full text-left rounded-xl border border-border bg-bg-2/95 p-4 sm:p-5 font-mono text-xs mb-8 overflow-hidden">
           <div className="flex items-center justify-between border-b border-border pb-2.5 mb-3 text-muted">
             <div className="flex items-center gap-2">
               <Terminal className="h-3.5 w-3.5 text-primary" />
-              <span className="text-[11px] uppercase tracking-wider">ShadowScope Kernel Inspection</span>
+              <span className="text-[11px]">ShadowScope Kernel Inspection</span>
             </div>
-            <span className="text-[10px] text-muted">eBPF / DNS Interceptor</span>
+            <span className="text-[10px] text-muted">dns / sni probe</span>
           </div>
 
           <div className="space-y-1.5 text-muted leading-relaxed">
@@ -91,7 +90,7 @@ export default function NotFound() {
               <span className="text-text">{location.pathname}</span>
             </div>
             <div>
-              <span className="text-primary">[RADAR]</span> Scanning 22 canonical AI provider fingerprints…
+              <span className="text-primary">[RADAR]</span> Matching against AI provider fingerprints…
             </div>
             <div className="text-muted/80 pl-4 border-l border-border/50 text-[11px]">
               - OpenAI (api.openai.com, chatgpt.com) : NO MATCH
@@ -131,7 +130,7 @@ export default function NotFound() {
         <div className="flex flex-wrap items-center justify-center gap-3 w-full">
           <Link
             to="/"
-            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-primary/40 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-mono font-semibold transition-all shadow-lg hover:shadow-primary/20"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-primary/40 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-mono font-semibold transition-all hover:shadow-primary/20"
           >
             <Home className="h-4 w-4" />
             <span>Return Home</span>

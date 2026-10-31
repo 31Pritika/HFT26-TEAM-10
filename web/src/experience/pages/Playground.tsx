@@ -28,7 +28,6 @@ import {
   Download,
   Terminal,
   Send,
-  Zap,
   Check,
   Cpu,
   Trash2,
@@ -58,42 +57,42 @@ const SEVERITY_CONFIG: Record<
   }
 > = {
   critical: {
-    bg: "rgba(255,59,92,0.12)",
-    border: "rgba(255,59,92,0.45)",
-    text: "#FF3B5C",
-    underline: "#FF3B5C",
-    badgeBg: "rgba(255,59,92,0.2)",
+    bg: "rgba(223,106,104,0.12)",
+    border: "rgba(223,106,104,0.45)",
+    text: "#df6a68",
+    underline: "#df6a68",
+    badgeBg: "rgba(223,106,104,0.2)",
     icon: ShieldAlert,
   },
   high: {
-    bg: "rgba(255,138,61,0.12)",
-    border: "rgba(255,138,61,0.45)",
-    text: "#FF8A3D",
-    underline: "#FF8A3D",
-    badgeBg: "rgba(255,138,61,0.2)",
+    bg: "rgba(212,145,90,0.12)",
+    border: "rgba(212,145,90,0.45)",
+    text: "#d4915a",
+    underline: "#d4915a",
+    badgeBg: "rgba(212,145,90,0.2)",
     icon: AlertTriangle,
   },
   medium: {
-    bg: "rgba(250,204,21,0.1)",
-    border: "rgba(250,204,21,0.45)",
-    text: "#FACC15",
-    underline: "#FACC15",
-    badgeBg: "rgba(250,204,21,0.2)",
+    bg: "rgba(201,180,103,0.1)",
+    border: "rgba(201,180,103,0.45)",
+    text: "#c9b467",
+    underline: "#c9b467",
+    badgeBg: "rgba(201,180,103,0.2)",
     icon: Info,
   },
   low: {
-    bg: "rgba(52,211,153,0.1)",
-    border: "rgba(52,211,153,0.4)",
-    text: "#34D399",
-    underline: "#34D399",
-    badgeBg: "rgba(52,211,153,0.2)",
+    bg: "rgba(134,182,154,0.1)",
+    border: "rgba(134,182,154,0.4)",
+    text: "#86b69a",
+    underline: "#86b69a",
+    badgeBg: "rgba(134,182,154,0.2)",
     icon: ShieldCheck,
   },
   info: {
     bg: "rgba(96,165,250,0.1)",
     border: "rgba(96,165,250,0.4)",
-    text: "#60A5FA",
-    underline: "#60A5FA",
+    text: "#8fb0d8",
+    underline: "#8fb0d8",
     badgeBg: "rgba(96,165,250,0.2)",
     icon: Info,
   },
@@ -120,7 +119,7 @@ export default function Playground() {
 
   // Check engine connectivity & self test on mount
   useEffect(() => {
-    document.title = "Threat Playground — ShadowScope";
+    document.title = "Threat Playground · ShadowScope";
     if (import.meta.env.DEV) {
       runScannerSelfTests();
     }
@@ -228,7 +227,7 @@ export default function Playground() {
   return (
     <div className="min-h-screen bg-bg text-text flex flex-col">
       {/* Top Navigation */}
-      <header className="border-b border-border bg-bg-2/80 backdrop-blur-xl sticky top-0 z-30">
+      <header className="border-b border-border bg-bg-2/80 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link
@@ -253,18 +252,17 @@ export default function Playground() {
           <div className="flex items-center gap-3">
             {/* Engine status indicator */}
             <div
-              className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono border"
+              className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-sm text-xs font-mono border"
               style={{
-                background: engineConnected ? "rgba(52,211,153,0.1)" : "rgba(34,211,238,0.08)",
-                borderColor: engineConnected ? "rgba(52,211,153,0.3)" : "rgba(34,211,238,0.25)",
+                background: engineConnected ? "rgba(134,182,154,0.1)" : "rgba(186,215,247,0.08)",
+                borderColor: engineConnected ? "rgba(134,182,154,0.3)" : "rgba(186,215,247,0.25)",
                 color: engineConnected ? "var(--low)" : "var(--primary)",
               }}
             >
               <span
-                className="w-1.5 h-1.5 rounded-full"
+                className="w-1.5 h-1.5 rounded-sm"
                 style={{
                   background: engineConnected ? "var(--low)" : "var(--primary)",
-                  boxShadow: `0 0 6px ${engineConnected ? "var(--low)" : "var(--primary)"}`,
                 }}
               />
               {engineConnected ? "Backend Engine Online" : "100% In-Browser Scanner"}
@@ -285,17 +283,8 @@ export default function Playground() {
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-5">
         {/* Presets Bar */}
         <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-mono text-muted uppercase tracking-wider flex items-center gap-1.5">
-              <Zap className="w-3.5 h-3.5 text-primary" />
-              Test Presets
-            </span>
-            <span className="text-xs font-mono text-faint hidden sm:inline">
-              Safe pattern-valid sample data
-            </span>
-          </div>
 
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+          <div className="flex items-center gap-2 flex-wrap pb-1 scrollbar-none">
             {PLAYGROUND_PRESETS.map((p) => {
               const active = selectedPreset === p.id;
               return (
@@ -304,11 +293,10 @@ export default function Playground() {
                   onClick={() => handleSelectPreset(p)}
                   className={`px-3 py-2 rounded-[var(--radius-sm)] border text-xs font-medium whitespace-nowrap flex items-center gap-2 transition-all ${
                     active
-                      ? "bg-primary/15 border-primary/50 text-text shadow-glow-primary"
+                      ? "bg-primary/15 border-primary/50 text-text"
                       : "bg-surface border-border text-muted hover:text-text hover:border-border-strong"
                   }`}
                 >
-                  <span>{p.icon}</span>
                   <span className="font-display font-semibold">{p.name}</span>
                 </button>
               );
@@ -404,11 +392,11 @@ export default function Playground() {
         {/* Dual Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1 min-h-[580px]">
           {/* Left Column: Editor & Line Highlights (7 cols on lg) */}
-          <div className="lg:col-span-7 flex flex-col rounded-[var(--radius)] border border-border bg-[#070913] overflow-hidden shadow-2xl relative">
+          <div className="lg:col-span-7 flex flex-col rounded-[var(--radius)] border border-border bg-[#070913] overflow-hidden relative">
             {/* Editor Header */}
             <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-surface-solid/40 font-mono text-xs text-muted">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary/40" />
+                <span className="w-2.5 h-2.5 rounded-sm bg-primary/40" />
                 <span>input-payload.txt</span>
               </div>
               <div className="flex items-center gap-3">
@@ -473,7 +461,7 @@ export default function Playground() {
             {/* Bottom Bar: Live scan status */}
             <div className="px-4 py-2 border-t border-border bg-black/40 flex items-center justify-between text-xs font-mono text-muted">
               <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                <span className="w-1.5 h-1.5 rounded-sm bg-primary" />
                 <span>Client Scan Duration: {scanResult.stats.duration_ms} ms</span>
               </div>
               <div className="flex items-center gap-3">
@@ -487,17 +475,17 @@ export default function Playground() {
           <div className="lg:col-span-5 flex flex-col gap-4">
             {/* Risk Meter Card */}
             <div
-              className="rounded-[var(--radius)] border p-5 flex items-center justify-between gap-4 backdrop-blur-xl relative overflow-hidden"
+              className="rounded-[var(--radius)] border p-5 flex items-center justify-between gap-4 relative overflow-hidden"
               style={{
                 background: "var(--surface)",
                 borderColor:
                   scanResult.risk_score >= 80
-                    ? "rgba(255,59,92,0.4)"
+                    ? "rgba(223,106,104,0.4)"
                     : scanResult.risk_score >= 60
-                      ? "rgba(255,138,61,0.4)"
+                      ? "rgba(212,145,90,0.4)"
                       : scanResult.risk_score >= 20
-                        ? "rgba(250,204,21,0.4)"
-                        : "rgba(52,211,153,0.4)",
+                        ? "rgba(201,180,103,0.4)"
+                        : "rgba(134,182,154,0.4)",
               }}
             >
               <div className="flex items-center gap-4">
@@ -509,7 +497,7 @@ export default function Playground() {
                       cy="18"
                       r="15"
                       fill="none"
-                      stroke="rgba(148,163,255,0.1)"
+                      stroke="rgba(186,215,247,0.1)"
                       strokeWidth="3"
                     />
                     <motion.circle
@@ -564,7 +552,7 @@ export default function Playground() {
             </div>
 
             {/* Findings Filter Tabs */}
-            <div className="flex items-center gap-1.5 border-b border-border pb-1 overflow-x-auto scrollbar-none">
+            <div className="flex items-center gap-1.5 border-b border-border pb-1 flex-wrap scrollbar-none">
               {(
                 [
                   { id: "all", label: "All", count: scanResult.findings.length },
@@ -600,7 +588,7 @@ export default function Playground() {
                   }`}
                 >
                   <span>{tab.label}</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-surface border border-border text-muted">
+                  <span className="text-[10px] px-1.5 py-0.2 rounded-sm bg-surface border border-border text-muted">
                     {tab.count}
                   </span>
                 </button>
@@ -611,7 +599,7 @@ export default function Playground() {
             <div className="flex-1 overflow-y-auto space-y-3 pr-1 max-h-[600px] scrollbar-thin">
               {filteredFindings.length === 0 ? (
                 <div className="rounded-[var(--radius)] border border-border bg-surface p-8 text-center flex flex-col items-center justify-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-low/15 border border-low/30 flex items-center justify-center text-low">
+                  <div className="w-12 h-12 rounded-sm bg-low/15 border border-low/30 flex items-center justify-center text-low">
                     <ShieldCheck className="w-6 h-6" />
                   </div>
                   <div>
@@ -641,14 +629,13 @@ export default function Playground() {
                       style={{
                         background: isHovered ? cfg.bg : "var(--surface)",
                         borderColor: isHovered ? cfg.text : cfg.border,
-                        boxShadow: isHovered ? `0 0 20px ${cfg.underline}44` : "none",
                       }}
                     >
                       {/* Finding Card Top Row */}
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-center gap-2">
                           <span
-                            className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase flex items-center gap-1"
+                            className="text-[10px] font-mono px-2 py-0.5 rounded font-bold flex items-center gap-1"
                             style={{
                               background: cfg.badgeBg,
                               color: cfg.text,

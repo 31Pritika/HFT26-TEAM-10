@@ -2,39 +2,68 @@
 
 /* Design tokens: master spec §10. `static` keeps every token available as a CSS variable. */
 @theme static {
-  --color-bg: #05060a;
-  --color-bg-2: #0a0d16;
-  --color-surface: rgba(17, 22, 39, 0.72);
-  --color-surface-solid: #111627;
-  --color-border: rgba(148, 163, 255, 0.1);
-  --color-border-strong: rgba(148, 163, 255, 0.22);
-  --color-text: #e8ecf5;
-  --color-muted: #8a93a8;
-  --color-faint: #4b5368;
-  --color-primary: #22d3ee;
-  --color-primary-2: #0ea5e9;
-  --color-accent: #8b5cf6;
-  --color-accent-2: #ec4899;
-  --color-critical: #ff3b5c;
-  --color-high: #ff8a3d;
-  --color-medium: #facc15;
-  --color-low: #34d399;
-  --color-info: #60a5fa;
+  --color-bg: #0b0d13;
+  --color-bg-2: #0f1219;
+  --color-surface: #11141c;
+  --color-surface-solid: #11141c;
+  --color-border: rgba(186, 215, 247, 0.13);
+  --color-border-strong: rgba(186, 215, 247, 0.26);
+  --color-text: #d8e2ee;
+  --color-muted: #94a2b5;
+  --color-faint: #76859a;
+  --color-primary: #bad6f7;
+  --color-primary-2: #98c0ef;
+  --color-accent: #9dadc2;
+  --color-accent-2: #9dadc2;
+  --color-danger: #df6a68;
+  --color-critical: #df6a68;
+  --color-high: #d4915a;
+  --color-medium: #c9b467;
+  --color-low: #86b69a;
+  --color-info: #8fb0d8;
 
-  --shadow-glow-primary: 0 0 24px rgba(34, 211, 238, 0.35);
-  --shadow-glow-critical: 0 0 28px rgba(255, 59, 92, 0.45);
+  /* One cool accent: every saturated utility the pages use lands on this short list. */
+  --color-cyan-50: #eef5fb; --color-cyan-100: #e2edf8; --color-cyan-200: #d8e8f7; --color-cyan-300: #c9def5;
+  --color-cyan-400: #bad6f7; --color-cyan-500: #98c0ef; --color-cyan-600: #7ea3d0; --color-cyan-700: #5f7fa8;
+  --color-cyan-800: #435c7c; --color-cyan-900: #2d3e55; --color-cyan-950: #1b2636;
+  --color-sky-300: #c9def5; --color-sky-400: #bad6f7; --color-sky-500: #98c0ef; --color-teal-300: #c9def5;
+  --color-teal-400: #bad6f7; --color-teal-500: #98c0ef; --color-blue-300: #c9def5; --color-blue-400: #a9c6ea;
+  --color-blue-500: #8fb0d8; --color-blue-600: #7ea3d0;
 
-  --radius-sm: 8px;
-  --radius: 14px;
-  --radius-lg: 22px;
+  --color-violet-300: #b9c5d6; --color-violet-400: #9dadc2; --color-violet-500: #8596ad; --color-violet-600: #6d7e95;
+  --color-violet-950: #1b2230; --color-purple-300: #b9c5d6; --color-purple-400: #9dadc2; --color-purple-500: #8596ad;
+  --color-fuchsia-400: #9dadc2; --color-fuchsia-500: #8596ad; --color-pink-300: #b9c5d6; --color-pink-400: #9dadc2;
+  --color-pink-500: #8596ad; --color-indigo-300: #b9c5d6; --color-indigo-400: #9dadc2; --color-indigo-500: #8596ad;
 
-  --font-display: "Space Grotesk", system-ui, sans-serif;
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-red-200: #f0c6c5; --color-red-300: #e9a3a1; --color-red-400: #e58583; --color-red-500: #df6a68;
+  --color-red-600: #c75553; --color-red-700: #a34443; --color-red-900: #4d2424; --color-red-950: #2b1718;
+  --color-rose-200: #f0c6c5; --color-rose-300: #e9a3a1; --color-rose-400: #e58583; --color-rose-500: #df6a68;
+  --color-rose-600: #c75553; --color-rose-900: #4d2424; --color-rose-950: #2b1718;
+  --color-orange-300: #e4b48c; --color-orange-400: #dca274; --color-orange-500: #d4915a; --color-orange-600: #b6784a;
+  --color-amber-200: #ead9a3; --color-amber-300: #dfc98a; --color-amber-400: #d4bd75; --color-amber-500: #c9b467;
+  --color-amber-600: #a99753; --color-amber-950: #2a2517; --color-yellow-300: #dfc98a; --color-yellow-400: #d4bd75;
+  --color-yellow-500: #c9b467;
+  --color-emerald-200: #cfe3d7; --color-emerald-300: #a9cdb8; --color-emerald-400: #96c1a8; --color-emerald-500: #86b69a;
+  --color-emerald-600: #6d9a80; --color-emerald-950: #17241d; --color-green-400: #96c1a8; --color-green-500: #86b69a;
 
-  --ease-signal: cubic-bezier(0.22, 1, 0.36, 1);
-  --duration-micro: 0.18s;
-  --duration-ui: 0.4s;
+  /* Square corners everywhere. */
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --radius: 2px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+  --radius-2xl: 2px;
+  --radius-3xl: 2px;
+
+  --font-display: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-serif: "Archivo", system-ui, sans-serif;
+
+  --ease-signal: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duration-micro: 0.15s;
+  --duration-ui: 0.25s;
   --duration-hero: 0.8s;
 
   --breakpoint-xs: 375px;
@@ -60,8 +89,6 @@
   --medium: var(--color-medium);
   --low: var(--color-low);
   --info: var(--color-info);
-  --glow-primary: var(--shadow-glow-primary);
-  --glow-critical: var(--shadow-glow-critical);
   color-scheme: dark;
 }
 
@@ -70,6 +97,8 @@
   body,
   #root {
     min-height: 100%;
+    max-width: 100%;
+    overflow-x: clip;
   }
 
   body {
@@ -94,7 +123,7 @@
   }
 
   ::selection {
-    background: rgba(34, 211, 238, 0.3);
+    background: rgba(186, 215, 247, 0.26);
     color: var(--text);
   }
 
@@ -115,7 +144,57 @@
 
   ::-webkit-scrollbar-thumb {
     background: var(--border-strong);
-    border-radius: 8px;
+  }
+
+  /* Plain text rows stay readable next to the mono data around them. */
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.015em;
+  }
+}
+
+@layer components {
+  /* Corner marks, the frame every panel sits in. */
+  .crop {
+    position: relative;
+  }
+  .crop::before,
+  .crop::after {
+    content: "";
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    pointer-events: none;
+    border: 0 solid var(--color-primary-2);
+    opacity: 0.55;
+  }
+  .crop::before {
+    top: -1px;
+    left: -1px;
+    border-top-width: 1px;
+    border-left-width: 1px;
+  }
+  .crop::after {
+    right: -1px;
+    bottom: -1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+  }
+
+  /* Third-party widgets set these inline. */
+  .recharts-default-tooltip {
+    border-radius: 2px !important;
+  }
+  .graph-info-msg {
+    font-family: var(--font-mono);
+  }
+
+  .hairline-grid {
+    background-image:
+      linear-gradient(to right, rgba(186, 215, 247, 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(186, 215, 247, 0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
 }
 

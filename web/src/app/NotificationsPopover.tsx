@@ -35,19 +35,19 @@ export function NotificationsPopover() {
       >
         <Bell className="w-5 h-5" />
         {unreadCriticals.length > 0 && (
-          <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 font-mono text-[10px] font-bold text-white shadow-[0_0_8px_rgba(255,59,92,0.8)] animate-pulse">
+          <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-sm bg-red-500 font-mono text-[10px] font-bold text-white">
             {unreadCriticals.length > 9 ? "9+" : unreadCriticals.length}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-xl border border-white/15 bg-[#090d18]/95 p-0 shadow-2xl backdrop-blur-2xl z-50">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-xl border border-white/15 bg-[#090d18]/95 p-0 z-50">
           <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
             <div className="flex items-center gap-2">
               <ShieldAlert className="w-4 h-4 text-red-400" />
               <span className="font-display text-sm font-semibold text-text">Critical Alerts</span>
-              <span className="rounded-full bg-red-500/20 px-2 py-0.5 font-mono text-[11px] font-bold text-red-400">
+              <span className="rounded-sm bg-red-500/20 px-2 py-0.5 font-mono text-[11px] font-bold text-red-400">
                 {unreadCriticals.length}
               </span>
             </div>

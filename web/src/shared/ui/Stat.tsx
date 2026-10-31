@@ -35,7 +35,7 @@ export function Stat({
   icon: Icon,
   trend,
   sparkline,
-  sparklineColor = "#22d3ee",
+  sparklineColor = "#bad6f7",
   countUp = true,
   formatter,
   variant = "default",
@@ -45,9 +45,9 @@ export function Stat({
 
   const iconVariants = {
     default: "bg-surface-solid text-muted border border-border",
-    cyan: "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-[0_0_12px_rgba(34,211,238,0.2)]",
-    violet: "bg-violet-500/10 text-violet-400 border border-violet-500/20 shadow-[0_0_12px_rgba(139,92,246,0.2)]",
-    critical: "bg-red-500/15 text-[#ff3b5c] border border-red-500/30 shadow-[0_0_16px_rgba(255,59,92,0.25)]",
+    cyan: "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 ",
+    violet: "bg-violet-500/10 text-violet-400 border border-violet-500/20 ",
+    critical: "bg-red-500/15 text-[#df6a68] border border-red-500/30 ",
     warning: "bg-orange-500/15 text-orange-400 border border-orange-500/30",
   };
 
@@ -63,7 +63,7 @@ export function Stat({
       )}
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-medium text-muted uppercase tracking-wider line-clamp-1">{label}</span>
+        <span className="text-xs font-medium text-muted line-clamp-1">{label}</span>
         {Icon && (
           <div className={cn("p-1.5 rounded-lg shrink-0", iconVariants[variant])}>
             <Icon className="w-4 h-4" />

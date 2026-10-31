@@ -33,34 +33,34 @@ const GRADE_CONFIG: Record<
   }
 > = {
   A: {
-    color: "#34d399",
-    glowClass: "shadow-[0_0_30px_rgba(52,211,153,0.35)]",
-    textClass: "text-[#34d399]",
-    statusLabel: "HEALTHY POSTURE",
+    color: "#86b69a",
+    glowClass: "",
+    textClass: "text-[#86b69a]",
+    statusLabel: "posture: healthy",
   },
   B: {
-    color: "#22d3ee",
-    glowClass: "shadow-[0_0_30px_rgba(34,211,238,0.35)]",
-    textClass: "text-[#22d3ee]",
-    statusLabel: "MODERATE RISK",
+    color: "#bad6f7",
+    glowClass: "",
+    textClass: "text-[#bad6f7]",
+    statusLabel: "posture: moderate",
   },
   C: {
-    color: "#facc15",
-    glowClass: "shadow-[0_0_30px_rgba(250,204,21,0.35)]",
-    textClass: "text-[#facc15]",
-    statusLabel: "ELEVATED EXPOSURE",
+    color: "#c9b467",
+    glowClass: "",
+    textClass: "text-[#c9b467]",
+    statusLabel: "posture: elevated",
   },
   D: {
-    color: "#ff8a3d",
-    glowClass: "shadow-[0_0_35px_rgba(255,138,61,0.4)]",
-    textClass: "text-[#ff8a3d]",
-    statusLabel: "HIGH RISK LEVEL",
+    color: "#d4915a",
+    glowClass: "",
+    textClass: "text-[#d4915a]",
+    statusLabel: "posture: high",
   },
   F: {
-    color: "#ff3b5c",
-    glowClass: "shadow-[0_0_40px_rgba(255,59,92,0.5)]",
-    textClass: "text-[#ff3b5c]",
-    statusLabel: "CRITICAL BREACH HAZARD",
+    color: "#df6a68",
+    glowClass: "",
+    textClass: "text-[#df6a68]",
+    statusLabel: "posture: critical",
   },
 };
 
@@ -76,11 +76,11 @@ export function RiskGauge({
   const cfg = GRADE_CONFIG[grade];
 
   const dimensions = {
-    hero: { diameter: 220, stroke: 14, fontGrade: "text-6xl", fontScore: "text-base" },
-    lg: { diameter: 160, stroke: 12, fontGrade: "text-4xl", fontScore: "text-sm" },
-    md: { diameter: 120, stroke: 10, fontGrade: "text-3xl", fontScore: "text-xs" },
-    sm: { diameter: 80, stroke: 7, fontGrade: "text-xl", fontScore: "text-[10px]" },
-    compact: { diameter: 48, stroke: 4.5, fontGrade: "text-sm", fontScore: "text-[9px]" },
+    hero: { diameter: 208, stroke: 6, fontGrade: "text-6xl", fontScore: "text-base" },
+    lg: { diameter: 160, stroke: 5, fontGrade: "text-4xl", fontScore: "text-sm" },
+    md: { diameter: 120, stroke: 4, fontGrade: "text-3xl", fontScore: "text-xs" },
+    sm: { diameter: 80, stroke: 3, fontGrade: "text-xl", fontScore: "text-[10px]" },
+    compact: { diameter: 44, stroke: 3, fontGrade: "text-sm", fontScore: "text-[9px]" },
   }[size];
 
   const radius = (dimensions.diameter - dimensions.stroke) / 2;
@@ -98,14 +98,6 @@ export function RiskGauge({
         className="relative flex items-center justify-center"
         style={{ width: dimensions.diameter, height: dimensions.diameter }}
       >
-        {/* Glow backdrop circle */}
-        <div
-          className={cn("absolute rounded-full transition-all duration-700 pointer-events-none opacity-40 blur-xl", cfg.glowClass)}
-          style={{
-            width: dimensions.diameter * 0.75,
-            height: dimensions.diameter * 0.75,
-          }}
-        />
 
         <svg
           width={dimensions.diameter}
@@ -123,7 +115,7 @@ export function RiskGauge({
             strokeWidth={dimensions.stroke}
             strokeDasharray={`${arcLength} ${circumference}`}
             strokeDashoffset={0}
-            strokeLinecap="round"
+            strokeLinecap="butt"
             style={{
               transformOrigin: "center",
               transform: `rotate(${startAngle}deg)`,
@@ -142,11 +134,10 @@ export function RiskGauge({
             initial={{ strokeDashoffset: arcLength }}
             animate={{ strokeDashoffset }}
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            strokeLinecap="round"
+            strokeLinecap="butt"
             style={{
               transformOrigin: "center",
               transform: `rotate(${startAngle}deg)`,
-              filter: `drop-shadow(0 0 6px ${cfg.color})`,
             }}
           />
         </svg>
@@ -173,7 +164,7 @@ export function RiskGauge({
         <div className="mt-3 text-center">
           <span
             className={cn(
-              "inline-block font-mono text-xs font-semibold tracking-widest uppercase px-3 py-1 rounded-full border bg-surface-solid/80 backdrop-blur-md",
+              "inline-block font-mono text-[11px] font-medium px-2 py-0.5 rounded-sm border bg-surface-solid/80 ",
               cfg.textClass,
               "border-current/30",
             )}

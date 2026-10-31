@@ -37,6 +37,7 @@ interface IngestSample {
   riskSummary: string;
   badge: string;
   content: string;
+  url?: string;
 }
 
 const SAMPLE_FILES: IngestSample[] = [
@@ -72,14 +73,15 @@ const SAMPLE_FILES: IngestSample[] = [
   },
   {
     id: "sample-pcap-ollama",
-    name: "Wireshark PCAP: Rogue Ollama Agent",
-    filename: "ollama_loopback_exfil.pcap",
+    name: "PCAP: Simulated Local AI Traffic",
+    filename: "demo.pcap",
     format: "pcap",
-    size: "842 KB",
-    description: "Local loopback packet capture recording an autonomous LangChain script streaming confidential IP to local port 11434.",
+    size: "10.3 KB",
+    description: "A real capture from the attack simulator: HTTP on loopback ports, plus a TLS ClientHello with its SNI.",
     riskSummary: "High: Unmonitored Localhost AI & Source Exfiltration",
     badge: "Packet Capture",
-    content: "PCAP_BINARY_DUMP_STREAM_LOCAL_PORT_11434_OLLAMA_MODEL_CODELLAMA_13B_AUTONOMOUS_EXFIL",
+    content: "",
+    url: "/samples/demo.pcap",
   },
   {
     id: "sample-jsonl-react",
@@ -169,8 +171,8 @@ export default function Ingest() {
     disabled: isProcessing,
   });
 
-  const handleLoadSample = (sample: IngestSample) => {
-    const blob = new Blob([sample.content], { type: "text/plain" });
+  const handleLoadSample = async (sample: IngestSample) => {
+    const blob = sample.url ? await (await fetch(sample.url)).blob() : new Blob([sample.content], { type: "text/plain" });
     const file = new File([blob], sample.filename, {
       type: sample.format === "har" ? "application/json" : "application/octet-stream",
     });
@@ -190,7 +192,7 @@ export default function Ingest() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl font-bold tracking-tight text-white font-[Space_Grotesk]">
+            <h1 className="text-2xl font-bold tracking-tight text-white font-display">
               Evidence Ingest
             </h1>
             <Badge variant="cyan" dot>
@@ -202,7 +204,7 @@ export default function Ingest() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 self-start sm:self-auto px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
+        <div className="flex items-center gap-2 self-start sm:self-auto px-3 py-1.5 rounded-sm bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
           <span>100% Client-Side Engine • Zero Cloud Uploads</span>
         </div>
@@ -218,9 +220,9 @@ export default function Ingest() {
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
-                className="relative overflow-hidden rounded-2xl border border-cyan-500/30 bg-neutral-900/80 p-8 backdrop-blur-xl shadow-2xl shadow-cyan-950/30"
+                className="relative overflow-hidden rounded-2xl border border-cyan-500/30 bg-neutral-900/80 p-8"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-violet-500/5 pointer-events-none" />
+                <div className="absolute inset-0 bg-cyan-500/5 pointer-events-none" />
 
                 <div className="relative z-10 flex flex-col items-center text-center space-y-6">
                   {/* Rotating Scanner Orb */}
@@ -228,15 +230,15 @@ export default function Ingest() {
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                      className="w-20 h-20 rounded-full border-2 border-cyan-500/20 border-t-cyan-400 border-r-cyan-400/50 flex items-center justify-center shadow-lg shadow-cyan-500/20"
+                      className="w-20 h-20 rounded-sm border-2 border-cyan-500/20 border-t-cyan-400 border-r-cyan-400/50 flex items-center justify-center"
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <Zap className="w-8 h-8 text-cyan-400 animate-pulse" />
+                      <Zap className="w-8 h-8 text-cyan-400" />
                     </div>
                   </div>
 
                   <div className="space-y-1">
-                    <h3 className="text-lg font-semibold text-white font-[Space_Grotesk]">
+                    <h3 className="text-lg font-semibold text-white font-display">
                       Analyzing Forensic Artifact
                     </h3>
                     <p className="text-xs font-mono text-cyan-400/90 truncate max-w-md">
@@ -250,9 +252,9 @@ export default function Ingest() {
                       <span className="text-neutral-400">Pipeline Execution</span>
                       <span className="text-cyan-400 font-semibold">{progress}%</span>
                     </div>
-                    <div className="w-full h-2 rounded-full bg-neutral-800 overflow-hidden border border-neutral-700/50">
+                    <div className="w-full h-2 rounded-sm bg-neutral-800 overflow-hidden border border-neutral-700/50">
                       <motion.div
-                        className="h-full bg-gradient-to-r from-cyan-500 to-violet-500 rounded-full"
+                        className="h-full bg-cyan-500 rounded-sm"
                         style={{ width: `${progress}%` }}
                         transition={{ ease: "easeInOut" }}
                       />
@@ -275,7 +277,7 @@ export default function Ingest() {
                 className="space-y-6"
               >
                 {/* Result Hero Card */}
-                <div className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-b from-emerald-950/20 via-neutral-900/90 to-neutral-950 p-6 backdrop-blur-xl shadow-xl shadow-emerald-950/20">
+                <div className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-6">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-neutral-800">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shrink-0">
@@ -283,7 +285,7 @@ export default function Ingest() {
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <h2 className="text-lg font-bold text-white font-[Space_Grotesk]">
+                          <h2 className="text-lg font-bold text-white font-display">
                             Ingestion Analysis Complete
                           </h2>
                           <Badge variant="low" dot>
@@ -310,7 +312,7 @@ export default function Ingest() {
                   {/* 4 Metric Cards */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6">
                     <div className="p-3.5 rounded-xl bg-neutral-950/70 border border-neutral-800/80">
-                      <div className="text-[11px] font-medium text-neutral-400 uppercase tracking-wider">
+                      <div className="text-[11px] font-medium text-neutral-400">
                         Events Created
                       </div>
                       <div className="text-2xl font-bold font-mono text-cyan-400 mt-1">
@@ -320,7 +322,7 @@ export default function Ingest() {
                     </div>
 
                     <div className="p-3.5 rounded-xl bg-neutral-950/70 border border-neutral-800/80">
-                      <div className="text-[11px] font-medium text-neutral-400 uppercase tracking-wider">
+                      <div className="text-[11px] font-medium text-neutral-400">
                         Findings Flagged
                       </div>
                       <div className="text-2xl font-bold font-mono text-rose-400 mt-1">
@@ -330,7 +332,7 @@ export default function Ingest() {
                     </div>
 
                     <div className="p-3.5 rounded-xl bg-neutral-950/70 border border-neutral-800/80">
-                      <div className="text-[11px] font-medium text-neutral-400 uppercase tracking-wider">
+                      <div className="text-[11px] font-medium text-neutral-400">
                         AI Requests
                       </div>
                       <div className="text-2xl font-bold font-mono text-amber-400 mt-1">
@@ -340,7 +342,7 @@ export default function Ingest() {
                     </div>
 
                     <div className="p-3.5 rounded-xl bg-neutral-950/70 border border-neutral-800/80">
-                      <div className="text-[11px] font-medium text-neutral-400 uppercase tracking-wider">
+                      <div className="text-[11px] font-medium text-neutral-400">
                         Scan Duration
                       </div>
                       <div className="text-2xl font-bold font-mono text-violet-400 mt-1">
@@ -369,7 +371,7 @@ export default function Ingest() {
                     <Button
                       variant="primary"
                       onClick={() => navigate("/app/alerts")}
-                      className="shadow-lg shadow-cyan-500/20"
+                      className=""
                     >
                       <span>Review Findings in Alerts Center</span>
                       <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -395,7 +397,7 @@ export default function Ingest() {
                   {...getRootProps()}
                   className={`relative cursor-pointer rounded-2xl border-2 border-dashed p-10 text-center transition-all duration-300 ${
                     isDragActive
-                      ? "border-cyan-400 bg-cyan-950/20 shadow-2xl shadow-cyan-500/20 scale-[1.01]"
+                      ? "border-cyan-400 bg-cyan-950/20 scale-[1.01]"
                       : "border-neutral-700/60 hover:border-cyan-500/50 bg-neutral-900/40 hover:bg-neutral-900/60"
                   }`}
                 >
@@ -413,7 +415,7 @@ export default function Ingest() {
                     </div>
 
                     <div className="space-y-1.5 max-w-sm">
-                      <div className="text-base font-semibold text-white font-[Space_Grotesk]">
+                      <div className="text-base font-semibold text-white font-display">
                         {isDragActive
                           ? "Drop network trace file here..."
                           : "Drag & drop network trace file here"}
@@ -436,7 +438,7 @@ export default function Ingest() {
 
                     {/* Supported Format Chips */}
                     <div className="flex flex-wrap items-center justify-center gap-2 pt-3 border-t border-neutral-800/80 w-full max-w-md">
-                      <span className="text-[10px] text-neutral-400 uppercase tracking-wider mr-1">Formats:</span>
+                      <span className="text-[10px] text-neutral-400 mr-1">Formats:</span>
                       <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-neutral-800/80 text-neutral-300 border border-neutral-700/50">
                         HAR (DevTools)
                       </span>
@@ -492,7 +494,7 @@ export default function Ingest() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="p-3 rounded-xl bg-neutral-900/60 border border-neutral-800 text-xs space-y-1">
                       <div className="font-semibold text-cyan-300 flex items-center gap-1.5">
-                        <span className="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">
+                        <span className="w-4 h-4 rounded-sm bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">
                           1
                         </span>
                         Open Developer Tools
@@ -506,7 +508,7 @@ export default function Ingest() {
 
                     <div className="p-3 rounded-xl bg-neutral-900/60 border border-neutral-800 text-xs space-y-1">
                       <div className="font-semibold text-cyan-300 flex items-center gap-1.5">
-                        <span className="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">
+                        <span className="w-4 h-4 rounded-sm bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">
                           2
                         </span>
                         Navigate to Network Tab
@@ -518,7 +520,7 @@ export default function Ingest() {
 
                     <div className="p-3 rounded-xl bg-neutral-900/60 border border-neutral-800 text-xs space-y-1">
                       <div className="font-semibold text-cyan-300 flex items-center gap-1.5">
-                        <span className="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">
+                        <span className="w-4 h-4 rounded-sm bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">
                           3
                         </span>
                         Reproduce AI Usage
@@ -530,7 +532,7 @@ export default function Ingest() {
 
                     <div className="p-3 rounded-xl bg-neutral-900/60 border border-neutral-800 text-xs space-y-1">
                       <div className="font-semibold text-cyan-300 flex items-center gap-1.5">
-                        <span className="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">
+                        <span className="w-4 h-4 rounded-sm bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">
                           4
                         </span>
                         Export Archive
@@ -558,7 +560,7 @@ export default function Ingest() {
           <GlassCard className="p-5">
             <div className="flex items-center gap-2 mb-3">
               <Zap className="w-4 h-4 text-amber-400" />
-              <h2 className="text-sm font-semibold text-white font-[Space_Grotesk]">
+              <h2 className="text-sm font-semibold text-white font-display">
                 Load Forensic Test Samples
               </h2>
             </div>
@@ -614,7 +616,7 @@ export default function Ingest() {
           <GlassCard className="p-5 space-y-3">
             <div className="flex items-center gap-2">
               <Layers className="w-4 h-4 text-violet-400" />
-              <h3 className="text-sm font-semibold text-white font-[Space_Grotesk]">
+              <h3 className="text-sm font-semibold text-white font-display">
                 Parser Capabilities
               </h3>
             </div>

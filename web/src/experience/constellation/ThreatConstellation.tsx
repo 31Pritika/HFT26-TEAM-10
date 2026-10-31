@@ -113,9 +113,9 @@ export default function ThreatConstellation() {
   }, [data]);
 
   return (
-    <div className="relative flex flex-col h-[calc(100vh-5rem)] min-h-[680px] w-full rounded-xl border border-border bg-bg-2 overflow-hidden shadow-2xl">
+    <div className="relative flex flex-col h-[calc(100vh-5rem)] min-h-[680px] w-full rounded-xl border border-border bg-bg-2 overflow-hidden">
       {/* Top Control Bar */}
-      <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-border bg-bg/80 px-4 py-3 backdrop-blur-md">
+      <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-border bg-bg/80 px-4 py-3">
         {/* Title & Live Status */}
         <div className="flex items-center gap-3">
           <div>
@@ -123,10 +123,10 @@ export default function ThreatConstellation() {
               <h1 className="font-display font-semibold text-text text-base md:text-lg">
                 Threat Constellation
               </h1>
-              <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full border border-primary/30 bg-primary/10 text-[11px] font-mono text-primary">
+              <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-sm border border-primary/30 bg-primary/10 text-[11px] font-mono text-primary">
                 <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-sm bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-sm h-1.5 w-1.5 bg-primary"></span>
                 </span>
                 Live 24h
               </span>
@@ -151,7 +151,7 @@ export default function ThreatConstellation() {
             />
             {/* Search Dropdown */}
             {searchMatches.length > 0 && searchQuery && (
-              <div className="absolute left-0 top-full mt-1.5 w-full z-30 rounded-lg border border-border bg-bg-2/95 p-1 backdrop-blur-xl shadow-xl">
+              <div className="absolute left-0 top-full mt-1.5 w-full z-30 rounded-lg border border-border bg-bg-2/95 p-1">
                 {searchMatches.map((node) => (
                   <button
                     key={node.id}
@@ -162,7 +162,7 @@ export default function ThreatConstellation() {
                     className="w-full flex items-center justify-between p-2 rounded text-left hover:bg-surface text-xs font-mono transition-colors"
                   >
                     <span className="text-text truncate">{node.label}</span>
-                    <span className="text-[10px] text-muted uppercase">[{node.kind}]</span>
+                    <span className="text-[10px] text-muted">[{node.kind}]</span>
                   </button>
                 ))}
               </div>
@@ -210,7 +210,7 @@ export default function ThreatConstellation() {
       {/* Filter Chips & Stats Bar */}
       <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-border/60 bg-bg-2/70 px-4 py-2 text-xs font-mono">
         {/* Kind Filters */}
-        <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
+        <div className="flex items-center gap-1.5 flex-wrap py-0.5">
           {[
             { id: "all", label: "All Nodes", icon: Radio },
             { id: "process", label: "Processes", icon: Cpu },
@@ -311,25 +311,25 @@ export default function ThreatConstellation() {
         )}
 
         {/* Legend Bar (Bottom Left) */}
-        <div className="absolute bottom-3 left-3 z-10 flex flex-wrap items-center gap-3 rounded-lg border border-border/80 bg-bg/90 px-3 py-2 text-[10px] font-mono text-muted backdrop-blur-md shadow-lg pointer-events-none sm:pointer-events-auto">
+        <div className="absolute bottom-3 left-3 z-10 flex flex-wrap items-center gap-3 rounded-lg border border-border/80 bg-bg/90 px-3 py-2 text-[10px] font-mono text-muted pointer-events-none sm:pointer-events-auto">
           <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-primary" />
+            <span className="h-2 w-2 rounded-sm bg-primary" />
             <span>Low (&lt;20)</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-warning" />
+            <span className="h-2 w-2 rounded-sm bg-warning" />
             <span>Med (20-50)</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-amber-500" />
+            <span className="h-2 w-2 rounded-sm bg-amber-500" />
             <span>High (50-80)</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-danger" />
+            <span className="h-2 w-2 rounded-sm bg-danger" />
             <span>Critical (&gt;80)</span>
           </div>
           <div className="hidden lg:flex items-center gap-1.5 border-l border-border pl-2">
-            <span className="inline-block h-1 w-3 bg-primary rounded animate-pulse" />
+            <span className="inline-block h-1 w-3 bg-primary rounded" />
             <span>Particles = Egress Volume</span>
           </div>
         </div>

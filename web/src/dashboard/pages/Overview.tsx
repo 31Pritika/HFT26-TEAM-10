@@ -15,8 +15,6 @@ import {
   Lock,
   Crosshair,
   Activity,
-  CheckCircle2,
-  XCircle,
   Database,
 } from "lucide-react";
 import {
@@ -66,12 +64,12 @@ function timeAgo(dateString: string): string {
 
 // Colors for provider donut
 const PROVIDER_COLORS = [
-  "#22D3EE", // cyan (Ollama / Local)
-  "#10B981", // emerald (OpenAI)
-  "#F59E0B", // amber (Anthropic)
-  "#8B5CF6", // violet (Cursor)
-  "#EC4899", // pink (Gemini)
-  "#3B82F6", // blue (Others)
+  "#bad6f7", // cyan (Ollama / Local)
+  "#86b69a", // emerald (OpenAI)
+  "#c9b467", // amber (Anthropic)
+  "#9dadc2", // violet (Cursor)
+  "#9dadc2", // pink (Gemini)
+  "#8fb0d8", // blue (Others)
 ];
 
 // Stagger container animation
@@ -102,6 +100,12 @@ export default function Overview() {
   const [timeWindow, setTimeWindow] = useState<"1h" | "6h" | "24h" | "7d">("24h");
 
   // Fetch overview data from shared api
+  const { data: report } = useQuery({
+    queryKey: ["report", "7d"],
+    queryFn: () => api.getReport("7d"),
+  });
+  const recommendations = report?.recommendations?.slice(0, 3) ?? [];
+
   const { data: overview, isLoading } = useQuery({
     queryKey: ["overview", timeWindow],
     queryFn: () => api.getOverview(timeWindow),
@@ -181,16 +185,6 @@ export default function Overview() {
             glow={riskGrade === "F" || riskGrade === "D" ? "critical" : "cyan"}
             className="h-full flex flex-col items-center justify-center p-6 sm:p-8 text-center relative overflow-hidden"
           >
-            {/* Header info */}
-            <div className="w-full flex items-center justify-between mb-4">
-              <span className="font-mono text-xs text-muted uppercase tracking-wider flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                Real-Time Risk Posture
-              </span>
-              <span className="font-mono text-[11px] text-muted/70 bg-white/5 px-2 py-0.5 rounded border border-white/10">
-                Formula §9
-              </span>
-            </div>
 
             {/* Radial Gauge */}
             <RiskGauge score={riskScore} grade={riskGrade} size="hero" showLabel />
@@ -234,20 +228,17 @@ export default function Overview() {
                 <div>
                   <h2 className="font-display text-lg font-bold text-text flex items-center gap-2">
                     <Shield className="w-5 h-5 text-cyan-400" />
-                    Threat Surface Intelligence
+                    Threat Surface
                   </h2>
-                  <p className="text-xs text-muted mt-0.5">
-                    Continuous endpoint inspection without SSL certificate interception
-                  </p>
                 </div>
                 {(() => {
-                  const runningCount = overview?.collectors?.filter((c) => c.running).length ?? 6;
-                  const totalCount = overview?.collectors?.length ?? 6;
+                  const runningCount = overview?.collectors?.filter((c) => c.running).length ?? 0;
+                  const totalCount = overview?.collectors?.length ?? 0;
                   const allRunning = runningCount === totalCount;
                   return (
                     <div className="flex items-center gap-1.5">
-                      <span className={`w-2 h-2 rounded-full ${allRunning ? "bg-emerald-400" : "bg-amber-400"}`} />
-                      <span className={`font-mono text-[11px] uppercase ${allRunning ? "text-emerald-400" : "text-amber-400"}`}>
+                      <span className={`w-2 h-2 rounded-sm ${allRunning ? "bg-emerald-400" : "bg-amber-400"}`} />
+                      <span className={`font-mono text-[11px]  ${allRunning ? "text-emerald-400" : "text-amber-400"}`}>
                         {runningCount} / {totalCount} Collectors Active
                       </span>
                     </div>
@@ -258,7 +249,7 @@ export default function Overview() {
               {/* Top Risk Vectors Summary Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-4">
                 <div className="rounded-xl border border-white/[0.06] bg-surface-solid/70 p-3.5 flex flex-col justify-between">
-                  <span className="text-[11px] font-medium text-muted uppercase">Top Rogue Process</span>
+                  <span className="text-[11px] font-medium text-muted">Top Rogue Process</span>
                   <div className="mt-2">
                     <p className="font-mono text-sm font-semibold text-text truncate">
                       {overview?.top_processes?.[0]?.name ?? "python3 (agent)"}
@@ -270,10 +261,10 @@ export default function Overview() {
                 </div>
 
                 <div className="rounded-xl border border-white/[0.06] bg-surface-solid/70 p-3.5 flex flex-col justify-between">
-                  <span className="text-[11px] font-medium text-muted uppercase">Unmonitored Traffic</span>
+                  <span className="text-[11px] font-medium text-muted">Unmonitored Traffic</span>
                   <div className="mt-2">
                     <p className="font-mono text-sm font-semibold text-text">
-                      {totals?.shadow_tools ?? 10} Tools
+                      {totals?.shadow_tools ?? 0} Tools
                     </p>
                     <p className="font-mono text-xs text-amber-400 mt-0.5">
                       Unsanctioned AI SaaS
@@ -282,10 +273,10 @@ export default function Overview() {
                 </div>
 
                 <div className="rounded-xl border border-white/[0.06] bg-surface-solid/70 p-3.5 flex flex-col justify-between">
-                  <span className="text-[11px] font-medium text-muted uppercase">Data Egress Volume</span>
+                  <span className="text-[11px] font-medium text-muted">Data Egress Volume</span>
                   <div className="mt-2">
                     <p className="font-mono text-sm font-semibold text-text">
-                      {formatBytes(totals?.bytes_out ?? 13195846)}
+                      {formatBytes(totals?.bytes_out ?? 0)}
                     </p>
                     <p className="font-mono text-xs text-cyan-400 mt-0.5">
                       Across all AI hosts
@@ -297,8 +288,8 @@ export default function Overview() {
               {/* Compliance Mini-Scorecards */}
               <div className="mt-4 pt-4 border-t border-white/[0.08]">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="font-mono text-xs font-semibold text-muted uppercase tracking-wider">
-                    Regulatory Compliance Mini-Scorecards
+                  <span className="font-mono text-xs font-semibold text-muted">
+                    Compliance
                   </span>
                   <button
                     onClick={() => navigate("/report")}
@@ -325,7 +316,7 @@ export default function Overview() {
                           <span className="font-mono text-[11px] font-bold text-text truncate">
                             {framework}
                           </span>
-                          <span className={`font-mono text-sm font-bold mt-1 px-2 py-0.5 rounded-full border ${color}`}>
+                          <span className={`font-mono text-sm font-bold mt-1 px-2 py-0.5 rounded-sm border ${color}`}>
                             {score}%
                           </span>
                         </div>
@@ -338,7 +329,7 @@ export default function Overview() {
 
             {/* Quick Jump Bar */}
             <div className="mt-4 pt-3 flex flex-wrap items-center justify-between gap-2 border-t border-white/[0.06] text-xs text-muted">
-              <span>Auditing engine active on ports 8787 / 8788 / 8789</span>
+              <span />
               <button
                 onClick={() => navigate("/app/live")}
                 className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 font-medium"
@@ -354,91 +345,85 @@ export default function Overview() {
       {/* 2. 8 KPI STAT CARDS (Count-up + Sparkline)                           */}
       {/* ==================================================================== */}
       <motion.div variants={itemVariants}>
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted">
-            Telemetry Key Performance Indicators
-          </h3>
-          <span className="font-mono text-[11px] text-muted">Updated real-time</span>
-        </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <Stat
             label="Total AI Events"
-            value={totals?.events ?? 150}
+            value={totals?.events ?? 0}
             icon={Radio}
             variant="cyan"
             sparkline={requestsSparkline.slice(0, 10)}
-            sparklineColor="#22d3ee"
+            sparklineColor="#bad6f7"
             sublabel="Audited telemetry packets"
           />
 
           <Stat
             label="AI Requests"
-            value={totals?.ai_requests ?? 113}
+            value={totals?.ai_requests ?? 0}
             icon={Activity}
             variant="cyan"
             sparkline={requestsSparkline.slice(10, 20)}
-            sparklineColor="#0ea5e9"
+            sparklineColor="#98c0ef"
             sublabel="Inference API queries"
           />
 
           <Stat
             label="Open Findings"
-            value={totals?.findings_open ?? 38}
+            value={totals?.findings_open ?? 0}
             icon={ShieldAlert}
             variant="warning"
             sparkline={findingsSparkline.slice(0, 10)}
-            sparklineColor="#facc15"
+            sparklineColor="#c9b467"
             sublabel="Awaiting remediation"
           />
 
           <Stat
             label="Critical Alerts"
-            value={totals?.critical ?? 11}
+            value={totals?.critical ?? 0}
             icon={ShieldAlert}
             variant="critical"
             sparkline={riskTrendSparkline.slice(0, 10)}
-            sparklineColor="#ff3b5c"
+            sparklineColor="#df6a68"
             sublabel="Active data exfiltration"
           />
 
           <Stat
             label="Leaked Secrets"
-            value={totals?.secrets ?? 21}
+            value={totals?.secrets ?? 0}
             icon={Lock}
             variant="critical"
             sparkline={findingsSparkline.slice(5, 15)}
-            sparklineColor="#ff3b5c"
+            sparklineColor="#df6a68"
             sublabel="AWS / OpenAI / JWT / Keys"
           />
 
           <Stat
             label="PII Exfiltrations"
-            value={totals?.pii ?? 15}
+            value={totals?.pii ?? 0}
             icon={Users}
             variant="warning"
             sparkline={findingsSparkline.slice(10, 20)}
-            sparklineColor="#ff8a3d"
+            sparklineColor="#d4915a"
             sublabel="Aadhaar / PAN / CC / Emails"
           />
 
           <Stat
             label="Agent Actions"
-            value={totals?.agent_actions ?? 13}
+            value={totals?.agent_actions ?? 0}
             icon={Bot}
             variant="violet"
             sparkline={requestsSparkline.slice(14, 24)}
-            sparklineColor="#8b5cf6"
+            sparklineColor="#9dadc2"
             sublabel="Shell / FS / Tool calls"
           />
 
           <Stat
             label="Shadow AI Tools"
-            value={totals?.shadow_tools ?? 10}
+            value={totals?.shadow_tools ?? 0}
             icon={Layers}
             variant="cyan"
             sparkline={riskTrendSparkline.slice(14, 24)}
-            sparklineColor="#22d3ee"
+            sparklineColor="#bad6f7"
             sublabel="Unsanctioned services"
           />
         </div>
@@ -486,12 +471,12 @@ export default function Overview() {
                 <AreaChart data={timelineData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="reqGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#22D3EE" stopOpacity={0.35} />
-                      <stop offset="95%" stopColor="#22D3EE" stopOpacity={0.0} />
+                      <stop offset="5%" stopColor="#bad6f7" stopOpacity={0.35} />
+                      <stop offset="95%" stopColor="#bad6f7" stopOpacity={0.0} />
                     </linearGradient>
                     <linearGradient id="fndGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#FF3B5C" stopOpacity={0.4} />
-                      <stop offset="95%" stopColor="#FF3B5C" stopOpacity={0.0} />
+                      <stop offset="5%" stopColor="#df6a68" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#df6a68" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
                   <XAxis
@@ -509,20 +494,19 @@ export default function Overview() {
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#0A0D16",
-                      border: "1px solid rgba(148, 163, 255, 0.2)",
+                      backgroundColor: "#0f1219",
+                      border: "1px solid rgba(186,215,247, 0.2)",
                       borderRadius: "10px",
-                      boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
                       fontFamily: "JetBrains Mono",
                       fontSize: "12px",
                     }}
-                    labelStyle={{ color: "#E8ECF5", fontWeight: 600, marginBottom: "4px" }}
+                    labelStyle={{ color: "#d8e2ee", fontWeight: 600, marginBottom: "4px" }}
                   />
                   <Area
                     type="monotone"
                     dataKey="requests"
                     name="AI Requests"
-                    stroke="#22D3EE"
+                    stroke="#bad6f7"
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#reqGradient)"
@@ -531,7 +515,7 @@ export default function Overview() {
                     type="monotone"
                     dataKey="findings"
                     name="Flagged Findings"
-                    stroke="#FF3B5C"
+                    stroke="#df6a68"
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#fndGradient)"
@@ -584,15 +568,15 @@ export default function Overview() {
                         <Cell
                           key={`cell-${index}`}
                           fill={PROVIDER_COLORS[index % PROVIDER_COLORS.length]}
-                          stroke="#05060A"
+                          stroke="#0b0d13"
                           strokeWidth={2}
                         />
                       ))}
                     </Pie>
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: "#0A0D16",
-                        border: "1px solid rgba(148, 163, 255, 0.2)",
+                        backgroundColor: "#0f1219",
+                        border: "1px solid rgba(186,215,247, 0.2)",
                         borderRadius: "8px",
                         fontFamily: "JetBrains Mono",
                         fontSize: "11px",
@@ -603,9 +587,9 @@ export default function Overview() {
 
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                   <span className="font-mono text-xl font-bold text-text">
-                    {totals?.ai_requests ?? 113}
+                    {totals?.ai_requests ?? 0}
                   </span>
-                  <span className="text-[10px] font-mono text-muted uppercase">Requests</span>
+                  <span className="text-[10px] font-mono text-muted">Requests</span>
                 </div>
               </div>
 
@@ -621,7 +605,7 @@ export default function Overview() {
                       className="flex items-center justify-between text-xs font-mono p-1.5 rounded-lg hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="flex items-center gap-2 truncate">
-                        <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                        <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ backgroundColor: color }} />
                         <span className="text-text font-medium truncate">{p.name}</span>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
@@ -657,8 +641,8 @@ export default function Overview() {
               <div className="flex items-center justify-between pb-3 border-b border-white/[0.08] mb-4">
                 <div className="flex items-center gap-2">
                   <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500" />
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-sm bg-cyan-400 opacity-75" />
+                    <span className="relative inline-flex rounded-sm h-2.5 w-2.5 bg-cyan-500" />
                   </span>
                   <h3 className="font-display text-base font-bold text-text">
                     Live Threat Feed
@@ -690,7 +674,7 @@ export default function Overview() {
                     onClick={() => navigate(`/app/alerts/${finding.id}`)}
                     className={`p-3 rounded-xl border transition-all cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                       finding.severity === "critical"
-                        ? "bg-red-950/20 border-red-500/30 hover:border-red-500/50 shadow-[0_0_15px_rgba(255,59,92,0.1)]"
+                        ? "bg-red-950/20 border-red-500/30 hover:border-red-500/50 "
                         : "bg-surface-solid/60 border-white/[0.06] hover:border-white/20 hover:bg-surface-solid"
                     }`}
                   >
@@ -757,18 +741,18 @@ export default function Overview() {
                     const pct = Math.min(100, Math.round((count / sevSum) * 100));
 
                     const colors: Record<Severity, { bar: string; text: string }> = {
-                      critical: { bar: "bg-[#FF3B5C]", text: "text-[#FF3B5C]" },
-                      high: { bar: "bg-[#FF8A3D]", text: "text-[#FF8A3D]" },
-                      medium: { bar: "bg-[#FACC15]", text: "text-[#FACC15]" },
-                      low: { bar: "bg-[#34D399]", text: "text-[#34D399]" },
-                      info: { bar: "bg-[#60A5FA]", text: "text-[#60A5FA]" },
+                      critical: { bar: "bg-[#df6a68]", text: "text-[#df6a68]" },
+                      high: { bar: "bg-[#d4915a]", text: "text-[#d4915a]" },
+                      medium: { bar: "bg-[#c9b467]", text: "text-[#c9b467]" },
+                      low: { bar: "bg-[#86b69a]", text: "text-[#86b69a]" },
+                      info: { bar: "bg-[#8fb0d8]", text: "text-[#8fb0d8]" },
                     };
 
                     return (
                       <div key={sev} className="space-y-1">
                         <div className="flex items-center justify-between text-xs font-mono">
                           <span className="capitalize font-semibold text-text flex items-center gap-1.5">
-                            <span className={`w-2 h-2 rounded-full ${colors[sev].bar}`} />
+                            <span className={`w-2 h-2 rounded-sm ${colors[sev].bar}`} />
                             {sev}
                           </span>
                           <div className="flex items-center gap-2">
@@ -776,9 +760,9 @@ export default function Overview() {
                             <span className="text-neutral-400 text-[10px]">({pct}%)</span>
                           </div>
                         </div>
-                        <div className="h-1.5 w-full bg-white/[0.06] rounded-full overflow-hidden">
+                        <div className="h-1.5 w-full bg-white/[0.06] rounded-sm overflow-hidden">
                           <motion.div
-                            className={`h-full rounded-full ${colors[sev].bar}`}
+                            className={`h-full rounded-sm ${colors[sev].bar}`}
                             initial={{ width: 0 }}
                             animate={{ width: `${pct}%` }}
                             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -791,26 +775,19 @@ export default function Overview() {
               </div>
             </div>
 
-            {/* Quick action checklist */}
-            <div className="mt-6 pt-4 border-t border-white/[0.08] space-y-2">
-              <span className="font-mono text-[11px] font-semibold uppercase text-muted tracking-wider block">
-                Recommended Actions
-              </span>
-              <div className="text-xs text-text space-y-1.5">
-                <div className="flex items-center gap-2 text-muted">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Enforce pre-commit hook git-secrets</span>
-                </div>
-                <div className="flex items-center gap-2 text-muted">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Isolate agent tool execution sandbox</span>
-                </div>
-                <div className="flex items-center gap-2 text-muted">
-                  <XCircle className="w-3.5 h-3.5 text-red-400 shrink-0" />
-                  <span>Revoke 2 exposed AWS IAM credentials</span>
-                </div>
+            {recommendations.length > 0 && (
+              <div className="mt-6 pt-4 border-t border-border">
+                <span className="font-mono text-[11px] text-muted block mb-2">Recommended Actions</span>
+                <ul className="space-y-1.5 text-xs text-text">
+                  {recommendations.map((item) => (
+                    <li key={item.title} className="flex gap-2">
+                      <span className="font-mono text-primary shrink-0">{item.priority}</span>
+                      <span>{item.title}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
+            )}
           </GlassCard>
         </motion.div>
       </div>
@@ -824,12 +801,9 @@ export default function Overview() {
             <div className="flex items-center gap-2">
               <Zap className="w-4 h-4 text-cyan-400" />
               <span className="font-display text-sm font-bold text-text">
-                Non-Invasive Endpoint Collectors Status
+                Collectors
               </span>
             </div>
-            <span className="font-mono text-xs text-muted">
-              Zero SSL-Decryption · Privacy-First Local Inspection
-            </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -870,15 +844,15 @@ export default function Overview() {
               return (
                 <div
                   key={col.id}
-                  className="flex items-center justify-between p-3 rounded-lg border border-white/[0.06] bg-[#0c101d] text-xs font-mono"
+                  className="flex items-center justify-between p-3 rounded-lg border border-white/[0.06] bg-[#11141c] text-xs font-mono"
                 >
                   <div className="min-w-0 pr-1">
                     <p className="font-semibold text-text truncate">{col.name}</p>
                     <p className="text-[10px] text-muted mt-0.5 truncate">{col.tech}</p>
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0 ml-1">
-                    <span className={`w-2 h-2 rounded-full ${isRunning ? "bg-emerald-400 animate-pulse" : "bg-neutral-600"}`} />
-                    <span className={`text-[10px] font-bold uppercase ${isRunning ? "text-emerald-400" : "text-neutral-400"}`}>
+                    <span className={`w-2 h-2 rounded-sm ${isRunning ? "bg-emerald-400 " : "bg-neutral-600"}`} />
+                    <span className={`text-[10px] font-bold  ${isRunning ? "text-emerald-400" : "text-neutral-400"}`}>
                       {isRunning ? "LIVE" : "STANDBY"}
                     </span>
                   </div>
