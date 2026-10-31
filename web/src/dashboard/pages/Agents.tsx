@@ -37,14 +37,14 @@ function timeAgo(dateString: string): string {
 
 // Framework badge styles & names
 const FRAMEWORK_META: Record<string, { label: string; color: string }> = {
-  langchain: { label: "LangChain", color: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10" },
-  autogpt: { label: "AutoGPT", color: "text-amber-400 border-amber-500/30 bg-amber-500/10" },
+  langchain: { label: "LangChain", color: "text-text border-emerald-500/30 bg-emerald-500/10" },
+  autogpt: { label: "AutoGPT", color: "text-text border-amber-500/30 bg-amber-500/10" },
   crewai: { label: "CrewAI", color: "text-violet-400 border-violet-500/30 bg-violet-500/10" },
   cursor: { label: "Cursor Agent", color: "text-cyan-400 border-cyan-500/30 bg-cyan-500/10" },
-  claude_code: { label: "Claude Code", color: "text-orange-400 border-orange-500/30 bg-orange-500/10" },
-  aider: { label: "Aider", color: "text-blue-400 border-blue-500/30 bg-blue-500/10" },
-  open_interpreter: { label: "Open Interpreter", color: "text-red-400 border-red-500/30 bg-red-500/10" },
-  custom: { label: "Custom Agent", color: "text-muted border-white/10 bg-surface" },
+  claude_code: { label: "Claude Code", color: "text-text border-orange-500/30 bg-orange-500/10" },
+  aider: { label: "Aider", color: "text-text border-blue-500/30 bg-blue-500/10" },
+  open_interpreter: { label: "Open Interpreter", color: "text-text border-red-500/30 bg-red-500/10" },
+  custom: { label: "Custom Agent", color: "text-muted border-border bg-surface" },
 };
 
 const MARKED_KEY = "shadowscope_marked_agents";
@@ -104,7 +104,7 @@ export default function Agents() {
 
   if (isLoading) {
     return (
-      <div className="space-y-6 max-w-7xl mx-auto">
+      <div className="space-y-6">
         <Skeleton className="h-14 w-72 rounded-xl" />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <Skeleton className="h-96 lg:col-span-4 rounded-xl" />
@@ -115,7 +115,7 @@ export default function Agents() {
   }
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
@@ -124,7 +124,7 @@ export default function Agents() {
               <Bot className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="font-display text-xl font-bold text-text">
+              <h1 className="font-display text-xl font-semibold text-text">
                 Autonomous Agents & Permission Governance
               </h1>
               <p className="text-xs text-muted mt-0.5">
@@ -135,11 +135,11 @@ export default function Agents() {
         </div>
 
         {/* Aggregate Stats Badges */}
-        <div className="flex items-center gap-2 font-mono text-xs">
+        <div className="flex items-center gap-2 text-xs">
           <span className="px-3 py-1 rounded-sm border border-violet-500/30 bg-violet-500/10 text-violet-300">
             {agents.length} Agent Sessions
           </span>
-          <span className="px-3 py-1 rounded-sm border border-red-500/30 bg-red-500/10 text-red-400 font-bold">
+          <span className="px-3 py-1 rounded-sm border border-red-500/30 bg-red-500/10 text-text font-semibold">
             {agents.filter((a) => a.risk_score >= 80).length} High Risk
           </span>
         </div>
@@ -151,7 +151,7 @@ export default function Agents() {
         {/* Left: Agent Session List (4 cols)                                    */}
         {/* ==================================================================== */}
         <div className="lg:col-span-4 space-y-3">
-          <div className="flex items-center justify-between px-1 text-xs font-mono text-muted">
+          <div className="flex items-center justify-between px-1 text-xs text-muted">
             <span>Discovered Agents ({agents.length})</span>
             <span>Autonomy / Risk</span>
           </div>
@@ -168,33 +168,33 @@ export default function Agents() {
                   variant="default"
                   interactive
                   onClick={() => setSelectedAgentId(agent.id)}
-                  className={`p-3.5 flex flex-col gap-2 transition-all cursor-pointer ${
+                  className={`p-3.5 flex flex-col gap-2 transition-colors cursor-pointer ${
                     selected
                       ? "border-cyan-400/50 bg-cyan-950/20 "
-                      : "hover:border-white/20"
-                  } ${blocked ? "opacity-60 grayscale-[40%]" : ""}`}
+                      : "hover:border-border-strong"
+                  } ${blocked ? "border-dashed" : ""}`}
                 >
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold border font-mono ${fw.color}`}>
+                      <span className={`px-2 py-0.5 rounded text-[11px] font-semibold border ${fw.color}`}>
                         {fw.label}
                       </span>
-                      <span className="font-mono text-xs font-bold text-text truncate">
+                      <span className="font-mono text-xs font-semibold text-text truncate">
                         {agent.process_name}
                       </span>
                       {agent.pid && (
-                        <span className="font-mono text-[10px] text-muted">:{agent.pid}</span>
+                        <span className="font-mono text-[11px] text-muted">:{agent.pid}</span>
                       )}
                     </div>
 
                     {/* Status Pill */}
                     <span
-                      className={`text-[9px] font-mono px-2 py-0.2 rounded-sm font-bold  ${
+                      className={`text-[11px] px-2 py-0.2 rounded-sm font-semibold  ${
                         blocked
-                          ? "bg-red-500/20 text-red-400 border border-red-500/30"
+                          ? "bg-red-500/20 text-text border border-red-500/30"
                           : agent.status === "active"
-                          ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
-                          : "bg-white/10 text-muted"
+                          ? "bg-emerald-500/15 text-text border border-emerald-500/30"
+                          : "bg-text/10 text-muted"
                       }`}
                     >
                       {blocked ? "marked" : agent.status}
@@ -202,11 +202,11 @@ export default function Agents() {
                   </div>
 
                   {/* Autonomy Meter & Risk Indicators */}
-                  <div className="flex items-center justify-between text-xs font-mono pt-1 border-t border-white/[0.04]">
+                  <div className="flex items-center justify-between text-xs pt-1 border-t border-border">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] text-muted">Autonomy:</span>
+                      <span className="text-[11px] text-muted">Autonomy:</span>
                       <span
-                        className={`font-bold ${
+                        className={`font-semibold ${
                           agent.autonomy_score >= 80
                             ? "text-red-400"
                             : agent.autonomy_score >= 50
@@ -219,12 +219,12 @@ export default function Agents() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] text-muted">Risk:</span>
+                      <span className="text-[11px] text-muted">Risk:</span>
                       <span
-                        className={`font-bold px-1.5 py-0.2 rounded ${
+                        className={`font-semibold px-1.5 py-0.2 rounded ${
                           agent.risk_score >= 80
-                            ? "bg-red-500/20 text-red-400"
-                            : "bg-amber-500/20 text-amber-300"
+                            ? "bg-red-500/20 text-text"
+                            : "bg-amber-500/20 text-text"
                         }`}
                       >
                         {agent.risk_score}
@@ -232,7 +232,7 @@ export default function Agents() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-[10px] font-mono text-muted/70">
+                  <div className="flex items-center justify-between text-[11px] text-muted">
                     <span>{agent.actions?.length || 0} tool actions</span>
                     <span>seen {timeAgo(agent.last_seen)}</span>
                   </div>
@@ -260,10 +260,10 @@ export default function Agents() {
                       {activeAgent.id}
                     </span>
                     <span
-                      className={`text-xs px-2.5 py-0.5 rounded-sm font-mono font-bold  ${
+                      className={`text-xs px-2.5 py-0.5 rounded-sm font-semibold  ${
                         isBlocked
-                          ? "bg-red-500/20 text-red-300 border border-red-500/40 "
-                          : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                          ? "bg-red-500/20 text-text border border-red-500/40 "
+                          : "bg-emerald-500/20 text-text border border-emerald-500/40"
                       }`}
                     >
                       {isBlocked ? "status: marked blocked" : `status: ${activeAgent.status}`}
@@ -273,13 +273,13 @@ export default function Agents() {
                     </span>
                   </div>
 
-                  <h2 className="font-display text-xl font-bold text-text">
+                  <h2 className="font-display text-xl font-semibold text-text">
                     {activeAgent.process_name}{" "}
                     <span className="text-muted text-base font-normal">
                       ({FRAMEWORK_META[activeAgent.framework]?.label ?? activeAgent.framework})
                     </span>
                   </h2>
-                  <p className="font-mono text-xs text-muted mt-1">
+                  <p className=" text-xs text-muted mt-1">
                     Connected to Provider:{" "}
                     <span className="text-text font-semibold">{activeAgent.provider_id ?? "Direct AI API"}</span>{" "}
                     · Started {timeAgo(activeAgent.started)}
@@ -293,7 +293,7 @@ export default function Agents() {
                     size="sm"
                     disabled={isBlocked}
                     onClick={() => handleMarkBlocked(activeAgent.id)}
-                    className="w-full sm:w-auto font-bold"
+                    className="w-full sm:w-auto font-semibold"
                     magnetic
                   >
                     <Power className="w-4 h-4 text-red-400" />
@@ -303,32 +303,32 @@ export default function Agents() {
               </div>
 
               {/* Autonomy vs Risk Score Dial strip */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-white/[0.08] font-mono text-xs">
-                <div className="p-3 rounded-xl border border-white/[0.06] bg-[#11141c]">
-                  <span className="text-[10px] text-muted block mb-1">Autonomy Score</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-border text-xs">
+                <div className="p-3 rounded-xl border border-border bg-surface">
+                  <span className="text-[11px] text-muted block mb-1">Autonomy Score</span>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold text-red-400">{activeAgent.autonomy_score}</span>
-                    <span className="text-muted/60">/ 100</span>
+                    <span className="text-2xl font-semibold text-red-400">{activeAgent.autonomy_score}</span>
+                    <span className="text-muted">/ 100</span>
                   </div>
-                  <span className="text-[10px] text-muted mt-1 block">Machine-speed execution</span>
+                  <span className="text-[11px] text-muted mt-1 block">Machine-speed execution</span>
                 </div>
 
-                <div className="p-3 rounded-xl border border-white/[0.06] bg-[#11141c]">
-                  <span className="text-[10px] text-muted block mb-1">Risk Score</span>
+                <div className="p-3 rounded-xl border border-border bg-surface">
+                  <span className="text-[11px] text-muted block mb-1">Risk Score</span>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold text-[#df6a68]">{activeAgent.risk_score}</span>
-                    <span className="text-muted/60">/ 100</span>
+                    <span className="text-2xl font-semibold text-critical">{activeAgent.risk_score}</span>
+                    <span className="text-muted">/ 100</span>
                   </div>
-                  <span className="text-[10px] text-muted mt-1 block">Exfiltration hazard</span>
+                  <span className="text-[11px] text-muted mt-1 block">Exfiltration hazard</span>
                 </div>
 
-                <div className="p-3 rounded-xl border border-white/[0.06] bg-[#11141c]">
-                  <span className="text-[10px] text-muted block mb-1">Inference Requests</span>
+                <div className="p-3 rounded-xl border border-border bg-surface">
+                  <span className="text-[11px] text-muted block mb-1">Inference Requests</span>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold text-cyan-400">{activeAgent.requests}</span>
-                    <span className="text-muted/60">total</span>
+                    <span className="text-2xl font-semibold text-cyan-400">{activeAgent.requests}</span>
+                    <span className="text-muted">total</span>
                   </div>
-                  <span className="text-[10px] text-muted mt-1 block">Model interaction loops</span>
+                  <span className="text-[11px] text-muted mt-1 block">Model interaction loops</span>
                 </div>
               </div>
             </GlassCard>
@@ -337,14 +337,14 @@ export default function Agents() {
             {/* Permission Matrix as Glowing Toggles with Danger Colors             */}
             {/* ==================================================================== */}
             <GlassCard variant="default" className="p-5 space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-white/[0.08]">
+              <div className="flex items-center justify-between pb-2 border-b border-border">
                 <div className="flex items-center gap-2">
                   <Sliders className="w-4 h-4 text-cyan-400" />
-                  <h3 className="font-display text-sm font-bold text-text">
+                  <h3 className="font-display text-sm font-semibold text-text">
                     Agent Capability & Permission Matrix
                   </h3>
                 </div>
-                <span className="font-mono text-[11px] text-muted">
+                <span className=" text-[11px] text-muted">
                   Inferred from declared tools
                 </span>
               </div>
@@ -403,7 +403,7 @@ export default function Agents() {
                           ? danger
                             ? "bg-red-950/25 border-red-500/40 "
                             : "bg-cyan-950/20 border-cyan-500/30"
-                          : "bg-surface-solid/60 border-white/[0.06] opacity-60"
+                          : "bg-surface-solid border-border"
                       }`}
                     >
                       <div className="flex items-center justify-between mb-2">
@@ -413,8 +413,8 @@ export default function Agents() {
                           }`}
                         />
                         <span
-                          className={`w-3.5 h-3.5 rounded-sm flex items-center justify-center text-[9px] font-bold ${
-                            enabled ? (danger ? "bg-red-500 text-white" : "bg-cyan-400 text-black") : "bg-white/10 text-muted"
+                          className={`w-3.5 h-3.5 rounded-sm flex items-center justify-center text-[11px] font-semibold ${
+                            enabled ? (danger ? "bg-critical text-bg" : "bg-primary text-bg") : "bg-text/10 text-muted"
                           }`}
                         >
                           {enabled ? <Check className="w-2.5 h-2.5" /> : <X className="w-2.5 h-2.5" />}
@@ -422,7 +422,7 @@ export default function Agents() {
                       </div>
                       <div>
                         <p className="font-semibold text-xs text-text">{label}</p>
-                        <p className="text-[10px] text-muted mt-0.5 line-clamp-1">{desc}</p>
+                        <p className="text-[11px] text-muted mt-0.5 line-clamp-1">{desc}</p>
                       </div>
                     </div>
                   );
@@ -435,12 +435,12 @@ export default function Agents() {
             {/* ==================================================================== */}
             {activeAgent.tools_used && activeAgent.tools_used.length > 0 && (
               <GlassCard variant="default" className="p-5 space-y-3">
-                <div className="flex items-center justify-between pb-2 border-b border-white/[0.08]">
-                  <h3 className="font-display text-sm font-bold text-text flex items-center gap-2">
+                <div className="flex items-center justify-between pb-2 border-b border-border">
+                  <h3 className="font-display text-sm font-semibold text-text flex items-center gap-2">
                     <Terminal className="w-4 h-4 text-cyan-400" />
                     Tools-Used Breakdown
                   </h3>
-                  <span className="font-mono text-[11px] text-muted">
+                  <span className=" text-[11px] text-muted">
                     Total Calls: {activeAgent.tools_used.reduce((acc, t) => acc + t.count, 0)}
                   </span>
                 </div>
@@ -450,7 +450,7 @@ export default function Agents() {
                     const maxCount = Math.max(...activeAgent.tools_used.map((t) => t.count), 1);
                     const pct = Math.round((tool.count / maxCount) * 100);
                     return (
-                      <div key={tool.name} className="space-y-1 font-mono text-xs">
+                      <div key={tool.name} className="space-y-1 text-xs">
                         <div className="flex items-center justify-between">
                           <span className="font-semibold text-text">{tool.name}</span>
                           <div className="flex items-center gap-2">
@@ -458,7 +458,7 @@ export default function Agents() {
                             <SeverityPill severity={tool.severity as Severity} size="xs" />
                           </div>
                         </div>
-                        <div className="h-1.5 w-full bg-white/[0.06] rounded-sm overflow-hidden">
+                        <div className="h-1.5 w-full bg-text/[0.06] rounded-sm overflow-hidden">
                           <div
                             className={`h-full rounded-sm ${
                               tool.severity === "critical"
@@ -479,12 +479,12 @@ export default function Agents() {
             {/* Vertical Dangerous Action Timeline                                  */}
             {/* ==================================================================== */}
             <GlassCard variant="default" className="p-5 space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-white/[0.08]">
-                <h3 className="font-display text-sm font-bold text-text flex items-center gap-2">
+              <div className="flex items-center justify-between pb-2 border-b border-border">
+                <h3 className="font-display text-sm font-semibold text-text flex items-center gap-2">
                   <Clock className="w-4 h-4 text-violet-400" />
                   Chronological Action Timeline
                 </h3>
-                <span className="font-mono text-[11px] text-muted">
+                <span className=" text-[11px] text-muted">
                   {activeAgent.actions?.length || 0} Events Audited
                 </span>
               </div>
@@ -495,7 +495,7 @@ export default function Agents() {
                     <div key={idx} className="relative group">
                       {/* Timeline Node Dot */}
                       <div
-                        className={`absolute -left-6 top-1.5 w-2.5 h-2.5 rounded-sm border-2 border-[#0b0d13] ${
+                        className={`absolute -left-6 top-1.5 w-2.5 h-2.5 rounded-sm border-2 border-bg ${
                           act.severity === "critical"
                             ? "bg-red-500 ring-4 ring-red-500/20"
                             : act.severity === "high"
@@ -504,18 +504,18 @@ export default function Agents() {
                         }`}
                       />
 
-                      <div className="rounded-xl border border-white/[0.08] bg-surface-solid/70 p-3 space-y-2">
+                      <div className="rounded-xl border border-border bg-surface-solid p-3 space-y-2">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-bold text-cyan-300">
+                            <span className="font-mono text-xs font-semibold text-cyan-300">
                               {act.kind}
                             </span>
                             <SeverityPill severity={act.severity as Severity} size="xs" />
                           </div>
 
-                          <div className="flex items-center gap-2 font-mono text-[10px] text-muted">
+                          <div className="flex items-center gap-2 text-[11px] text-muted">
                             {!act.verified && (
-                              <span className="px-1.5 py-0.2 rounded bg-red-500/10 text-red-400 border border-red-500/30">
+                              <span className="px-1.5 py-0.2 rounded bg-red-500/10 text-text border border-red-500/30">
                                 Unverified Tool Call
                               </span>
                             )}
@@ -524,7 +524,7 @@ export default function Agents() {
                         </div>
 
                         {/* Executed Command in Mono */}
-                        <pre className="p-2 rounded bg-[#0b0d13] border border-white/5 font-mono text-xs text-text whitespace-pre-wrap break-words whitespace-pre-wrap">
+                        <pre className="p-2 rounded bg-surface-solid border border-border font-mono text-xs text-text whitespace-pre-wrap break-words whitespace-pre-wrap">
                           {act.detail}
                         </pre>
                       </div>

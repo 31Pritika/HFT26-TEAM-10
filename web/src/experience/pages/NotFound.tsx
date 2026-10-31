@@ -38,31 +38,31 @@ export default function NotFound() {
 
       <div className="relative z-10 w-full max-w-2xl mx-auto flex flex-col items-center text-center">
         {/* Status Pill */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm border border-danger/30 bg-danger/10 text-xs font-mono text-danger mb-6">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm border border-danger/30 bg-danger/10 text-xs text-text mb-6">
           <ShieldAlert className="h-3.5 w-3.5" />
           <span>STATUS: UNKNOWN_ENDPOINT_DETECTED</span>
         </div>
 
         {/* Big Glitch 404 */}
-        <div className="relative font-display font-black text-7xl sm:text-9xl tracking-tighter select-none my-2 text-transparent bg-clip-text bg-text from-text via-text/80 to-muted/40">
+        <div className="relative font-display font-semibold text-7xl sm:text-9xl tracking-tighter select-none my-2 text-transparent bg-clip-text bg-text from-text via-text/80 to-muted/40">
           <span>404</span>
           {/* Cyber chromatic aberration layer */}
           <span
             aria-hidden="true"
-            className="absolute inset-0 text-primary/30 translate-x-[2px] translate-y-[-1px] blur-[1px] pointer-events-none"
+            className="absolute inset-0 text-primary translate-x-[2px] translate-y-[-1px] blur-[1px] pointer-events-none"
           >
             404
           </span>
           <span
             aria-hidden="true"
-            className="absolute inset-0 text-danger/30 -translate-x-[2px] translate-y-[1px] blur-[1px] pointer-events-none"
+            className="absolute inset-0 text-danger -translate-x-[2px] translate-y-[1px] blur-[1px] pointer-events-none"
           >
             404
           </span>
         </div>
 
         {/* Spec Headline */}
-        <h1 className="font-display text-xl sm:text-3xl font-bold tracking-tight text-text mt-2 mb-3">
+        <h1 className="font-display text-xl sm:text-3xl font-semibold tracking-tight text-text mt-2 mb-3">
           This endpoint isn't in our fingerprint DB
         </h1>
 
@@ -75,13 +75,13 @@ export default function NotFound() {
         </p>
 
         {/* Terminal Diagnostics Card */}
-        <div className="w-full text-left rounded-xl border border-border bg-bg-2/95 p-4 sm:p-5 font-mono text-xs mb-8 overflow-hidden">
+        <div className="w-full text-left rounded-xl border border-border bg-bg-2/95 p-4 sm:p-5 text-xs mb-8 overflow-hidden">
           <div className="flex items-center justify-between border-b border-border pb-2.5 mb-3 text-muted">
             <div className="flex items-center gap-2">
               <Terminal className="h-3.5 w-3.5 text-primary" />
               <span className="text-[11px]">ShadowScope Kernel Inspection</span>
             </div>
-            <span className="text-[10px] text-muted">dns / sni probe</span>
+            <span className="text-[11px] text-muted">dns / sni probe</span>
           </div>
 
           <div className="space-y-1.5 text-muted leading-relaxed">
@@ -92,7 +92,7 @@ export default function NotFound() {
             <div>
               <span className="text-primary">[RADAR]</span> Matching against AI provider fingerprints…
             </div>
-            <div className="text-muted/80 pl-4 border-l border-border/50 text-[11px]">
+            <div className="text-muted pl-4 border-l border-border/50 text-[11px]">
               - OpenAI (api.openai.com, chatgpt.com) : NO MATCH
               <br />
               - Anthropic (api.anthropic.com, claude.ai) : NO MATCH
@@ -118,7 +118,7 @@ export default function NotFound() {
             <button
               onClick={handleRunDiag}
               disabled={runningDiag}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-surface-solid text-[11px] font-mono text-text transition-colors disabled:opacity-50"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-surface-solid text-[11px] text-text transition-colors disabled:opacity-50"
             >
               <RefreshCw className={`h-3 w-3 text-primary ${runningDiag ? "animate-spin" : ""}`} />
               <span>{runningDiag ? "Probing Kernel Tap…" : "Re-run Diagnostic Probe"}</span>
@@ -130,7 +130,7 @@ export default function NotFound() {
         <div className="flex flex-wrap items-center justify-center gap-3 w-full">
           <Link
             to="/"
-            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-primary/40 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-mono font-semibold transition-all hover:shadow-primary/20"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-primary/40 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold transition-colors hover:shadow-primary/20"
           >
             <Home className="h-4 w-4" />
             <span>Return Home</span>
@@ -138,7 +138,7 @@ export default function NotFound() {
 
           <Link
             to="/app"
-            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-surface hover:bg-surface-solid text-text text-xs font-mono font-semibold transition-all"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-surface hover:bg-surface-solid text-text text-xs font-semibold transition-colors"
           >
             <LayoutDashboard className="h-4 w-4 text-accent" />
             <span>Open Threat Console</span>
@@ -146,7 +146,7 @@ export default function NotFound() {
 
           <Link
             to="/playground"
-            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-surface hover:bg-surface-solid text-text text-xs font-mono font-semibold transition-all"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-surface hover:bg-surface-solid text-text text-xs font-semibold transition-colors"
           >
             <FlaskConical className="h-4 w-4 text-amber-400" />
             <span>Threat Playground</span>
@@ -156,7 +156,7 @@ export default function NotFound() {
         <div className="mt-8">
           <Link
             to="/"
-            className="inline-flex items-center gap-1 text-xs font-mono text-muted hover:text-text transition-colors"
+            className="inline-flex items-center gap-1 text-xs text-muted hover:text-text transition-colors"
           >
             <ArrowLeft className="h-3 w-3" />
             <span>Back to previous coordinates</span>

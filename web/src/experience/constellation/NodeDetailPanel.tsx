@@ -53,10 +53,10 @@ export function NodeDetailPanel({
   });
 
   const getRiskColor = (risk: number) => {
-    if (risk >= 80) return { text: "text-danger", border: "border-danger/40", bg: "bg-danger/10", fill: "#df6a68", label: "Critical" };
-    if (risk >= 50) return { text: "text-amber-400", border: "border-amber-500/40", bg: "bg-amber-500/10", fill: "#d4915a", label: "High" };
-    if (risk >= 20) return { text: "text-warning", border: "border-warning/40", bg: "bg-warning/10", fill: "#c9b467", label: "Medium" };
-    return { text: "text-primary", border: "border-primary/40", bg: "bg-primary/10", fill: "#bad6f7", label: "Low" };
+    if (risk >= 80) return { text: "text-danger", border: "border-danger/40", bg: "bg-danger/10", fill: "var(--critical)", label: "Critical" };
+    if (risk >= 50) return { text: "text-high", border: "border-high/40", bg: "bg-high/10", fill: "var(--high)", label: "High" };
+    if (risk >= 20) return { text: "text-warning", border: "border-warning/40", bg: "bg-warning/10", fill: "var(--medium)", label: "Medium" };
+    return { text: "text-primary", border: "border-primary/40", bg: "bg-primary/10", fill: "var(--primary)", label: "Low" };
   };
 
   const riskInfo = getRiskColor(node.risk);
@@ -110,9 +110,9 @@ export function NodeDetailPanel({
       {/* Risk Gauge & Metrics */}
       <div className="py-4 border-b border-border space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs text-muted font-mono">Threat Score</span>
+          <span className="text-xs text-muted">Threat Score</span>
           <span
-            className={`font-mono text-xs font-semibold px-2 py-0.5 rounded-sm border ${riskInfo.border} ${riskInfo.bg} ${riskInfo.text}`}
+            className={` text-xs font-semibold px-2 py-0.5 rounded-sm border ${riskInfo.border} ${riskInfo.bg} ${riskInfo.text}`}
           >
             {riskInfo.label} · {node.risk}/100
           </span>
@@ -121,36 +121,36 @@ export function NodeDetailPanel({
         {/* Meter bar */}
         <div className="h-2 w-full rounded-sm bg-surface-solid overflow-hidden border border-border/50">
           <div
-            className="h-full rounded-sm transition-all duration-500"
+            className="h-full rounded-sm transition-colors duration-500"
             style={{ width: `${Math.max(5, node.risk)}%`, backgroundColor: riskInfo.fill }}
           />
         </div>
 
         <div className="grid grid-cols-2 gap-2 pt-1">
           <div className="rounded-lg border border-border/60 bg-surface/50 p-2.5">
-            <div className="text-[10px] font-mono text-muted">Traffic Weight</div>
-            <div className="text-sm font-semibold font-mono text-text mt-0.5">{node.size} units</div>
+            <div className="text-[11px] text-muted">Traffic Weight</div>
+            <div className="text-sm font-semibold text-text mt-0.5">{node.size} units</div>
           </div>
           <div className="rounded-lg border border-border/60 bg-surface/50 p-2.5">
-            <div className="text-[10px] font-mono text-muted">Connections</div>
-            <div className="text-sm font-semibold font-mono text-text mt-0.5">{connectedLinks.length} active</div>
+            <div className="text-[11px] text-muted">Connections</div>
+            <div className="text-sm font-semibold text-text mt-0.5">{connectedLinks.length} active</div>
           </div>
         </div>
       </div>
 
       {/* Threat Context */}
       <div className="py-3 border-b border-border">
-        <div className="flex items-center gap-2 text-xs font-mono text-muted mb-2">
+        <div className="flex items-center gap-2 text-xs text-muted mb-2">
           <ShieldAlert className="h-3.5 w-3.5 text-danger" />
           <span>Security Assessment</span>
         </div>
         <p className="text-xs text-muted leading-relaxed">
           {node.risk >= 80 ? (
-            <span className="text-danger/90 font-medium">
+            <span className="text-danger font-medium">
               High telemetry risk: Multiple unencrypted credentials, sensitive prompt exfiltration or dangerous agent operations detected along this vertex.
             </span>
           ) : node.risk >= 50 ? (
-            <span className="text-amber-400/90 font-medium">
+            <span className="text-amber-400 font-medium">
               Elevated exposure: Regular unstructured AI queries with prospective PII or unapproved shadow cloud routing.
             </span>
           ) : (
@@ -163,14 +163,14 @@ export function NodeDetailPanel({
 
       {/* Connected Entities */}
       <div className="py-3 border-b border-border space-y-3">
-        <div className="flex items-center justify-between text-xs font-mono text-muted">
+        <div className="flex items-center justify-between text-xs text-muted">
           <span>Adjacent Nodes ({connectedLinks.length})</span>
           <Activity className="h-3.5 w-3.5" />
         </div>
 
         {outgoing.length > 0 && (
           <div>
-            <div className="text-[10px] font-mono text-primary mb-1.5 flex items-center gap-1">
+            <div className="text-[11px] text-primary mb-1.5 flex items-center gap-1">
               <span>Outgoing Egress →</span>
             </div>
             <div className="space-y-1.5 max-h-28 overflow-y-auto pr-1">
@@ -184,10 +184,10 @@ export function NodeDetailPanel({
                     onClick={() => targetNode && onSelectNode(targetNode)}
                     className="w-full flex items-center justify-between gap-2 p-1.5 rounded border border-border/50 bg-surface/30 hover:bg-surface hover:border-primary/40 text-left transition-colors group"
                   >
-                    <span className="text-xs text-text group-hover:text-primary truncate font-mono">
+                    <span className="text-xs text-text group-hover:text-primary truncate">
                       {targetLabel}
                     </span>
-                    <span className="text-[10px] font-mono text-muted shrink-0">
+                    <span className="text-[11px] text-muted shrink-0">
                       {l.weight} req · {l.risk}%
                     </span>
                   </button>
@@ -199,7 +199,7 @@ export function NodeDetailPanel({
 
         {incoming.length > 0 && (
           <div>
-            <div className="text-[10px] font-mono text-accent mb-1.5 flex items-center gap-1">
+            <div className="text-[11px] text-accent mb-1.5 flex items-center gap-1">
               <span>← Incoming Sources</span>
             </div>
             <div className="space-y-1.5 max-h-28 overflow-y-auto pr-1">
@@ -213,10 +213,10 @@ export function NodeDetailPanel({
                     onClick={() => sourceNode && onSelectNode(sourceNode)}
                     className="w-full flex items-center justify-between gap-2 p-1.5 rounded border border-border/50 bg-surface/30 hover:bg-surface hover:border-primary/40 text-left transition-colors group"
                   >
-                    <span className="text-xs text-text group-hover:text-primary truncate font-mono">
+                    <span className="text-xs text-text group-hover:text-primary truncate">
                       {sourceLabel}
                     </span>
-                    <span className="text-[10px] font-mono text-muted shrink-0">
+                    <span className="text-[11px] text-muted shrink-0">
                       {l.weight} req · {l.risk}%
                     </span>
                   </button>
@@ -231,7 +231,7 @@ export function NodeDetailPanel({
       <div className="pt-3 flex flex-col gap-2">
         <Link
           to={`/app/alerts?process=${encodeURIComponent(node.label)}`}
-          className="flex items-center justify-between px-3 py-2 rounded-lg border border-border bg-surface hover:border-primary/50 text-xs font-mono text-text hover:text-primary transition-colors"
+          className="flex items-center justify-between px-3 py-2 rounded-lg border border-border bg-surface hover:border-primary/50 text-xs text-text hover:text-primary transition-colors"
         >
           <span>View Related Alerts</span>
           <ArrowUpRight className="h-3.5 w-3.5" />
@@ -239,7 +239,7 @@ export function NodeDetailPanel({
         {node.kind === "agent" ? (
           <Link
             to="/app/agents"
-            className="flex items-center justify-between px-3 py-2 rounded-lg border border-border bg-surface hover:border-accent/50 text-xs font-mono text-text hover:text-accent transition-colors"
+            className="flex items-center justify-between px-3 py-2 rounded-lg border border-border bg-surface hover:border-accent/50 text-xs text-text hover:text-accent transition-colors"
           >
             <span>Open Agent Sandbox Console</span>
             <ArrowUpRight className="h-3.5 w-3.5" />
@@ -247,7 +247,7 @@ export function NodeDetailPanel({
         ) : (
           <Link
             to="/app/inventory"
-            className="flex items-center justify-between px-3 py-2 rounded-lg border border-border bg-surface hover:border-accent/50 text-xs font-mono text-text hover:text-accent transition-colors"
+            className="flex items-center justify-between px-3 py-2 rounded-lg border border-border bg-surface hover:border-accent/50 text-xs text-text hover:text-accent transition-colors"
           >
             <span>Inspect in AI Inventory</span>
             <ArrowUpRight className="h-3.5 w-3.5" />

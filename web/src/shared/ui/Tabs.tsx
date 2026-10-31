@@ -36,7 +36,7 @@ export function Tabs({
       role="tablist"
       className={cn(
         "flex flex-wrap items-center gap-1",
-        variant === "underline" ? "border-b border-border pb-px" : "bg-surface-solid/80 p-1 rounded-xl border border-border",
+        variant === "underline" ? "border-b border-border pb-px" : "bg-surface-solid p-1 rounded-md border border-border",
         className,
       )}
     >
@@ -51,11 +51,11 @@ export function Tabs({
             aria-selected={active}
             onClick={() => onChange(tab.id)}
             className={cn(
-              "relative flex items-center gap-2 whitespace-nowrap text-sm font-medium transition-colors select-none",
+              "relative z-0 flex items-center gap-2 whitespace-nowrap text-sm font-medium transition-colors select-none",
               variant === "underline"
                 ? "px-4 py-2.5 text-muted hover:text-text"
-                : "px-3 py-1.5 rounded-lg text-muted hover:text-text",
-              active && "text-text font-semibold",
+                : "px-3 py-1.5 rounded-sm text-muted hover:text-text",
+              active && "text-text",
             )}
           >
             {Icon && <Icon className={cn("w-4 h-4", active ? "text-primary" : "text-muted")} />}
@@ -63,10 +63,8 @@ export function Tabs({
             {tab.count !== undefined && (
               <span
                 className={cn(
-                  "font-mono text-xs px-1.5 py-0.5 rounded-md",
-                  active
-                    ? "bg-primary/20 text-primary border border-primary/30"
-                    : "bg-surface text-muted border border-border",
+                  "text-xs px-1.5 py-0.5 rounded-sm border border-border",
+                  active ? "bg-elevated text-text" : "bg-surface text-muted",
                 )}
               >
                 {tab.count}
@@ -79,13 +77,13 @@ export function Tabs({
                 <motion.div
                   layoutId={layoutId}
                   className="absolute bottom-0 inset-x-0 h-0.5 bg-primary"
-                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  transition={{ type: "spring", stiffness: 420, damping: 38 }}
                 />
               ) : (
                 <motion.div
                   layoutId={layoutId}
-                  className="absolute inset-0 rounded-lg bg-surface border border-white/10 -z-10"
-                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  className="absolute inset-0 rounded-sm bg-elevated -z-10"
+                  transition={{ type: "spring", stiffness: 420, damping: 38 }}
                 />
               )
             )}

@@ -30,24 +30,24 @@ export function NotificationsPopover() {
     <div className="relative" ref={containerRef}>
       <button
         onClick={() => setOpen(!open)}
-        className="relative rounded-lg p-2 text-muted hover:text-text hover:bg-white/[0.08] transition-colors cursor-pointer"
+        className="relative rounded-lg p-2 text-muted hover:text-text hover:bg-elevated transition-colors cursor-pointer"
         aria-label="Critical notifications"
       >
         <Bell className="w-5 h-5" />
         {unreadCriticals.length > 0 && (
-          <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-sm bg-red-500 font-mono text-[10px] font-bold text-white">
+          <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-sm bg-red-500 text-[11px] font-semibold text-text">
             {unreadCriticals.length > 9 ? "9+" : unreadCriticals.length}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-xl border border-white/15 bg-[#090d18]/95 p-0 z-50">
-          <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-xl border border-border-strong bg-elevated p-0 z-50">
+          <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <div className="flex items-center gap-2">
               <ShieldAlert className="w-4 h-4 text-red-400" />
               <span className="font-display text-sm font-semibold text-text">Critical Alerts</span>
-              <span className="rounded-sm bg-red-500/20 px-2 py-0.5 font-mono text-[11px] font-bold text-red-400">
+              <span className="rounded-sm bg-red-500/20 px-2 py-0.5 text-[11px] font-semibold text-text">
                 {unreadCriticals.length}
               </span>
             </div>
@@ -62,7 +62,7 @@ export function NotificationsPopover() {
             )}
           </div>
 
-          <div className="max-h-80 overflow-y-auto divide-y divide-white/[0.06]">
+          <div className="max-h-80 overflow-y-auto divide-y divide-border">
             {unreadCriticals.length === 0 ? (
               <div className="p-6 text-center text-xs text-muted">
                 <p className="font-medium text-text mb-1">All Clear</p>
@@ -73,11 +73,11 @@ export function NotificationsPopover() {
                 <div
                   key={finding.id}
                   onClick={() => handleOpenAlert(finding.id)}
-                  className="p-3.5 hover:bg-white/[0.06] transition-colors cursor-pointer group"
+                  className="p-3.5 hover:bg-elevated transition-colors cursor-pointer group"
                 >
                   <div className="flex items-center justify-between gap-2 mb-1">
                     <SeverityPill severity={finding.severity} size="xs" />
-                    <span className="font-mono text-[10px] text-muted">
+                    <span className=" text-[11px] text-muted">
                       {new Date(finding.ts).toLocaleTimeString()}
                     </span>
                   </div>
@@ -87,7 +87,7 @@ export function NotificationsPopover() {
                   <p className="text-[11px] text-muted line-clamp-1 mt-0.5">
                     {finding.evidence?.redacted_snippet || finding.description}
                   </p>
-                  <div className="mt-2 flex items-center justify-between text-[10px] font-mono text-muted">
+                  <div className="mt-2 flex items-center justify-between text-[11px] font-mono text-muted">
                     <span>{finding.process_name ?? "unknown"}</span>
                     <span className="flex items-center gap-1 text-cyan-400 group-hover:underline">
                       Investigate <ExternalLink className="w-2.5 h-2.5" />
@@ -98,7 +98,7 @@ export function NotificationsPopover() {
             )}
           </div>
 
-          <div className="border-t border-white/10 p-2.5 text-center bg-white/[0.02]">
+          <div className="border-t border-border p-2.5 text-center bg-text/[0.02]">
             <button
               onClick={() => {
                 setOpen(false);

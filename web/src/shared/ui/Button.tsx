@@ -32,18 +32,18 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref,
   ) => {
     const variantStyles = {
-      primary: "bg-primary text-[#0b0d13] font-semibold border border-primary hover:bg-[#d8e8f7]",
-      secondary: "bg-transparent border border-border-strong text-text hover:border-primary hover:text-primary",
-      danger: "bg-transparent border border-red-500/50 text-red-400 hover:bg-red-500/10",
-      ghost: "bg-transparent border border-transparent text-muted hover:text-text hover:border-border",
-      outline: "bg-transparent border border-border text-muted hover:border-primary hover:text-primary",
-      glow: "bg-transparent border border-primary/60 text-primary hover:bg-primary/10",
+      primary: "bg-cta text-on-cta font-medium border border-cta hover:bg-cta-hover hover:border-cta-hover",
+      secondary: "bg-transparent border border-border text-text hover:bg-elevated hover:border-border-strong",
+      danger: "bg-transparent border border-critical/50 text-critical hover:bg-critical/10 hover:border-critical",
+      ghost: "bg-transparent border border-transparent text-muted hover:text-text hover:bg-elevated",
+      outline: "bg-transparent border border-border text-muted hover:text-text hover:bg-elevated hover:border-border-strong",
+      glow: "bg-transparent border border-border text-primary hover:bg-elevated hover:border-border-strong",
     };
 
     const sizeStyles = {
-      xs: "px-2.5 py-1 text-[11px] gap-1.5",
-      sm: "px-3 py-1.5 text-xs gap-2",
-      md: "px-4 py-2 text-xs gap-2",
+      xs: "px-2.5 py-1 text-xs gap-1.5",
+      sm: "px-3 py-1.5 text-[13px] gap-2",
+      md: "px-4 py-2 text-[13px] gap-2",
       lg: "px-5 py-2.5 text-sm gap-2.5",
       icon: "w-9 h-9 p-0 justify-center",
     };
@@ -53,7 +53,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          "inline-flex items-center justify-center rounded-sm font-mono font-medium select-none cursor-pointer transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed",
+          "inline-flex items-center justify-center rounded-md font-medium select-none cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none",
           sizeStyles[size],
           variantStyles[variant],
           className,

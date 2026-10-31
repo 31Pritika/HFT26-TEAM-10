@@ -101,15 +101,15 @@ export default function Report() {
   const getGradeColor = (grade: string) => {
     switch (grade) {
       case "A":
-        return { text: "text-emerald-400", ring: "#86b69a", bg: "bg-emerald-500/10", border: "border-emerald-500/40" };
+        return { text: "text-emerald-400", ring: "var(--low)", bg: "bg-emerald-500/10", border: "border-emerald-500/40" };
       case "B":
-        return { text: "text-primary", ring: "#bad6f7", bg: "bg-primary/10", border: "border-primary/40" };
+        return { text: "text-primary", ring: "var(--primary)", bg: "bg-primary/10", border: "border-primary/40" };
       case "C":
-        return { text: "text-warning", ring: "#c9b467", bg: "bg-warning/10", border: "border-warning/40" };
+        return { text: "text-warning", ring: "var(--medium)", bg: "bg-warning/10", border: "border-warning/40" };
       case "D":
-        return { text: "text-amber-500", ring: "#d4915a", bg: "bg-amber-500/10", border: "border-amber-500/40" };
+        return { text: "text-high", ring: "var(--high)", bg: "bg-high/10", border: "border-high/40" };
       default:
-        return { text: "text-danger", ring: "#df6a68", bg: "bg-danger/10", border: "border-danger/40" };
+        return { text: "text-danger", ring: "var(--critical)", bg: "bg-danger/10", border: "border-danger/40" };
     }
   };
 
@@ -126,7 +126,7 @@ export default function Report() {
       <div className="min-h-screen flex items-center justify-center bg-bg text-text">
         <div className="flex flex-col items-center gap-3">
           <Activity className="h-8 w-8 animate-spin text-primary" />
-          <p className="font-mono text-sm text-muted">Compiling cryptographic compliance audit report…</p>
+          <p className=" text-sm text-muted">Compiling cryptographic compliance audit report…</p>
         </div>
       </div>
     );
@@ -140,10 +140,10 @@ export default function Report() {
       <div className="hidden print:block mb-8 border-b-2 border-black pb-4">
         <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-black">SHADOWSCOPE COMPLIANCE AUDIT REPORT</h1>
+            <h1 className="text-2xl font-semibold tracking-tight text-black">SHADOWSCOPE COMPLIANCE AUDIT REPORT</h1>
             <p className="text-xs text-gray-600 mt-1">Autonomous AI & Shadow IT Risk & Regulatory Attestation</p>
           </div>
-          <div className="text-right text-xs text-gray-600 font-mono">
+          <div className="text-right text-xs text-gray-600">
             <div>Organization: {report.org}</div>
             <div>Generated: {new Date(report.generated_at).toLocaleDateString()}</div>
             <div>Audit Window: {report.window.from.slice(0, 10)} → {report.window.to.slice(0, 10)}</div>
@@ -157,14 +157,14 @@ export default function Report() {
           <div className="flex items-center gap-4">
             <Link
               to="/app"
-              className="flex items-center gap-1.5 text-xs font-mono text-muted hover:text-text rounded-md px-2.5 py-1.5 border border-border bg-surface transition-colors"
+              className="flex items-center gap-1.5 text-xs text-muted hover:text-text rounded-md px-2.5 py-1.5 border border-border bg-surface transition-colors"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Back to Console</span>
             </Link>
             <div className="flex items-center gap-2">
-              <span className="font-display font-bold text-text text-base">ShadowScope</span>
-              <span className="text-xs font-mono text-primary px-2 py-0.5 rounded border border-primary/30 bg-primary/10">
+              <span className="font-display font-semibold text-text text-base">ShadowScope</span>
+              <span className="text-xs text-primary px-2 py-0.5 rounded border border-primary/30 bg-primary/10">
                 Audit Report
               </span>
             </div>
@@ -172,7 +172,7 @@ export default function Report() {
 
           {/* Time Selector & Export Actions */}
           <div className="flex items-center gap-2 flex-wrap">
-            <div className="flex rounded-lg border border-border bg-surface p-0.5 text-xs font-mono">
+            <div className="flex rounded-lg border border-border bg-surface p-0.5 text-xs">
               {[
                 { id: "24h", label: "24h" },
                 { id: "7d", label: "7 Days" },
@@ -183,7 +183,7 @@ export default function Report() {
                   onClick={() => setTimeWindow(id)}
                   className={`px-3 py-1 rounded-md transition-colors ${
                     timeWindow === id
-                      ? "bg-primary text-bg font-semibold"
+                      ? "bg-cta text-on-cta font-semibold"
                       : "text-muted hover:text-text"
                   }`}
                 >
@@ -194,7 +194,7 @@ export default function Report() {
 
             <button
               onClick={handlePrint}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-surface-solid text-xs font-mono text-text transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-surface-solid text-xs text-text transition-colors"
               title="Print or Save as PDF"
             >
               <Printer className="h-3.5 w-3.5 text-primary" />
@@ -203,7 +203,7 @@ export default function Report() {
 
             <button
               onClick={handleExportJSON}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-surface-solid text-xs font-mono text-muted hover:text-text transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-surface-solid text-xs text-muted hover:text-text transition-colors"
               title="Export Full JSON"
             >
               <Download className="h-3.5 w-3.5" />
@@ -212,7 +212,7 @@ export default function Report() {
 
             <button
               onClick={handleExportCSV}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-surface-solid text-xs font-mono text-muted hover:text-text transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-surface-solid text-xs text-muted hover:text-text transition-colors"
               title="Export CSV Matrix"
             >
               <FileSpreadsheet className="h-3.5 w-3.5" />
@@ -231,7 +231,7 @@ export default function Report() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Narrative */}
             <div className="lg:col-span-8 space-y-4">
-              <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-muted">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
                 <span className="flex items-center gap-1 px-2.5 py-1 rounded-md border border-border bg-surface text-text">
                   <Building2 className="h-3.5 w-3.5 text-primary" />
                   {report.org}
@@ -242,7 +242,7 @@ export default function Report() {
                 </span>
               </div>
 
-              <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-text print:text-black">
+              <h2 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-text print:text-black">
                 AI Shadow IT & Regulatory Compliance Assessment
               </h2>
 
@@ -254,38 +254,38 @@ export default function Report() {
               {/* Stats Strip */}
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-3">
                 <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
-                  <div className="text-[10px] font-mono text-muted">Events Analyzed</div>
-                  <div className="font-mono text-base font-bold text-text mt-0.5 print:text-black">
+                  <div className="text-[11px] text-muted">Events Analyzed</div>
+                  <div className=" text-base font-semibold text-text mt-0.5 print:text-black">
                     {report.stats.events.toLocaleString()}
                   </div>
                 </div>
                 <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
-                  <div className="text-[10px] font-mono text-muted">AI Requests</div>
-                  <div className="font-mono text-base font-bold text-text mt-0.5 print:text-black">
+                  <div className="text-[11px] text-muted">AI Requests</div>
+                  <div className=" text-base font-semibold text-text mt-0.5 print:text-black">
                     {report.stats.ai_requests.toLocaleString()}
                   </div>
                 </div>
                 <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
-                  <div className="text-[10px] font-mono text-muted">Data Egress</div>
-                  <div className="font-mono text-base font-bold text-text mt-0.5 print:text-black">
+                  <div className="text-[11px] text-muted">Data Egress</div>
+                  <div className=" text-base font-semibold text-text mt-0.5 print:text-black">
                     {formatBytes(report.stats.bytes_out)}
                   </div>
                 </div>
                 <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
-                  <div className="text-[10px] font-mono text-muted">Shadow AI Tools</div>
-                  <div className="font-mono text-base font-bold text-amber-400 mt-0.5 print:text-black">
+                  <div className="text-[11px] text-muted">Shadow AI Tools</div>
+                  <div className=" text-base font-semibold text-amber-400 mt-0.5 print:text-black">
                     {report.stats.shadow_tools}
                   </div>
                 </div>
                 <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
-                  <div className="text-[10px] font-mono text-muted">Open Findings</div>
-                  <div className="font-mono text-base font-bold text-danger mt-0.5 print:text-black">
+                  <div className="text-[11px] text-muted">Open Findings</div>
+                  <div className=" text-base font-semibold text-danger mt-0.5 print:text-black">
                     {report.stats.findings_open}
                   </div>
                 </div>
                 <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
-                  <div className="text-[10px] font-mono text-muted">Critical Leaks</div>
-                  <div className="font-mono text-base font-bold text-danger mt-0.5 print:text-black">
+                  <div className="text-[11px] text-muted">Critical Leaks</div>
+                  <div className=" text-base font-semibold text-danger mt-0.5 print:text-black">
                     {report.stats.critical}
                   </div>
                 </div>
@@ -307,7 +307,7 @@ export default function Report() {
                     cx="60"
                     cy="60"
                     r="50"
-                    className="stroke-[8] fill-none transition-all duration-1000 print:stroke-black"
+                    className="stroke-[8] fill-none transition-colors duration-1000 print:stroke-black"
                     stroke={gradeStyle.ring}
                     strokeDasharray={314.159}
                     strokeDashoffset={314.159 * (1 - report.overall.score / 100)}
@@ -317,10 +317,10 @@ export default function Report() {
 
                 {/* Grade Letter in Center */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                  <span className={`font-display text-5xl sm:text-6xl font-black ${gradeStyle.text} print:text-black`}>
+                  <span className={`font-display text-5xl sm:text-6xl font-semibold ${gradeStyle.text} print:text-black`}>
                     {report.overall.grade}
                   </span>
-                  <span className="font-mono text-xs text-muted mt-1 print:text-gray-600">
+                  <span className=" text-xs text-muted mt-1 print:text-gray-600">
                     Score: {report.overall.score}/100
                   </span>
                 </div>
@@ -328,7 +328,7 @@ export default function Report() {
 
               <div className="mt-4 text-center">
                 <span
-                  className={`inline-block font-mono text-xs font-semibold px-3 py-1 rounded-sm border ${gradeStyle.border} ${gradeStyle.bg} ${gradeStyle.text} print:border-black print:text-black`}
+                  className={`inline-block text-xs font-semibold px-3 py-1 rounded-sm border ${gradeStyle.border} ${gradeStyle.bg} ${gradeStyle.text} print:border-black print:text-black`}
                 >
                   Postured: Grade {report.overall.grade} ({report.overall.score}%)
                 </span>
@@ -341,8 +341,8 @@ export default function Report() {
         <section className="space-y-4 print:break-inside-avoid">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-display text-xl font-bold text-text print:text-black">Regulatory Framework Scorecards</h3>
-              <p className="text-xs font-mono text-muted print:text-gray-600">
+              <h3 className="font-display text-xl font-semibold text-text print:text-black">Regulatory Framework Scorecards</h3>
+              <p className="text-xs text-muted print:text-gray-600">
                 Evaluation across data protection, privacy, credit card, and cybersecurity governance mandates
               </p>
             </div>
@@ -364,27 +364,27 @@ export default function Report() {
                     <div className="flex items-start justify-between gap-2 border-b border-border pb-3 print:border-gray-200">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs font-bold text-primary print:text-black">{fw.id}</span>
-                          <span className="text-[10px] font-mono text-muted">Mandate</span>
+                          <span className="font-mono text-xs font-semibold text-primary print:text-black">{fw.id}</span>
+                          <span className="text-[11px] text-muted">Mandate</span>
                         </div>
                         <h4 className="font-display font-semibold text-text text-sm mt-0.5 print:text-black">
                           {fw.name}
                         </h4>
                       </div>
                       <div className="text-right">
-                        <span className="font-mono text-base font-bold text-text print:text-black">{fw.score}%</span>
-                        <div className="text-[10px] font-mono text-muted">Pass Rate</div>
+                        <span className=" text-base font-semibold text-text print:text-black">{fw.score}%</span>
+                        <div className="text-[11px] text-muted">Pass Rate</div>
                       </div>
                     </div>
 
                     {/* Progress Bar */}
                     <div className="my-3 h-1.5 w-full rounded-sm bg-surface-solid overflow-hidden print:bg-gray-200">
                       <div
-                        className="h-full rounded-sm transition-all duration-700"
+                        className="h-full rounded-sm transition-colors duration-700"
                         style={{
                           width: `${fw.score}%`,
                           backgroundColor:
-                            fw.score >= 80 ? "#86b69a" : fw.score >= 60 ? "#c9b467" : "#df6a68",
+                            fw.score >= 80 ? "var(--low)" : fw.score >= 60 ? "var(--medium)" : "var(--critical)",
                         }}
                       />
                     </div>
@@ -394,19 +394,19 @@ export default function Report() {
                       {fw.controls.map((ctrl) => (
                         <div
                           key={ctrl.id}
-                          className="rounded-lg border border-border/60 bg-surface/40 p-2.5 text-xs font-mono print:border-gray-200 print:bg-gray-50"
+                          className="rounded-lg border border-border/60 bg-surface/40 p-2.5 text-xs print:border-gray-200 print:bg-gray-50"
                         >
                           <div className="flex items-center justify-between gap-2">
                             <span className="font-semibold text-text truncate print:text-black">
                               {ctrl.id}: {ctrl.name}
                             </span>
                             <span
-                              className={`shrink-0 flex items-center gap-1 text-[10px]  font-bold px-1.5 py-0.5 rounded ${
+                              className={`shrink-0 flex items-center gap-1 text-[11px]  font-semibold px-1.5 py-0.5 rounded ${
                                 ctrl.status === "pass"
-                                  ? "border border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                                  ? "border border-emerald-500/30 bg-emerald-500/10 text-text"
                                   : ctrl.status === "warn"
-                                  ? "border border-warning/30 bg-warning/10 text-warning"
-                                  : "border border-danger/30 bg-danger/10 text-danger"
+                                  ? "border border-warning/30 bg-warning/10 text-text"
+                                  : "border border-danger/30 bg-danger/10 text-text"
                               } print:border-gray-400 print:text-black`}
                             >
                               {ctrl.status === "pass" ? (
@@ -428,7 +428,7 @@ export default function Report() {
                   </div>
 
                   {/* Summary Footer */}
-                  <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-[11px] font-mono text-muted print:border-gray-200">
+                  <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-[11px] text-muted print:border-gray-200">
                     <span>Summary:</span>
                     <div className="flex items-center gap-2">
                       <span className="text-emerald-400">{passCount} Pass</span>
@@ -448,20 +448,20 @@ export default function Report() {
         <section className="space-y-4 print:break-inside-avoid">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-display text-xl font-bold text-text print:text-black">Top Critical Findings & Telemetry Leaks</h3>
-              <p className="text-xs font-mono text-muted print:text-gray-600">
+              <h3 className="font-display text-xl font-semibold text-text print:text-black">Top Critical Findings & Telemetry Leaks</h3>
+              <p className="text-xs text-muted print:text-gray-600">
                 Validated exfiltration events requiring immediate containment or credential rotation
               </p>
             </div>
-            <span className="font-mono text-xs text-danger font-semibold">
+            <span className=" text-xs text-danger font-semibold">
               {report.top_findings.length} High-Risk Incidents
             </span>
           </div>
 
           <div className=" rounded-xl border border-border bg-bg-2 print:border-gray-300 print:bg-white print:shadow-none">
-            <table className="w-full text-left border-collapse text-xs font-mono">
+            <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-border bg-surface/80 text-muted text-[10px] print:border-gray-300 print:bg-gray-100 print:text-black">
+                <tr className="border-b border-border bg-surface/80 text-muted text-[11px] print:border-gray-300 print:bg-gray-100 print:text-black">
                   <th className="p-3">Severity</th>
                   <th className="p-3">Title & Classification</th>
                   <th className="p-3">Origin / Destination</th>
@@ -475,12 +475,12 @@ export default function Report() {
                   <tr key={finding.id} className="hover:bg-surface/30 transition-colors print:hover:bg-transparent">
                     <td className="p-3 whitespace-nowrap">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px]  font-bold ${
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px]  font-semibold ${
                           finding.severity === "critical"
-                            ? "border border-danger/40 bg-danger/10 text-danger"
+                            ? "border border-danger/40 bg-danger/10 text-text"
                             : finding.severity === "high"
-                            ? "border border-amber-500/40 bg-amber-500/10 text-amber-400"
-                            : "border border-warning/40 bg-warning/10 text-warning"
+                            ? "border border-amber-500/40 bg-amber-500/10 text-text"
+                            : "border border-warning/40 bg-warning/10 text-text"
                         } print:border-black print:text-black`}
                       >
                         <ShieldAlert className="h-3 w-3" />
@@ -489,7 +489,7 @@ export default function Report() {
                     </td>
                     <td className="p-3">
                       <div className="font-semibold text-text text-xs print:text-black">{finding.title}</div>
-                      <div className="text-[10px] text-muted capitalize mt-0.5">
+                      <div className="text-[11px] text-muted capitalize mt-0.5">
                         {finding.type} · {finding.subtype.replace(/_/g, " ")}
                       </div>
                     </td>
@@ -498,7 +498,7 @@ export default function Report() {
                         <Cpu className="h-3 w-3 text-muted" />
                         <span>{finding.process_name || "Unknown"}</span>
                       </div>
-                      <div className="text-[10px] text-primary truncate mt-0.5">
+                      <div className="text-[11px] text-primary truncate mt-0.5">
                         → {finding.provider_id || "Direct IP / Gateway"}
                       </div>
                     </td>
@@ -512,7 +512,7 @@ export default function Report() {
                         {finding.compliance.map((c) => (
                           <span
                             key={c}
-                            className="px-1.5 py-0.5 rounded border border-border bg-surface text-[9px] text-muted print:border-gray-300 print:text-black"
+                            className="px-1.5 py-0.5 rounded border border-border bg-surface text-[11px] text-muted print:border-gray-300 print:text-black"
                           >
                             {c}
                           </span>
@@ -539,21 +539,21 @@ export default function Report() {
           <section className="space-y-4 print:break-inside-avoid">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-display text-lg font-bold text-text print:text-black flex items-center gap-2">
+                <h3 className="font-display text-lg font-semibold text-text print:text-black flex items-center gap-2">
                   <Layers className="h-4 w-4 text-primary" />
                   Shadow AI Inventory
                 </h3>
-                <p className="text-xs font-mono text-muted print:text-gray-600">Discovered AI models & desktop assistants</p>
+                <p className="text-xs text-muted print:text-gray-600">Discovered AI models & desktop assistants</p>
               </div>
-              <span className="font-mono text-xs text-muted">
+              <span className=" text-xs text-muted">
                 {report.inventory.length} Discovered
               </span>
             </div>
 
             <div className=" rounded-xl border border-border bg-bg-2 p-1 print:border-gray-300 print:bg-white print:shadow-none">
-              <table className="w-full text-left text-xs font-mono">
+              <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-border bg-surface/50 text-[10px] text-muted print:border-gray-200 print:text-black">
+                  <tr className="border-b border-border bg-surface/50 text-[11px] text-muted print:border-gray-200 print:text-black">
                     <th className="p-2.5">Process</th>
                     <th className="p-2.5">Category</th>
                     <th className="p-2.5">Traffic</th>
@@ -566,25 +566,25 @@ export default function Report() {
                     <tr key={item.id} className="hover:bg-surface/20">
                       <td className="p-2.5">
                         <div className="font-semibold text-text print:text-black">{item.process_name}</div>
-                        <div className="text-[10px] text-muted truncate">{item.provider_ids.join(", ")}</div>
+                        <div className="text-[11px] text-muted truncate">{item.provider_ids.join(", ")}</div>
                       </td>
                       <td className="p-2.5 capitalize text-muted">{item.category.replace(/_/g, " ")}</td>
                       <td className="p-2.5 text-muted">
                         <div>{item.request_count} reqs</div>
-                        <div className="text-[10px]">{formatBytes(item.bytes_out)}</div>
+                        <div className="text-[11px]">{formatBytes(item.bytes_out)}</div>
                       </td>
                       <td className="p-2.5">
                         <span
-                          className={`px-1.5 py-0.5 rounded text-[10px]  font-bold ${
+                          className={`px-1.5 py-0.5 rounded text-[11px]  font-semibold ${
                             item.sanctioned
-                              ? "border border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
-                              : "border border-danger/30 bg-danger/10 text-danger"
+                              ? "border border-emerald-500/30 bg-emerald-500/10 text-text"
+                              : "border border-danger/30 bg-danger/10 text-text"
                           } print:border-black print:text-black`}
                         >
                           {item.sanctioned ? "Sanctioned" : "Shadow AI"}
                         </span>
                       </td>
-                      <td className="p-2.5 text-right font-bold text-text print:text-black">
+                      <td className="p-2.5 text-right font-semibold text-text print:text-black">
                         {item.risk_score}/100
                       </td>
                     </tr>
@@ -598,21 +598,21 @@ export default function Report() {
           <section className="space-y-4 print:break-inside-avoid">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-display text-lg font-bold text-text print:text-black flex items-center gap-2">
+                <h3 className="font-display text-lg font-semibold text-text print:text-black flex items-center gap-2">
                   <Bot className="h-4 w-4 text-accent" />
                   Autonomous Agent Sessions
                 </h3>
-                <p className="text-xs font-mono text-muted print:text-gray-600">Active agent loops & tool permissions</p>
+                <p className="text-xs text-muted print:text-gray-600">Active agent loops & tool permissions</p>
               </div>
-              <span className="font-mono text-xs text-muted">
+              <span className=" text-xs text-muted">
                 {report.agents.length} Monitored
               </span>
             </div>
 
             <div className=" rounded-xl border border-border bg-bg-2 p-1 print:border-gray-300 print:bg-white print:shadow-none">
-              <table className="w-full text-left text-xs font-mono">
+              <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-border bg-surface/50 text-[10px] text-muted print:border-gray-200 print:text-black">
+                  <tr className="border-b border-border bg-surface/50 text-[11px] text-muted print:border-gray-200 print:text-black">
                     <th className="p-2.5">Agent / Process</th>
                     <th className="p-2.5">Permissions Matrix</th>
                     <th className="p-2.5">Autonomy</th>
@@ -626,14 +626,14 @@ export default function Report() {
                         <div className="font-semibold text-text print:text-black capitalize">
                           {agent.framework.replace(/_/g, " ")} ({agent.id})
                         </div>
-                        <div className="text-[10px] text-muted">PID {agent.pid || "N/A"} · {agent.process_name}</div>
+                        <div className="text-[11px] text-muted">PID {agent.pid || "N/A"} · {agent.process_name}</div>
                       </td>
                       <td className="p-2.5">
-                        <div className="flex items-center gap-1 text-[10px]">
+                        <div className="flex items-center gap-1 text-[11px]">
                           <span
                             className={`px-1 py-0.5 rounded ${
                               agent.permissions.shell
-                                ? "bg-danger/20 text-danger font-bold"
+                                ? "bg-danger/20 text-text font-semibold"
                                 : "bg-surface text-muted"
                             }`}
                             title="Shell Access"
@@ -643,7 +643,7 @@ export default function Report() {
                           <span
                             className={`px-1 py-0.5 rounded ${
                               agent.permissions.filesystem_write
-                                ? "bg-warning/20 text-warning font-bold"
+                                ? "bg-warning/20 text-text font-semibold"
                                 : "bg-surface text-muted"
                             }`}
                             title="FS Write"
@@ -653,7 +653,7 @@ export default function Report() {
                           <span
                             className={`px-1 py-0.5 rounded ${
                               agent.permissions.network
-                                ? "bg-primary/20 text-primary font-bold"
+                                ? "bg-primary/20 text-primary font-semibold"
                                 : "bg-surface text-muted"
                             }`}
                             title="Network Socket"
@@ -662,16 +662,16 @@ export default function Report() {
                           </span>
                         </div>
                       </td>
-                      <td className="p-2.5 font-bold text-text print:text-black">
+                      <td className="p-2.5 font-semibold text-text print:text-black">
                         {agent.autonomy_score}%
                       </td>
                       <td className="p-2.5 text-right">
                         <span
-                          className={`px-1.5 py-0.5 rounded text-[10px]  font-bold ${
+                          className={`px-1.5 py-0.5 rounded text-[11px]  font-semibold ${
                             agent.status === "blocked"
-                              ? "border border-danger/30 bg-danger/10 text-danger"
+                              ? "border border-danger/30 bg-danger/10 text-text"
                               : agent.status === "active"
-                              ? "border border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                              ? "border border-emerald-500/30 bg-emerald-500/10 text-text"
                               : "border border-border bg-surface text-muted"
                           } print:border-black print:text-black`}
                         >
@@ -690,10 +690,10 @@ export default function Report() {
         <section className="space-y-4 print:break-inside-avoid">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-display text-xl font-bold text-text print:text-black">Prioritized Remediation Roadmap</h3>
-              <p className="text-xs font-mono text-muted print:text-gray-600">Actionable steps to reach compliance Grade A</p>
+              <h3 className="font-display text-xl font-semibold text-text print:text-black">Prioritized Remediation Roadmap</h3>
+              <p className="text-xs text-muted print:text-gray-600">Actionable steps to reach compliance Grade A</p>
             </div>
-            <span className="font-mono text-xs text-muted">
+            <span className=" text-xs text-muted">
               {report.recommendations.length} Directives
             </span>
           </div>
@@ -702,7 +702,7 @@ export default function Report() {
             {report.recommendations.map((rec, index) => (
               <div
                 key={index}
-                className={`rounded-xl border p-5 transition-all ${
+                className={`rounded-xl border p-5 transition-colors ${
                   rec.priority === "P0"
                     ? "border-danger/40 bg-danger/5 print:border-red-400 print:bg-white"
                     : rec.priority === "P1"
@@ -713,12 +713,12 @@ export default function Report() {
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="flex items-center gap-2">
                     <span
-                      className={`font-mono text-xs font-bold px-2 py-0.5 rounded ${
+                      className={` text-xs font-semibold px-2 py-0.5 rounded ${
                         rec.priority === "P0"
                           ? "bg-danger text-bg"
                           : rec.priority === "P1"
                           ? "bg-amber-500 text-bg"
-                          : "bg-primary text-bg"
+                          : "bg-cta text-on-cta"
                       }`}
                     >
                       {rec.priority}
@@ -739,7 +739,7 @@ export default function Report() {
         </section>
 
         {/* SECTION 6: AUDIT ATTESTATION FOOTER */}
-        <section className="border-t border-border pt-6 pb-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-muted print:border-black print:text-black">
+        <section className="border-t border-border pt-6 pb-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted print:border-black print:text-black">
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 text-primary print:text-black" />
             <span>Cryptographically sealed by ShadowScope Kernel Engine v0.1.0</span>

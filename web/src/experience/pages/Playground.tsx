@@ -57,43 +57,43 @@ const SEVERITY_CONFIG: Record<
   }
 > = {
   critical: {
-    bg: "rgba(223,106,104,0.12)",
-    border: "rgba(223,106,104,0.45)",
-    text: "#df6a68",
-    underline: "#df6a68",
-    badgeBg: "rgba(223,106,104,0.2)",
+    bg: "color-mix(in srgb, var(--critical) 12%, transparent)",
+    border: "color-mix(in srgb, var(--critical) 45%, transparent)",
+    text: "var(--text)",
+    underline: "var(--critical)",
+    badgeBg: "color-mix(in srgb, var(--critical) 20%, transparent)",
     icon: ShieldAlert,
   },
   high: {
-    bg: "rgba(212,145,90,0.12)",
-    border: "rgba(212,145,90,0.45)",
-    text: "#d4915a",
-    underline: "#d4915a",
-    badgeBg: "rgba(212,145,90,0.2)",
+    bg: "color-mix(in srgb, var(--high) 12%, transparent)",
+    border: "color-mix(in srgb, var(--high) 45%, transparent)",
+    text: "var(--text)",
+    underline: "var(--high)",
+    badgeBg: "color-mix(in srgb, var(--high) 20%, transparent)",
     icon: AlertTriangle,
   },
   medium: {
-    bg: "rgba(201,180,103,0.1)",
-    border: "rgba(201,180,103,0.45)",
-    text: "#c9b467",
-    underline: "#c9b467",
-    badgeBg: "rgba(201,180,103,0.2)",
+    bg: "color-mix(in srgb, var(--medium) 10%, transparent)",
+    border: "color-mix(in srgb, var(--medium) 45%, transparent)",
+    text: "var(--text)",
+    underline: "var(--medium)",
+    badgeBg: "color-mix(in srgb, var(--medium) 20%, transparent)",
     icon: Info,
   },
   low: {
-    bg: "rgba(134,182,154,0.1)",
-    border: "rgba(134,182,154,0.4)",
-    text: "#86b69a",
-    underline: "#86b69a",
-    badgeBg: "rgba(134,182,154,0.2)",
+    bg: "color-mix(in srgb, var(--low) 10%, transparent)",
+    border: "color-mix(in srgb, var(--low) 40%, transparent)",
+    text: "var(--text)",
+    underline: "var(--low)",
+    badgeBg: "color-mix(in srgb, var(--low) 20%, transparent)",
     icon: ShieldCheck,
   },
   info: {
-    bg: "rgba(96,165,250,0.1)",
-    border: "rgba(96,165,250,0.4)",
-    text: "#8fb0d8",
-    underline: "#8fb0d8",
-    badgeBg: "rgba(96,165,250,0.2)",
+    bg: "color-mix(in srgb, var(--info) 10%, transparent)",
+    border: "color-mix(in srgb, var(--info) 40%, transparent)",
+    text: "var(--text)",
+    underline: "var(--info)",
+    badgeBg: "color-mix(in srgb, var(--info) 20%, transparent)",
     icon: Info,
   },
 };
@@ -238,7 +238,7 @@ export default function Playground() {
               <div className="w-8 h-8 rounded-lg bg-primary/15 border border-primary/30 flex items-center justify-center">
                 <Eye className="w-4 h-4 text-primary" />
               </div>
-              <span className="font-display font-bold text-base hidden sm:inline">
+              <span className="font-display font-semibold text-base hidden sm:inline">
                 Shadow<span className="text-primary">Scope</span>
               </span>
             </Link>
@@ -252,10 +252,10 @@ export default function Playground() {
           <div className="flex items-center gap-3">
             {/* Engine status indicator */}
             <div
-              className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-sm text-xs font-mono border"
+              className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-sm text-xs border"
               style={{
-                background: engineConnected ? "rgba(134,182,154,0.1)" : "rgba(186,215,247,0.08)",
-                borderColor: engineConnected ? "rgba(134,182,154,0.3)" : "rgba(186,215,247,0.25)",
+                background: engineConnected ? "color-mix(in srgb, var(--low) 10%, transparent)" : "color-mix(in srgb, var(--primary) 8%, transparent)",
+                borderColor: engineConnected ? "color-mix(in srgb, var(--low) 30%, transparent)" : "color-mix(in srgb, var(--primary) 25%, transparent)",
                 color: engineConnected ? "var(--low)" : "var(--primary)",
               }}
             >
@@ -270,7 +270,7 @@ export default function Playground() {
 
             <Link
               to="/app"
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-[var(--radius-sm)] bg-primary text-black font-semibold text-xs transition-all hover:bg-primary/90"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-cta text-on-cta font-semibold text-xs transition-colors hover:bg-cta-hover"
             >
               <Terminal className="w-3.5 h-3.5" />
               Open Console
@@ -291,7 +291,7 @@ export default function Playground() {
                 <button
                   key={p.id}
                   onClick={() => handleSelectPreset(p)}
-                  className={`px-3 py-2 rounded-[var(--radius-sm)] border text-xs font-medium whitespace-nowrap flex items-center gap-2 transition-all ${
+                  className={`px-3 py-2 rounded-[var(--radius-sm)] border text-xs font-medium whitespace-nowrap flex items-center gap-2 transition-colors ${
                     active
                       ? "bg-primary/15 border-primary/50 text-text"
                       : "bg-surface border-border text-muted hover:text-text hover:border-border-strong"
@@ -305,14 +305,14 @@ export default function Playground() {
         </div>
 
         {/* Action Toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-[var(--radius)] bg-surface-solid/60 border border-border">
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-[var(--radius)] bg-surface-solid border border-border">
           <div className="flex items-center gap-2">
             {/* Redacted View Toggle */}
             <button
               onClick={() => setRedactedView(!redactedView)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] text-xs font-semibold border transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] text-xs font-semibold border transition-colors ${
                 redactedView
-                  ? "bg-critical/15 border-critical/40 text-critical"
+                  ? "bg-critical/15 border-critical/40 text-text"
                   : "bg-surface border-border text-muted hover:text-text"
               }`}
             >
@@ -332,7 +332,7 @@ export default function Playground() {
             {/* Simulate Sending to ChatGPT */}
             <button
               onClick={() => setIsFlightModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] bg-accent/15 border border-accent/30 text-accent hover:bg-accent/25 text-xs font-semibold transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] bg-accent/15 border border-accent/30 text-accent hover:bg-accent/25 text-xs font-semibold transition-colors"
             >
               <Send className="w-3.5 h-3.5" />
               Simulate Sending to ChatGPT
@@ -345,7 +345,7 @@ export default function Playground() {
               <button
                 onClick={handleScanWithEngine}
                 disabled={engineScanning}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] bg-surface border border-border hover:border-primary/40 text-xs font-mono text-muted hover:text-text transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] bg-surface border border-border hover:border-primary/40 text-xs text-muted hover:text-text transition-colors"
               >
                 <Cpu className="w-3.5 h-3.5 text-primary" />
                 {engineScanning ? "Engine Scanning…" : "Scan with Engine"}
@@ -353,7 +353,7 @@ export default function Playground() {
             )}
 
             {engineDiff && (
-              <span className="text-[11px] font-mono px-2 py-1 rounded bg-surface border border-primary/30 text-primary">
+              <span className="text-[11px] px-2 py-1 rounded bg-surface border border-primary/30 text-primary">
                 {engineDiff}
               </span>
             )}
@@ -361,7 +361,7 @@ export default function Playground() {
             {/* Copy Redacted */}
             <button
               onClick={handleCopyRedacted}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] bg-surface border border-border text-xs text-muted hover:text-text transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] bg-surface border border-border text-xs text-muted hover:text-text transition-colors"
               title="Copy Redacted Text"
             >
               {copied ? <Check className="w-3.5 h-3.5 text-low" /> : <Copy className="w-3.5 h-3.5" />}
@@ -371,7 +371,7 @@ export default function Playground() {
             {/* Export JSON */}
             <button
               onClick={handleExportJson}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] bg-surface border border-border text-xs text-muted hover:text-text transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-sm)] bg-surface border border-border text-xs text-muted hover:text-text transition-colors"
               title="Export Findings JSON"
             >
               <Download className="w-3.5 h-3.5" />
@@ -381,7 +381,7 @@ export default function Playground() {
             {/* Clear Button */}
             <button
               onClick={() => setText("")}
-              className="p-1.5 rounded-[var(--radius-sm)] bg-surface border border-border text-muted hover:text-critical hover:border-critical/30 transition-all"
+              className="p-1.5 rounded-[var(--radius-sm)] bg-surface border border-border text-muted hover:text-critical hover:border-critical/30 transition-colors"
               title="Clear Editor"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -392,9 +392,9 @@ export default function Playground() {
         {/* Dual Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1 min-h-[580px]">
           {/* Left Column: Editor & Line Highlights (7 cols on lg) */}
-          <div className="lg:col-span-7 flex flex-col rounded-[var(--radius)] border border-border bg-[#070913] overflow-hidden relative">
+          <div className="lg:col-span-7 flex flex-col rounded-[var(--radius)] border border-border bg-surface-solid overflow-hidden relative">
             {/* Editor Header */}
-            <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-surface-solid/40 font-mono text-xs text-muted">
+            <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-surface-solid/40 text-xs text-muted">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-sm bg-primary/40" />
                 <span>input-payload.txt</span>
@@ -410,7 +410,7 @@ export default function Playground() {
               {/* Line Numbers Column */}
               <div
                 ref={lineNumbersRef}
-                className="w-12 py-4 select-none font-mono text-xs text-faint text-right pr-3 bg-black/20 border-r border-border/50 overflow-hidden"
+                className="w-12 py-4 select-none text-xs text-faint text-right pr-3 bg-surface-solid border-r border-border/50 overflow-hidden"
                 style={{ lineHeight: "1.6rem" }}
                 aria-hidden="true"
               >
@@ -451,7 +451,7 @@ export default function Playground() {
                   onScroll={handleScroll}
                   spellCheck={false}
                   placeholder="Paste AI prompts, tool calls, logs, source code, or configuration keys here to scan..."
-                  className={`absolute inset-0 w-full h-full p-4 font-mono text-xs sm:text-sm bg-transparent resize-none outline-none leading-[1.6rem] whitespace-pre-wrap break-words selection:bg-primary/30 ${
+                  className={`absolute inset-0 w-full h-full p-4 text-xs sm:text-sm bg-transparent resize-none outline-none leading-[1.6rem] whitespace-pre-wrap break-words selection:bg-primary/30 ${
                     redactedView ? "text-transparent caret-transparent" : "text-text caret-primary"
                   }`}
                 />
@@ -459,7 +459,7 @@ export default function Playground() {
             </div>
 
             {/* Bottom Bar: Live scan status */}
-            <div className="px-4 py-2 border-t border-border bg-black/40 flex items-center justify-between text-xs font-mono text-muted">
+            <div className="px-4 py-2 border-t border-border bg-surface-solid flex items-center justify-between text-xs text-muted">
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-sm bg-primary" />
                 <span>Client Scan Duration: {scanResult.stats.duration_ms} ms</span>
@@ -480,12 +480,12 @@ export default function Playground() {
                 background: "var(--surface)",
                 borderColor:
                   scanResult.risk_score >= 80
-                    ? "rgba(223,106,104,0.4)"
+                    ? "color-mix(in srgb, var(--critical) 40%, transparent)"
                     : scanResult.risk_score >= 60
-                      ? "rgba(212,145,90,0.4)"
+                      ? "color-mix(in srgb, var(--high) 40%, transparent)"
                       : scanResult.risk_score >= 20
-                        ? "rgba(201,180,103,0.4)"
-                        : "rgba(134,182,154,0.4)",
+                        ? "color-mix(in srgb, var(--medium) 40%, transparent)"
+                        : "color-mix(in srgb, var(--low) 40%, transparent)",
               }}
             >
               <div className="flex items-center gap-4">
@@ -497,7 +497,7 @@ export default function Playground() {
                       cy="18"
                       r="15"
                       fill="none"
-                      stroke="rgba(186,215,247,0.1)"
+                      stroke="color-mix(in srgb, var(--primary) 10%, transparent)"
                       strokeWidth="3"
                     />
                     <motion.circle
@@ -525,16 +525,16 @@ export default function Playground() {
                     />
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                    <span className="font-display font-bold text-xl leading-none text-text">
+                    <span className="font-display font-semibold text-xl leading-none text-text">
                       {scanResult.risk_score}
                     </span>
-                    <span className="text-[10px] font-mono text-muted">/100</span>
+                    <span className="text-[11px] text-muted">/100</span>
                   </div>
                 </div>
 
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="font-display font-bold text-base text-text">
+                    <h3 className="font-display font-semibold text-base text-text">
                       Risk Level Grade {scanResult.risk_grade}
                     </h3>
                   </div>
@@ -581,14 +581,14 @@ export default function Playground() {
                 <button
                   key={tab.id}
                   onClick={() => setFilterType(tab.id)}
-                  className={`px-3 py-1.5 rounded-t-[var(--radius-sm)] text-xs font-mono font-medium flex items-center gap-1.5 transition-colors ${
+                  className={`px-3 py-1.5 rounded-t-[var(--radius-sm)] text-xs font-medium flex items-center gap-1.5 transition-colors ${
                     filterType === tab.id
-                      ? "text-primary border-b-2 border-primary bg-surface/50 font-bold"
+                      ? "text-primary border-b-2 border-primary bg-surface/50 font-semibold"
                       : "text-muted hover:text-text"
                   }`}
                 >
                   <span>{tab.label}</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded-sm bg-surface border border-border text-muted">
+                  <span className="text-[11px] px-1.5 py-0.2 rounded-sm bg-surface border border-border text-muted">
                     {tab.count}
                   </span>
                 </button>
@@ -599,7 +599,7 @@ export default function Playground() {
             <div className="flex-1 overflow-y-auto space-y-3 pr-1 max-h-[600px] scrollbar-thin">
               {filteredFindings.length === 0 ? (
                 <div className="rounded-[var(--radius)] border border-border bg-surface p-8 text-center flex flex-col items-center justify-center gap-3">
-                  <div className="w-12 h-12 rounded-sm bg-low/15 border border-low/30 flex items-center justify-center text-low">
+                  <div className="w-12 h-12 rounded-sm bg-low/15 border border-low/30 flex items-center justify-center text-text">
                     <ShieldCheck className="w-6 h-6" />
                   </div>
                   <div>
@@ -623,7 +623,7 @@ export default function Playground() {
                       key={finding.id}
                       onMouseEnter={() => setHoveredFindingId(finding.id)}
                       onMouseLeave={() => setHoveredFindingId(null)}
-                      className={`rounded-[var(--radius)] p-4 border transition-all duration-200 cursor-pointer ${
+                      className={`rounded-[var(--radius)] p-4 border transition-colors duration-200 cursor-pointer ${
                         isHovered ? "scale-[1.01]" : ""
                       }`}
                       style={{
@@ -635,7 +635,7 @@ export default function Playground() {
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-center gap-2">
                           <span
-                            className="text-[10px] font-mono px-2 py-0.5 rounded font-bold flex items-center gap-1"
+                            className="text-[11px] px-2 py-0.5 rounded font-semibold flex items-center gap-1"
                             style={{
                               background: cfg.badgeBg,
                               color: cfg.text,
@@ -651,14 +651,14 @@ export default function Playground() {
                         </div>
 
                         {finding.evidence.line && (
-                          <span className="text-[10px] font-mono text-faint">
+                          <span className="text-[11px] text-faint">
                             Line {finding.evidence.line}
                           </span>
                         )}
                       </div>
 
                       {/* Finding Title & Description */}
-                      <h4 className="font-display font-bold text-sm text-text mt-2">
+                      <h4 className="font-display font-semibold text-sm text-text mt-2">
                         {finding.title}
                       </h4>
                       <p className="text-xs text-muted mt-0.5 leading-relaxed">
@@ -666,15 +666,15 @@ export default function Playground() {
                       </p>
 
                       {/* Evidence Match Box */}
-                      <div className="mt-2.5 p-2 rounded bg-black/40 border border-border/60 font-mono text-xs flex items-center justify-between gap-2">
+                      <div className="mt-2.5 p-2 rounded bg-surface-solid border border-border/60 font-mono text-xs flex items-center justify-between gap-2">
                         <span className="text-muted truncate">
                           Match:{" "}
-                          <span className="font-bold" style={{ color: cfg.text }}>
+                          <span className="font-semibold" style={{ color: cfg.text }}>
                             {finding.evidence.match_redacted}
                           </span>
                         </span>
                         {finding.evidence.entropy !== null && (
-                          <span className="text-[10px] text-faint shrink-0">
+                          <span className="text-[11px] text-faint shrink-0">
                             H: {finding.evidence.entropy}
                           </span>
                         )}
@@ -686,7 +686,7 @@ export default function Playground() {
                           {finding.compliance.map((c) => (
                             <span
                               key={c}
-                              className="px-1.5 py-0.5 rounded bg-surface border border-border font-mono text-[9px] text-muted"
+                              className="px-1.5 py-0.5 rounded bg-surface border border-border text-[11px] text-muted"
                             >
                               {c}
                             </span>
@@ -694,7 +694,7 @@ export default function Playground() {
                         </div>
 
                         {finding.remediation.length > 0 && (
-                          <span className="text-primary hover:underline text-[11px] font-mono flex items-center gap-1">
+                          <span className="text-primary hover:underline text-[11px] flex items-center gap-1">
                             {finding.remediation[0]}
                           </span>
                         )}
@@ -747,10 +747,10 @@ function renderHighlights(
     elements.push(
       <mark
         key={f.id}
-        className="bg-transparent rounded-sm px-0.5 transition-all duration-200"
+        className="bg-transparent rounded-sm px-0.5 transition-colors duration-200"
         style={{
           borderBottom: `2.5px solid ${cfg.underline}`,
-          backgroundColor: isHovered ? cfg.bg : `${cfg.underline}15`,
+          backgroundColor: isHovered ? cfg.bg : `color-mix(in srgb, ${cfg.underline} 8%, transparent)`,
           color: "inherit",
         }}
       >

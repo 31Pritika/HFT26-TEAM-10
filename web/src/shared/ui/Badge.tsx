@@ -24,32 +24,32 @@ export function Badge({
 }: BadgeProps) {
   const variantStyles = {
     default: "bg-surface-solid text-muted border border-border",
-    cyan: "bg-cyan-500/10 text-cyan-300 border border-cyan-500/30",
-    violet: "bg-violet-500/10 text-violet-300 border border-violet-500/30",
-    critical: "bg-red-500/10 text-red-400 border border-red-500/30",
-    high: "bg-orange-500/10 text-orange-400 border border-orange-500/30",
-    medium: "bg-amber-500/10 text-amber-300 border border-amber-500/30",
-    low: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30",
-    info: "bg-blue-500/10 text-blue-300 border border-blue-500/30",
+    cyan: "bg-primary/10 text-primary border border-primary/30",
+    violet: "bg-primary/10 text-primary border border-primary/30",
+    critical: "bg-critical/10 text-text border border-critical/40",
+    high: "bg-high/10 text-text border border-high/40",
+    medium: "bg-medium/10 text-text border border-medium/40",
+    low: "bg-low/10 text-text border border-low/40",
+    info: "bg-info/10 text-text border border-info/40",
     outline: "border border-border text-muted bg-transparent",
-    mono: "font-mono bg-[#11141c] text-cyan-400/90 border border-cyan-900/40",
+    mono: " bg-surface-solid text-primary border border-border",
   };
 
   const dotStyles = {
     default: "bg-muted",
-    cyan: "bg-cyan-400 ",
-    violet: "bg-violet-400 ",
-    critical: "bg-red-400 animate-ping",
-    high: "bg-orange-400 ",
-    medium: "bg-amber-400",
-    low: "bg-emerald-400",
-    info: "bg-blue-400",
+    cyan: "bg-primary",
+    violet: "bg-primary",
+    critical: "bg-critical",
+    high: "bg-high",
+    medium: "bg-medium",
+    low: "bg-low",
+    info: "bg-info",
     outline: "bg-muted",
-    mono: "bg-cyan-400",
+    mono: "bg-primary",
   };
 
   const sizeStyles = {
-    xs: "px-1.5 py-0.5 text-[10px] gap-1",
+    xs: "px-1.5 py-0.5 text-[11px] gap-1",
     sm: "px-2.5 py-0.5 text-xs gap-1.5",
     md: "px-3 py-1 text-sm gap-2",
   };
@@ -64,7 +64,7 @@ export function Badge({
       )}
       {...props}
     >
-      {dot && <span className={cn("inline-block w-1.5 h-1.5 rounded-sm shrink-0", dotStyles[variant])} />}
+      {dot && <span className={cn("inline-block w-1.5 h-1.5 rounded-full shrink-0", dotStyles[variant])} />}
       {children}
     </span>
   );

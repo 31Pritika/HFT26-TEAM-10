@@ -15,7 +15,7 @@ export interface GlassCardProps extends Omit<HTMLMotionProps<"div">, "children">
   className?: string;
 }
 
-/** A flat hairline panel with corner marks. `variant` and `glow` only pick the border now. */
+/** A flat panel with a thin border. `variant` and `glow` only pick the border now. */
 export function GlassCard({
   children,
   variant = "default",
@@ -29,9 +29,9 @@ export function GlassCard({
   return (
     <motion.div
       className={cn(
-        "crop rounded-sm border bg-surface p-5 transition-colors duration-150",
-        critical ? "border-red-500/35" : "border-border",
-        interactive && "cursor-pointer hover:border-border-strong",
+        "rounded-md border bg-surface p-5 transition-colors",
+        critical ? "border-critical/40" : "border-border",
+        interactive && "cursor-pointer hover:border-border-strong hover:bg-elevated",
         className,
       )}
       {...props}

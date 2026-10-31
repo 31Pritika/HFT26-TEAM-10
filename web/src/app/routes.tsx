@@ -8,18 +8,35 @@ const Playground = lazy(() => import("../experience/pages/Playground"));
 const Report = lazy(() => import("../experience/pages/Report"));
 const Architecture = lazy(() => import("../experience/pages/Architecture"));
 const NotFound = lazy(() => import("../experience/pages/NotFound"));
-const ThreatConstellation = lazy(() => import("../experience/constellation/ThreatConstellation"));
 
-const Overview = lazy(() => import("../dashboard/pages/Overview"));
-const LiveTraffic = lazy(() => import("../dashboard/pages/LiveTraffic"));
-const Alerts = lazy(() => import("../dashboard/pages/Alerts"));
-const AlertDetail = lazy(() => import("../dashboard/pages/AlertDetail"));
-const Inventory = lazy(() => import("../dashboard/pages/Inventory"));
-const Agents = lazy(() => import("../dashboard/pages/Agents"));
-const Simulate = lazy(() => import("../dashboard/pages/Simulate"));
-const Ingest = lazy(() => import("../dashboard/pages/Ingest"));
-const Policies = lazy(() => import("../dashboard/pages/Policies"));
-const Settings = lazy(() => import("../dashboard/pages/Settings"));
+const consolePages = {
+  ThreatConstellation: () => import("../experience/constellation/ThreatConstellation"),
+  Overview: () => import("../dashboard/pages/Overview"),
+  LiveTraffic: () => import("../dashboard/pages/LiveTraffic"),
+  Alerts: () => import("../dashboard/pages/Alerts"),
+  AlertDetail: () => import("../dashboard/pages/AlertDetail"),
+  Inventory: () => import("../dashboard/pages/Inventory"),
+  Agents: () => import("../dashboard/pages/Agents"),
+  Ingest: () => import("../dashboard/pages/Ingest"),
+  Policies: () => import("../dashboard/pages/Policies"),
+  Settings: () => import("../dashboard/pages/Settings"),
+};
+
+const ThreatConstellation = lazy(consolePages.ThreatConstellation);
+const Overview = lazy(consolePages.Overview);
+const LiveTraffic = lazy(consolePages.LiveTraffic);
+const Alerts = lazy(consolePages.Alerts);
+const AlertDetail = lazy(consolePages.AlertDetail);
+const Inventory = lazy(consolePages.Inventory);
+const Agents = lazy(consolePages.Agents);
+const Ingest = lazy(consolePages.Ingest);
+const Policies = lazy(consolePages.Policies);
+const Settings = lazy(consolePages.Settings);
+
+/** Fetches every console page ahead of time, so moving between them never shows a loading state. */
+export function preloadConsolePages() {
+  Object.values(consolePages).forEach((load) => void load());
+}
 
 export const router = createBrowserRouter([
   { path: "/", element: <Landing /> },
@@ -37,7 +54,6 @@ export const router = createBrowserRouter([
       { path: "inventory", element: <Inventory /> },
       { path: "agents", element: <Agents /> },
       { path: "graph", element: <ThreatConstellation /> },
-      { path: "simulate", element: <Simulate /> },
       { path: "ingest", element: <Ingest /> },
       { path: "policies", element: <Policies /> },
       { path: "settings", element: <Settings /> },

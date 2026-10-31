@@ -76,10 +76,10 @@ export function Constellation2D({
   }, [nodes]);
 
   const getNodeColor = (risk: number) => {
-    if (risk >= 80) return "#df6a68"; // Critical (red)
-    if (risk >= 50) return "#d4915a"; // High (orange)
-    if (risk >= 20) return "#c9b467"; // Med (yellow)
-    return "#bad6f7"; // Low (cyan)
+    if (risk >= 80) return "var(--critical)"; // Critical (red)
+    if (risk >= 50) return "var(--high)"; // High (orange)
+    if (risk >= 20) return "var(--medium)"; // Med (yellow)
+    return "var(--primary)"; // Low (cyan)
   };
 
   return (
@@ -92,9 +92,9 @@ export function Constellation2D({
         <defs>
           {/* Radial radar rings */}
           <radialGradient id="radarGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#bad6f7" stopOpacity="0.08" />
-            <stop offset="60%" stopColor="#9dadc2" stopOpacity="0.03" />
-            <stop offset="100%" stopColor="#0b0d13" stopOpacity="0" />
+            <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.08" />
+            <stop offset="60%" stopColor="var(--primary)" stopOpacity="0.03" />
+            <stop offset="100%" stopColor="var(--bg)" stopOpacity="0" />
           </radialGradient>
 
           {/* Glow filter */}
@@ -117,10 +117,10 @@ export function Constellation2D({
 
         {/* Ambient Grid Background */}
         <circle cx={layout.centerX} cy={layout.centerY} r="320" fill="url(#radarGlow)" />
-        <circle cx={layout.centerX} cy={layout.centerY} r="110" fill="none" stroke="rgba(255,255,255,0.05)" strokeDasharray="4 4" />
-        <circle cx={layout.centerX} cy={layout.centerY} r="195" fill="none" stroke="rgba(255,255,255,0.05)" strokeDasharray="4 4" />
-        <circle cx={layout.centerX} cy={layout.centerY} r="265" fill="none" stroke="rgba(255,255,255,0.05)" strokeDasharray="4 4" />
-        <circle cx={layout.centerX} cy={layout.centerY} r="310" fill="none" stroke="rgba(255,255,255,0.05)" strokeDasharray="4 4" />
+        <circle cx={layout.centerX} cy={layout.centerY} r="110" fill="none" stroke="color-mix(in srgb, var(--text) 5%, transparent)" strokeDasharray="4 4" />
+        <circle cx={layout.centerX} cy={layout.centerY} r="195" fill="none" stroke="color-mix(in srgb, var(--text) 5%, transparent)" strokeDasharray="4 4" />
+        <circle cx={layout.centerX} cy={layout.centerY} r="265" fill="none" stroke="color-mix(in srgb, var(--text) 5%, transparent)" strokeDasharray="4 4" />
+        <circle cx={layout.centerX} cy={layout.centerY} r="310" fill="none" stroke="color-mix(in srgb, var(--text) 5%, transparent)" strokeDasharray="4 4" />
 
         {/* Crosshair guide lines */}
         <line
@@ -128,14 +128,14 @@ export function Constellation2D({
           y1={layout.centerY}
           x2={layout.centerX + 330}
           y2={layout.centerY}
-          stroke="rgba(255,255,255,0.04)"
+          stroke="color-mix(in srgb, var(--text) 4%, transparent)"
         />
         <line
           x1={layout.centerX}
           y1={layout.centerY - 330}
           x2={layout.centerX}
           y2={layout.centerY + 330}
-          stroke="rgba(255,255,255,0.04)"
+          stroke="color-mix(in srgb, var(--text) 4%, transparent)"
         />
 
         {/* Links */}
@@ -215,7 +215,7 @@ export function Constellation2D({
                     points={`0,-${radius * 1.3} ${radius * 1.3},0 0,${radius * 1.3} -${radius * 1.3},0`}
                     fill={color}
                     fillOpacity={0.85}
-                    stroke="#ffffff"
+                    stroke="var(--surface)"
                     strokeWidth={isSelected ? 2 : 1}
                     filter="url(#nodeGlow)"
                   />
@@ -229,7 +229,7 @@ export function Constellation2D({
                     rx="1"
                     fill={color}
                     fillOpacity={0.8}
-                    stroke="#ffffff"
+                    stroke="var(--surface)"
                     strokeWidth={isSelected ? 2 : 1}
                     filter="url(#nodeGlow)"
                   />
@@ -239,23 +239,19 @@ export function Constellation2D({
                     r={radius}
                     fill={color}
                     fillOpacity={0.9}
-                    stroke="#ffffff"
+                    stroke="var(--surface)"
                     strokeWidth={isSelected ? 2 : 1}
                     filter={isSelected ? "url(#activeGlow)" : "url(#nodeGlow)"}
                   />
                 )}
 
-                {/* Core pulse for critical threat */}
-                {node.risk >= 80 && !reducedMotion && (
-                  <circle r={radius * 0.4} fill="#ffffff" className="animate-ping" opacity="0.75" />
-                )}
 
                 {/* Node Label */}
                 <text
                   y={radius + 12}
                   textAnchor="middle"
-                  className={`text-[9px] font-mono pointer-events-none select-none ${
-                    isSelected ? "fill-text font-bold" : isHovered ? "fill-primary" : "fill-muted"
+                  className={`text-[11px] pointer-events-none select-none ${
+                    isSelected ? "fill-text font-semibold" : isHovered ? "fill-primary" : "fill-muted"
                   }`}
                  
                 >
@@ -278,9 +274,9 @@ export function Constellation2D({
               style={{ backgroundColor: getNodeColor(hoveredNode.risk) }}
             />
             <span className="font-mono text-xs font-semibold text-text">{hoveredNode.label}</span>
-            <span className="font-mono text-[10px] text-muted">[{hoveredNode.kind}]</span>
+            <span className="font-mono text-[11px] text-muted">[{hoveredNode.kind}]</span>
           </div>
-          <div className="text-[10px] font-mono text-muted mt-1">
+          <div className="text-[11px] text-muted mt-1">
             Risk: <span className="text-text font-semibold">{hoveredNode.risk}</span>/100 · Size: {hoveredNode.size}
           </div>
         </div>

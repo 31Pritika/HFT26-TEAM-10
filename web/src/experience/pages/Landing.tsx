@@ -87,7 +87,7 @@ function FooterLink({ label, to }: { label: string; to: string }) {
 function Section({ title, intro, children }: { title: string; intro?: string; children: ReactNode }) {
   return (
     <section className="mx-auto max-w-5xl px-5 py-14 sm:py-20">
-      <h2 className="font-display text-2xl sm:text-4xl font-bold text-primary">{title}</h2>
+      <h2 className="font-display text-2xl sm:text-4xl font-semibold text-primary">{title}</h2>
       {intro && <p className="mt-3 max-w-2xl text-sm sm:text-base leading-relaxed text-muted">{intro}</p>}
       <div className="mt-8">{children}</div>
     </section>
@@ -96,7 +96,7 @@ function Section({ title, intro, children }: { title: string; intro?: string; ch
 
 function Terminal({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <div className="crop border border-border bg-surface font-mono text-xs sm:text-[13px] leading-relaxed">
+    <div className="rounded-md border border-border bg-surface font-mono text-xs sm:text-[13px] leading-relaxed">
       <div className="border-b border-border px-4 py-2 text-muted">{title}</div>
       <div className="px-4 py-3 break-words">{children}</div>
     </div>
@@ -105,11 +105,11 @@ function Terminal({ title, children }: { title: string; children: ReactNode }) {
 
 function CallToAction() {
   return (
-    <div className="flex flex-wrap items-center justify-center gap-3 font-mono text-sm">
-      <Link to="/app" className="inline-flex items-center gap-2 rounded-sm border border-primary bg-primary px-5 py-2.5 font-medium text-[#0b0d13] hover:bg-[#d8e8f7] transition-colors">
+    <div className="flex flex-wrap items-center justify-center gap-3 text-sm">
+      <Link to="/app" className="inline-flex items-center gap-2 rounded-md border border-cta bg-cta px-5 py-2.5 font-medium text-on-cta hover:bg-cta-hover transition-colors">
         launch console <ArrowRight className="h-4 w-4" aria-hidden="true" />
       </Link>
-      <Link to="/playground" className="rounded-sm border border-border-strong px-5 py-2.5 text-text hover:border-primary hover:text-primary transition-colors">
+      <Link to="/playground" className="rounded-md border border-border px-5 py-2.5 text-text hover:bg-elevated hover:border-border-strong transition-colors">
         try the playground
       </Link>
     </div>
@@ -157,7 +157,7 @@ export default function Landing() {
             <span>0x80</span>
           </div>
 
-          <header className="absolute inset-x-0 top-0 flex items-center justify-between px-6 sm:px-10 py-6 font-mono text-[13px]">
+          <header className="absolute inset-x-0 top-0 flex items-center justify-between px-6 sm:px-10 py-6 text-[13px]">
             <Link to="/" className="flex items-center gap-2 text-text" aria-label="ShadowScope home">
               <ScopeMark className="h-5 w-5 text-primary" />
               <span className="hidden sm:inline">shadowscope</span>
@@ -165,7 +165,7 @@ export default function Landing() {
             <button
               type="button"
               onClick={() => setLamp(nextLamp)}
-              className="absolute left-1/2 top-6 h-7 w-7 -translate-x-1/2 cursor-pointer rounded-sm border border-border-strong bg-[#05060f] hover:border-primary transition-colors"
+              className="absolute left-1/2 top-6 h-7 w-7 -translate-x-1/2 cursor-pointer rounded-sm border border-border-strong bg-surface-solid hover:border-primary transition-colors"
               aria-label={`Stage light is ${lamp}. Switch it to ${nextLamp}.`}
               title={`lamp: ${lamp}`}
             />
@@ -198,7 +198,7 @@ export default function Landing() {
         </section>
 
         <section className="border-y border-border">
-          <dl className="mx-auto grid max-w-5xl grid-cols-2 sm:grid-cols-4 font-mono">
+          <dl className="mx-auto grid max-w-5xl grid-cols-2 sm:grid-cols-4">
             {stats.map(([label, value]) => (
               <div key={label} className="border-border px-5 py-4 [&:not(:last-child)]:sm:border-r">
                 <dt className="text-[11px] text-muted">{label}</dt>
@@ -206,7 +206,7 @@ export default function Landing() {
               </div>
             ))}
           </dl>
-          <p className="border-t border-border px-5 py-2 text-center font-mono text-[11px] text-muted">
+          <p className="border-t border-border px-5 py-2 text-center text-[11px] text-muted">
             source: {isEngineLive() ? "your live engine, last 24h" : "demo data"}
           </p>
         </section>
@@ -235,8 +235,8 @@ export default function Landing() {
           <ol className="border-t border-border">
             {PIPELINE.map(([name, detail], index) => (
               <li key={name} className="grid gap-1 border-b border-border py-3 sm:grid-cols-[3rem_11rem_1fr] sm:gap-4">
-                <span className="hidden sm:block font-mono text-xs text-faint">{String(index + 1).padStart(2, "0")}</span>
-                <span className="font-mono text-sm text-primary">{name}</span>
+                <span className="hidden sm:block text-xs text-faint">{String(index + 1).padStart(2, "0")}</span>
+                <span className=" text-sm text-primary">{name}</span>
                 <span className="text-sm leading-relaxed text-muted">{detail}</span>
               </li>
             ))}
@@ -268,7 +268,7 @@ export default function Landing() {
               </div>
             ))}
           </Terminal>
-          <Link to="/playground" className="mt-4 inline-block font-mono text-sm text-primary hover:underline">
+          <Link to="/playground" className="mt-4 inline-block text-sm text-primary hover:underline">
             Scan your own prompts in the Playground
           </Link>
         </Section>
@@ -285,7 +285,7 @@ export default function Landing() {
         </Section>
 
         <section className="border-t border-border px-5 py-20 text-center">
-          <h2 className="font-display text-3xl sm:text-5xl font-bold text-primary">See every AI conversation.</h2>
+          <h2 className="font-display text-3xl sm:text-5xl font-semibold text-primary">See every AI conversation.</h2>
           <p className="mx-auto mt-4 max-w-xl text-sm sm:text-base leading-relaxed text-muted">
             Just run ShadowScope and finally know what AI is doing inside your org.
           </p>
@@ -296,7 +296,7 @@ export default function Landing() {
       </main>
 
       <footer className="border-t border-border">
-        <div className="mx-auto grid max-w-5xl gap-8 px-5 py-10 font-mono text-xs sm:grid-cols-3">
+        <div className="mx-auto grid max-w-5xl gap-8 px-5 py-10 text-xs sm:grid-cols-3">
           <div>
             <div className="flex items-center gap-2 text-text">
               <ScopeMark className="h-5 w-5 text-primary" />

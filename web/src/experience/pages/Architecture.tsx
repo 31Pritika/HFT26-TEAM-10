@@ -225,14 +225,14 @@ export default function Architecture() {
           <div className="flex items-center gap-4">
             <Link
               to="/"
-              className="flex items-center gap-1.5 text-xs font-mono text-muted hover:text-text rounded-md px-2.5 py-1.5 border border-border bg-surface transition-colors"
+              className="flex items-center gap-1.5 text-xs text-muted hover:text-text rounded-md px-2.5 py-1.5 border border-border bg-surface transition-colors"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Home</span>
             </Link>
             <div className="flex items-center gap-2">
-              <span className="font-display font-bold text-text text-base">ShadowScope</span>
-              <span className="text-xs font-mono text-primary px-2 py-0.5 rounded border border-primary/30 bg-primary/10">
+              <span className="font-display font-semibold text-text text-base">ShadowScope</span>
+              <span className="text-xs text-primary px-2 py-0.5 rounded border border-primary/30 bg-primary/10">
                 Engine Architecture
               </span>
             </div>
@@ -241,7 +241,7 @@ export default function Architecture() {
           <div className="flex items-center gap-2">
             <Link
               to="/app"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary/40 bg-primary/10 hover:bg-primary/20 text-xs font-mono text-primary font-semibold transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary/40 bg-primary/10 hover:bg-primary/20 text-xs text-primary font-semibold transition-colors"
             >
               <span>Threat Console</span>
               <ExternalLink className="h-3 w-3" />
@@ -254,7 +254,7 @@ export default function Architecture() {
       <section className="relative px-4 py-12 sm:px-8 sm:py-16 border-b border-border bg-bg-2/50 overflow-hidden">
         <div className="mx-auto max-w-5xl text-center space-y-4 relative z-10">
 
-          <h1 className="font-display text-3xl sm:text-5xl font-black tracking-tight text-text">
+          <h1 className="font-display text-3xl sm:text-5xl font-semibold tracking-tight text-text">
             How ShadowScope Sees AI Exfiltration <br className="hidden sm:inline" />
             <span className="text-primary">
               Without Breaking TLS Encryption
@@ -272,11 +272,11 @@ export default function Architecture() {
       <section className="px-4 py-12 sm:px-8 mx-auto max-w-7xl">
         <div className="flex flex-col lg:flex-row items-start justify-between gap-4 mb-6">
           <div>
-            <h2 className="font-display text-2xl font-bold text-text flex items-center gap-2.5">
+            <h2 className="font-display text-2xl font-semibold text-text flex items-center gap-2.5">
               <Layers className="h-5 w-5 text-primary" />
               Interactive Architectural Topology
             </h2>
-            <p className="text-xs font-mono text-muted mt-1">
+            <p className="text-xs text-muted mt-1">
               Select any component to inspect its implementation, file path, privilege requirements, and telemetry model.
             </p>
           </div>
@@ -296,13 +296,13 @@ export default function Architecture() {
             >
               <defs>
                 <linearGradient id="cyanLine" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#bad6f7" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#9dadc2" stopOpacity="0.8" />
+                  <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="var(--primary)" stopOpacity="0.8" />
                 </linearGradient>
 
                 <linearGradient id="accentLine" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#9dadc2" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#df6a68" stopOpacity="0.8" />
+                  <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="var(--critical)" stopOpacity="0.8" />
                 </linearGradient>
 
                 <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
@@ -322,7 +322,7 @@ export default function Architecture() {
                     key={`c-p-${i}`}
                     d={`M 180 ${y} C 220 ${y}, 230 250, 270 250`}
                     fill="none"
-                    stroke="#bad6f7"
+                    stroke="var(--primary)"
                     strokeWidth="1.5"
                     strokeDasharray="4 4"
                   />
@@ -332,7 +332,7 @@ export default function Architecture() {
                 <path
                   d="M 390 250 L 460 250"
                   fill="none"
-                  stroke="#bad6f7"
+                  stroke="var(--primary)"
                   strokeWidth="2"
                 />
 
@@ -340,14 +340,14 @@ export default function Architecture() {
                 <path
                   d="M 520 285 L 520 370"
                   fill="none"
-                  stroke="#9dadc2"
+                  stroke="var(--primary)"
                   strokeWidth="1.8"
                   strokeDasharray="3 3"
                 />
                 <path
                   d="M 580 250 L 650 250"
                   fill="none"
-                  stroke="#9dadc2"
+                  stroke="var(--primary)"
                   strokeWidth="2"
                 />
 
@@ -355,7 +355,7 @@ export default function Architecture() {
                 <path
                   d="M 580 400 L 650 400"
                   fill="none"
-                  stroke="#df6a68"
+                  stroke="var(--critical)"
                   strokeWidth="1.5"
                 />
 
@@ -363,20 +363,20 @@ export default function Architecture() {
                 <path
                   d="M 770 250 L 800 250"
                   fill="none"
-                  stroke="#86b69a"
+                  stroke="var(--low)"
                   strokeWidth="2"
                 />
               </g>
 
               {/* Animated telemetry dots along pipeline */}
-              <circle r="3" fill="#bad6f7" filter="url(#softGlow)">
+              <circle r="3" fill="var(--primary)" filter="url(#softGlow)">
                 <animateMotion
                   path="M 180 115 C 220 115, 230 250, 270 250 L 460 250 L 650 250 L 800 250"
                   dur="4s"
                   repeatCount="indefinite"
                 />
               </circle>
-              <circle r="3" fill="#df6a68" filter="url(#softGlow)">
+              <circle r="3" fill="var(--critical)" filter="url(#softGlow)">
                 <animateMotion
                   path="M 180 295 C 220 295, 230 250, 270 250 L 520 250 L 520 370 L 650 400"
                   dur="3.2s"
@@ -385,7 +385,7 @@ export default function Architecture() {
               </circle>
 
               {/* LAYER 1: COLLECTORS (Column 1) */}
-              <text x="30" y="24" className="text-[10px] font-mono fill-muted">
+              <text x="30" y="24" className="text-[11px] fill-muted">
                 Telemetry Sources & Collectors
               </text>
 
@@ -410,15 +410,15 @@ export default function Architecture() {
                       width="150"
                       height="46"
                       rx="1"
-                      fill={isSelected ? "#11141c" : "#0f1219"}
-                      stroke={isSelected ? "#bad6f7" : "rgba(255,255,255,0.12)"}
+                      fill={isSelected ? "var(--elevated)" : "var(--surface)"}
+                      stroke={isSelected ? "var(--primary)" : "color-mix(in srgb, var(--text) 12%, transparent)"}
                       strokeWidth={isSelected ? "1.8" : "1"}
-                      className="transition-all"
+                      className="transition-colors"
                     />
-                    <text x="12" y="20" className={`text-[11px] font-mono font-semibold ${isSelected ? "fill-primary font-bold" : "fill-text"}`}>
+                    <text x="12" y="20" className={`text-[11px] font-mono font-semibold ${isSelected ? "fill-primary font-semibold" : "fill-text"}`}>
                       {c.label}
                     </text>
-                    <text x="12" y="34" className="text-[9px] font-mono fill-muted">
+                    <text x="12" y="34" className="text-[11px] fill-muted">
                       {c.sub}
                     </text>
                   </g>
@@ -435,17 +435,17 @@ export default function Architecture() {
                   width="120"
                   height="70"
                   rx="1"
-                  fill={selectedNodeId === "pipeline" ? "#11141c" : "#0f1219"}
-                  stroke={selectedNodeId === "pipeline" ? "#bad6f7" : "rgba(186,215,247,0.4)"}
+                  fill={selectedNodeId === "pipeline" ? "var(--elevated)" : "var(--surface)"}
+                  stroke={selectedNodeId === "pipeline" ? "var(--primary)" : "color-mix(in srgb, var(--primary) 40%, transparent)"}
                   strokeWidth={selectedNodeId === "pipeline" ? "2" : "1.2"}
                 />
-                <text x="15" y="28" className="text-[12px] font-mono font-bold fill-primary">
+                <text x="15" y="28" className="text-[12px] font-semibold fill-primary">
                   Pipeline.py
                 </text>
-                <text x="15" y="44" className="text-[9px] font-mono fill-text">
+                <text x="15" y="44" className="text-[11px] fill-text">
                   Dedupe & Matching
                 </text>
-                <text x="15" y="58" className="text-[9px] font-mono fill-muted">
+                <text x="15" y="58" className="text-[11px] fill-muted">
                   Self-exclusion filter
                 </text>
               </g>
@@ -460,17 +460,17 @@ export default function Architecture() {
                   width="120"
                   height="70"
                   rx="1"
-                  fill={selectedNodeId === "detector" ? "#11141c" : "#0f1219"}
-                  stroke={selectedNodeId === "detector" ? "#9dadc2" : "rgba(157,173,194,0.5)"}
+                  fill={selectedNodeId === "detector" ? "var(--elevated)" : "var(--surface)"}
+                  stroke={selectedNodeId === "detector" ? "var(--primary)" : "color-mix(in srgb, var(--primary) 50%, transparent)"}
                   strokeWidth={selectedNodeId === "detector" ? "2" : "1.5"}
                 />
-                <text x="15" y="28" className="text-[12px] font-mono font-bold fill-accent">
+                <text x="15" y="28" className="text-[12px] font-semibold fill-accent">
                   Detector 0.2.0
                 </text>
-                <text x="15" y="44" className="text-[9px] font-mono fill-text">
+                <text x="15" y="44" className="text-[11px] fill-text">
                   Regex + Luhn/Verhoeff
                 </text>
-                <text x="15" y="58" className="text-[9px] font-mono fill-muted">
+                <text x="15" y="58" className="text-[11px] fill-muted">
                   Agent Analyzer + Code
                 </text>
               </g>
@@ -485,17 +485,17 @@ export default function Architecture() {
                   width="120"
                   height="60"
                   rx="1"
-                  fill={selectedNodeId === "redactor" ? "#11141c" : "#0f1219"}
-                  stroke={selectedNodeId === "redactor" ? "#df6a68" : "rgba(223,106,104,0.4)"}
+                  fill={selectedNodeId === "redactor" ? "var(--elevated)" : "var(--surface)"}
+                  stroke={selectedNodeId === "redactor" ? "var(--critical)" : "color-mix(in srgb, var(--critical) 40%, transparent)"}
                   strokeWidth={selectedNodeId === "redactor" ? "2" : "1"}
                 />
-                <text x="15" y="25" className="text-[11px] font-mono font-bold fill-danger">
+                <text x="15" y="25" className="text-[11px] font-semibold fill-danger">
                   Redactor Gate
                 </text>
-                <text x="15" y="40" className="text-[9px] font-mono fill-text">
+                <text x="15" y="40" className="text-[11px] fill-text">
                   1-Way Masking
                 </text>
-                <text x="15" y="52" className="text-[9px] font-mono fill-muted">
+                <text x="15" y="52" className="text-[11px] fill-muted">
                   Zero raw storage
                 </text>
               </g>
@@ -509,17 +509,17 @@ export default function Architecture() {
                   width="130"
                   height="60"
                   rx="1"
-                  fill={selectedNodeId === "triage" ? "#11141c" : "#0f1219"}
-                  stroke={selectedNodeId === "triage" ? "#df6a68" : "rgba(223,106,104,0.4)"}
+                  fill={selectedNodeId === "triage" ? "var(--elevated)" : "var(--surface)"}
+                  stroke={selectedNodeId === "triage" ? "var(--critical)" : "color-mix(in srgb, var(--critical) 40%, transparent)"}
                   strokeWidth={selectedNodeId === "triage" ? "2" : "1"}
                 />
-                <text x="15" y="25" className="text-[11px] font-mono font-bold fill-amber-400">
+                <text x="15" y="25" className="text-[11px] font-semibold fill-amber-400">
                   LLM Triage Chain
                 </text>
-                <text x="15" y="40" className="text-[9px] font-mono fill-text">
+                <text x="15" y="40" className="text-[11px] fill-text">
                   Featherless → Groq
                 </text>
-                <text x="15" y="52" className="text-[9px] font-mono fill-muted">
+                <text x="15" y="52" className="text-[11px] fill-muted">
                   Ollama → Local Rules
                 </text>
               </g>
@@ -534,17 +534,17 @@ export default function Architecture() {
                   width="120"
                   height="70"
                   rx="1"
-                  fill={selectedNodeId === "sqlite" ? "#11141c" : "#0f1219"}
-                  stroke={selectedNodeId === "sqlite" ? "#86b69a" : "rgba(134,182,154,0.4)"}
+                  fill={selectedNodeId === "sqlite" ? "var(--elevated)" : "var(--surface)"}
+                  stroke={selectedNodeId === "sqlite" ? "var(--low)" : "color-mix(in srgb, var(--low) 40%, transparent)"}
                   strokeWidth={selectedNodeId === "sqlite" ? "2" : "1.2"}
                 />
-                <text x="15" y="28" className="text-[12px] font-mono font-bold fill-emerald-400">
+                <text x="15" y="28" className="text-[12px] font-semibold fill-emerald-400">
                   SQLite (WAL)
                 </text>
-                <text x="15" y="44" className="text-[9px] font-mono fill-text">
+                <text x="15" y="44" className="text-[11px] fill-text">
                   Risk & Anomaly Engine
                 </text>
-                <text x="15" y="58" className="text-[9px] font-mono fill-muted">
+                <text x="15" y="58" className="text-[11px] fill-muted">
                   Thread-safe Bus
                 </text>
               </g>
@@ -559,17 +559,17 @@ export default function Architecture() {
                   width="70"
                   height="70"
                   rx="1"
-                  fill={selectedNodeId === "console" ? "#11141c" : "#0f1219"}
-                  stroke={selectedNodeId === "console" ? "#bad6f7" : "rgba(186,215,247,0.5)"}
+                  fill={selectedNodeId === "console" ? "var(--elevated)" : "var(--surface)"}
+                  stroke={selectedNodeId === "console" ? "var(--primary)" : "color-mix(in srgb, var(--primary) 50%, transparent)"}
                   strokeWidth={selectedNodeId === "console" ? "2" : "1.2"}
                 />
-                <text x="10" y="32" className="text-[11px] font-mono font-bold fill-primary">
+                <text x="10" y="32" className="text-[11px] font-semibold fill-primary">
                   Console
                 </text>
-                <text x="10" y="48" className="text-[9px] font-mono fill-text">
+                <text x="10" y="48" className="text-[11px] fill-text">
                   Web & WS
                 </text>
-                <text x="10" y="60" className="text-[9px] font-mono fill-muted">
+                <text x="10" y="60" className="text-[11px] fill-muted">
                   3D View
                 </text>
               </g>
@@ -579,15 +579,15 @@ export default function Architecture() {
           {/* Node Detail Explanation Card */}
           <div className="lg:col-span-4 rounded-2xl border border-border bg-bg-2/95 p-6 relative">
             <div className="flex items-center justify-between border-b border-border pb-3 mb-4">
-              <span className="font-mono text-xs px-2 py-0.5 rounded border border-primary/30 bg-primary/10 text-primary">
+              <span className=" text-xs px-2 py-0.5 rounded border border-primary/30 bg-primary/10 text-primary">
                 {activeNode.layer}
               </span>
-              <span className="font-mono text-[10px] text-muted">Node ID: {activeNode.id}</span>
+              <span className="font-mono text-[11px] text-muted">Node ID: {activeNode.id}</span>
             </div>
 
-            <h3 className="font-display text-xl font-bold text-text mb-1">{activeNode.title}</h3>
+            <h3 className="font-display text-xl font-semibold text-text mb-1">{activeNode.title}</h3>
             <div className="flex items-center gap-2 mb-4">
-              <span className="font-mono text-xs text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
+              <span className=" text-xs text-text bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
                 {activeNode.badge}
               </span>
             </div>
@@ -596,21 +596,21 @@ export default function Architecture() {
 
             <div className="space-y-3 pt-3 border-t border-border">
               <div>
-                <span className="text-[10px] font-mono text-muted block mb-1">Source Code Location</span>
+                <span className="text-[11px] font-mono text-muted block mb-1">Source Code Location</span>
                 <code className="text-xs font-mono text-primary bg-surface-solid px-2 py-1 rounded block truncate border border-border">
                   {activeNode.file}
                 </code>
               </div>
 
               <div>
-                <span className="text-[10px] font-mono text-muted block mb-1">Execution Privileges</span>
-                <p className="text-xs text-text font-mono bg-surface/50 p-2 rounded border border-border/60">
+                <span className="text-[11px] text-muted block mb-1">Execution Privileges</span>
+                <p className="text-xs text-text bg-surface/50 p-2 rounded border border-border/60">
                   {activeNode.privilege}
                 </p>
               </div>
 
               <div>
-                <span className="text-[10px] font-mono text-muted block mb-1.5">Architectural Capabilities</span>
+                <span className="text-[11px] text-muted block mb-1.5">Architectural Capabilities</span>
                 <ul className="space-y-1.5">
                   {activeNode.details.map((detail, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-xs text-muted">
@@ -629,7 +629,7 @@ export default function Architecture() {
       <section className="px-4 py-16 sm:px-8 border-t border-border bg-bg-2/40">
         <div className="mx-auto max-w-6xl space-y-10">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <h2 className="font-display text-2xl sm:text-4xl font-black text-text">
+            <h2 className="font-display text-2xl sm:text-4xl font-semibold text-text">
               Why Zero SSL Decryption is the Future of AI Security
             </h2>
             <p className="text-sm text-muted leading-relaxed font-sans">
@@ -641,20 +641,20 @@ export default function Architecture() {
           {/* 4 Pillars of Failure */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="rounded-xl border border-border bg-surface/40 p-5">
-              <div className="h-9 w-9 rounded-lg border border-danger/30 bg-danger/10 flex items-center justify-center text-danger mb-3">
+              <div className="h-9 w-9 rounded-lg border border-danger/30 bg-danger/10 flex items-center justify-center text-text mb-3">
                 <ShieldAlert className="h-5 w-5" />
               </div>
-              <h3 className="font-display font-bold text-text text-base mb-1.5">Certificate Pinning</h3>
+              <h3 className="font-display font-semibold text-text text-base mb-1.5">Certificate Pinning</h3>
               <p className="text-xs text-muted leading-relaxed">
-                Developer tools, Python <code className="text-primary font-mono">requests</code>, Ollama, Cursor, and CLI clients hardcode their trust stores. MITM proxies break these tools with catastrophic TLS handshake failures.
+                Developer tools, Python <code className="text-primary">requests</code>, Ollama, Cursor, and CLI clients hardcode their trust stores. MITM proxies break these tools with catastrophic TLS handshake failures.
               </p>
             </div>
 
             <div className="rounded-xl border border-border bg-surface/40 p-5">
-              <div className="h-9 w-9 rounded-lg border border-amber-500/30 bg-amber-500/10 flex items-center justify-center text-amber-400 mb-3">
+              <div className="h-9 w-9 rounded-lg border border-amber-500/30 bg-amber-500/10 flex items-center justify-center text-text mb-3">
                 <Lock className="h-5 w-5" />
               </div>
-              <h3 className="font-display font-bold text-text text-base mb-1.5">Massive Privacy Exposure</h3>
+              <h3 className="font-display font-semibold text-text text-base mb-1.5">Massive Privacy Exposure</h3>
               <p className="text-xs text-muted leading-relaxed">
                 Decryption proxies inspect everything indiscriminately: employee banking, medical records, and private communications. Storing decrypted traffic creates an enormous regulatory compliance liability.
               </p>
@@ -664,17 +664,17 @@ export default function Architecture() {
               <div className="h-9 w-9 rounded-lg border border-primary/30 bg-primary/10 flex items-center justify-center text-primary mb-3">
                 <Laptop className="h-5 w-5" />
               </div>
-              <h3 className="font-display font-bold text-text text-base mb-1.5">Fragile Infrastructure</h3>
+              <h3 className="font-display font-semibold text-text text-base mb-1.5">Fragile Infrastructure</h3>
               <p className="text-xs text-muted leading-relaxed">
                 Requires enterprise MDM software, root CA deployment across every machine, complex proxy pac scripts, and completely fails when developers connect from home networks or mobile hotspots.
               </p>
             </div>
 
             <div className="rounded-xl border border-border bg-surface/40 p-5">
-              <div className="h-9 w-9 rounded-lg border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-3">
+              <div className="h-9 w-9 rounded-lg border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center text-text mb-3">
                 <Zap className="h-5 w-5" />
               </div>
-              <h3 className="font-display font-bold text-text text-base mb-1.5">ShadowScope Approach</h3>
+              <h3 className="font-display font-semibold text-text text-base mb-1.5">ShadowScope Approach</h3>
               <p className="text-xs text-muted leading-relaxed">
                 Passive correlation: matches OS processes with unencrypted TLS ClientHello SNI headers, monitors loopback ports, and catches DOM pastes before the browser encrypts. Fast, silent, and unbreakable.
               </p>
@@ -683,9 +683,9 @@ export default function Architecture() {
 
           {/* Comparison Matrix Table */}
           <div className=" rounded-xl border border-border bg-bg-2">
-            <table className="w-full text-left text-xs font-mono">
+            <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-border bg-surface/80 text-[10px] text-muted">
+                <tr className="border-b border-border bg-surface/80 text-[11px] text-muted">
                   <th className="p-3.5">Security Dimension</th>
                   <th className="p-3.5 text-danger">Traditional Decryption Proxy (MITM)</th>
                   <th className="p-3.5 text-primary">ShadowScope Passive Egress Monitor</th>
@@ -693,27 +693,27 @@ export default function Architecture() {
               </thead>
               <tbody className="divide-y divide-border/60">
                 <tr>
-                  <td className="p-3.5 font-bold text-text">Developer Tool Compatibility</td>
+                  <td className="p-3.5 font-semibold text-text">Developer Tool Compatibility</td>
                   <td className="p-3.5 text-muted">❌ Breaks CLI tools, Python requests, Pip, Git, Ollama</td>
                   <td className="p-3.5 text-emerald-400 font-semibold">✅ 100% compatible; zero TLS certificate tampering</td>
                 </tr>
                 <tr>
-                  <td className="p-3.5 font-bold text-text">Root Certificate Requirements</td>
+                  <td className="p-3.5 font-semibold text-text">Root Certificate Requirements</td>
                   <td className="p-3.5 text-muted">❌ Mandatory custom root CA deployed to every client OS</td>
                   <td className="p-3.5 text-emerald-400 font-semibold">✅ Zero root certificates; standard OS privileges</td>
                 </tr>
                 <tr>
-                  <td className="p-3.5 font-bold text-text">Localhost & Workstation LLMs</td>
+                  <td className="p-3.5 font-semibold text-text">Localhost & Workstation LLMs</td>
                   <td className="p-3.5 text-muted">❌ Blind to Ollama, LM Studio, and local agent traffic</td>
                   <td className="p-3.5 text-emerald-400 font-semibold">✅ Dedicated loopback reassembler on ports 11434, 1234</td>
                 </tr>
                 <tr>
-                  <td className="p-3.5 font-bold text-text">User Privacy & Personal Data</td>
+                  <td className="p-3.5 font-semibold text-text">User Privacy & Personal Data</td>
                   <td className="p-3.5 text-muted">❌ Indiscriminately decrypts personal banking and health</td>
                   <td className="p-3.5 text-emerald-400 font-semibold">✅ Only watches verified AI provider IP/SNI signatures</td>
                 </tr>
                 <tr>
-                  <td className="p-3.5 font-bold text-text">Autonomous Agent Loops</td>
+                  <td className="p-3.5 font-semibold text-text">Autonomous Agent Loops</td>
                   <td className="p-3.5 text-muted">❌ Sees requests as disconnected HTTP calls</td>
                   <td className="p-3.5 text-emerald-400 font-semibold">✅ Correlates child shells, tool calls, and file access</td>
                 </tr>
@@ -728,12 +728,12 @@ export default function Architecture() {
         <div className="rounded-2xl border border-primary/30 bg-primary/5 p-8 sm:p-10 relative overflow-hidden">
 
           <div className="max-w-3xl space-y-4 relative z-10">
-            <div className="flex items-center gap-2 text-primary font-mono text-xs">
+            <div className="flex items-center gap-2 text-primary text-xs">
               <ShieldCheck className="h-4 w-4" />
               <span>Cryptographic Privacy Guarantee</span>
             </div>
 
-            <h2 className="font-display text-2xl sm:text-3xl font-black text-text">
+            <h2 className="font-display text-2xl sm:text-3xl font-semibold text-text">
               The Strict Redaction & Air-Gapped Intelligence Model
             </h2>
 
@@ -743,21 +743,21 @@ export default function Architecture() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
               <div className="rounded-xl border border-border bg-bg-2 p-4">
-                <div className="font-mono text-xs font-bold text-text mb-1">1. In-Memory Sanitization</div>
+                <div className=" text-xs font-semibold text-text mb-1">1. In-Memory Sanitization</div>
                 <p className="text-[11px] text-muted">
                   All 32 regex rules, Luhn, and Verhoeff passes run locally in Python. SQLite only stores masked text.
                 </p>
               </div>
 
               <div className="rounded-xl border border-border bg-bg-2 p-4">
-                <div className="font-mono text-xs font-bold text-text mb-1">2. LLM Triage Gate</div>
+                <div className=" text-xs font-semibold text-text mb-1">2. LLM Triage Gate</div>
                 <p className="text-[11px] text-muted">
                   Triple-pass redaction re-scan verifies context snippet is 100% clean. If any token survives, transmission aborts.
                 </p>
               </div>
 
               <div className="rounded-xl border border-border bg-bg-2 p-4">
-                <div className="font-mono text-xs font-bold text-text mb-1">3. Air-Gapped Operation</div>
+                <div className=" text-xs font-semibold text-text mb-1">3. Air-Gapped Operation</div>
                 <p className="text-[11px] text-muted">
                   Can run 100% offline using local Ollama (<code className="text-primary">llama3.2:3b</code>) or deterministic rules without internet.
                 </p>
@@ -770,7 +770,7 @@ export default function Architecture() {
       {/* SECTION 4: TECH STACK BADGES */}
       <section className="px-4 py-12 sm:px-8 border-t border-border bg-bg-2/30">
         <div className="mx-auto max-w-6xl space-y-6">
-          <h2 className="font-display text-xl font-bold text-text text-center">Engine Technology Stack</h2>
+          <h2 className="font-display text-xl font-semibold text-text text-center">Engine Technology Stack</h2>
 
           <div className="flex flex-wrap items-center justify-center gap-2.5">
             {[
@@ -788,10 +788,10 @@ export default function Architecture() {
             ].map((tech) => (
               <span
                 key={tech.name}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-mono ${tech.bg} ${tech.border} ${tech.text}`}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs ${tech.bg} ${tech.border} ${tech.text}`}
               >
-                <span className="font-bold">{tech.name}</span>
-                <span className="text-[10px] text-muted border-l border-border pl-1.5">{tech.role}</span>
+                <span className="font-semibold">{tech.name}</span>
+                <span className="text-[11px] text-muted border-l border-border pl-1.5">{tech.role}</span>
               </span>
             ))}
           </div>
@@ -801,11 +801,11 @@ export default function Architecture() {
       {/* SECTION 5: TEAM CREDITS */}
       <section className="px-4 py-16 sm:px-8 border-t border-border mx-auto max-w-6xl">
         <div className="text-center space-y-3 mb-10">
-          <span className="font-mono text-xs px-3 py-1 rounded-sm border border-border bg-surface text-muted">
+          <span className=" text-xs px-3 py-1 rounded-sm border border-border bg-surface text-muted">
             Hacktoberfest @ CBIT
           </span>
-          <h2 className="font-display text-2xl sm:text-3xl font-bold text-text">Team "git push n pray"</h2>
-          <p className="text-xs font-mono text-muted">Architected, engineered, and shipped in 16 hours</p>
+          <h2 className="font-display text-2xl sm:text-3xl font-semibold text-text">Team "git push n pray"</h2>
+          <p className="text-xs text-muted">Architected, engineered, and shipped in 16 hours</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -834,10 +834,10 @@ export default function Architecture() {
             <div key={m.name} className="rounded-xl border border-border bg-bg-2 p-5 flex flex-col justify-between">
               <div>
                 <h3 className="font-display font-semibold text-text text-base">{m.name}</h3>
-                <div className="font-mono text-xs text-primary mt-0.5 mb-2.5">{m.role}</div>
+                <div className=" text-xs text-primary mt-0.5 mb-2.5">{m.role}</div>
                 <p className="text-xs text-muted leading-relaxed font-sans">{m.focus}</p>
               </div>
-              <div className="pt-4 mt-4 border-t border-border/60 flex items-center justify-between text-[11px] font-mono text-muted">
+              <div className="pt-4 mt-4 border-t border-border/60 flex items-center justify-between text-[11px] text-muted">
                 <span>git push n pray</span>
                 <span className="text-emerald-400">Verified</span>
               </div>

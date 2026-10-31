@@ -32,21 +32,15 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center p-8 text-center rounded-2xl border border-dashed border-white/10 bg-surface/30 ",
+        "flex flex-col items-center justify-center p-8 text-center rounded-md border border-dashed border-border bg-surface",
         className,
       )}
     >
-      {/* Futuristic Radar / Shield Graphic */}
-      <div className="relative mb-4 flex items-center justify-center">
-        {/* Animated concentric scanning circles */}
-        <div className="absolute w-24 h-24 rounded-sm border border-cyan-500/15 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]" />
-        <div className="absolute w-16 h-16 rounded-sm border border-violet-500/20" />
-        <div className="w-12 h-12 rounded-xl bg-surface-solid border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-          <Icon className="w-6 h-6" />
-        </div>
+      <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-md border border-border bg-surface-solid text-muted">
+        <Icon className="w-5 h-5" />
       </div>
 
-      <h3 className="font-display text-lg font-semibold text-text">{title}</h3>
+      <h3 className="font-display text-base font-semibold text-text">{title}</h3>
       <p className="mt-1 max-w-sm text-sm text-muted leading-relaxed">{description}</p>
 
       {action && (

@@ -14,6 +14,8 @@ import {
 import { api } from "../../shared/api";
 import { useAppStore } from "../../shared/store";
 import {
+  Select,
+  SEVERITY_META,
   GlassCard,
   SeverityPill,
   Button,
@@ -159,13 +161,24 @@ export default function Alerts() {
     });
   }, [allFindings, selectedSeverity, statusFilter, typeFilter, searchQuery]);
 
+  // Rows only stagger on the first load.
+  const [settled, setSettled] = useState(false);
+  useEffect(() => {
+    if (allFindings.length === 0 || settled) return;
+    const timer = window.setTimeout(() => setSettled(true), 600);
+    return () => window.clearTimeout(timer);
+  }, [allFindings.length, settled]);
+  const rise = (index: number) =>
+    !settled && index < 12 ? { className: "ui-rise", style: { animationDelay: `${index * 25}ms` } } : { className: "", style: undefined };
+
   // Keyboard navigation: j, k, x, enter
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Don't intercept if user is typing in search input
       if (
         document.activeElement?.tagName === "INPUT" ||
-        document.activeElement?.tagName === "TEXTAREA"
+        document.activeElement?.tagName === "TEXTAREA" ||
+        document.activeElement?.closest('[role="combobox"], [role="listbox"]')
       ) {
         return;
       }
@@ -242,7 +255,7 @@ export default function Alerts() {
   };
 
   return (
-    <div className="space-y-4 max-w-7xl mx-auto flex flex-col min-h-[calc(100vh-6.5rem)]">
+    <div className="space-y-4 flex flex-col min-h-[calc(100dvh-10rem)] md:min-h-[calc(100dvh-8.25rem)]">
       {/* ==================================================================== */}
       {/* 1. SEVERITY TABS & CONTROLS HEADER                                   */}
       {/* ==================================================================== */}
@@ -250,15 +263,15 @@ export default function Alerts() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           {/* Header Title */}
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400">
+            <div className="p-2 rounded-xl bg-red-500/10 border border-red-500/30 text-text">
               <ShieldAlert className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="font-display text-lg font-bold text-text">
+                <h1 className="font-display text-lg font-semibold text-text">
                   Alerts & Exfiltration Center
                 </h1>
-                <span className="font-mono text-xs px-2 py-0.5 rounded-sm bg-red-500/15 text-red-300 border border-red-500/30 font-bold">
+                <span className=" text-xs px-2 py-0.5 rounded-sm bg-red-500/15 text-text border border-red-500/30 font-semibold">
                   {countsBySeverity.critical} Critical
                 </span>
               </div>
@@ -270,18 +283,18 @@ export default function Alerts() {
 
           {/* View Mode Toggle & Keyboard Hint */}
           <div className="flex items-center gap-2">
-            <span className="hidden lg:inline font-mono text-[11px] text-muted/60 mr-2">
-              Keys: <kbd className="bg-white/5 border border-white/10 px-1 rounded">j</kbd>/
-              <kbd className="bg-white/5 border border-white/10 px-1 rounded">k</kbd> navigate,{" "}
-              <kbd className="bg-white/5 border border-white/10 px-1 rounded">x</kbd> select,{" "}
-              <kbd className="bg-white/5 border border-white/10 px-1 rounded">↵</kbd> open
+            <span className="hidden lg:inline font-mono text-[11px] text-muted mr-2">
+              Keys: <kbd className="bg-text/5 border border-border px-1 rounded">j</kbd>/
+              <kbd className="bg-text/5 border border-border px-1 rounded">k</kbd> navigate,{" "}
+              <kbd className="bg-text/5 border border-border px-1 rounded">x</kbd> select,{" "}
+              <kbd className="bg-text/5 border border-border px-1 rounded">↵</kbd> open
             </span>
 
-            <div className="flex items-center rounded-lg border border-white/10 bg-surface-solid/80 p-0.5">
+            <div className="flex items-center rounded-lg border border-border bg-surface-solid p-0.5">
               <button
                 onClick={() => setViewMode("list")}
                 className={`p-1.5 rounded transition-colors ${
-                  viewMode === "list" ? "bg-white/10 text-cyan-400" : "text-muted hover:text-text"
+                  viewMode === "list" ? "bg-text/10 text-cyan-400" : "text-muted hover:text-text"
                 }`}
                 title="List View"
               >
@@ -290,7 +303,7 @@ export default function Alerts() {
               <button
                 onClick={() => setViewMode("grid")}
                 className={`p-1.5 rounded transition-colors ${
-                  viewMode === "grid" ? "bg-white/10 text-cyan-400" : "text-muted hover:text-text"
+                  viewMode === "grid" ? "bg-text/10 text-cyan-400" : "text-muted hover:text-text"
                 }`}
                 title="Grid View"
               >
@@ -301,19 +314,13 @@ export default function Alerts() {
         </div>
 
         {/* Severity Tabs with Animated layoutId Indicator */}
-        <div className="flex items-center gap-1 border-b border-white/[0.08] flex-wrap pb-px scrollbar-none">
+        <div className="flex items-center gap-1 border-b border-border flex-wrap pb-px scrollbar-none">
           {(["all", "critical", "high", "medium", "low", "info"] as SeverityTab[]).map((tab) => {
             const active = selectedSeverity === tab;
             const count = countsBySeverity[tab];
 
-            const tabColors: Record<SeverityTab, string> = {
-              all: "text-text",
-              critical: "text-[#df6a68]",
-              high: "text-[#d4915a]",
-              medium: "text-[#c9b467]",
-              low: "text-[#86b69a]",
-              info: "text-[#8fb0d8]",
-            };
+            const meta = tab === "all" ? null : SEVERITY_META[tab];
+            const TabIcon = meta?.icon;
 
             return (
               <button
@@ -322,14 +329,15 @@ export default function Alerts() {
                   setSelectedSeverity(tab);
                   setSearchParams({ severity: tab, status: statusFilter });
                 }}
-                className={`relative flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs font-mono   transition-colors select-none whitespace-nowrap cursor-pointer ${
-                  active ? "text-text font-bold" : "text-muted hover:text-text"
+                className={`relative flex items-center gap-2 px-3 sm:px-4 py-2.5 text-xs   transition-colors select-none whitespace-nowrap cursor-pointer ${
+                  active ? "text-text font-medium" : "text-muted hover:text-text"
                 }`}
               >
-                <span className={active ? tabColors[tab] : ""}>{tab}</span>
+                {TabIcon && <TabIcon className={`w-3.5 h-3.5 ${meta?.iconClass}`} />}
+                <span className="capitalize">{tab}</span>
                 <span
-                  className={`px-1.5 py-0.2 rounded-sm text-[10px] ${
-                    active ? "bg-white/15 text-text font-bold" : "bg-white/5 text-muted"
+                  className={`px-1.5 py-0.2 rounded-sm text-[11px] ${
+                    active ? "bg-text/15 text-text font-semibold" : "bg-text/5 text-muted"
                   }`}
                 >
                   {count}
@@ -339,7 +347,7 @@ export default function Alerts() {
                   <motion.div
                     layoutId="active-severity-tab"
                     className="absolute bottom-0 inset-x-0 h-0.5 bg-primary"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    transition={{ type: "spring", stiffness: 420, damping: 38 }}
                   />
                 )}
               </button>
@@ -357,44 +365,46 @@ export default function Alerts() {
               placeholder="Search by title, secret subtype, process..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#0d0f16] border border-white/10 rounded-lg pl-9 pr-3 py-2 text-xs text-text placeholder:text-muted/60 focus:outline-none focus:border-cyan-400 font-mono"
+              className="ui-input w-full pl-9 pr-3 py-2 text-xs"
             />
           </div>
 
           {/* Type Filter (4 cols) */}
           <div className="sm:col-span-4">
-            <select
+            <Select
+              aria-label="Finding type"
               value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              className="w-full bg-[#0d0f16] border border-white/10 rounded-lg px-3 py-2 text-xs text-text focus:outline-none focus:border-cyan-400 font-mono"
-            >
-              <option value="all">All Finding Types</option>
-              <option value="secret">Secrets & Credentials</option>
-              <option value="pii">PII & Personal Data</option>
-              <option value="agent_action">Risky Agent Actions</option>
-              <option value="source_code">Proprietary Source Code</option>
-              <option value="shadow_ai">Shadow AI Tools</option>
-              <option value="canary">Honeytokens / Canaries</option>
-              <option value="policy">Policy Violations</option>
-            </select>
+              onValueChange={setTypeFilter}
+              options={[
+                { value: "all", label: "All Finding Types" },
+                { value: "secret", label: "Secrets & Credentials" },
+                { value: "pii", label: "PII & Personal Data" },
+                { value: "agent_action", label: "Risky Agent Actions" },
+                { value: "source_code", label: "Proprietary Source Code" },
+                { value: "shadow_ai", label: "Shadow AI Tools" },
+                { value: "canary", label: "Honeytokens / Canaries" },
+                { value: "policy", label: "Policy Violations" },
+              ]}
+            />
           </div>
 
           {/* Status Filter (3 cols) */}
           <div className="sm:col-span-3">
-            <select
+            <Select
+              aria-label="Status"
               value={statusFilter}
-              onChange={(e) => {
-                setStatusFilter(e.target.value as StatusFilter);
-                setSearchParams({ severity: selectedSeverity, status: e.target.value });
+              onValueChange={(value) => {
+                setStatusFilter(value as StatusFilter);
+                setSearchParams({ severity: selectedSeverity, status: value });
               }}
-              className="w-full bg-[#0d0f16] border border-white/10 rounded-lg px-3 py-2 text-xs text-text focus:outline-none focus:border-cyan-400 font-mono"
-            >
-              <option value="all">All Statuses</option>
-              <option value="open">Open Only</option>
-              <option value="acknowledged">Acknowledged</option>
-              <option value="resolved">Resolved</option>
-              <option value="false_positive">False Positive</option>
-            </select>
+              options={[
+                { value: "all", label: "All Statuses" },
+                { value: "open", label: "Open Only" },
+                { value: "acknowledged", label: "Acknowledged" },
+                { value: "resolved", label: "Resolved" },
+                { value: "false_positive", label: "False Positive" },
+              ]}
+            />
           </div>
         </div>
       </GlassCard>
@@ -408,10 +418,10 @@ export default function Alerts() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="p-3 rounded-xl border border-cyan-500/40 bg-[#0c1428]/95 flex flex-wrap items-center justify-between gap-3 z-20"
+            className="p-3 rounded-xl border border-cyan-500/40 bg-elevated flex flex-wrap items-center justify-between gap-3 z-20"
           >
             <div className="flex items-center gap-3">
-              <span className="font-mono text-xs font-bold text-cyan-300">
+              <span className=" text-xs font-semibold text-cyan-300">
                 {selectedIds.size} of {filteredFindings.length} selected
               </span>
               <button
@@ -461,7 +471,7 @@ export default function Alerts() {
         </div>
       ) : filteredFindings.length === 0 ? (
         <GlassCard variant="default" className="flex-1 flex flex-col items-center justify-center p-12 text-center">
-          <ShieldCheck className="w-14 h-14 text-emerald-400/40 mb-3" />
+          <ShieldCheck className="w-14 h-14 text-emerald-400 mb-3" />
           <h3 className="font-display text-lg font-semibold text-text">No Alerts Found</h3>
           <p className="text-xs text-muted max-w-sm mt-1">
             Zero security exfiltrations match your current filters. Your endpoints are operating securely.
@@ -484,13 +494,13 @@ export default function Alerts() {
         /* List View */
         <GlassCard variant="default" className="p-0 overflow-hidden flex-1">
           {/* Header Row */}
-          <div className="flex items-center justify-between px-4 py-2.5 bg-[#0d0f16] border-b border-white/[0.08] text-[10px] font-mono text-muted">
+          <div className="flex items-center justify-between px-4 py-2.5 bg-surface-solid border-b border-border text-[11px] text-muted">
             <div className="flex items-center gap-3">
               <input
                 type="checkbox"
                 checked={selectedIds.size === filteredFindings.length && filteredFindings.length > 0}
                 onChange={toggleSelectAll}
-                className="rounded border-white/20 bg-white/5 text-cyan-400 focus:ring-0 cursor-pointer"
+                className="rounded-xs cursor-pointer"
               />
               <span>Severity / Title</span>
             </div>
@@ -502,7 +512,7 @@ export default function Alerts() {
             </div>
           </div>
 
-          <div className="divide-y divide-white/[0.04]">
+          <div className="divide-y divide-border">
             {filteredFindings.map((finding, idx) => {
               const isSelected = selectedIds.has(finding.id);
               const isHighlighted = idx === highlightedIndex;
@@ -512,8 +522,9 @@ export default function Alerts() {
                 <div
                   key={finding.id}
                   onClick={() => navigate(`/app/alerts/${finding.id}`)}
-                  className={`p-3.5 sm:px-4 sm:py-3 transition-all cursor-pointer group flex items-center justify-between gap-3 ${
-                    isSelected ? "bg-cyan-500/10" : isHighlighted ? "bg-white/[0.04]" : ""
+                  style={rise(idx).style}
+                  className={`${rise(idx).className} p-3.5 sm:px-4 sm:py-3 hover:bg-elevated transition-colors cursor-pointer group flex items-center justify-between gap-3 ${
+                    isSelected ? "bg-cyan-500/10" : isHighlighted ? "bg-text/[0.04]" : ""
                   } ${
                     isCritical && finding.status === "open"
                       ? "bg-red-950/15 border-l-2 border-red-500 "
@@ -527,7 +538,7 @@ export default function Alerts() {
                       checked={isSelected}
                       onClick={(e) => toggleSelectOne(finding.id, e)}
                       onChange={() => {}}
-                      className="rounded border-white/20 bg-white/5 text-cyan-400 focus:ring-0 cursor-pointer shrink-0"
+                      className="rounded-xs cursor-pointer shrink-0"
                     />
 
                     <SeverityPill severity={finding.severity} size="xs" />
@@ -537,7 +548,7 @@ export default function Alerts() {
                         <p className="font-semibold text-xs sm:text-sm text-text group-hover:text-cyan-300 transition-colors truncate">
                           {finding.title}
                         </p>
-                        <span className="font-mono text-[10px] text-muted/80 bg-white/5 px-1.5 py-0.2 rounded border border-white/10 hidden sm:inline">
+                        <span className="font-mono text-[11px] text-muted bg-text/5 px-1.5 py-0.2 rounded border border-border hidden sm:inline">
                           {finding.subtype}
                         </span>
                       </div>
@@ -548,10 +559,10 @@ export default function Alerts() {
                   </div>
 
                   {/* Right: Process, Compliance, Status, Time, Arrow */}
-                  <div className="flex items-center gap-3 sm:gap-6 shrink-0 font-mono text-xs">
+                  <div className="flex items-center gap-3 sm:gap-6 shrink-0 text-xs">
                     <div className="hidden md:flex items-center gap-1.5 text-muted text-[11px]">
-                      <Cpu className="w-3.5 h-3.5 text-cyan-400/80" />
-                      <span>{finding.process_name ?? "system"}</span>
+                      <Cpu className="w-3.5 h-3.5 text-cyan-400" />
+                      <span className="font-mono">{finding.process_name ?? "system"}</span>
                     </div>
 
                     {/* Compliance chips */}
@@ -559,7 +570,7 @@ export default function Alerts() {
                       {finding.compliance?.slice(0, 2).map((c) => (
                         <span
                           key={c}
-                          className="text-[9px] px-1.5 py-0.2 rounded bg-surface border border-white/10 text-muted"
+                          className="text-[11px] px-1.5 py-0.2 rounded bg-surface border border-border text-muted"
                         >
                           {c}
                         </span>
@@ -568,12 +579,12 @@ export default function Alerts() {
 
                     {/* Status Pill */}
                     <span
-                      className={`text-[10px] px-2 py-0.5 rounded-sm font-bold  ${
+                      className={`text-[11px] px-2 py-0.5 rounded-sm font-semibold  ${
                         finding.status === "open"
-                          ? "bg-red-500/15 text-red-400 border border-red-500/30"
+                          ? "bg-red-500/15 text-text border border-red-500/30"
                           : finding.status === "acknowledged"
-                          ? "bg-amber-500/15 text-amber-300 border border-amber-500/30"
-                          : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                          ? "bg-amber-500/15 text-text border border-amber-500/30"
+                          : "bg-emerald-500/15 text-text border border-emerald-500/30"
                       }`}
                     >
                       {finding.status}
@@ -583,7 +594,7 @@ export default function Alerts() {
                       {timeAgo(finding.ts)}
                     </span>
 
-                    <ChevronRight className="w-4 h-4 text-muted group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-all hidden sm:block" />
+                    <ChevronRight className="w-4 h-4 text-muted group-hover:text-cyan-400 transition-colors hidden sm:block" />
                   </div>
                 </div>
               );
@@ -603,7 +614,7 @@ export default function Alerts() {
                 variant="default"
                 interactive
                 onClick={() => navigate(`/app/alerts/${finding.id}`)}
-                className={`p-4 flex flex-col justify-between transition-all ${
+                className={`p-4 flex flex-col justify-between transition-colors ${
                   isSelected ? "border-cyan-400/50 bg-cyan-950/20" : ""
                 } ${
                   isCritical && finding.status === "open"
@@ -615,7 +626,7 @@ export default function Alerts() {
                   <div className="flex items-center justify-between gap-2 mb-2.5">
                     <SeverityPill severity={finding.severity} size="xs" />
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] text-muted">
+                      <span className=" text-[11px] text-muted">
                         {timeAgo(finding.ts)}
                       </span>
                       <input
@@ -623,7 +634,7 @@ export default function Alerts() {
                         checked={isSelected}
                         onClick={(e) => toggleSelectOne(finding.id, e)}
                         onChange={() => {}}
-                        className="rounded border-white/20 bg-white/5 text-cyan-400 focus:ring-0 cursor-pointer"
+                        className="rounded-xs cursor-pointer"
                       />
                     </div>
                   </div>
@@ -632,22 +643,22 @@ export default function Alerts() {
                     {finding.title}
                   </h3>
 
-                  <p className="font-mono text-[11px] text-muted line-clamp-2 mt-1.5 leading-relaxed bg-[#0b0d13] p-2 rounded border border-white/10">
+                  <p className="font-mono text-[11px] text-muted line-clamp-2 mt-1.5 leading-relaxed bg-surface-solid p-2 rounded border border-border">
                     {finding.evidence?.redacted_snippet || finding.description}
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono">
+                <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs">
                   <div className="flex items-center gap-1.5 text-muted text-[11px]">
                     <Cpu className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>{finding.process_name ?? "unknown"}</span>
+                    <span className="font-mono">{finding.process_name ?? "unknown"}</span>
                   </div>
 
                   <span
-                    className={`text-[10px] px-2 py-0.5 rounded-sm font-bold  ${
+                    className={`text-[11px] px-2 py-0.5 rounded-sm font-semibold  ${
                       finding.status === "open"
-                        ? "bg-red-500/15 text-red-400"
-                        : "bg-emerald-500/15 text-emerald-400"
+                        ? "bg-red-500/15 text-text"
+                        : "bg-emerald-500/15 text-text"
                     }`}
                   >
                     {finding.status}
