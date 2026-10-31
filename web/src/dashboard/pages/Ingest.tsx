@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "../../shared/useDocumentTitle";
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
@@ -103,6 +104,8 @@ const SCAN_STEPS = [
 ];
 
 export default function Ingest() {
+  useDocumentTitle("Evidence Ingest · ShadowScope");
+
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeFileName, setActiveFileName] = useState<string | null>(null);
@@ -218,7 +221,7 @@ export default function Ingest() {
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
-                className="relative overflow-hidden rounded-2xl border border-cyan-500/30 bg-neutral-900/80 p-8 backdrop-blur-xl shadow-2xl shadow-cyan-950/30"
+                className="relative overflow-hidden rounded-[var(--radius)] border border-primary/30 bg-surface p-8  shadow-2xl shadow-cyan-950/30"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-violet-500/5 pointer-events-none" />
 
@@ -231,7 +234,7 @@ export default function Ingest() {
                       className="w-20 h-20 rounded-full border-2 border-cyan-500/20 border-t-cyan-400 border-r-cyan-400/50 flex items-center justify-center shadow-lg shadow-cyan-500/20"
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <Zap className="w-8 h-8 text-cyan-400 animate-pulse" />
+                      <Zap className="w-8 h-8 text-primary animate-pulse" />
                     </div>
                   </div>
 
@@ -239,7 +242,7 @@ export default function Ingest() {
                     <h3 className="text-lg font-semibold text-white font-[Space_Grotesk]">
                       Analyzing Forensic Artifact
                     </h3>
-                    <p className="text-xs font-mono text-cyan-400/90 truncate max-w-md">
+                    <p className="text-xs font-mono text-primary/90 truncate max-w-md">
                       {activeFileName}
                     </p>
                   </div>
@@ -248,9 +251,9 @@ export default function Ingest() {
                   <div className="w-full max-w-md space-y-2">
                     <div className="flex justify-between text-xs font-mono">
                       <span className="text-neutral-400">Pipeline Execution</span>
-                      <span className="text-cyan-400 font-semibold">{progress}%</span>
+                      <span className="text-primary font-semibold">{progress}%</span>
                     </div>
-                    <div className="w-full h-2 rounded-full bg-neutral-800 overflow-hidden border border-neutral-700/50">
+                    <div className="w-full h-2 rounded-full bg-neutral-800 overflow-hidden border border-border/50">
                       <motion.div
                         className="h-full bg-gradient-to-r from-cyan-500 to-violet-500 rounded-full"
                         style={{ width: `${progress}%` }}
@@ -260,8 +263,8 @@ export default function Ingest() {
                   </div>
 
                   {/* Pipeline Stepper text */}
-                  <div className="flex items-center gap-2 text-xs text-neutral-300 bg-neutral-950/60 border border-neutral-800 px-4 py-2 rounded-lg">
-                    <Activity className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
+                  <div className="flex items-center gap-2 text-xs text-neutral-300 bg-neutral-950/60 border border-border px-4 py-2 rounded-lg">
+                    <Activity className="w-3.5 h-3.5 text-primary animate-spin" />
                     <span>{SCAN_STEPS[stepIndex]}</span>
                   </div>
                 </div>
@@ -275,10 +278,10 @@ export default function Ingest() {
                 className="space-y-6"
               >
                 {/* Result Hero Card */}
-                <div className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-b from-emerald-950/20 via-neutral-900/90 to-neutral-950 p-6 backdrop-blur-xl shadow-xl shadow-emerald-950/20">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-neutral-800">
+                <div className="relative overflow-hidden rounded-[var(--radius)] border border-emerald-500/30 bg-gradient-to-b from-emerald-950/20 via-neutral-900/90 to-neutral-950 p-6  shadow-xl shadow-emerald-950/20">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-border">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 rounded-[var(--radius)] bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shrink-0">
                         <CheckCircle2 className="w-6 h-6 text-emerald-400" />
                       </div>
                       <div>
@@ -309,17 +312,17 @@ export default function Ingest() {
 
                   {/* 4 Metric Cards */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6">
-                    <div className="p-3.5 rounded-xl bg-neutral-950/70 border border-neutral-800/80">
+                    <div className="p-3.5 rounded-[var(--radius)] bg-neutral-950/70 border border-border">
                       <div className="text-[11px] font-medium text-neutral-400 uppercase tracking-wider">
                         Events Created
                       </div>
-                      <div className="text-2xl font-bold font-mono text-cyan-400 mt-1">
+                      <div className="text-2xl font-bold font-mono text-primary mt-1">
                         <CountUp value={result.events_created} />
                       </div>
                       <div className="text-[10px] text-neutral-400 mt-0.5">Stream logs</div>
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-neutral-950/70 border border-neutral-800/80">
+                    <div className="p-3.5 rounded-[var(--radius)] bg-neutral-950/70 border border-border">
                       <div className="text-[11px] font-medium text-neutral-400 uppercase tracking-wider">
                         Findings Flagged
                       </div>
@@ -329,7 +332,7 @@ export default function Ingest() {
                       <div className="text-[10px] text-neutral-400 mt-0.5">Exfiltrations / leaks</div>
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-neutral-950/70 border border-neutral-800/80">
+                    <div className="p-3.5 rounded-[var(--radius)] bg-neutral-950/70 border border-border">
                       <div className="text-[11px] font-medium text-neutral-400 uppercase tracking-wider">
                         AI Requests
                       </div>
@@ -339,7 +342,7 @@ export default function Ingest() {
                       <div className="text-[10px] text-neutral-400 mt-0.5">Endpoints verified</div>
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-neutral-950/70 border border-neutral-800/80">
+                    <div className="p-3.5 rounded-[var(--radius)] bg-neutral-950/70 border border-border">
                       <div className="text-[11px] font-medium text-neutral-400 uppercase tracking-wider">
                         Scan Duration
                       </div>
@@ -365,7 +368,7 @@ export default function Ingest() {
                   )}
 
                   {/* Actions */}
-                  <div className="flex flex-wrap items-center gap-3 mt-6 pt-4 border-t border-neutral-800/60">
+                  <div className="flex flex-wrap items-center gap-3 mt-6 pt-4 border-t border-border/60">
                     <Button
                       variant="primary"
                       onClick={() => navigate("/app/alerts")}
@@ -378,7 +381,7 @@ export default function Ingest() {
                       variant="outline"
                       onClick={() => navigate("/app/live")}
                     >
-                      <Activity className="w-4 h-4 mr-1.5 text-cyan-400" />
+                      <Activity className="w-4 h-4 mr-1.5 text-primary" />
                       <span>Inspect Ingested Events</span>
                     </Button>
                   </div>
@@ -393,20 +396,20 @@ export default function Ingest() {
               >
                 <div
                   {...getRootProps()}
-                  className={`relative cursor-pointer rounded-2xl border-2 border-dashed p-10 text-center transition-all duration-300 ${
+                  className={`relative cursor-pointer rounded-[var(--radius)] border-2 border-dashed p-10 text-center transition-all duration-300 ${
                     isDragActive
-                      ? "border-cyan-400 bg-cyan-950/20 shadow-2xl shadow-cyan-500/20 scale-[1.01]"
-                      : "border-neutral-700/60 hover:border-cyan-500/50 bg-neutral-900/40 hover:bg-neutral-900/60"
+                      ? "border-primary bg-surface shadow-2xl shadow-cyan-500/20 scale-[1.01]"
+                      : "border-border hover:border-cyan-500/50 bg-surface hover:bg-surface"
                   }`}
                 >
                   <input {...getInputProps()} />
 
                   <div className="flex flex-col items-center justify-center space-y-4">
                     <div
-                      className={`w-16 h-16 rounded-2xl flex items-center justify-center border transition-all ${
+                      className={`w-16 h-16 rounded-[var(--radius)] flex items-center justify-center border transition-all ${
                         isDragActive
-                          ? "bg-cyan-500/20 border-cyan-400 text-cyan-300 scale-110"
-                          : "bg-neutral-800/80 border-neutral-700 text-neutral-300 hover:text-cyan-400 hover:border-cyan-500/40"
+                          ? "bg-primary/15 border-primary text-primary scale-110"
+                          : "bg-neutral-800/80 border-border text-neutral-300 hover:text-primary hover:border-primary/30"
                       }`}
                     >
                       <UploadCloud className="w-8 h-8" />
@@ -419,34 +422,34 @@ export default function Ingest() {
                           : "Drag & drop network trace file here"}
                       </div>
                       <p className="text-xs text-neutral-400">
-                        Supports <span className="font-mono text-cyan-400">.har</span>,{" "}
-                        <span className="font-mono text-cyan-400">.pcap</span>,{" "}
-                        <span className="font-mono text-cyan-400">.jsonl</span>,{" "}
-                        <span className="font-mono text-cyan-400">.json</span>, and{" "}
-                        <span className="font-mono text-cyan-400">.log</span> files up to 250 MB
+                        Supports <span className="font-mono text-primary">.har</span>,{" "}
+                        <span className="font-mono text-primary">.pcap</span>,{" "}
+                        <span className="font-mono text-primary">.jsonl</span>,{" "}
+                        <span className="font-mono text-primary">.json</span>, and{" "}
+                        <span className="font-mono text-primary">.log</span> files up to 250 MB
                       </p>
                     </div>
 
                     <div className="pt-2">
                       <Button variant="outline" size="sm" className="pointer-events-none">
-                        <FileText className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
+                        <FileText className="w-3.5 h-3.5 mr-1.5 text-primary" />
                         Browse Files on Device
                       </Button>
                     </div>
 
                     {/* Supported Format Chips */}
-                    <div className="flex flex-wrap items-center justify-center gap-2 pt-3 border-t border-neutral-800/80 w-full max-w-md">
+                    <div className="flex flex-wrap items-center justify-center gap-2 pt-3 border-t border-border w-full max-w-md">
                       <span className="text-[10px] text-neutral-400 uppercase tracking-wider mr-1">Formats:</span>
-                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-neutral-800/80 text-neutral-300 border border-neutral-700/50">
+                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-neutral-800/80 text-neutral-300 border border-border/50">
                         HAR (DevTools)
                       </span>
-                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-neutral-800/80 text-neutral-300 border border-neutral-700/50">
+                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-neutral-800/80 text-neutral-300 border border-border/50">
                         PCAP / PCAPNG
                       </span>
-                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-neutral-800/80 text-neutral-300 border border-neutral-700/50">
+                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-neutral-800/80 text-neutral-300 border border-border/50">
                         JSONL (Proxy)
                       </span>
-                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-neutral-800/80 text-neutral-300 border border-neutral-700/50">
+                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-neutral-800/80 text-neutral-300 border border-border/50">
                         Plain Logs
                       </span>
                     </div>
@@ -457,13 +460,13 @@ export default function Ingest() {
           </AnimatePresence>
 
           {/* DevTools HAR Export Guide Accordion */}
-          <GlassCard className="p-0 overflow-hidden border border-neutral-800">
+          <GlassCard className="p-0 overflow-hidden border border-border">
             <button
               onClick={() => setIsGuideOpen(!isGuideOpen)}
               className="w-full flex items-center justify-between p-4 text-left hover:bg-neutral-800/30 transition-colors"
             >
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 border border-cyan-500/20 flex items-center justify-center text-primary">
                   <FileCode2 className="w-4 h-4" />
                 </div>
                 <div>
@@ -487,12 +490,12 @@ export default function Ingest() {
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="border-t border-neutral-800/80 p-5 bg-neutral-950/40 space-y-4"
+                  className="border-t border-border p-5 bg-neutral-950/40 space-y-4"
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="p-3 rounded-xl bg-neutral-900/60 border border-neutral-800 text-xs space-y-1">
-                      <div className="font-semibold text-cyan-300 flex items-center gap-1.5">
-                        <span className="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">
+                    <div className="p-3 rounded-[var(--radius)] bg-surface border border-border text-xs space-y-1">
+                      <div className="font-semibold text-primary flex items-center gap-1.5">
+                        <span className="w-4 h-4 rounded-full bg-primary/15 text-primary flex items-center justify-center text-[10px]">
                           1
                         </span>
                         Open Developer Tools
@@ -504,9 +507,9 @@ export default function Ingest() {
                       </p>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-neutral-900/60 border border-neutral-800 text-xs space-y-1">
-                      <div className="font-semibold text-cyan-300 flex items-center gap-1.5">
-                        <span className="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">
+                    <div className="p-3 rounded-[var(--radius)] bg-surface border border-border text-xs space-y-1">
+                      <div className="font-semibold text-primary flex items-center gap-1.5">
+                        <span className="w-4 h-4 rounded-full bg-primary/15 text-primary flex items-center justify-center text-[10px]">
                           2
                         </span>
                         Navigate to Network Tab
@@ -516,9 +519,9 @@ export default function Ingest() {
                       </p>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-neutral-900/60 border border-neutral-800 text-xs space-y-1">
-                      <div className="font-semibold text-cyan-300 flex items-center gap-1.5">
-                        <span className="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">
+                    <div className="p-3 rounded-[var(--radius)] bg-surface border border-border text-xs space-y-1">
+                      <div className="font-semibold text-primary flex items-center gap-1.5">
+                        <span className="w-4 h-4 rounded-full bg-primary/15 text-primary flex items-center justify-center text-[10px]">
                           3
                         </span>
                         Reproduce AI Usage
@@ -528,9 +531,9 @@ export default function Ingest() {
                       </p>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-neutral-900/60 border border-neutral-800 text-xs space-y-1">
-                      <div className="font-semibold text-cyan-300 flex items-center gap-1.5">
-                        <span className="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">
+                    <div className="p-3 rounded-[var(--radius)] bg-surface border border-border text-xs space-y-1">
+                      <div className="font-semibold text-primary flex items-center gap-1.5">
+                        <span className="w-4 h-4 rounded-full bg-primary/15 text-primary flex items-center justify-center text-[10px]">
                           4
                         </span>
                         Export Archive
@@ -541,8 +544,8 @@ export default function Ingest() {
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-lg bg-cyan-950/20 border border-cyan-800/30 text-xs text-cyan-200/90 flex items-start gap-2">
-                    <Sparkles className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                  <div className="p-3 rounded-lg bg-surface border border-cyan-800/30 text-xs text-cyan-200/90 flex items-start gap-2">
+                    <Sparkles className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                     <span>
                       <strong>Privacy Assurance:</strong> ShadowScope performs all token detection and entropy analysis locally in your browser session. No raw secrets or unredacted tokens are ever transmitted off your system.
                     </span>
@@ -570,14 +573,14 @@ export default function Ingest() {
               {SAMPLE_FILES.map((sample) => (
                 <div
                   key={sample.id}
-                  className="p-3.5 rounded-xl bg-neutral-900/70 border border-neutral-800 hover:border-cyan-500/40 transition-all group flex flex-col justify-between"
+                  className="p-3.5 rounded-[var(--radius)] bg-surface/70 border border-border hover:border-primary/30 transition-all group flex flex-col justify-between"
                 >
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-white group-hover:text-cyan-300 transition-colors">
+                      <span className="text-xs font-semibold text-white group-hover:text-primary transition-colors">
                         {sample.name}
                       </span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-neutral-800 text-neutral-300 border border-neutral-700/60">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-neutral-800 text-neutral-300 border border-border">
                         {sample.badge}
                       </span>
                     </div>
@@ -590,7 +593,7 @@ export default function Ingest() {
                     </div>
                   </div>
 
-                  <div className="pt-3 mt-2 border-t border-neutral-800/60 flex items-center justify-between">
+                  <div className="pt-3 mt-2 border-t border-border/60 flex items-center justify-between">
                     <span className="text-[10px] font-mono text-neutral-400">
                       {sample.filename} • {sample.size}
                     </span>
@@ -599,7 +602,7 @@ export default function Ingest() {
                       size="sm"
                       disabled={isProcessing}
                       onClick={() => handleLoadSample(sample)}
-                      className="h-7 text-xs px-2.5 group-hover:border-cyan-500/50 group-hover:text-cyan-300"
+                      className="h-7 text-xs px-2.5 group-hover:border-cyan-500/50 group-hover:text-primary"
                     >
                       <span>Load Sample</span>
                       <ArrowRight className="w-3 h-3 ml-1" />
@@ -620,19 +623,19 @@ export default function Ingest() {
             </div>
             <ul className="text-xs text-neutral-400 space-y-2">
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
                 <span>
                   <strong className="text-neutral-200">Deep TLS & SNI Header Extraction:</strong> Identifies unmonitored connections even when payload is encrypted.
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
                 <span>
                   <strong className="text-neutral-200">Entropy Anomaly Detection:</strong> Flags high-entropy strings (credentials, API keys, private keys).
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
                 <span>
                   <strong className="text-neutral-200">Honeytoken Traps:</strong> Immediate critical alerts if organizational canary tokens appear in requests.
                 </span>

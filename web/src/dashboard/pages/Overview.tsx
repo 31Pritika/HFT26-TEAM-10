@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "../../shared/useDocumentTitle";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -66,11 +67,11 @@ function timeAgo(dateString: string): string {
 
 // Colors for provider donut
 const PROVIDER_COLORS = [
-  "#22D3EE", // cyan (Ollama / Local)
+  "#F2C94C", // cyan (Ollama / Local)
   "#10B981", // emerald (OpenAI)
   "#F59E0B", // amber (Anthropic)
   "#8B5CF6", // violet (Cursor)
-  "#EC4899", // pink (Gemini)
+  "#E8833A", // pink (Gemini)
   "#3B82F6", // blue (Others)
 ];
 
@@ -98,6 +99,8 @@ const itemVariants = {
 };
 
 export default function Overview() {
+  useDocumentTitle("Overview · ShadowScope");
+
   const navigate = useNavigate();
   const [timeWindow, setTimeWindow] = useState<"1h" | "6h" | "24h" | "7d">("24h");
 
@@ -151,12 +154,12 @@ export default function Overview() {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <Skeleton className="h-64 rounded-xl" />
-          <Skeleton className="h-64 rounded-xl lg:col-span-2" />
+          <Skeleton className="h-64 rounded-[var(--radius)]" />
+          <Skeleton className="h-64 rounded-[var(--radius)] lg:col-span-2" />
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className="h-28 rounded-xl" />
+            <Skeleton key={i} className="h-28 rounded-[var(--radius)]" />
           ))}
         </div>
       </div>
@@ -184,7 +187,7 @@ export default function Overview() {
             {/* Header info */}
             <div className="w-full flex items-center justify-between mb-4">
               <span className="font-mono text-xs text-muted uppercase tracking-wider flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                 Real-Time Risk Posture
               </span>
               <span className="font-mono text-[11px] text-muted/70 bg-white/5 px-2 py-0.5 rounded border border-white/10">
@@ -233,7 +236,7 @@ export default function Overview() {
               <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
                 <div>
                   <h2 className="font-display text-lg font-bold text-text flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-cyan-400" />
+                    <Shield className="w-5 h-5 text-primary" />
                     Threat Surface Intelligence
                   </h2>
                   <p className="text-xs text-muted mt-0.5">
@@ -257,7 +260,7 @@ export default function Overview() {
 
               {/* Top Risk Vectors Summary Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-4">
-                <div className="rounded-xl border border-white/[0.06] bg-surface-solid/70 p-3.5 flex flex-col justify-between">
+                <div className="rounded-[var(--radius)] border border-white/[0.06] bg-surface-solid/70 p-3.5 flex flex-col justify-between">
                   <span className="text-[11px] font-medium text-muted uppercase">Top Rogue Process</span>
                   <div className="mt-2">
                     <p className="font-mono text-sm font-semibold text-text truncate">
@@ -269,7 +272,7 @@ export default function Overview() {
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-white/[0.06] bg-surface-solid/70 p-3.5 flex flex-col justify-between">
+                <div className="rounded-[var(--radius)] border border-white/[0.06] bg-surface-solid/70 p-3.5 flex flex-col justify-between">
                   <span className="text-[11px] font-medium text-muted uppercase">Unmonitored Traffic</span>
                   <div className="mt-2">
                     <p className="font-mono text-sm font-semibold text-text">
@@ -281,13 +284,13 @@ export default function Overview() {
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-white/[0.06] bg-surface-solid/70 p-3.5 flex flex-col justify-between">
+                <div className="rounded-[var(--radius)] border border-white/[0.06] bg-surface-solid/70 p-3.5 flex flex-col justify-between">
                   <span className="text-[11px] font-medium text-muted uppercase">Data Egress Volume</span>
                   <div className="mt-2">
                     <p className="font-mono text-sm font-semibold text-text">
                       {formatBytes(totals?.bytes_out ?? 13195846)}
                     </p>
-                    <p className="font-mono text-xs text-cyan-400 mt-0.5">
+                    <p className="font-mono text-xs text-primary mt-0.5">
                       Across all AI hosts
                     </p>
                   </div>
@@ -302,7 +305,7 @@ export default function Overview() {
                   </span>
                   <button
                     onClick={() => navigate("/report")}
-                    className="flex items-center gap-1 font-mono text-xs text-cyan-400 hover:underline cursor-pointer"
+                    className="flex items-center gap-1 font-mono text-xs text-primary hover:underline cursor-pointer"
                   >
                     Executive Report <ExternalLink className="w-3 h-3" />
                   </button>
@@ -320,7 +323,7 @@ export default function Overview() {
                       return (
                         <div
                           key={framework}
-                          className="flex flex-col items-center justify-center p-2.5 rounded-xl border border-white/[0.06] bg-surface-solid/50 text-center"
+                          className="flex flex-col items-center justify-center p-2.5 rounded-[var(--radius)] border border-white/[0.06] bg-surface-solid/50 text-center"
                         >
                           <span className="font-mono text-[11px] font-bold text-text truncate">
                             {framework}
@@ -341,7 +344,7 @@ export default function Overview() {
               <span>Auditing engine active on ports 8787 / 8788 / 8789</span>
               <button
                 onClick={() => navigate("/app/live")}
-                className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 font-medium"
+                className="flex items-center gap-1 text-primary hover:text-primary font-medium"
               >
                 Inspect Live Stream <ArrowRight className="w-3.5 h-3.5" />
               </button>
@@ -368,7 +371,7 @@ export default function Overview() {
             icon={Radio}
             variant="cyan"
             sparkline={requestsSparkline.slice(0, 10)}
-            sparklineColor="#22d3ee"
+            sparklineColor="#F2C94C"
             sublabel="Audited telemetry packets"
           />
 
@@ -378,7 +381,7 @@ export default function Overview() {
             icon={Activity}
             variant="cyan"
             sparkline={requestsSparkline.slice(10, 20)}
-            sparklineColor="#0ea5e9"
+            sparklineColor="#D9B44A"
             sublabel="Inference API queries"
           />
 
@@ -428,7 +431,7 @@ export default function Overview() {
             icon={Bot}
             variant="violet"
             sparkline={requestsSparkline.slice(14, 24)}
-            sparklineColor="#8b5cf6"
+            sparklineColor="#9A968F"
             sublabel="Shell / FS / Tool calls"
           />
 
@@ -438,7 +441,7 @@ export default function Overview() {
             icon={Layers}
             variant="cyan"
             sparkline={riskTrendSparkline.slice(14, 24)}
-            sparklineColor="#22d3ee"
+            sparklineColor="#F2C94C"
             sublabel="Unsanctioned services"
           />
         </div>
@@ -454,7 +457,7 @@ export default function Overview() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
               <div>
                 <h3 className="font-display text-base font-bold text-text flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-cyan-400" />
+                  <Activity className="w-4 h-4 text-primary" />
                   Traffic vs Findings Timeline (24h)
                 </h3>
                 <p className="text-xs text-muted mt-0.5">
@@ -470,7 +473,7 @@ export default function Overview() {
                     onClick={() => setTimeWindow(win)}
                     className={`font-mono text-xs px-2.5 py-1 rounded transition-colors ${
                       timeWindow === win
-                        ? "bg-cyan-500/20 text-cyan-300 font-semibold border border-cyan-500/30"
+                        ? "bg-primary/15 text-primary font-semibold border border-primary/30"
                         : "text-muted hover:text-text"
                     }`}
                   >
@@ -486,8 +489,8 @@ export default function Overview() {
                 <AreaChart data={timelineData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="reqGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#22D3EE" stopOpacity={0.35} />
-                      <stop offset="95%" stopColor="#22D3EE" stopOpacity={0.0} />
+                      <stop offset="5%" stopColor="#F2C94C" stopOpacity={0.35} />
+                      <stop offset="95%" stopColor="#F2C94C" stopOpacity={0.0} />
                     </linearGradient>
                     <linearGradient id="fndGradient" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#FF3B5C" stopOpacity={0.4} />
@@ -522,7 +525,7 @@ export default function Overview() {
                     type="monotone"
                     dataKey="requests"
                     name="AI Requests"
-                    stroke="#22D3EE"
+                    stroke="#F2C94C"
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#reqGradient)"
@@ -543,7 +546,7 @@ export default function Overview() {
             {/* Legend footer */}
             <div className="flex items-center justify-center gap-6 mt-4 pt-3 border-t border-white/[0.06] text-xs font-mono">
               <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded bg-cyan-400/40 border border-cyan-400" />
+                <span className="w-3 h-3 rounded bg-primary/40 border border-primary" />
                 <span className="text-text">AI Requests</span>
               </div>
               <div className="flex items-center gap-2">
@@ -584,7 +587,7 @@ export default function Overview() {
                         <Cell
                           key={`cell-${index}`}
                           fill={PROVIDER_COLORS[index % PROVIDER_COLORS.length]}
-                          stroke="#05060A"
+                          stroke="#000000"
                           strokeWidth={2}
                         />
                       ))}
@@ -637,7 +640,7 @@ export default function Overview() {
             <div className="mt-4 pt-3 border-t border-white/[0.06] text-center">
               <button
                 onClick={() => navigate("/app/inventory")}
-                className="text-xs font-medium text-cyan-400 hover:underline"
+                className="text-xs font-medium text-primary hover:underline"
               >
                 Inspect Inventory Allowlist →
               </button>
@@ -657,8 +660,8 @@ export default function Overview() {
               <div className="flex items-center justify-between pb-3 border-b border-white/[0.08] mb-4">
                 <div className="flex items-center gap-2">
                   <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500" />
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary" />
                   </span>
                   <h3 className="font-display text-base font-bold text-text">
                     Live Threat Feed
@@ -688,9 +691,9 @@ export default function Overview() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.25 }}
                     onClick={() => navigate(`/app/alerts/${finding.id}`)}
-                    className={`p-3 rounded-xl border transition-all cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                    className={`p-3 rounded-[var(--radius)] border transition-all cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                       finding.severity === "critical"
-                        ? "bg-red-950/20 border-red-500/30 hover:border-red-500/50 shadow-[0_0_15px_rgba(255,59,92,0.1)]"
+                        ? "bg-red-950/20 border-red-500/30 hover:border-red-500/50 "
                         : "bg-surface-solid/60 border-white/[0.06] hover:border-white/20 hover:bg-surface-solid"
                     }`}
                   >
@@ -698,7 +701,7 @@ export default function Overview() {
                       <SeverityPill severity={finding.severity} size="xs" />
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <p className="font-medium text-xs sm:text-sm text-text group-hover:text-cyan-300 transition-colors truncate">
+                          <p className="font-medium text-xs sm:text-sm text-text group-hover:text-primary transition-colors truncate">
                             {finding.title}
                           </p>
                           <span className="font-mono text-[10px] text-muted hidden md:inline">
@@ -712,11 +715,11 @@ export default function Overview() {
                     </div>
 
                     <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 font-mono text-[11px] text-muted">
-                      <span className="px-2 py-0.5 rounded bg-white/[0.05] border border-white/10 text-cyan-300 text-[10px]">
+                      <span className="px-2 py-0.5 rounded bg-white/[0.05] border border-white/10 text-primary text-[10px]">
                         {finding.process_name ?? "unknown"}
                       </span>
                       <span>{timeAgo(finding.ts)}</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-muted group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-all" />
+                      <ArrowRight className="w-3.5 h-3.5 text-muted group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                     </div>
                   </motion.div>
                 ))}
@@ -727,7 +730,7 @@ export default function Overview() {
               <span>Telemetry buffer: live capped at 200 items</span>
               <button
                 onClick={() => navigate("/app/live")}
-                className="text-cyan-400 hover:underline font-medium cursor-pointer"
+                className="text-primary hover:underline font-medium cursor-pointer"
               >
                 Open Live Telemetry Console →
               </button>
@@ -822,7 +825,7 @@ export default function Overview() {
         <GlassCard variant="solid" className="p-4 sm:p-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
             <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-cyan-400" />
+              <Zap className="w-4 h-4 text-primary" />
               <span className="font-display text-sm font-bold text-text">
                 Non-Invasive Endpoint Collectors Status
               </span>

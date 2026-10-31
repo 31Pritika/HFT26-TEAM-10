@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDocumentTitle } from "../../shared/useDocumentTitle";
+import { SiteFooter } from "../components/SiteFooter";
 import {
-  ShieldCheck,
   ShieldAlert,
   ArrowLeft,
-  Cpu,
   Layers,
   Lock,
   Zap,
@@ -212,16 +212,14 @@ const NODES_DATA: Record<string, NodeDetail> = {
 export default function Architecture() {
   const [selectedNodeId, setSelectedNodeId] = useState<string>("detector");
 
-  useEffect(() => {
-    document.title = "Architecture & Engine Internals — ShadowScope";
-  }, []);
+  useDocumentTitle("Architecture · ShadowScope");
 
   const activeNode = NODES_DATA[selectedNodeId] || NODES_DATA.detector;
 
   return (
     <div className="min-h-screen bg-bg text-text selection:bg-primary/20 selection:text-primary">
       {/* Top Navigation */}
-      <header className="sticky top-0 z-30 border-b border-border bg-bg/85 backdrop-blur-xl px-4 py-3 sm:px-8">
+      <header className="sticky top-0 z-30 border-b border-border bg-bg/85  px-4 py-3 sm:px-8">
         <div className="mx-auto max-w-7xl flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Link
@@ -253,12 +251,9 @@ export default function Architecture() {
 
       {/* Hero Header */}
       <section className="relative px-4 py-12 sm:px-8 sm:py-16 border-b border-border bg-bg-2/50 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(34,211,238,0.08)_0%,_transparent_70%)] pointer-events-none" />
+        <div className="absolute inset-0  pointer-events-none" />
         <div className="mx-auto max-w-5xl text-center space-y-4 relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-xs font-mono text-primary">
-            <Cpu className="h-3.5 w-3.5" />
-            <span>Zero-Decryption Kernel & Network Architecture</span>
-          </div>
+
 
           <h1 className="font-display text-3xl sm:text-5xl font-black tracking-tight text-text">
             How ShadowScope Sees AI Exfiltration <br className="hidden sm:inline" />
@@ -294,7 +289,7 @@ export default function Architecture() {
         {/* Diagram + Node Explanation Card Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* SVG Diagram Canvas */}
-          <div className="lg:col-span-8 rounded-2xl border border-border bg-bg-2 p-4 sm:p-6 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+          <div className="lg:col-span-8 rounded-[var(--radius)] border border-border bg-bg-2 p-4 sm:p-6 shadow-2xl relative overflow-hidden ">
             {/* Ambient Background Grid */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]" />
 
@@ -586,7 +581,7 @@ export default function Architecture() {
           </div>
 
           {/* Node Detail Explanation Card */}
-          <div className="lg:col-span-4 rounded-2xl border border-border bg-bg-2/95 p-6 backdrop-blur-xl shadow-2xl relative">
+          <div className="lg:col-span-4 rounded-[var(--radius)] border border-border bg-bg-2/95 p-6  shadow-2xl relative">
             <div className="flex items-center justify-between border-b border-border pb-3 mb-4">
               <span className="font-mono text-xs uppercase px-2 py-0.5 rounded border border-primary/30 bg-primary/10 text-primary">
                 {activeNode.layer}
@@ -638,9 +633,7 @@ export default function Architecture() {
       <section className="px-4 py-16 sm:px-8 border-t border-border bg-bg-2/40">
         <div className="mx-auto max-w-6xl space-y-10">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="font-mono text-xs uppercase px-3 py-1 rounded-full border border-danger/30 bg-danger/10 text-danger">
-              Architectural Paradigm
-            </span>
+
             <h2 className="font-display text-2xl sm:text-4xl font-black text-text">
               Why Zero SSL Decryption is the Future of AI Security
             </h2>
@@ -652,7 +645,7 @@ export default function Architecture() {
 
           {/* 4 Pillars of Failure */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="rounded-xl border border-border bg-surface/40 p-5 backdrop-blur-md">
+            <div className="rounded-[var(--radius)] border border-border bg-surface/40 p-5 ">
               <div className="h-9 w-9 rounded-lg border border-danger/30 bg-danger/10 flex items-center justify-center text-danger mb-3">
                 <ShieldAlert className="h-5 w-5" />
               </div>
@@ -662,7 +655,7 @@ export default function Architecture() {
               </p>
             </div>
 
-            <div className="rounded-xl border border-border bg-surface/40 p-5 backdrop-blur-md">
+            <div className="rounded-[var(--radius)] border border-border bg-surface/40 p-5 ">
               <div className="h-9 w-9 rounded-lg border border-amber-500/30 bg-amber-500/10 flex items-center justify-center text-amber-400 mb-3">
                 <Lock className="h-5 w-5" />
               </div>
@@ -672,7 +665,7 @@ export default function Architecture() {
               </p>
             </div>
 
-            <div className="rounded-xl border border-border bg-surface/40 p-5 backdrop-blur-md">
+            <div className="rounded-[var(--radius)] border border-border bg-surface/40 p-5 ">
               <div className="h-9 w-9 rounded-lg border border-primary/30 bg-primary/10 flex items-center justify-center text-primary mb-3">
                 <Laptop className="h-5 w-5" />
               </div>
@@ -682,7 +675,7 @@ export default function Architecture() {
               </p>
             </div>
 
-            <div className="rounded-xl border border-border bg-surface/40 p-5 backdrop-blur-md">
+            <div className="rounded-[var(--radius)] border border-border bg-surface/40 p-5 ">
               <div className="h-9 w-9 rounded-lg border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-3">
                 <Zap className="h-5 w-5" />
               </div>
@@ -694,7 +687,7 @@ export default function Architecture() {
           </div>
 
           {/* Comparison Matrix Table */}
-          <div className="overflow-x-auto rounded-xl border border-border bg-bg-2 shadow-xl">
+          <div className="overflow-x-auto rounded-[var(--radius)] border border-border bg-bg-2 shadow-xl">
             <table className="w-full text-left text-xs font-mono">
               <thead>
                 <tr className="border-b border-border bg-surface/80 text-[10px] uppercase text-muted">
@@ -737,14 +730,11 @@ export default function Architecture() {
 
       {/* SECTION 3: PRIVACY & AIR-GAPPED SECURITY MODEL */}
       <section className="px-4 py-16 sm:px-8 mx-auto max-w-6xl">
-        <div className="rounded-2xl border border-primary/30 bg-primary/5 p-8 sm:p-10 relative overflow-hidden backdrop-blur-xl">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="rounded-[var(--radius)] border border-primary/30 bg-primary/5 p-8 sm:p-10 relative overflow-hidden ">
+          
 
           <div className="max-w-3xl space-y-4 relative z-10">
-            <div className="flex items-center gap-2 text-primary font-mono text-xs">
-              <ShieldCheck className="h-4 w-4" />
-              <span>Cryptographic Privacy Guarantee</span>
-            </div>
+
 
             <h2 className="font-display text-2xl sm:text-3xl font-black text-text">
               The Strict Redaction & Air-Gapped Intelligence Model
@@ -755,21 +745,21 @@ export default function Architecture() {
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-              <div className="rounded-xl border border-border bg-bg-2 p-4">
+              <div className="rounded-[var(--radius)] border border-border bg-bg-2 p-4">
                 <div className="font-mono text-xs font-bold text-text mb-1">1. In-Memory Sanitization</div>
                 <p className="text-[11px] text-muted">
                   All 32 regex rules, Luhn, and Verhoeff passes run locally in Python. SQLite only stores masked text.
                 </p>
               </div>
 
-              <div className="rounded-xl border border-border bg-bg-2 p-4">
+              <div className="rounded-[var(--radius)] border border-border bg-bg-2 p-4">
                 <div className="font-mono text-xs font-bold text-text mb-1">2. LLM Triage Gate</div>
                 <p className="text-[11px] text-muted">
                   Triple-pass redaction re-scan verifies context snippet is 100% clean. If any token survives, transmission aborts.
                 </p>
               </div>
 
-              <div className="rounded-xl border border-border bg-bg-2 p-4">
+              <div className="rounded-[var(--radius)] border border-border bg-bg-2 p-4">
                 <div className="font-mono text-xs font-bold text-text mb-1">3. Air-Gapped Operation</div>
                 <p className="text-[11px] text-muted">
                   Can run 100% offline using local Ollama (<code className="text-primary">llama3.2:3b</code>) or deterministic rules without internet.
@@ -844,7 +834,7 @@ export default function Architecture() {
               focus: "Cinematic Landing with 3D hero, Threat Constellation, Threat Playground, Compliance Report PDF",
             },
           ].map((m) => (
-            <div key={m.name} className="rounded-xl border border-border bg-bg-2 p-5 backdrop-blur-md flex flex-col justify-between">
+            <div key={m.name} className="rounded-[var(--radius)] border border-border bg-bg-2 p-5  flex flex-col justify-between">
               <div>
                 <h3 className="font-display font-semibold text-text text-base">{m.name}</h3>
                 <div className="font-mono text-xs text-primary mt-0.5 mb-2.5">{m.role}</div>
@@ -860,10 +850,7 @@ export default function Architecture() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-8 px-4 text-center text-xs font-mono text-muted">
-        <div>ShadowScope Engine Architecture & Telemetry Specification v0.2.0</div>
-        <div className="mt-1">Built with precision for Hacktoberfest @ CBIT · 2026</div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

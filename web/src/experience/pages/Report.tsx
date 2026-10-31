@@ -12,13 +12,14 @@ import {
   XCircle,
   Building2,
   Calendar,
-  Lock,
   Layers,
   Bot,
   Activity,
   Cpu,
 } from "lucide-react";
 import { api } from "../../shared/api";
+import { useDocumentTitle } from "../../shared/useDocumentTitle";
+import { SiteFooter } from "../components/SiteFooter";
 import type { ComplianceReport, Finding } from "../../shared/types";
 
 export default function Report() {
@@ -26,9 +27,7 @@ export default function Report() {
   const [loading, setLoading] = useState(true);
   const [timeWindow, setTimeWindow] = useState("7d");
 
-  useEffect(() => {
-    document.title = "Compliance Audit Report — ShadowScope";
-  }, []);
+  useDocumentTitle("Compliance Report · ShadowScope");
 
   useEffect(() => {
     let mounted = true;
@@ -153,7 +152,7 @@ export default function Report() {
       </div>
 
       {/* Screen Navigation & Action Bar */}
-      <header className="sticky top-0 z-30 border-b border-border bg-bg/85 backdrop-blur-xl px-4 py-3 sm:px-8 print:hidden">
+      <header className="sticky top-0 z-30 border-b border-border bg-bg/85  px-4 py-3 sm:px-8 print:hidden">
         <div className="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Link
@@ -226,9 +225,9 @@ export default function Report() {
       {/* Main Report Container */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-8 space-y-10 print:px-0 print:py-0 print:space-y-6">
         {/* SECTION 1: EXECUTIVE COVER & SCORECARD */}
-        <section className="rounded-2xl border border-border bg-bg-2/80 p-6 sm:p-8 backdrop-blur-xl relative overflow-hidden shadow-2xl print:border print:border-gray-300 print:bg-white print:p-6 print:shadow-none">
+        <section className="rounded-[var(--radius)] border border-border bg-bg-2/80 p-6 sm:p-8  relative overflow-hidden shadow-2xl print:border print:border-gray-300 print:bg-white print:p-6 print:shadow-none">
           {/* Subtle Cyber Grid Glow */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none print:hidden" />
+          
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Narrative */}
@@ -242,10 +241,7 @@ export default function Report() {
                   <Calendar className="h-3.5 w-3.5" />
                   Window: {report.window.from.slice(0, 10)} to {report.window.to.slice(0, 10)}
                 </span>
-                <span className="flex items-center gap-1 px-2.5 py-1 rounded-md border border-amber-500/30 bg-amber-500/10 text-amber-400">
-                  <Lock className="h-3.5 w-3.5" />
-                  Confidential Audit
-                </span>
+
               </div>
 
               <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-text print:text-black">
@@ -259,37 +255,37 @@ export default function Report() {
 
               {/* Stats Strip */}
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-3">
-                <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
+                <div className="rounded-[var(--radius)] border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
                   <div className="text-[10px] font-mono uppercase text-muted">Events Analyzed</div>
                   <div className="font-mono text-base font-bold text-text mt-0.5 print:text-black">
                     {report.stats.events.toLocaleString()}
                   </div>
                 </div>
-                <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
+                <div className="rounded-[var(--radius)] border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
                   <div className="text-[10px] font-mono uppercase text-muted">AI Requests</div>
                   <div className="font-mono text-base font-bold text-text mt-0.5 print:text-black">
                     {report.stats.ai_requests.toLocaleString()}
                   </div>
                 </div>
-                <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
+                <div className="rounded-[var(--radius)] border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
                   <div className="text-[10px] font-mono uppercase text-muted">Data Egress</div>
                   <div className="font-mono text-base font-bold text-text mt-0.5 print:text-black">
                     {formatBytes(report.stats.bytes_out)}
                   </div>
                 </div>
-                <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
+                <div className="rounded-[var(--radius)] border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
                   <div className="text-[10px] font-mono uppercase text-muted">Shadow AI Tools</div>
                   <div className="font-mono text-base font-bold text-amber-400 mt-0.5 print:text-black">
                     {report.stats.shadow_tools}
                   </div>
                 </div>
-                <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
+                <div className="rounded-[var(--radius)] border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
                   <div className="text-[10px] font-mono uppercase text-muted">Open Findings</div>
                   <div className="font-mono text-base font-bold text-danger mt-0.5 print:text-black">
                     {report.stats.findings_open}
                   </div>
                 </div>
-                <div className="rounded-xl border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
+                <div className="rounded-[var(--radius)] border border-border bg-surface/50 p-3 print:border-gray-200 print:bg-gray-50">
                   <div className="text-[10px] font-mono uppercase text-muted">Critical Leaks</div>
                   <div className="font-mono text-base font-bold text-danger mt-0.5 print:text-black">
                     {report.stats.critical}
@@ -369,7 +365,7 @@ export default function Report() {
               return (
                 <div
                   key={fw.id}
-                  className="rounded-xl border border-border bg-bg-2 p-5 backdrop-blur-md flex flex-col justify-between shadow-lg print:border-gray-300 print:bg-white print:shadow-none print:break-inside-avoid"
+                  className="rounded-[var(--radius)] border border-border bg-bg-2 p-5  flex flex-col justify-between shadow-lg print:border-gray-300 print:bg-white print:shadow-none print:break-inside-avoid"
                 >
                   <div>
                     {/* Header */}
@@ -377,7 +373,7 @@ export default function Report() {
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-mono text-xs font-bold text-primary print:text-black">{fw.id}</span>
-                          <span className="text-[10px] font-mono text-muted">Mandate</span>
+                          
                         </div>
                         <h4 className="font-display font-semibold text-text text-sm mt-0.5 print:text-black">
                           {fw.name}
@@ -470,7 +466,7 @@ export default function Report() {
             </span>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-border bg-bg-2 shadow-xl print:border-gray-300 print:bg-white print:shadow-none">
+          <div className="overflow-x-auto rounded-[var(--radius)] border border-border bg-bg-2 shadow-xl print:border-gray-300 print:bg-white print:shadow-none">
             <table className="w-full text-left border-collapse text-xs font-mono">
               <thead>
                 <tr className="border-b border-border bg-surface/80 text-muted uppercase text-[10px] tracking-wider print:border-gray-300 print:bg-gray-100 print:text-black">
@@ -562,7 +558,7 @@ export default function Report() {
               </span>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-border bg-bg-2 p-1 shadow-lg print:border-gray-300 print:bg-white print:shadow-none">
+            <div className="overflow-x-auto rounded-[var(--radius)] border border-border bg-bg-2 p-1 shadow-lg print:border-gray-300 print:bg-white print:shadow-none">
               <table className="w-full text-left text-xs font-mono">
                 <thead>
                   <tr className="border-b border-border bg-surface/50 text-[10px] uppercase text-muted print:border-gray-200 print:text-black">
@@ -621,7 +617,7 @@ export default function Report() {
               </span>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-border bg-bg-2 p-1 shadow-lg print:border-gray-300 print:bg-white print:shadow-none">
+            <div className="overflow-x-auto rounded-[var(--radius)] border border-border bg-bg-2 p-1 shadow-lg print:border-gray-300 print:bg-white print:shadow-none">
               <table className="w-full text-left text-xs font-mono">
                 <thead>
                   <tr className="border-b border-border bg-surface/50 text-[10px] uppercase text-muted print:border-gray-200 print:text-black">
@@ -714,7 +710,7 @@ export default function Report() {
             {report.recommendations.map((rec, index) => (
               <div
                 key={index}
-                className={`rounded-xl border p-5 backdrop-blur-md shadow-lg transition-all ${
+                className={`rounded-[var(--radius)] border p-5  shadow-lg transition-all ${
                   rec.priority === "P0"
                     ? "border-danger/40 bg-danger/5 print:border-red-400 print:bg-white"
                     : rec.priority === "P1"
@@ -761,6 +757,9 @@ export default function Report() {
           </div>
         </section>
       </main>
+      <div className="print:hidden">
+        <SiteFooter />
+      </div>
     </div>
   );
 }

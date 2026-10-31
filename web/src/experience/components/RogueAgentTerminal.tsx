@@ -1,9 +1,8 @@
 /**
- * RogueAgentDemo — horizontal pinned scroll on desktop, stacked on mobile.
- * Shows a rogue AI agent executing 4 dangerous attack steps with ShadowScope interception.
+ * RogueAgentDemo — interactive tabbed terminal with auto-advance and step controls.
+ * Eliminates scroll-jacking and viewport-width overflows for a clean, stable layout.
  */
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { useState, useEffect } from "react";
 import {
   Terminal,
   AlertOctagon,
@@ -141,81 +140,69 @@ const ATTACK_STAGES: AttackStage[] = [
 
 const SEVERITY_THEME = {
   critical: {
-    border: "rgba(255,59,92,0.4)",
-    glow: "rgba(255,59,92,0.18)",
-    badgeBg: "rgba(255,59,92,0.15)",
-    badgeText: "#FF3B5C",
+    border: "rgba(229, 72, 77, 0.4)",
+    badgeBg: "rgba(229, 72, 77, 0.12)",
+    badgeText: "#E5484D",
     icon: ShieldAlert,
   },
   high: {
-    border: "rgba(255,138,61,0.4)",
-    glow: "rgba(255,138,61,0.18)",
-    badgeBg: "rgba(255,138,61,0.15)",
-    badgeText: "#FF8A3D",
+    border: "rgba(232, 131, 58, 0.4)",
+    badgeBg: "rgba(232, 131, 58, 0.12)",
+    badgeText: "#E8833A",
     icon: AlertOctagon,
   },
   medium: {
-    border: "rgba(250,204,21,0.4)",
-    glow: "rgba(250,204,21,0.15)",
-    badgeBg: "rgba(250,204,21,0.15)",
-    badgeText: "#FACC15",
+    border: "rgba(217, 180, 74, 0.4)",
+    badgeBg: "rgba(217, 180, 74, 0.12)",
+    badgeText: "#D9B44A",
     icon: FileWarning,
   },
 };
 
-export function RogueAgentTerminal({ isMobile }: { isMobile: boolean }) {
-  const containerRef = useRef<HTMLDivElement>(null);
+export function RogueAgentTerminal({ isMobile: _isMobile }: { isMobile?: boolean } = {}) {
+  const [activeStageIndex, setActiveStageIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
-  // Desktop horizontal scroll mapping
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
+  // Auto-advance stages every 3.5s unless user paused/clicked
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(() => {
+      setActiveStageIndex((prev) => (prev + 1) % ATTACK_STAGES.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, [isPaused]);
 
-  // Slide horizontally by -75% so 4 panels slide across
-  const xTranslate = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
+  const activeStage = ATTACK_STAGES[activeStageIndex];
 
-  if (isMobile) {
-    // Mobile: stacked vertically without sticky pin
-    return (
-      <div className="flex flex-col gap-6 w-full">
-        {ATTACK_STAGES.map((stage) => (
-          <AttackStageCard key={stage.id} stage={stage} />
-        ))}
-      </div>
-    );
-  }
-
-  // Desktop: pinned horizontal scroll
   return (
-    <div ref={containerRef} className="relative h-[280vh] w-full">
-      <div className="sticky top-20 h-[80vh] flex flex-col justify-center overflow-hidden">
-        {/* Stage progress header */}
-        <div className="flex items-center justify-between mb-4 px-2">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-critical animate-ping" />
-            <span className="text-xs font-mono uppercase tracking-wider text-critical">
-              Live Agent Exfiltration Trace
-            </span>
-          </div>
-          <span className="text-xs font-mono text-muted">
-            Scroll down to advance attack timeline →
-          </span>
-        </div>
+    <div className="w-full flex flex-col gap-4">
+      {/* Stage Selector Tabs */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+        {ATTACK_STAGES.map((stage, idx) => {
+          const isActive = idx === activeStageIndex;
+          return (
+            <button
+              key={stage.id}
+              onClick={() => {
+                setActiveStageIndex(idx);
+                setIsPaused(true);
+              }}
+              className={`px-3 py-1.5 rounded-[var(--radius-sm)] border text-xs font-mono whitespace-nowrap transition-colors cursor-pointer ${
+                isActive
+                  ? "bg-surface border-border-strong text-text font-semibold"
+                  : "bg-bg-2 border-border text-muted hover:text-text hover:border-border-strong"
+              }`}
+            >
+              <span className={isActive ? "text-primary mr-1.5" : "text-faint mr-1.5"}>0{idx + 1}</span>
+              {stage.title}
+            </button>
+          );
+        })}
+      </div>
 
-        {/* Horizontal track */}
-        <div className="relative w-full overflow-hidden rounded-[var(--radius)]">
-          <motion.div
-            style={{ x: xTranslate }}
-            className="flex gap-6 w-[400%] pr-12"
-          >
-            {ATTACK_STAGES.map((stage) => (
-              <div key={stage.id} className="w-[100vw] max-w-[920px] shrink-0">
-                <AttackStageCard stage={stage} />
-              </div>
-            ))}
-          </motion.div>
-        </div>
+      {/* Main Terminal Stage Display */}
+      <div className="w-full">
+        <AttackStageCard stage={activeStage} />
       </div>
     </div>
   );
@@ -227,25 +214,16 @@ function AttackStageCard({ stage }: { stage: AttackStage }) {
 
   return (
     <div
-      className="rounded-[var(--radius)] overflow-hidden border backdrop-blur-xl flex flex-col gap-0 transition-all duration-300"
-      style={{
-        background: "rgba(10,13,22,0.92)",
-        borderColor: theme.border,
-        boxShadow: `0 0 32px ${theme.glow}`,
-      }}
+      className="rounded-[var(--radius)] overflow-hidden border border-border bg-surface flex flex-col gap-0 transition-colors"
     >
       {/* Terminal Title Bar */}
       <div
-        className="flex items-center justify-between px-4 py-3 border-b"
-        style={{
-          background: "rgba(17,22,39,0.8)",
-          borderColor: "rgba(148,163,255,0.1)",
-        }}
+        className="flex items-center justify-between px-4 py-3 border-b border-border bg-bg-2"
       >
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-critical opacity-80" />
-          <div className="w-3 h-3 rounded-full bg-medium opacity-80" />
-          <div className="w-3 h-3 rounded-full bg-low opacity-80" />
+          <div className="w-2.5 h-2.5 rounded-full bg-critical opacity-80" />
+          <div className="w-2.5 h-2.5 rounded-full bg-medium opacity-80" />
+          <div className="w-2.5 h-2.5 rounded-full bg-low opacity-80" />
           <span className="ml-3 font-mono text-xs text-muted flex items-center gap-1.5">
             <Terminal className="w-3.5 h-3.5 text-primary" />
             agent-session ~ {stage.step}
@@ -253,11 +231,11 @@ function AttackStageCard({ stage }: { stage: AttackStage }) {
         </div>
         <div className="flex items-center gap-2">
           <span
-            className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase"
+            className="text-[10px] font-mono px-2 py-0.5 rounded-[var(--radius-sm)] font-medium uppercase border"
             style={{
               background: theme.badgeBg,
               color: theme.badgeText,
-              border: `1px solid ${theme.border}`,
+              borderColor: theme.border,
             }}
           >
             {stage.alert.badge}
@@ -266,14 +244,14 @@ function AttackStageCard({ stage }: { stage: AttackStage }) {
       </div>
 
       {/* Terminal Execution Window */}
-      <div className="p-5 font-mono text-xs sm:text-sm bg-black/40">
-        <div className="flex items-center gap-2 text-primary font-bold mb-2">
-          <span className="text-low">crewai-worker@host:~$</span>
-          <span className="text-text">{stage.command}</span>
+      <div className="p-4 sm:p-5 font-mono text-xs sm:text-sm bg-black/60">
+        <div className="flex items-center gap-2 text-text font-medium mb-2 break-all">
+          <span className="text-low shrink-0">crewai-worker@host:~$</span>
+          <span>{stage.command}</span>
         </div>
-        <div className="pl-4 border-l-2 border-primary/20 space-y-1 text-muted text-xs font-mono my-3">
+        <div className="pl-3 border-l border-border space-y-1 text-muted text-xs font-mono my-3">
           {stage.output.map((line, idx) => (
-            <div key={idx} className="leading-relaxed">
+            <div key={idx} className="leading-relaxed break-all">
               {line}
             </div>
           ))}
@@ -282,54 +260,54 @@ function AttackStageCard({ stage }: { stage: AttackStage }) {
 
       {/* ShadowScope Intercept Notification */}
       <div
-        className="px-5 py-4 border-t flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-        style={{
-          background: "rgba(17,22,39,0.5)",
-          borderColor: "rgba(148,163,255,0.1)",
-        }}
+        className="px-4 py-3.5 border-t border-border bg-bg-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
       >
         <div className="flex items-start gap-3">
           <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-            style={{ background: theme.badgeBg, color: theme.badgeText }}
+            className="w-7 h-7 rounded-[var(--radius-sm)] flex items-center justify-center shrink-0 border"
+            style={{
+              background: theme.badgeBg,
+              color: theme.badgeText,
+              borderColor: theme.border,
+            }}
           >
-            <AlertIcon className="w-4 h-4" />
+            <AlertIcon className="w-3.5 h-3.5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h4 className="font-display font-bold text-sm text-text">
+              <h4 className="font-display font-medium text-sm text-text">
                 {stage.alert.title}
               </h4>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface border border-border text-muted">
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-[var(--radius-sm)] bg-surface border border-border text-muted">
                 Rule #{stage.id.replace("stage-", "")}
               </span>
             </div>
-            <p className="text-xs text-muted mt-0.5">{stage.alert.detail}</p>
+            <p className="text-xs text-muted mt-0.5 font-sans">{stage.alert.detail}</p>
           </div>
         </div>
 
         {/* Telemetry pill */}
-        <div className="flex items-center gap-3 shrink-0 text-xs font-mono">
+        <div className="flex items-center gap-3 shrink-0 text-xs font-mono w-full sm:w-auto justify-between sm:justify-end">
           <div className="text-right hidden sm:block">
             <div className="text-muted text-[11px]">Process: {stage.telemetry.process}</div>
             <div className="text-faint text-[10px]">PID: {stage.telemetry.pid} · {stage.telemetry.dest}</div>
           </div>
           <div
-            className="px-3 py-1.5 rounded-lg border flex items-center gap-1.5 font-bold"
+            className="px-2.5 py-1 rounded-[var(--radius-sm)] border flex items-center gap-1.5 font-semibold text-xs"
             style={{
-              background: stage.telemetry.action === "blocked" ? "rgba(255,59,92,0.15)" : "rgba(255,138,61,0.15)",
-              borderColor: stage.telemetry.action === "blocked" ? "#FF3B5C" : "#FF8A3D",
-              color: stage.telemetry.action === "blocked" ? "#FF3B5C" : "#FF8A3D",
+              background: stage.telemetry.action === "blocked" ? "rgba(229, 72, 77, 0.12)" : "rgba(232, 131, 58, 0.12)",
+              borderColor: stage.telemetry.action === "blocked" ? "rgba(229, 72, 77, 0.3)" : "rgba(232, 131, 58, 0.3)",
+              color: stage.telemetry.action === "blocked" ? "#E5484D" : "#E8833A",
             }}
           >
             {stage.telemetry.action === "blocked" ? (
               <>
-                <KeyRound className="w-3.5 h-3.5" />
+                <KeyRound className="w-3 h-3" />
                 DROPPED
               </>
             ) : (
               <>
-                <CheckCircle2 className="w-3.5 h-3.5" />
+                <CheckCircle2 className="w-3 h-3" />
                 FLAGGED
               </>
             )}
@@ -339,4 +317,3 @@ function AttackStageCard({ stage }: { stage: AttackStage }) {
     </div>
   );
 }
-

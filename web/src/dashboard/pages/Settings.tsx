@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "../../shared/useDocumentTitle";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -65,6 +66,8 @@ const COLLECTOR_DESCRIPTIONS: Record<string, { label: string; desc: string; icon
 };
 
 export default function Settings() {
+  useDocumentTitle("Settings · ShadowScope");
+
   const { engineStatus, setEngineStatus, demoModeOverride, setDemoModeOverride } = useAppStore();
 
   const [apiBaseInput, setApiBaseInput] = useState(API_BASE);
@@ -196,10 +199,10 @@ export default function Settings() {
         <div className="lg:col-span-2 space-y-6">
           {/* Engine Health Hero Card */}
           <GlassCard className="p-6 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-800">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0">
-                  <Server className="w-6 h-6 text-cyan-400" />
+                <div className="w-12 h-12 rounded-[var(--radius)] bg-primary/10 border border-primary/30 flex items-center justify-center shrink-0">
+                  <Server className="w-6 h-6 text-primary" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -224,7 +227,7 @@ export default function Settings() {
 
               <div className="text-right sm:text-right">
                 <div className="text-[11px] font-mono text-neutral-400 uppercase">Engine Uptime</div>
-                <div className="text-base font-bold font-mono text-cyan-400">
+                <div className="text-base font-bold font-mono text-primary">
                   {health ? formatUptime(health.uptime_s) : "0h 0m 0s"}
                 </div>
               </div>
@@ -234,7 +237,7 @@ export default function Settings() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-semibold text-neutral-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <Activity className="w-3.5 h-3.5 text-cyan-400" />
+                  <Activity className="w-3.5 h-3.5 text-primary" />
                   Active Inspection Collectors ({Object.values(health?.collectors ?? {}).filter((c) => c.running).length}/{Object.keys(health?.collectors ?? {}).length || 6} Running)
                 </h3>
                 <span className={`text-[11px] font-mono ${Object.values(health?.collectors ?? {}).every((c) => c.running) ? "text-emerald-400" : "text-amber-400"}`}>
@@ -260,11 +263,11 @@ export default function Settings() {
                     return (
                       <div
                         key={key}
-                        className="p-3.5 rounded-xl bg-neutral-900/60 border border-neutral-800/80 hover:border-neutral-700 transition-all flex flex-col justify-between space-y-2"
+                        className="p-3.5 rounded-[var(--radius)] bg-surface border border-border hover:border-border transition-all flex flex-col justify-between space-y-2"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <div className="p-1.5 rounded-lg bg-neutral-800 text-cyan-400 shrink-0">
+                            <div className="p-1.5 rounded-lg bg-neutral-800 text-primary shrink-0">
                               <Icon className="w-3.5 h-3.5" />
                             </div>
                             <span className="text-xs font-semibold text-white">
@@ -296,7 +299,7 @@ export default function Settings() {
           {/* Engine Connection & API Base Override */}
           <GlassCard className="p-6 space-y-5">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 border border-cyan-500/20 flex items-center justify-center text-primary">
                 <Globe className="w-4 h-4" />
               </div>
               <div>
@@ -319,7 +322,7 @@ export default function Settings() {
                     type="text"
                     value={apiBaseInput}
                     onChange={(e) => setApiBaseInput(e.target.value)}
-                    className="flex-1 px-3 py-1.5 rounded-lg bg-neutral-900/80 border border-neutral-700/60 text-xs font-mono text-white placeholder-neutral-500 focus:outline-none focus:border-cyan-500/50"
+                    className="flex-1 px-3 py-1.5 rounded-lg bg-surface border border-border text-xs font-mono text-white placeholder-neutral-500 focus:outline-none focus:border-cyan-500/50"
                   />
                   <Button
                     variant="outline"
@@ -336,7 +339,7 @@ export default function Settings() {
               </div>
 
               {/* Demo Mode Toggle Switch */}
-              <div className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-800 flex items-center justify-between gap-4">
+              <div className="p-4 rounded-[var(--radius)] bg-surface border border-border flex items-center justify-between gap-4">
                 <div className="space-y-0.5">
                   <div className="text-xs font-semibold text-white flex items-center gap-2">
                     <span>Demo Mode Simulation Override</span>
@@ -382,7 +385,7 @@ export default function Settings() {
             </div>
 
             {/* Reduce Motion */}
-            <div className="p-3 rounded-xl bg-neutral-900/60 border border-neutral-800 flex items-center justify-between">
+            <div className="p-3 rounded-[var(--radius)] bg-surface border border-border flex items-center justify-between">
               <div>
                 <div className="text-xs font-semibold text-white">Reduce Motion</div>
                 <div className="text-[11px] text-neutral-400">Disable complex spring animations</div>
@@ -391,16 +394,16 @@ export default function Settings() {
                 type="checkbox"
                 checked={reduceMotion}
                 onChange={(e) => setReduceMotion(e.target.checked)}
-                className="w-4 h-4 rounded border-neutral-700 bg-neutral-900 accent-violet-500 cursor-pointer"
+                className="w-4 h-4 rounded border-border bg-surface accent-primary cursor-pointer"
               />
             </div>
 
             {/* Browser Notifications */}
-            <div className="p-3 rounded-xl bg-neutral-900/60 border border-neutral-800 space-y-2.5">
+            <div className="p-3 rounded-[var(--radius)] bg-surface border border-border space-y-2.5">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-xs font-semibold text-white flex items-center gap-1.5">
-                    <Bell className="w-3.5 h-3.5 text-cyan-400" />
+                    <Bell className="w-3.5 h-3.5 text-primary" />
                     Critical Incident Alerts
                   </div>
                   <div className="text-[11px] text-neutral-400">
@@ -453,7 +456,7 @@ export default function Settings() {
               <strong className="text-white">All analysis executes locally on this host machine.</strong> Raw API keys, private passwords, and sensitive customer PII are redacted on-device before storage and before any LLM triage evaluation.
             </p>
 
-            <ul className="text-[11px] text-neutral-400 space-y-2 pt-1 border-t border-neutral-800/80">
+            <ul className="text-[11px] text-neutral-400 space-y-2 pt-1 border-t border-border">
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
                 <span>
@@ -474,15 +477,15 @@ export default function Settings() {
               </li>
             </ul>
 
-            <div className="pt-2 border-t border-neutral-800/80">
+            <div className="pt-2 border-t border-border">
               <div className="text-[10px] text-neutral-400 uppercase tracking-wider mb-1.5">
                 Compliance Standards Cross-Reference:
               </div>
               <div className="flex flex-wrap gap-1.5 font-mono text-[10px]">
-                <span className="px-1.5 py-0.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-300">DPDP Act 2023 §8</span>
-                <span className="px-1.5 py-0.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-300">GDPR Art. 25</span>
-                <span className="px-1.5 py-0.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-300">SOC2 Type II</span>
-                <span className="px-1.5 py-0.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-300">PCI-DSS v4.0</span>
+                <span className="px-1.5 py-0.5 rounded bg-surface border border-border text-neutral-300">DPDP Act 2023 §8</span>
+                <span className="px-1.5 py-0.5 rounded bg-surface border border-border text-neutral-300">GDPR Art. 25</span>
+                <span className="px-1.5 py-0.5 rounded bg-surface border border-border text-neutral-300">SOC2 Type II</span>
+                <span className="px-1.5 py-0.5 rounded bg-surface border border-border text-neutral-300">PCI-DSS v4.0</span>
               </div>
             </div>
           </GlassCard>

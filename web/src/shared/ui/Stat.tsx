@@ -35,7 +35,7 @@ export function Stat({
   icon: Icon,
   trend,
   sparkline,
-  sparklineColor = "#22d3ee",
+  sparklineColor = "#F2C94C",
   countUp = true,
   formatter,
   variant = "default",
@@ -45,10 +45,10 @@ export function Stat({
 
   const iconVariants = {
     default: "bg-surface-solid text-muted border border-border",
-    cyan: "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-[0_0_12px_rgba(34,211,238,0.2)]",
-    violet: "bg-violet-500/10 text-violet-400 border border-violet-500/20 shadow-[0_0_12px_rgba(139,92,246,0.2)]",
-    critical: "bg-red-500/15 text-[#ff3b5c] border border-red-500/30 shadow-[0_0_16px_rgba(255,59,92,0.25)]",
-    warning: "bg-orange-500/15 text-orange-400 border border-orange-500/30",
+    cyan: "bg-primary/10 text-primary border border-primary/25",
+    violet: "bg-surface-solid text-text border border-border",
+    critical: "bg-critical/10 text-critical border border-critical/30",
+    warning: "bg-high/10 text-high border border-high/30",
   };
 
   const trendPositive = trend?.direction === "up" ? trend.isUpGood !== false : trend?.isUpGood === false;
@@ -57,15 +57,15 @@ export function Stat({
     <GlassCard
       variant="default"
       className={cn(
-        "p-4 flex flex-col justify-between transition-all duration-200 hover:border-white/20",
-        variant === "critical" && "border-red-500/25 bg-red-950/10",
+        "p-4 flex flex-col justify-between transition-colors duration-150",
+        variant === "critical" && "border-critical/30",
         className,
       )}
     >
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs font-medium text-muted uppercase tracking-wider line-clamp-1">{label}</span>
         {Icon && (
-          <div className={cn("p-1.5 rounded-lg shrink-0", iconVariants[variant])}>
+          <div className={cn("p-1.5 rounded-[var(--radius-sm)] shrink-0", iconVariants[variant])}>
             <Icon className="w-4 h-4" />
           </div>
         )}
@@ -86,12 +86,12 @@ export function Stat({
       </div>
 
       <div className="flex items-center justify-between text-xs text-muted">
-        {sublabel && <span className="line-clamp-1">{sublabel}</span>}
+        {sublabel && <span className="line-clamp-1 text-faint">{sublabel}</span>}
         {trend && (
           <span
             className={cn(
               "inline-flex items-center gap-0.5 font-mono text-[11px] font-medium shrink-0 ml-auto",
-              trendPositive ? "text-emerald-400" : "text-rose-400",
+              trendPositive ? "text-low" : "text-critical",
             )}
           >
             {trend.direction === "up" ? (
@@ -106,4 +106,3 @@ export function Stat({
     </GlassCard>
   );
 }
-

@@ -26,11 +26,11 @@ export default function App() {
         closeButton
         toastOptions={{
           style: {
-            background: "#090d18",
-            border: "1px solid rgba(148, 163, 255, 0.15)",
-            color: "#e8ecf5",
-            backdropFilter: "blur(16px)",
-            fontFamily: "Inter, sans-serif",
+            background: "#111111",
+            border: "1px solid rgba(255, 255, 255, 0.16)",
+            color: "#f5f2ec",
+            fontFamily: "var(--font-sans), system-ui, sans-serif",
+            borderRadius: "var(--radius)",
           },
         }}
       />

@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "../../shared/useDocumentTitle";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -40,7 +41,7 @@ const FRAMEWORK_META: Record<string, { label: string; color: string }> = {
   langchain: { label: "LangChain", color: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10" },
   autogpt: { label: "AutoGPT", color: "text-amber-400 border-amber-500/30 bg-amber-500/10" },
   crewai: { label: "CrewAI", color: "text-violet-400 border-violet-500/30 bg-violet-500/10" },
-  cursor: { label: "Cursor Agent", color: "text-cyan-400 border-cyan-500/30 bg-cyan-500/10" },
+  cursor: { label: "Cursor Agent", color: "text-primary border-primary/30 bg-primary/10" },
   claude_code: { label: "Claude Code", color: "text-orange-400 border-orange-500/30 bg-orange-500/10" },
   aider: { label: "Aider", color: "text-blue-400 border-blue-500/30 bg-blue-500/10" },
   open_interpreter: { label: "Open Interpreter", color: "text-red-400 border-red-500/30 bg-red-500/10" },
@@ -48,6 +49,8 @@ const FRAMEWORK_META: Record<string, { label: string; color: string }> = {
 };
 
 export default function Agents() {
+  useDocumentTitle("Agents · ShadowScope");
+
   const { data, isLoading } = useQuery({
     queryKey: ["agents"],
     queryFn: () => api.getAgents(),
@@ -102,10 +105,10 @@ export default function Agents() {
   if (isLoading) {
     return (
       <div className="space-y-6 max-w-7xl mx-auto">
-        <Skeleton className="h-14 w-72 rounded-xl" />
+        <Skeleton className="h-14 w-72 rounded-[var(--radius)]" />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <Skeleton className="h-96 lg:col-span-4 rounded-xl" />
-          <Skeleton className="h-96 lg:col-span-8 rounded-xl" />
+          <Skeleton className="h-96 lg:col-span-4 rounded-[var(--radius)]" />
+          <Skeleton className="h-96 lg:col-span-8 rounded-[var(--radius)]" />
         </div>
       </div>
     );
@@ -117,7 +120,7 @@ export default function Agents() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-violet-500/10 border border-violet-500/30 text-violet-400">
+            <div className="p-2 rounded-[var(--radius)] bg-violet-500/10 border border-violet-500/30 text-violet-400">
               <Bot className="w-5 h-5 animate-pulse" />
             </div>
             <div>
@@ -167,7 +170,7 @@ export default function Agents() {
                   onClick={() => setSelectedAgentId(agent.id)}
                   className={`p-3.5 flex flex-col gap-2 transition-all cursor-pointer ${
                     selected
-                      ? "border-cyan-400/50 bg-cyan-950/20 shadow-[0_0_20px_rgba(34,211,238,0.15)]"
+                      ? "border-primary/50 bg-surface "
                       : "hover:border-white/20"
                   } ${blocked ? "opacity-60 grayscale-[40%]" : ""}`}
                 >
@@ -253,7 +256,7 @@ export default function Agents() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                    <span className="font-mono text-xs text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/25">
+                    <span className="font-mono text-xs text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/30">
                       {activeAgent.id}
                     </span>
                     <span
@@ -301,7 +304,7 @@ export default function Agents() {
 
               {/* Autonomy vs Risk Score Dial strip */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-white/[0.08] font-mono text-xs">
-                <div className="p-3 rounded-xl border border-white/[0.06] bg-[#0c101d]">
+                <div className="p-3 rounded-[var(--radius)] border border-white/[0.06] bg-[#0c101d]">
                   <span className="text-[10px] uppercase text-muted block mb-1">Autonomy Score</span>
                   <div className="flex items-baseline gap-2">
                     <span className="text-2xl font-bold text-red-400">{activeAgent.autonomy_score}</span>
@@ -310,7 +313,7 @@ export default function Agents() {
                   <span className="text-[10px] text-muted mt-1 block">Machine-speed execution</span>
                 </div>
 
-                <div className="p-3 rounded-xl border border-white/[0.06] bg-[#0c101d]">
+                <div className="p-3 rounded-[var(--radius)] border border-white/[0.06] bg-[#0c101d]">
                   <span className="text-[10px] uppercase text-muted block mb-1">Risk Score</span>
                   <div className="flex items-baseline gap-2">
                     <span className="text-2xl font-bold text-[#ff3b5c]">{activeAgent.risk_score}</span>
@@ -319,10 +322,10 @@ export default function Agents() {
                   <span className="text-[10px] text-muted mt-1 block">Exfiltration hazard</span>
                 </div>
 
-                <div className="p-3 rounded-xl border border-white/[0.06] bg-[#0c101d]">
+                <div className="p-3 rounded-[var(--radius)] border border-white/[0.06] bg-[#0c101d]">
                   <span className="text-[10px] uppercase text-muted block mb-1">Inference Requests</span>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold text-cyan-400">{activeAgent.requests}</span>
+                    <span className="text-2xl font-bold text-primary">{activeAgent.requests}</span>
                     <span className="text-muted/60">total</span>
                   </div>
                   <span className="text-[10px] text-muted mt-1 block">Model interaction loops</span>
@@ -336,7 +339,7 @@ export default function Agents() {
             <GlassCard variant="default" className="p-5 space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-white/[0.08]">
                 <div className="flex items-center gap-2">
-                  <Sliders className="w-4 h-4 text-cyan-400" />
+                  <Sliders className="w-4 h-4 text-primary" />
                   <h3 className="font-display text-sm font-bold text-text">
                     Agent Capability & Permission Matrix
                   </h3>
@@ -396,23 +399,23 @@ export default function Agents() {
                     <div
                       key={key}
                       onClick={() => handleTogglePermission(key)}
-                      className={`p-3 rounded-xl border transition-all cursor-pointer select-none flex flex-col justify-between ${
+                      className={`p-3 rounded-[var(--radius)] border transition-all cursor-pointer select-none flex flex-col justify-between ${
                         enabled
                           ? danger
-                            ? "bg-red-950/25 border-red-500/40 shadow-[0_0_15px_rgba(255,59,92,0.15)]"
-                            : "bg-cyan-950/20 border-cyan-500/30"
+                            ? "bg-red-950/25 border-red-500/40 "
+                            : "bg-surface border-primary/30"
                           : "bg-surface-solid/60 border-white/[0.06] opacity-60"
                       }`}
                     >
                       <div className="flex items-center justify-between mb-2">
                         <Icon
                           className={`w-4 h-4 ${
-                            enabled ? (danger ? "text-red-400" : "text-cyan-400") : "text-muted"
+                            enabled ? (danger ? "text-red-400" : "text-primary") : "text-muted"
                           }`}
                         />
                         <span
                           className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[9px] font-bold ${
-                            enabled ? (danger ? "bg-red-500 text-white" : "bg-cyan-400 text-black") : "bg-white/10 text-muted"
+                            enabled ? (danger ? "bg-red-500 text-white" : "bg-primary text-black") : "bg-white/10 text-muted"
                           }`}
                         >
                           {enabled ? <Check className="w-2.5 h-2.5" /> : <X className="w-2.5 h-2.5" />}
@@ -435,7 +438,7 @@ export default function Agents() {
               <GlassCard variant="default" className="p-5 space-y-3">
                 <div className="flex items-center justify-between pb-2 border-b border-white/[0.08]">
                   <h3 className="font-display text-sm font-bold text-text flex items-center gap-2">
-                    <Terminal className="w-4 h-4 text-cyan-400" />
+                    <Terminal className="w-4 h-4 text-primary" />
                     Tools-Used Breakdown
                   </h3>
                   <span className="font-mono text-[11px] text-muted">
@@ -460,8 +463,8 @@ export default function Agents() {
                           <div
                             className={`h-full rounded-full ${
                               tool.severity === "critical"
-                                ? "bg-red-500 shadow-[0_0_8px_rgba(255,59,92,0.8)]"
-                                : "bg-cyan-400"
+                                ? "bg-red-500 "
+                                : "bg-primary"
                             }`}
                             style={{ width: `${pct}%` }}
                           />
@@ -493,19 +496,19 @@ export default function Agents() {
                     <div key={idx} className="relative group">
                       {/* Timeline Node Dot */}
                       <div
-                        className={`absolute -left-6 top-1.5 w-2.5 h-2.5 rounded-full border-2 border-[#05060A] ${
+                        className={`absolute -left-6 top-1.5 w-2.5 h-2.5 rounded-full border-2 border-[#000000] ${
                           act.severity === "critical"
                             ? "bg-red-500 ring-4 ring-red-500/20"
                             : act.severity === "high"
                             ? "bg-orange-400"
-                            : "bg-cyan-400"
+                            : "bg-primary"
                         }`}
                       />
 
-                      <div className="rounded-xl border border-white/[0.08] bg-surface-solid/70 p-3 space-y-2">
+                      <div className="rounded-[var(--radius)] border border-white/[0.08] bg-surface-solid/70 p-3 space-y-2">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-bold text-cyan-300 uppercase">
+                            <span className="font-mono text-xs font-bold text-primary uppercase">
                               {act.kind}
                             </span>
                             <SeverityPill severity={act.severity as Severity} size="xs" />
@@ -522,7 +525,7 @@ export default function Agents() {
                         </div>
 
                         {/* Executed Command in Mono */}
-                        <pre className="p-2 rounded bg-[#060812] border border-white/5 font-mono text-xs text-text overflow-x-auto whitespace-pre-wrap">
+                        <pre className="p-2 rounded bg-[var(--surface)] border border-white/5 font-mono text-xs text-text overflow-x-auto whitespace-pre-wrap">
                           {act.detail}
                         </pre>
                       </div>

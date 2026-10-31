@@ -78,12 +78,12 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/75 backdrop-blur-md transition-opacity"
+        className="fixed inset-0 bg-black/75  transition-opacity"
         onClick={() => onOpenChange(false)}
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-white/15 bg-[#090d18]/95 p-0 shadow-[0_0_50px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
+      <div className="relative w-full max-w-2xl overflow-hidden rounded-[var(--radius)] border border-border-strong bg-surface p-0 shadow-[0_0_50px_rgba(0,0,0,0.8)] ">
         <Command
           className="flex flex-col w-full"
           filter={(value, search) => {
@@ -92,7 +92,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
           }}
         >
           {/* Header search input */}
-          <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3.5">
+          <div className="flex items-center gap-3 border-b border-border px-4 py-3.5">
             <Search className="w-5 h-5 text-muted shrink-0" />
             <Command.Input
               value={search}
@@ -101,7 +101,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               className="w-full bg-transparent text-sm text-text placeholder:text-muted focus:outline-none font-sans"
               autoFocus
             />
-            <kbd className="hidden sm:inline-flex items-center gap-1 rounded border border-white/10 bg-white/5 px-2 py-0.5 text-[11px] font-mono text-muted">
+            <kbd className="hidden sm:inline-flex items-center gap-1 rounded border border-border bg-white/5 px-2 py-0.5 text-[11px] font-mono text-muted">
               ESC
             </kbd>
           </div>
@@ -129,7 +129,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                 onSelect={() => nav("/app/live")}
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-text cursor-pointer hover:bg-white/10 transition-colors aria-selected:bg-primary/15 aria-selected:text-primary"
               >
-                <Radio className="w-4 h-4 text-cyan-400" />
+                <Radio className="w-4 h-4 text-primary" />
                 <span>Live Traffic Stream</span>
                 <span className="ml-auto font-mono text-xs text-muted">/app/live</span>
               </Command.Item>
@@ -244,7 +244,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                 onSelect={handleToggleDemoMode}
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-text cursor-pointer hover:bg-white/10 transition-colors aria-selected:bg-cyan-500/20 aria-selected:text-cyan-300"
               >
-                <Eye className="w-4 h-4 text-cyan-400" />
+                <Eye className="w-4 h-4 text-primary" />
                 <span>Toggle Demo Mode</span>
                 <span className="ml-auto font-mono text-xs text-muted">
                   {demoModeOverride === true ? "Currently Demo" : "Auto / Live"}
@@ -276,7 +276,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                 onSelect={() => nav("/")}
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-text cursor-pointer hover:bg-white/10 transition-colors aria-selected:bg-white/10"
               >
-                <Sparkles className="w-4 h-4 text-cyan-400" />
+                <Sparkles className="w-4 h-4 text-primary" />
                 <span>Product Landing Page</span>
                 <span className="ml-auto font-mono text-xs text-muted">/</span>
               </Command.Item>
@@ -304,7 +304,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
           </Command.List>
 
           {/* Footer keyboard hint */}
-          <div className="flex items-center justify-between border-t border-white/10 px-4 py-2.5 text-xs text-muted">
+          <div className="flex items-center justify-between border-t border-border px-4 py-2.5 text-xs text-muted">
             <div className="flex items-center gap-3 font-mono text-[11px]">
               <span>↑↓ Navigate</span>
               <span>↵ Select</span>

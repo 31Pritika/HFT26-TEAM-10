@@ -3,7 +3,7 @@ import type {
   Observation, Overview, Page, Policy, Provider, ScanResult, Scenario, TriageResult,
 } from "./types";
 
-export const API_BASE: string = import.meta.env.VITE_API_BASE ?? "http://localhost:8787/api";
+export const API_BASE: string = import.meta.env.VITE_API_BASE ?? "http://localhost:8788/api";
 const DEMO_FORCED = import.meta.env.VITE_DEMO_MODE === "true";
 const PROBE_TIMEOUT_MS = 1500;
 const PROBE_INTERVAL_MS = 15_000;

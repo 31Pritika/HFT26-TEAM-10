@@ -18,15 +18,18 @@ export interface SparklineProps {
 
 export function Sparkline({
   data,
-  color = "#22d3ee",
+  color = "#F2C94C",
   height = 32,
   width = 96,
-  strokeWidth = 2,
+  strokeWidth = 1.5,
   showArea = true,
   className,
 }: SparklineProps) {
+  // Move useId unconditionally to the top to satisfy React rules of hooks
+  const gradientId = React.useId();
+
   if (!data || data.length < 2) {
-    return <div style={{ height, width }} className={cn("opacity-20 bg-muted/20 rounded", className)} />;
+    return <div style={{ height, width }} className={cn("opacity-20 bg-muted/20 rounded-[var(--radius-sm)]", className)} />;
   }
 
   const min = Math.min(...data);
@@ -51,7 +54,6 @@ export function Sparkline({
   }
 
   const areaD = `${pathD} L ${width} ${height} L 0 ${height} Z`;
-  const gradientId = React.useId();
 
   return (
     <svg
@@ -62,11 +64,15 @@ export function Sparkline({
     >
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity={0.35} />
+          <stop offset="0%" stopColor={color} stopOpacity={0.25} />
           <stop offset="100%" stopColor={color} stopOpacity={0.0} />
         </linearGradient>
       </defs>
-      {showArea && <path d={areaD} fill={`url(#${gradientId})`} />}
+
+      {showArea && (
+        <path d={areaD} fill={`url(#${gradientId})`} />
+      )}
+
       <path
         d={pathD}
         fill="none"
@@ -78,4 +84,3 @@ export function Sparkline({
     </svg>
   );
 }
-

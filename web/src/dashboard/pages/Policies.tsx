@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "../../shared/useDocumentTitle";
 import { useState, useMemo, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "motion/react";
@@ -53,6 +54,8 @@ const DEFAULT_SAMPLE_TEXT = `const config = {
 };`;
 
 export default function Policies() {
+  useDocumentTitle("Policies · ShadowScope");
+
   const queryClient = useQueryClient();
 
   // Queries
@@ -291,7 +294,7 @@ export default function Policies() {
           <GlassCard className="p-6 space-y-5">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 border border-cyan-500/20 flex items-center justify-center text-primary">
                   <ShieldCheck className="w-4 h-4" />
                 </div>
                 <div>
@@ -324,7 +327,7 @@ export default function Policies() {
                   placeholder="Search provider, host, or id..."
                   value={providerSearch}
                   onChange={(e) => setProviderSearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-neutral-900/80 border border-neutral-700/60 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-cyan-500/50"
+                  className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-surface border border-border text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-cyan-500/50"
                 />
               </div>
 
@@ -335,8 +338,8 @@ export default function Policies() {
                     onClick={() => setProviderCategory(cat)}
                     className={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition-colors ${
                       providerCategory === cat
-                        ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
-                        : "bg-neutral-900/60 text-neutral-400 border border-neutral-800 hover:text-white"
+                        ? "bg-primary/15 text-primary border border-primary/30"
+                        : "bg-surface text-neutral-400 border border-border hover:text-white"
                     }`}
                   >
                     {cat === "all" ? "All Types" : cat.replace("_", " ").toUpperCase()}
@@ -352,12 +355,12 @@ export default function Policies() {
                 return (
                   <div
                     key={provider.id}
-                    className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between ${
+                    className={`p-3.5 rounded-[var(--radius)] border transition-all flex flex-col justify-between ${
                       status === "sanctioned"
                         ? "bg-emerald-950/20 border-emerald-500/30"
                         : status === "blocked"
                         ? "bg-rose-950/20 border-rose-500/30"
-                        : "bg-neutral-900/50 border-neutral-800 hover:border-neutral-700"
+                        : "bg-surface/50 border-border hover:border-border"
                     }`}
                   >
                     <div className="space-y-1">
@@ -375,7 +378,7 @@ export default function Policies() {
                     </div>
 
                     {/* 3-State Toggle */}
-                    <div className="flex items-center gap-1.5 pt-3 mt-2 border-t border-neutral-800/60">
+                    <div className="flex items-center gap-1.5 pt-3 mt-2 border-t border-border/60">
                       <button
                         onClick={() => setProviderStatus(provider.id, "sanctioned")}
                         className={`flex-1 flex items-center justify-center gap-1 py-1 rounded text-[11px] font-medium transition-all ${
@@ -392,8 +395,8 @@ export default function Policies() {
                         onClick={() => setProviderStatus(provider.id, "neutral")}
                         className={`px-2 py-1 rounded text-[11px] transition-all ${
                           status === "neutral"
-                            ? "bg-neutral-800 text-neutral-200 border border-neutral-700 font-semibold"
-                            : "bg-neutral-900/50 text-neutral-400 hover:text-white"
+                            ? "bg-neutral-800 text-neutral-200 border border-border font-semibold"
+                            : "bg-surface/50 text-neutral-400 hover:text-white"
                         }`}
                       >
                         Neutral
@@ -443,10 +446,10 @@ export default function Policies() {
             </div>
 
             {/* Slider control */}
-            <div className="space-y-2 p-4 rounded-xl bg-neutral-900/60 border border-neutral-800">
+            <div className="space-y-2 p-4 rounded-[var(--radius)] bg-surface border border-border">
               <div className="flex justify-between text-xs font-mono text-neutral-400">
                 <span>2.5 (Strict - Lower false negatives)</span>
-                <span className="text-cyan-400">4.0 (Recommended Default)</span>
+                <span className="text-primary">4.0 (Recommended Default)</span>
                 <span>5.5 (Relaxed - Raw keys only)</span>
               </div>
               <input
@@ -461,7 +464,7 @@ export default function Policies() {
                     entropy_threshold: parseFloat(e.target.value),
                   })
                 }
-                className="w-full h-2 bg-neutral-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                className="w-full h-2 bg-neutral-800 rounded-lg appearance-none cursor-pointer accent-primary"
               />
               <div className="flex items-center justify-between text-[11px] text-neutral-400 pt-1">
                 <span>Max entropy detected in sample: <strong className="text-white font-mono">{tokenAnalysis.maxEntropy}</strong></span>
@@ -481,19 +484,19 @@ export default function Policies() {
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-semibold text-neutral-300 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                  <Sparkles className="w-3.5 h-3.5 text-primary" />
                   Live Token Highlight Preview (Real-time Entropy Filter)
                 </span>
                 <button
                   onClick={() => setPreviewText(DEFAULT_SAMPLE_TEXT)}
-                  className="text-[11px] text-neutral-400 hover:text-cyan-400 underline"
+                  className="text-[11px] text-neutral-400 hover:text-primary underline"
                 >
                   Reset Sample
                 </button>
               </div>
 
               {/* Render highlighted preview text */}
-              <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800 font-mono text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap">
+              <div className="p-4 rounded-[var(--radius)] bg-neutral-950 border border-border font-mono text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap">
                 {tokenAnalysis.analyzed.map((item) => {
                   if (item.isFlagged) {
                     return (
@@ -519,7 +522,7 @@ export default function Policies() {
                 onChange={(e) => setPreviewText(e.target.value)}
                 placeholder="Type or paste text here to test custom token entropy in real time..."
                 rows={2}
-                className="w-full p-2.5 rounded-lg bg-neutral-900/50 border border-neutral-800 text-xs font-mono text-neutral-400 focus:text-neutral-200 focus:outline-none focus:border-cyan-500/50 transition-colors"
+                className="w-full p-2.5 rounded-lg bg-surface/50 border border-border text-xs font-mono text-neutral-400 focus:text-neutral-200 focus:outline-none focus:border-cyan-500/50 transition-colors"
               />
             </div>
           </GlassCard>
@@ -551,7 +554,7 @@ export default function Policies() {
                   placeholder="e.g. CANARY-SS-7F3A9"
                   value={newCanaryToken}
                   onChange={(e) => setNewCanaryToken(e.target.value)}
-                  className="flex-1 px-3 py-1.5 rounded-lg bg-neutral-900/80 border border-neutral-700/60 text-xs font-mono text-white placeholder-neutral-500 focus:outline-none focus:border-rose-500/50"
+                  className="flex-1 px-3 py-1.5 rounded-lg bg-surface border border-border text-xs font-mono text-white placeholder-neutral-500 focus:outline-none focus:border-rose-500/50"
                 />
                 <Button
                   variant="outline"
@@ -579,7 +582,7 @@ export default function Policies() {
             <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
               <AnimatePresence>
                 {draft.canary_tokens.length === 0 ? (
-                  <div className="p-4 rounded-lg bg-neutral-900/40 border border-neutral-800 text-center text-xs text-neutral-400">
+                  <div className="p-4 rounded-lg bg-surface border border-border text-center text-xs text-neutral-400">
                     No active honeytokens. Add or generate one above to trap unauthorized exfiltrations.
                   </div>
                 ) : (
@@ -589,7 +592,7 @@ export default function Policies() {
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="p-2.5 rounded-lg bg-neutral-900/80 border border-rose-500/20 flex items-center justify-between group"
+                      className="p-2.5 rounded-lg bg-surface border border-rose-500/20 flex items-center justify-between group"
                     >
                       <div className="flex items-center gap-2 overflow-hidden">
                         <KeyRound className="w-3.5 h-3.5 text-rose-400 shrink-0" />
@@ -628,7 +631,7 @@ export default function Policies() {
           {/* Minimum Severity Selector */}
           <GlassCard className="p-6 space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 border border-cyan-500/20 flex items-center justify-center text-primary">
                 <Shield className="w-4 h-4" />
               </div>
               <div>
@@ -641,7 +644,7 @@ export default function Policies() {
               </div>
             </div>
 
-            <div className="grid grid-cols-5 gap-1.5 p-1 rounded-xl bg-neutral-900/80 border border-neutral-800">
+            <div className="grid grid-cols-5 gap-1.5 p-1 rounded-[var(--radius)] bg-surface border border-border">
               {(["info", "low", "medium", "high", "critical"] as Severity[]).map((sev) => {
                 const isActive = draft.alert_min_severity === sev;
                 return (
@@ -654,7 +657,7 @@ export default function Policies() {
                           ? "bg-rose-500/20 text-rose-300 border border-rose-500/50 font-bold"
                           : sev === "high"
                           ? "bg-orange-500/20 text-orange-300 border border-orange-500/50 font-bold"
-                          : "bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 font-bold"
+                          : "bg-primary/15 text-primary border border-cyan-500/50 font-bold"
                         : "text-neutral-400 hover:text-white"
                     }`}
                   >
@@ -691,7 +694,7 @@ export default function Policies() {
                     llm_triage: { ...draft.llm_triage, enabled: e.target.checked },
                   })
                 }
-                className="w-4 h-4 rounded border-neutral-700 bg-neutral-900 accent-violet-500 cursor-pointer"
+                className="w-4 h-4 rounded border-border bg-surface accent-primary cursor-pointer"
               />
             </div>
 
@@ -718,10 +721,10 @@ export default function Policies() {
                           },
                         })
                       }
-                      className={`w-full text-left p-2.5 rounded-xl border transition-all ${
+                      className={`w-full text-left p-2.5 rounded-[var(--radius)] border transition-all ${
                         isSelected
                           ? "bg-violet-950/20 border-violet-500/40 text-white"
-                          : "bg-neutral-900/40 border-neutral-800 text-neutral-400 hover:text-neutral-200"
+                          : "bg-surface border-border text-neutral-400 hover:text-neutral-200"
                       }`}
                     >
                       <div className="flex items-center justify-between text-xs font-semibold">
@@ -737,19 +740,19 @@ export default function Policies() {
           </GlassCard>
 
           {/* Immutable Hard Guardrails */}
-          <GlassCard className="p-5 space-y-3 bg-neutral-950/40 border border-neutral-800">
+          <GlassCard className="p-5 space-y-3 bg-neutral-950/40 border border-border">
             <div className="flex items-center gap-2">
-              <Lock className="w-4 h-4 text-cyan-400" />
+              <Lock className="w-4 h-4 text-primary" />
               <h4 className="text-xs font-semibold text-white uppercase tracking-wider">
                 Immutable Core Guardrails
               </h4>
             </div>
             <div className="space-y-2 text-xs">
-              <div className="flex items-center justify-between p-2 rounded bg-neutral-900/60 border border-neutral-800">
+              <div className="flex items-center justify-between p-2 rounded bg-surface border border-border">
                 <span className="text-neutral-300">Client-Side Storage Redaction</span>
                 <span className="font-mono text-emerald-400 text-[11px]">ENFORCED (TRUE)</span>
               </div>
-              <div className="flex items-center justify-between p-2 rounded bg-neutral-900/60 border border-neutral-800">
+              <div className="flex items-center justify-between p-2 rounded bg-surface border border-border">
                 <span className="text-neutral-300">ShadowScope Self-Exclusion</span>
                 <span className="font-mono text-emerald-400 text-[11px]">ENFORCED (TRUE)</span>
               </div>

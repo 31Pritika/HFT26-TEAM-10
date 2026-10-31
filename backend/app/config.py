@@ -25,7 +25,7 @@ _load_dotenv(REPO_ROOT / ".env")
 
 VERSION = "0.2.0"
 HOST = os.getenv("SHADOWSCOPE_HOST", "127.0.0.1")
-PORT = int(os.getenv("SHADOWSCOPE_PORT", "8787"))
+PORT = int(os.getenv("SHADOWSCOPE_PORT", "8788"))
 DB_PATH = Path(os.getenv("SHADOWSCOPE_DB", BACKEND_DIR / "data" / "shadowscope.db"))
 CLOUD = os.getenv("SHADOWSCOPE_CLOUD") == "1"
 CORS_ORIGINS = [origin.strip().rstrip("/") for origin in
@@ -51,7 +51,7 @@ SCENARIO_CACHE_S = 60
 AGENT_ACTIVE_WINDOW_S = 600
 RISK_HALF_LIFE_H = 6
 
-ALLOWED_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173", *CORS_ORIGINS]
+ALLOWED_ORIGINS = ["http://localhost:5174", "http://127.0.0.1:5174", *CORS_ORIGINS]
 ALLOWED_ORIGIN_REGEX = r"chrome-extension://.*"
 
 COLLECTOR_NAMES = ("process_conn", "ip_cache", "dns_sni", "loopback", "agent_watch", "gateway")

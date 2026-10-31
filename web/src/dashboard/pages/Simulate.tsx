@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "../../shared/useDocumentTitle";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -43,6 +44,8 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export default function Simulate() {
+  useDocumentTitle("Simulator · ShadowScope");
+
   const navigate = useNavigate();
 
   // Load scenarios from API
@@ -141,10 +144,10 @@ export default function Simulate() {
   if (isLoading) {
     return (
       <div className="space-y-6 max-w-7xl mx-auto">
-        <Skeleton className="h-28 w-full rounded-2xl" />
+        <Skeleton className="h-28 w-full rounded-[var(--radius)]" />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {Array.from({ length: 9 }).map((_, i) => (
-            <Skeleton key={i} className="h-44 rounded-xl" />
+            <Skeleton key={i} className="h-44 rounded-[var(--radius)]" />
           ))}
         </div>
       </div>
@@ -213,8 +216,8 @@ export default function Simulate() {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                  <span className="font-bold text-cyan-300">
+                  <span className="w-2 h-2 rounded-full bg-primary animate-ping" />
+                  <span className="font-bold text-primary">
                     Executing Step {sequenceIndex + 1} of {scenarios.length}:{" "}
                     {scenarios[sequenceIndex]?.name}
                   </span>
@@ -231,9 +234,9 @@ export default function Simulate() {
                     key={i}
                     className={`rounded-full transition-all duration-300 ${
                       i < sequenceIndex
-                        ? "bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]"
+                        ? "bg-emerald-400 "
                         : i === sequenceIndex
-                        ? "bg-cyan-400 animate-pulse"
+                        ? "bg-primary animate-pulse"
                         : "bg-white/10"
                     }`}
                   />
@@ -267,7 +270,7 @@ export default function Simulate() {
                   variant="default"
                   className={`p-4 flex flex-col justify-between transition-all relative overflow-hidden group ${
                     isActive
-                      ? "border-amber-500/50 bg-amber-950/20 shadow-[0_0_20px_rgba(245,158,11,0.2)]"
+                      ? "border-amber-500/50 bg-amber-950/20 "
                       : "hover:border-white/20"
                   }`}
                 >
@@ -277,13 +280,13 @@ export default function Simulate() {
                       initial={{ scale: 0, opacity: 0.8 }}
                       animate={{ scale: 3, opacity: 0 }}
                       transition={{ duration: 0.8, ease: "easeOut" }}
-                      className="absolute inset-0 bg-cyan-400/30 rounded-full pointer-events-none"
+                      className="absolute inset-0 bg-primary/30 rounded-full pointer-events-none"
                     />
                   )}
 
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-2.5">
-                      <div className="p-2 rounded-xl bg-surface-solid border border-white/10 text-cyan-400 group-hover:text-cyan-300 transition-colors">
+                      <div className="p-2 rounded-[var(--radius)] bg-surface-solid border border-white/10 text-primary group-hover:text-primary transition-colors">
                         <Icon className="w-4 h-4" />
                       </div>
                       <SeverityPill severity={sc.severity} size="xs" />
@@ -331,7 +334,7 @@ export default function Simulate() {
           <GlassCard variant="default" className="p-5 flex flex-col justify-between space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
-                <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
+                <Radio className="w-4 h-4 text-primary animate-pulse" />
                 <h3 className="font-display text-sm font-bold text-text">
                   Simulation Telemetry Feed
                 </h3>
@@ -352,7 +355,7 @@ export default function Simulate() {
                   <div
                     key={finding.id}
                     onClick={() => navigate(`/app/alerts/${finding.id}`)}
-                    className="p-3 rounded-xl border border-red-500/30 bg-red-950/20 hover:border-red-500/50 transition-colors cursor-pointer group"
+                    className="p-3 rounded-[var(--radius)] border border-red-500/30 bg-red-950/20 hover:border-red-500/50 transition-colors cursor-pointer group"
                   >
                     <div className="flex items-center justify-between gap-1 mb-1">
                       <SeverityPill severity={finding.severity} size="xs" />
@@ -360,7 +363,7 @@ export default function Simulate() {
                         {new Date(finding.ts).toLocaleTimeString()}
                       </span>
                     </div>
-                    <p className="font-semibold text-xs text-text group-hover:text-cyan-300 transition-colors line-clamp-1">
+                    <p className="font-semibold text-xs text-text group-hover:text-primary transition-colors line-clamp-1">
                       {finding.title}
                     </p>
                     <p className="font-mono text-[10px] text-muted line-clamp-1 mt-0.5">
@@ -375,7 +378,7 @@ export default function Simulate() {
             <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono">
               <button
                 onClick={() => navigate("/app/live")}
-                className="text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer"
+                className="text-primary hover:underline flex items-center gap-1 cursor-pointer"
               >
                 <span>Live Traffic Stream</span>
                 <ChevronRight className="w-3.5 h-3.5" />

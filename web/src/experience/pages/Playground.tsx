@@ -15,6 +15,8 @@
  * - Fully responsive (375px → 1920px) & prefers-reduced-motion compliant
  */
 
+import { useDocumentTitle } from "../../shared/useDocumentTitle";
+import { SiteFooter } from "../components/SiteFooter";
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
@@ -60,46 +62,47 @@ const SEVERITY_CONFIG: Record<
   critical: {
     bg: "rgba(255,59,92,0.12)",
     border: "rgba(255,59,92,0.45)",
-    text: "#FF3B5C",
-    underline: "#FF3B5C",
+    text: "#E5484D",
+    underline: "#E5484D",
     badgeBg: "rgba(255,59,92,0.2)",
     icon: ShieldAlert,
   },
   high: {
     bg: "rgba(255,138,61,0.12)",
     border: "rgba(255,138,61,0.45)",
-    text: "#FF8A3D",
-    underline: "#FF8A3D",
+    text: "#E8833A",
+    underline: "#E8833A",
     badgeBg: "rgba(255,138,61,0.2)",
     icon: AlertTriangle,
   },
   medium: {
     bg: "rgba(250,204,21,0.1)",
     border: "rgba(250,204,21,0.45)",
-    text: "#FACC15",
-    underline: "#FACC15",
+    text: "#D9B44A",
+    underline: "#D9B44A",
     badgeBg: "rgba(250,204,21,0.2)",
     icon: Info,
   },
   low: {
     bg: "rgba(52,211,153,0.1)",
     border: "rgba(52,211,153,0.4)",
-    text: "#34D399",
-    underline: "#34D399",
+    text: "#4CAF7A",
+    underline: "#4CAF7A",
     badgeBg: "rgba(52,211,153,0.2)",
     icon: ShieldCheck,
   },
   info: {
     bg: "rgba(96,165,250,0.1)",
     border: "rgba(96,165,250,0.4)",
-    text: "#60A5FA",
-    underline: "#60A5FA",
+    text: "#7A9CC6",
+    underline: "#7A9CC6",
     badgeBg: "rgba(96,165,250,0.2)",
     icon: Info,
   },
 };
 
 export default function Playground() {
+  useDocumentTitle("Playground · ShadowScope");
   const [text, setText] = useState<string>(PLAYGROUND_PRESETS[0].text);
   const [selectedPreset, setSelectedPreset] = useState<string>(PLAYGROUND_PRESETS[0].id);
   const [redactedView, setRedactedView] = useState<boolean>(false);
@@ -120,7 +123,7 @@ export default function Playground() {
 
   // Check engine connectivity & self test on mount
   useEffect(() => {
-    document.title = "Threat Playground — ShadowScope";
+    
     if (import.meta.env.DEV) {
       runScannerSelfTests();
     }
@@ -304,7 +307,7 @@ export default function Playground() {
                   onClick={() => handleSelectPreset(p)}
                   className={`px-3 py-2 rounded-[var(--radius-sm)] border text-xs font-medium whitespace-nowrap flex items-center gap-2 transition-all ${
                     active
-                      ? "bg-primary/15 border-primary/50 text-text shadow-glow-primary"
+                      ? "bg-primary/15 border-primary/50 text-text border-primary"
                       : "bg-surface border-border text-muted hover:text-text hover:border-border-strong"
                   }`}
                 >
@@ -720,6 +723,8 @@ export default function Playground() {
           </div>
         </div>
       </main>
+
+      <SiteFooter />
 
       {/* Packet Interception Microinteraction Modal */}
       <PacketFlightModal

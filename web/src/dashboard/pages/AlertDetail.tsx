@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "../../shared/useDocumentTitle";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -30,6 +31,7 @@ import type { Finding, TriageResult } from "../../shared/types";
 import { toast } from "sonner";
 
 export default function AlertDetail() {
+  
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -53,6 +55,9 @@ export default function AlertDetail() {
   });
 
   const finding = findingDetail as (Finding & { event: unknown }) | undefined;
+
+  const pageTitle = finding?.title ? (finding.title + " · ShadowScope") : id ? ("Alert " + id + " · ShadowScope") : "Alerts · ShadowScope";
+  useDocumentTitle(pageTitle);
 
   // Initialize triageData from finding if already triaged
   useEffect(() => {
@@ -134,10 +139,10 @@ export default function AlertDetail() {
     return (
       <div className="space-y-6 max-w-5xl mx-auto">
         <Skeleton className="h-10 w-48 rounded-lg" />
-        <Skeleton className="h-28 w-full rounded-2xl" />
+        <Skeleton className="h-28 w-full rounded-[var(--radius)]" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Skeleton className="h-64 rounded-xl" />
-          <Skeleton className="h-64 rounded-xl" />
+          <Skeleton className="h-64 rounded-[var(--radius)]" />
+          <Skeleton className="h-64 rounded-[var(--radius)]" />
         </div>
       </div>
     );
@@ -168,7 +173,7 @@ export default function AlertDetail() {
       <div>
         <button
           onClick={() => navigate("/app/alerts")}
-          className="inline-flex items-center gap-2 text-xs font-mono text-muted hover:text-cyan-400 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 text-xs font-mono text-muted hover:text-primary transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Alerts Center</span>
@@ -179,19 +184,19 @@ export default function AlertDetail() {
       {/* 1. SEVERITY HERO BAND                                                */}
       {/* ==================================================================== */}
       <div
-        className={`rounded-2xl border p-5 sm:p-6 backdrop-blur-xl relative overflow-hidden ${
+        className={`rounded-[var(--radius)] border p-5 sm:p-6  relative overflow-hidden ${
           isCritical
-            ? "border-red-500/40 bg-gradient-to-r from-red-950/40 via-surface/90 to-surface/90 shadow-[0_0_35px_rgba(255,59,92,0.2)]"
+            ? "border-red-500/40 bg-gradient-to-r from-red-950/40 via-surface/90 to-surface/90 "
             : finding.severity === "high"
             ? "border-orange-500/35 bg-gradient-to-r from-orange-950/30 via-surface/90 to-surface/90"
-            : "border-cyan-500/30 bg-gradient-to-r from-cyan-950/30 via-surface/90 to-surface/90"
+            : "border-primary/30 bg-gradient-to-r from-cyan-950/30 via-surface/90 to-surface/90"
         }`}
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2.5">
               <SeverityPill severity={finding.severity} size="sm" pulse={isCritical} />
-              <span className="font-mono text-xs text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/25">
+              <span className="font-mono text-xs text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/30">
                 {finding.id}
               </span>
               <span className="font-mono text-xs text-muted">
@@ -285,7 +290,7 @@ export default function AlertDetail() {
           {finding.event_id && (
             <button
               onClick={() => navigate(`/app/live`)}
-              className="ml-auto inline-flex items-center gap-1 text-cyan-400 hover:underline cursor-pointer"
+              className="ml-auto inline-flex items-center gap-1 text-primary hover:underline cursor-pointer"
             >
               <span>Linked Event {finding.event_id}</span>
               <ExternalLink className="w-3 h-3" />
@@ -300,7 +305,7 @@ export default function AlertDetail() {
       <GlassCard variant="default" className="p-5 sm:p-6 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/[0.08] pb-3">
           <div className="flex items-center gap-2">
-            <Lock className="w-5 h-5 text-cyan-400" />
+            <Lock className="w-5 h-5 text-primary" />
             <h3 className="font-display text-base font-bold text-text">
               Exfiltration Evidence & Payload Analysis
             </h3>
@@ -311,13 +316,13 @@ export default function AlertDetail() {
         </div>
 
         {/* Highlighted Match Box */}
-        <div className="relative rounded-xl border border-white/10 bg-[#060812] p-4 font-mono text-xs leading-relaxed overflow-x-auto">
+        <div className="relative rounded-[var(--radius)] border border-white/10 bg-[var(--surface)] p-4 font-mono text-xs leading-relaxed overflow-x-auto">
           <div className="text-muted/60 text-[10px] uppercase tracking-wider mb-2 flex items-center justify-between">
             <span>Redacted Snippet Captured</span>
             {evidence?.fingerprint && (
               <button
                 onClick={() => copyFingerprint(evidence.fingerprint!)}
-                className="flex items-center gap-1 text-muted hover:text-cyan-400 transition-colors"
+                className="flex items-center gap-1 text-muted hover:text-primary transition-colors"
                 title="Copy SHA-256 fingerprint"
               >
                 <Fingerprint className="w-3.5 h-3.5" />
@@ -348,10 +353,10 @@ export default function AlertDetail() {
         {/* Entropy Meter & Offset Info */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 font-mono text-xs">
           {/* Shannon Entropy Bar */}
-          <div className="rounded-xl border border-white/[0.06] bg-surface-solid/60 p-3">
+          <div className="rounded-[var(--radius)] border border-white/[0.06] bg-surface-solid/60 p-3">
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-muted text-[11px] flex items-center gap-1">
-                <Gauge className="w-3.5 h-3.5 text-cyan-400" />
+                <Gauge className="w-3.5 h-3.5 text-primary" />
                 Shannon Entropy
               </span>
               <span className="font-bold text-text">
@@ -362,7 +367,7 @@ export default function AlertDetail() {
               <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full ${
-                    entropy >= 4.0 ? "bg-red-400 shadow-[0_0_8px_rgba(255,59,92,0.8)]" : "bg-cyan-400"
+                    entropy >= 4.0 ? "bg-red-400 " : "bg-primary"
                   }`}
                   style={{ width: `${Math.min(100, (entropy / 6) * 100)}%` }}
                 />
@@ -373,7 +378,7 @@ export default function AlertDetail() {
           </div>
 
           {/* Line & Offset */}
-          <div className="rounded-xl border border-white/[0.06] bg-surface-solid/60 p-3 flex flex-col justify-between">
+          <div className="rounded-[var(--radius)] border border-white/[0.06] bg-surface-solid/60 p-3 flex flex-col justify-between">
             <span className="text-muted text-[11px]">Payload Offset</span>
             <div className="flex items-center gap-3 text-text font-bold mt-1">
               <span>Line {evidence?.line ?? 1}</span>
@@ -383,13 +388,13 @@ export default function AlertDetail() {
           </div>
 
           {/* Regulatory Compliance Mappings */}
-          <div className="rounded-xl border border-white/[0.06] bg-surface-solid/60 p-3 flex flex-col justify-between">
+          <div className="rounded-[var(--radius)] border border-white/[0.06] bg-surface-solid/60 p-3 flex flex-col justify-between">
             <span className="text-muted text-[11px]">Impacted Compliance</span>
             <div className="flex flex-wrap gap-1.5 mt-1">
               {finding.compliance?.map((c) => (
                 <span
                   key={c}
-                  className="px-2 py-0.5 rounded bg-surface border border-cyan-500/30 text-cyan-300 font-bold text-[10px]"
+                  className="px-2 py-0.5 rounded bg-surface border border-primary/30 text-primary font-bold text-[10px]"
                 >
                   {c}
                 </span>
@@ -406,7 +411,7 @@ export default function AlertDetail() {
         {/* Process Card */}
         <GlassCard variant="default" className="p-5 space-y-3 font-mono text-xs">
           <div className="flex items-center gap-2 pb-2 border-b border-white/[0.08]">
-            <Cpu className="w-4 h-4 text-cyan-400" />
+            <Cpu className="w-4 h-4 text-primary" />
             <h4 className="font-display text-sm font-bold text-text">Process Context</h4>
           </div>
           <div className="grid grid-cols-2 gap-2 text-muted">
@@ -493,7 +498,7 @@ export default function AlertDetail() {
               value={triageEngine}
               onChange={(e) => setTriageEngine(e.target.value as typeof triageEngine)}
               disabled={isTriaging}
-              className="bg-[#080c18] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-text focus:outline-none focus:border-violet-400 font-mono"
+              className="bg-[var(--surface)] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-text focus:outline-none focus:border-violet-400 font-mono"
             >
               <option value="auto">Auto (Best Available)</option>
               <option value="featherless">Featherless Cloud LLM</option>
@@ -542,13 +547,13 @@ export default function AlertDetail() {
             className="space-y-4"
           >
             {/* Header: Verdict Badge & Engine / Latency Chips */}
-            <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl border border-white/[0.08] bg-surface-solid/80">
+            <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-[var(--radius)] border border-white/[0.08] bg-surface-solid/80">
               <div className="flex items-center gap-2.5">
                 <span className="text-xs font-mono uppercase text-muted">Verdict:</span>
                 <span
                   className={`font-mono text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${
                     triageData.verdict === "true_positive"
-                      ? "bg-red-500/20 text-red-400 border border-red-500/40 shadow-[0_0_12px_rgba(255,59,92,0.3)]"
+                      ? "bg-red-500/20 text-red-400 border border-red-500/40 "
                       : triageData.verdict === "likely_false_positive"
                       ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
                       : "bg-amber-500/20 text-amber-300 border border-amber-500/40"
@@ -562,14 +567,14 @@ export default function AlertDetail() {
                 <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-violet-300">
                   {triageData.engine} ({triageData.model})
                 </span>
-                <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-cyan-300">
+                <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-primary">
                   {triageData.latency_ms}ms
                 </span>
               </div>
             </div>
 
             {/* Typewriter Reasoning Box */}
-            <div className="p-4 rounded-xl border border-white/10 bg-[#070a16] space-y-2">
+            <div className="p-4 rounded-[var(--radius)] border border-white/10 bg-[#070a16] space-y-2">
               <span className="text-[10px] font-mono uppercase text-muted/70 tracking-wider block">
                 Analyst Reasoning
               </span>
@@ -580,9 +585,9 @@ export default function AlertDetail() {
 
             {/* Policy Suggestion Card */}
             {triageData.policy_suggestion && (
-              <div className="p-4 rounded-xl border border-cyan-500/30 bg-cyan-950/15 space-y-1">
-                <div className="flex items-center gap-2 text-cyan-300 text-xs font-bold font-mono">
-                  <Layers className="w-4 h-4 text-cyan-400" />
+              <div className="p-4 rounded-[var(--radius)] border border-primary/30 bg-surface space-y-1">
+                <div className="flex items-center gap-2 text-primary text-xs font-bold font-mono">
+                  <Layers className="w-4 h-4 text-primary" />
                   Recommended Governance Policy Update
                 </div>
                 <p className="text-xs text-text/90 leading-relaxed font-mono">
@@ -592,7 +597,7 @@ export default function AlertDetail() {
             )}
 
             {/* Collapsible Privacy Proof Box */}
-            <div className="border border-white/10 rounded-xl overflow-hidden bg-[#060812]">
+            <div className="border border-white/10 rounded-[var(--radius)] overflow-hidden bg-[var(--surface)]">
               <button
                 onClick={() => setProofExpanded(!proofExpanded)}
                 className="w-full flex items-center justify-between p-3.5 text-xs font-mono text-muted hover:text-text transition-colors bg-white/[0.02]"

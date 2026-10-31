@@ -105,12 +105,12 @@ export function Constellation3D({
         width={dimensions.width}
         height={dimensions.height}
         graphData={graphData}
-        backgroundColor="#05060A"
+        backgroundColor="#000000"
         showNavInfo={false}
         enableNodeDrag={true}
         nodeLabel={(node: any) =>
-          `<div style="background: rgba(11, 13, 20, 0.95); border: 1px solid rgba(255, 255, 255, 0.15); padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 11px; color: #E6EDF3; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
-            <div style="font-weight: 600; color: #22D3EE;">${node.label}</div>
+          `<div style="background: #111111; border: 1px solid rgba(255, 255, 255, 0.16); padding: 6px 10px; border-radius: 4px; font-family: var(--font-mono), ui-monospace, monospace; font-size: 11px; color: #E6EDF3; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+            <div style="font-weight: 600; color: #F2C94C;">${node.label}</div>
             <div style="color: #8B949E; text-transform: uppercase; font-size: 9px;">${node.kind} · Risk ${node.risk}/100</div>
           </div>`
         }

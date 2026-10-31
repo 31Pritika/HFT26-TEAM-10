@@ -35,15 +35,15 @@ export function NotificationsPopover() {
       >
         <Bell className="w-5 h-5" />
         {unreadCriticals.length > 0 && (
-          <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 font-mono text-[10px] font-bold text-white shadow-[0_0_8px_rgba(255,59,92,0.8)] animate-pulse">
+          <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 font-mono text-[10px] font-bold text-white  animate-pulse">
             {unreadCriticals.length > 9 ? "9+" : unreadCriticals.length}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-xl border border-white/15 bg-[#090d18]/95 p-0 shadow-2xl backdrop-blur-2xl z-50">
-          <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-[var(--radius)] border border-border-strong bg-surface p-0 shadow-2xl  z-50">
+          <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <div className="flex items-center gap-2">
               <ShieldAlert className="w-4 h-4 text-red-400" />
               <span className="font-display text-sm font-semibold text-text">Critical Alerts</span>
@@ -89,7 +89,7 @@ export function NotificationsPopover() {
                   </p>
                   <div className="mt-2 flex items-center justify-between text-[10px] font-mono text-muted">
                     <span>{finding.process_name ?? "unknown"}</span>
-                    <span className="flex items-center gap-1 text-cyan-400 group-hover:underline">
+                    <span className="flex items-center gap-1 text-primary group-hover:underline">
                       Investigate <ExternalLink className="w-2.5 h-2.5" />
                     </span>
                   </div>
@@ -98,7 +98,7 @@ export function NotificationsPopover() {
             )}
           </div>
 
-          <div className="border-t border-white/10 p-2.5 text-center bg-white/[0.02]">
+          <div className="border-t border-border p-2.5 text-center bg-white/[0.02]">
             <button
               onClick={() => {
                 setOpen(false);

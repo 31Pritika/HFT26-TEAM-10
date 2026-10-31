@@ -110,7 +110,7 @@ export default function AppShell() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#05060a] text-text flex flex-col antialiased selection:bg-cyan-500/30 overflow-x-hidden">
+    <div className="relative min-h-screen bg-black text-text flex flex-col antialiased  overflow-x-hidden">
       {/* Background Animated Subtle Grid + Radial Glows */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
         {/* Obsidian subtle grid */}
@@ -121,10 +121,7 @@ export default function AppShell() {
             backgroundSize: "40px 40px",
           }}
         />
-        {/* Cyan Ambient Radial Glow - Top Left */}
-        <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-cyan-500/10 blur-[120px]" />
-        {/* Violet Ambient Radial Glow - Bottom Right */}
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-violet-600/10 blur-[130px]" />
+
       </div>
 
       <div className="flex flex-1 min-h-screen">
@@ -132,22 +129,22 @@ export default function AppShell() {
         {/* Desktop & Tablet Sidebar (Hidden on <768px Mobile)                       */}
         {/* ======================================================================== */}
         <aside
-          className={`hidden md:flex flex-col border-r border-white/[0.08] bg-[#070a14]/80 backdrop-blur-2xl transition-all duration-300 z-30 shrink-0 ${
+          className={`hidden md:flex flex-col border-r border-border bg-bg-2 sticky top-0 h-screen transition-all duration-300 z-30 shrink-0 ${
             collapsed ? "w-16" : "w-16 lg:w-64"
           }`}
         >
           {/* Logo & Brand Header */}
-          <div className="flex h-16 items-center justify-between px-4 border-b border-white/[0.08]">
+          <div className="flex h-16 items-center justify-between px-4 border-b border-border">
             <NavLink to="/app" className="flex items-center gap-2.5 overflow-hidden group">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-violet-600 p-0.5 shrink-0 shadow-[0_0_16px_rgba(34,211,238,0.35)] group-hover:shadow-[0_0_24px_rgba(34,211,238,0.55)] transition-shadow">
-                <div className="w-full h-full bg-[#070a14] rounded-[6px] flex items-center justify-center">
-                  <Shield className="w-4 h-4 text-cyan-400" />
+              <div className="w-8 h-8 rounded-lg border border-border bg-surface p-0.5 shrink-0  transition-shadow">
+                <div className="w-full h-full bg-bg-2 rounded-[6px] flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-primary" />
                 </div>
               </div>
               {!collapsed && (
                 <div className="hidden lg:flex flex-col">
                   <span className="font-display font-bold text-base tracking-tight text-white leading-none">
-                    Shadow<span className="text-cyan-400">Scope</span>
+                    Shadow<span className="text-primary">Scope</span>
                   </span>
                   <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-300 mt-0.5">
                     Security Console
@@ -183,7 +180,7 @@ export default function AppShell() {
                       className={({ isActive }) =>
                         `relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 select-none ${
                           isActive
-                            ? "text-cyan-300 bg-cyan-500/10 font-semibold"
+                            ? "text-primary bg-primary/10 font-semibold"
                             : "text-muted hover:text-text hover:bg-white/[0.05]"
                         } ${collapsed ? "justify-center" : "justify-center lg:justify-start"}`
                       }
@@ -191,7 +188,7 @@ export default function AppShell() {
                     >
                       {({ isActive }) => (
                         <>
-                          <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-cyan-400" : "text-muted"}`} />
+                          <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-primary" : "text-muted"}`} />
                           {!collapsed && <span className="hidden lg:inline">{label}</span>}
                           {to === "/app/alerts" && unreadCriticals.length > 0 && (
                             <span
@@ -205,7 +202,7 @@ export default function AppShell() {
                           {isActive && (
                             <motion.div
                               layoutId="active-sidebar-pill"
-                              className="absolute left-0 top-1 bottom-1 w-1 rounded-r bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]"
+                              className="absolute left-0 top-1 bottom-1 w-1 rounded-r bg-cyan-400 "
                               transition={{ type: "spring", stiffness: 380, damping: 30 }}
                             />
                           )}
@@ -231,7 +228,7 @@ export default function AppShell() {
                       className={({ isActive }) =>
                         `relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 select-none ${
                           isActive
-                            ? "text-cyan-300 bg-cyan-500/10 font-semibold"
+                            ? "text-primary bg-primary/10 font-semibold"
                             : "text-muted hover:text-text hover:bg-white/[0.05]"
                         } ${collapsed ? "justify-center" : "justify-center lg:justify-start"}`
                       }
@@ -239,12 +236,12 @@ export default function AppShell() {
                     >
                       {({ isActive }) => (
                         <>
-                          <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-cyan-400" : "text-muted"}`} />
+                          <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-primary" : "text-muted"}`} />
                           {!collapsed && <span className="hidden lg:inline">{label}</span>}
                           {isActive && (
                             <motion.div
                               layoutId="active-sidebar-pill"
-                              className="absolute left-0 top-1 bottom-1 w-1 rounded-r bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]"
+                              className="absolute left-0 top-1 bottom-1 w-1 rounded-r bg-cyan-400 "
                               transition={{ type: "spring", stiffness: 380, damping: 30 }}
                             />
                           )}
@@ -259,8 +256,8 @@ export default function AppShell() {
 
           {/* Sidebar Footer Posture Card */}
           {!collapsed && (
-            <div className="hidden lg:block p-3 border-t border-white/[0.08] bg-[#05070e]/60">
-              <div className="rounded-xl border border-white/[0.08] bg-surface/50 p-3 flex items-center justify-between">
+            <div className="hidden lg:block p-3 border-t border-border bg-[#05070e]/60">
+              <div className="rounded-xl border border-border bg-surface/50 p-3 flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <RiskGauge score={riskScore} grade={riskGrade} size="compact" showLabel={false} />
                   <div>
@@ -278,7 +275,7 @@ export default function AppShell() {
         {/* ======================================================================== */}
         <div className="flex-1 flex flex-col min-w-0 pb-16 md:pb-0">
           {/* Top Bar */}
-          <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-white/[0.08] bg-[#05060a]/85 backdrop-blur-xl px-4 lg:px-6">
+          <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border bg-black/85  px-4 lg:px-6">
             {/* Left: Mobile menu toggle / Breadcrumbs */}
             <div className="flex items-center gap-3">
               <button
@@ -290,7 +287,7 @@ export default function AppShell() {
               </button>
 
               <div className="flex items-center gap-2 text-sm">
-                <span className="font-mono text-xs font-semibold text-cyan-400 uppercase tracking-widest hidden sm:inline">
+                <span className="font-mono text-xs font-semibold text-primary uppercase tracking-widest hidden sm:inline">
                   ShadowScope
                 </span>
                 <span className="text-muted/40 hidden sm:inline">/</span>
@@ -339,7 +336,7 @@ export default function AppShell() {
 
               {/* Live telemetry pulse indicator */}
               <div className="flex items-center gap-1.5 px-2 py-1 text-muted text-xs font-mono" title="Live Telemetry Stream Active">
-                <Activity className="w-4 h-4 text-cyan-400 animate-pulse" />
+                <Activity className="w-4 h-4 text-primary animate-pulse" />
               </div>
 
               {/* ⌘K Command Palette Button */}
@@ -361,12 +358,12 @@ export default function AppShell() {
           </header>
 
           {/* Page View with Smooth Animated PageTransition */}
-          <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+          <main className="flex-1 p-4 sm:p-6 lg:p-8">
             <Suspense
               fallback={
                 <div className="flex items-center justify-center min-h-[50vh]">
                   <div className="flex flex-col items-center gap-3">
-                    <div className="w-8 h-8 border-2 border-cyan-400/20 border-t-cyan-400 rounded-full animate-spin" />
+                    <div className="w-8 h-8 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
                     <span className="font-mono text-xs text-muted">Loading telemetry modules...</span>
                   </div>
                 </div>
@@ -385,7 +382,7 @@ export default function AppShell() {
       {/* ======================================================================== */}
       <nav
         aria-label="Mobile Navigation"
-        className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t border-white/[0.08] bg-[#070a14]/95 backdrop-blur-2xl px-2 py-1 flex items-center justify-around"
+        className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t border-border bg-bg-2  px-2 py-1 flex items-center justify-around"
       >
         {MOBILE_BOTTOM_TABS.map(({ to, label, icon: Icon, end }) => (
           <NavLink
@@ -394,7 +391,7 @@ export default function AppShell() {
             end={end}
             className={({ isActive }) =>
               `flex flex-col items-center justify-center py-1.5 px-3 rounded-lg text-[10px] font-medium transition-colors select-none ${
-                isActive ? "text-cyan-400 font-semibold" : "text-muted hover:text-text"
+                isActive ? "text-primary font-semibold" : "text-muted hover:text-text"
               }`
             }
           >
@@ -435,12 +432,12 @@ export default function AppShell() {
                   className={({ isActive }) =>
                     `flex items-center gap-2.5 p-3 rounded-xl border text-xs font-medium transition-colors ${
                       isActive
-                        ? "bg-cyan-500/15 border-cyan-500/30 text-cyan-300 font-semibold"
+                        ? "bg-primary/15 border-primary/30 text-primary font-semibold"
                         : "bg-surface-solid/60 border-white/[0.06] text-text hover:bg-surface"
                     }`
                   }
                 >
-                  <Icon className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <Icon className="w-4 h-4 text-primary shrink-0" />
                   <span className="truncate">{label}</span>
                 </NavLink>
               ))}
@@ -460,7 +457,7 @@ export default function AppShell() {
                   className={({ isActive }) =>
                     `flex items-center gap-2.5 p-3 rounded-xl border text-xs font-medium transition-colors ${
                       isActive
-                        ? "bg-cyan-500/15 border-cyan-500/30 text-cyan-300 font-semibold"
+                        ? "bg-primary/15 border-primary/30 text-primary font-semibold"
                         : "bg-surface-solid/60 border-white/[0.06] text-text hover:bg-surface"
                     }`
                   }

@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useDocumentTitle } from "../../shared/useDocumentTitle";
+import { SiteFooter } from "../components/SiteFooter";
 import {
-  ShieldAlert,
   ArrowLeft,
   Terminal,
   Home,
@@ -16,9 +17,7 @@ export default function NotFound() {
   const [runningDiag, setRunningDiag] = useState(false);
   const [diagComplete, setDiagComplete] = useState(false);
 
-  useEffect(() => {
-    document.title = "404 Not Found — ShadowScope";
-  }, []);
+  useDocumentTitle("Page Not Found · ShadowScope");
 
   const handleRunDiag = () => {
     setRunningDiag(true);
@@ -32,17 +31,13 @@ export default function NotFound() {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center bg-bg text-text p-4 sm:p-6 overflow-hidden selection:bg-primary/20 selection:text-primary">
       {/* Background Cyber Grid & Vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(34,211,238,0.06)_0%,_rgba(5,6,10,0.95)_70%)] pointer-events-none" />
+      <div className="absolute inset-0  pointer-events-none" />
       <div
         className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:32px_32px]"
       />
 
       <div className="relative z-10 w-full max-w-2xl mx-auto flex flex-col items-center text-center">
-        {/* Status Pill */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-danger/30 bg-danger/10 text-xs font-mono text-danger mb-6 animate-pulse">
-          <ShieldAlert className="h-3.5 w-3.5" />
-          <span>STATUS: UNKNOWN_ENDPOINT_DETECTED</span>
-        </div>
+
 
         {/* Big Glitch 404 */}
         <div className="relative font-display font-black text-7xl sm:text-9xl tracking-tighter select-none my-2 text-transparent bg-clip-text bg-gradient-to-b from-text via-text/80 to-muted/40">
@@ -76,11 +71,11 @@ export default function NotFound() {
         </p>
 
         {/* Terminal Diagnostics Card */}
-        <div className="w-full text-left rounded-xl border border-border bg-bg-2/95 p-4 sm:p-5 backdrop-blur-xl font-mono text-xs shadow-2xl mb-8 overflow-hidden">
+        <div className="w-full text-left rounded-[var(--radius)] border border-border bg-bg-2/95 p-4 sm:p-5  font-mono text-xs  mb-8 overflow-hidden">
           <div className="flex items-center justify-between border-b border-border pb-2.5 mb-3 text-muted">
             <div className="flex items-center gap-2">
               <Terminal className="h-3.5 w-3.5 text-primary" />
-              <span className="text-[11px] uppercase tracking-wider">ShadowScope Kernel Inspection</span>
+              <span className="text-[11px] font-mono text-muted">Kernel Inspection</span>
             </div>
             <span className="text-[10px] text-muted">eBPF / DNS Interceptor</span>
           </div>
@@ -131,7 +126,7 @@ export default function NotFound() {
         <div className="flex flex-wrap items-center justify-center gap-3 w-full">
           <Link
             to="/"
-            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-primary/40 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-mono font-semibold transition-all shadow-lg hover:shadow-primary/20"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-[var(--radius)] border border-primary/40 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-mono font-semibold transition-all shadow-lg hover:shadow-primary/20"
           >
             <Home className="h-4 w-4" />
             <span>Return Home</span>
@@ -139,7 +134,7 @@ export default function NotFound() {
 
           <Link
             to="/app"
-            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-surface hover:bg-surface-solid text-text text-xs font-mono font-semibold transition-all"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-[var(--radius)] border border-border bg-surface hover:bg-surface-solid text-text text-xs font-mono font-semibold transition-all"
           >
             <LayoutDashboard className="h-4 w-4 text-accent" />
             <span>Open Threat Console</span>
@@ -147,7 +142,7 @@ export default function NotFound() {
 
           <Link
             to="/playground"
-            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-surface hover:bg-surface-solid text-text text-xs font-mono font-semibold transition-all"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-[var(--radius)] border border-border bg-surface hover:bg-surface-solid text-text text-xs font-mono font-semibold transition-all"
           >
             <FlaskConical className="h-4 w-4 text-amber-400" />
             <span>Threat Playground</span>
@@ -164,6 +159,7 @@ export default function NotFound() {
           </Link>
         </div>
       </div>
+      <SiteFooter />
     </div>
   );
 }

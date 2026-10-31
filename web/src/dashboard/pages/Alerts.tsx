@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "../../shared/useDocumentTitle";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
@@ -38,6 +39,8 @@ type SeverityTab = "all" | Severity;
 type StatusFilter = "all" | "open" | "acknowledged" | "resolved" | "false_positive";
 
 export default function Alerts() {
+  useDocumentTitle("Alerts · ShadowScope");
+
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -237,7 +240,7 @@ export default function Alerts() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           {/* Header Title */}
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400">
+            <div className="p-2 rounded-[var(--radius)] bg-red-500/10 border border-red-500/30 text-red-400">
               <ShieldAlert className="w-5 h-5 animate-pulse" />
             </div>
             <div>
@@ -268,7 +271,7 @@ export default function Alerts() {
               <button
                 onClick={() => setViewMode("list")}
                 className={`p-1.5 rounded transition-colors ${
-                  viewMode === "list" ? "bg-white/10 text-cyan-400" : "text-muted hover:text-text"
+                  viewMode === "list" ? "bg-white/10 text-primary" : "text-muted hover:text-text"
                 }`}
                 title="List View"
               >
@@ -277,7 +280,7 @@ export default function Alerts() {
               <button
                 onClick={() => setViewMode("grid")}
                 className={`p-1.5 rounded transition-colors ${
-                  viewMode === "grid" ? "bg-white/10 text-cyan-400" : "text-muted hover:text-text"
+                  viewMode === "grid" ? "bg-white/10 text-primary" : "text-muted hover:text-text"
                 }`}
                 title="Grid View"
               >
@@ -325,7 +328,7 @@ export default function Alerts() {
                 {active && (
                   <motion.div
                     layoutId="active-severity-tab"
-                    className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-primary via-cyan-400 to-primary-2 shadow-[0_0_8px_rgba(34,211,238,0.7)]"
+                    className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-primary via-cyan-400 to-primary-2 "
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -344,7 +347,7 @@ export default function Alerts() {
               placeholder="Search by title, secret subtype, process..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#080c18] border border-white/10 rounded-lg pl-9 pr-3 py-2 text-xs text-text placeholder:text-muted/60 focus:outline-none focus:border-cyan-400 font-mono"
+              className="w-full bg-[var(--surface)] border border-white/10 rounded-lg pl-9 pr-3 py-2 text-xs text-text placeholder:text-muted/60 focus:outline-none focus:border-primary font-mono"
             />
           </div>
 
@@ -353,7 +356,7 @@ export default function Alerts() {
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="w-full bg-[#080c18] border border-white/10 rounded-lg px-3 py-2 text-xs text-text focus:outline-none focus:border-cyan-400 font-mono"
+              className="w-full bg-[var(--surface)] border border-white/10 rounded-lg px-3 py-2 text-xs text-text focus:outline-none focus:border-primary font-mono"
             >
               <option value="all">All Finding Types</option>
               <option value="secret">Secrets & Credentials</option>
@@ -374,7 +377,7 @@ export default function Alerts() {
                 setStatusFilter(e.target.value as StatusFilter);
                 setSearchParams({ severity: selectedSeverity, status: e.target.value });
               }}
-              className="w-full bg-[#080c18] border border-white/10 rounded-lg px-3 py-2 text-xs text-text focus:outline-none focus:border-cyan-400 font-mono"
+              className="w-full bg-[var(--surface)] border border-white/10 rounded-lg px-3 py-2 text-xs text-text focus:outline-none focus:border-primary font-mono"
             >
               <option value="all">All Statuses</option>
               <option value="open">Open Only</option>
@@ -395,10 +398,10 @@ export default function Alerts() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="p-3 rounded-xl border border-cyan-500/40 bg-[#0c1428]/95 shadow-[0_0_24px_rgba(34,211,238,0.2)] backdrop-blur-xl flex flex-wrap items-center justify-between gap-3 z-20"
+            className="p-3 rounded-[var(--radius)] border border-primary/30 bg-[var(--surface)]/95   flex flex-wrap items-center justify-between gap-3 z-20"
           >
             <div className="flex items-center gap-3">
-              <span className="font-mono text-xs font-bold text-cyan-300">
+              <span className="font-mono text-xs font-bold text-primary">
                 {selectedIds.size} of {filteredFindings.length} selected
               </span>
               <button
@@ -443,7 +446,7 @@ export default function Alerts() {
       {loading ? (
         <div className="space-y-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="h-16 w-full rounded-xl" />
+            <Skeleton key={i} className="h-16 w-full rounded-[var(--radius)]" />
           ))}
         </div>
       ) : filteredFindings.length === 0 ? (
@@ -477,7 +480,7 @@ export default function Alerts() {
                 type="checkbox"
                 checked={selectedIds.size === filteredFindings.length && filteredFindings.length > 0}
                 onChange={toggleSelectAll}
-                className="rounded border-white/20 bg-white/5 text-cyan-400 focus:ring-0 cursor-pointer"
+                className="rounded border-white/20 bg-white/5 text-primary focus:ring-0 cursor-pointer"
               />
               <span>Severity / Title</span>
             </div>
@@ -500,7 +503,7 @@ export default function Alerts() {
                   key={finding.id}
                   onClick={() => navigate(`/app/alerts/${finding.id}`)}
                   className={`p-3.5 sm:px-4 sm:py-3 transition-all cursor-pointer group flex items-center justify-between gap-3 ${
-                    isSelected ? "bg-cyan-500/10" : isHighlighted ? "bg-white/[0.04]" : ""
+                    isSelected ? "bg-primary/10" : isHighlighted ? "bg-white/[0.04]" : ""
                   } ${
                     isCritical && finding.status === "open"
                       ? "bg-red-950/15 border-l-2 border-red-500 shadow-[inset_0_0_20px_rgba(255,59,92,0.06)]"
@@ -514,14 +517,14 @@ export default function Alerts() {
                       checked={isSelected}
                       onClick={(e) => toggleSelectOne(finding.id, e)}
                       onChange={() => {}}
-                      className="rounded border-white/20 bg-white/5 text-cyan-400 focus:ring-0 cursor-pointer shrink-0"
+                      className="rounded border-white/20 bg-white/5 text-primary focus:ring-0 cursor-pointer shrink-0"
                     />
 
                     <SeverityPill severity={finding.severity} size="xs" />
 
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="font-semibold text-xs sm:text-sm text-text group-hover:text-cyan-300 transition-colors truncate">
+                        <p className="font-semibold text-xs sm:text-sm text-text group-hover:text-primary transition-colors truncate">
                           {finding.title}
                         </p>
                         <span className="font-mono text-[10px] text-muted/80 bg-white/5 px-1.5 py-0.2 rounded border border-white/10 hidden sm:inline">
@@ -537,7 +540,7 @@ export default function Alerts() {
                   {/* Right: Process, Compliance, Status, Time, Arrow */}
                   <div className="flex items-center gap-3 sm:gap-6 shrink-0 font-mono text-xs">
                     <div className="hidden md:flex items-center gap-1.5 text-muted text-[11px]">
-                      <Cpu className="w-3.5 h-3.5 text-cyan-400/80" />
+                      <Cpu className="w-3.5 h-3.5 text-primary/80" />
                       <span>{finding.process_name ?? "system"}</span>
                     </div>
 
@@ -570,7 +573,7 @@ export default function Alerts() {
                       {timeAgo(finding.ts)}
                     </span>
 
-                    <ChevronRight className="w-4 h-4 text-muted group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-all hidden sm:block" />
+                    <ChevronRight className="w-4 h-4 text-muted group-hover:text-primary group-hover:translate-x-0.5 transition-all hidden sm:block" />
                   </div>
                 </div>
               );
@@ -591,10 +594,10 @@ export default function Alerts() {
                 interactive
                 onClick={() => navigate(`/app/alerts/${finding.id}`)}
                 className={`p-4 flex flex-col justify-between transition-all ${
-                  isSelected ? "border-cyan-400/50 bg-cyan-950/20" : ""
+                  isSelected ? "border-primary/50 bg-surface" : ""
                 } ${
                   isCritical && finding.status === "open"
-                    ? "border-red-500/35 bg-red-950/10 shadow-[0_0_20px_rgba(255,59,92,0.15)]"
+                    ? "border-red-500/35 bg-red-950/10 "
                     : ""
                 }`}
               >
@@ -610,7 +613,7 @@ export default function Alerts() {
                         checked={isSelected}
                         onClick={(e) => toggleSelectOne(finding.id, e)}
                         onChange={() => {}}
-                        className="rounded border-white/20 bg-white/5 text-cyan-400 focus:ring-0 cursor-pointer"
+                        className="rounded border-white/20 bg-white/5 text-primary focus:ring-0 cursor-pointer"
                       />
                     </div>
                   </div>
@@ -619,14 +622,14 @@ export default function Alerts() {
                     {finding.title}
                   </h3>
 
-                  <p className="font-mono text-[11px] text-muted line-clamp-2 mt-1.5 leading-relaxed bg-[#060812] p-2 rounded border border-white/10">
+                  <p className="font-mono text-[11px] text-muted line-clamp-2 mt-1.5 leading-relaxed bg-[var(--surface)] p-2 rounded border border-white/10">
                     {finding.evidence?.redacted_snippet || finding.description}
                   </p>
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono">
                   <div className="flex items-center gap-1.5 text-muted text-[11px]">
-                    <Cpu className="w-3.5 h-3.5 text-cyan-400" />
+                    <Cpu className="w-3.5 h-3.5 text-primary" />
                     <span>{finding.process_name ?? "unknown"}</span>
                   </div>
 

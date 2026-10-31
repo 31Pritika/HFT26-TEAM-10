@@ -1,46 +1,47 @@
 @import "tailwindcss";
 
-/* Design tokens: master spec §10. `static` keeps every token available as a CSS variable. */
+/* Stage Light design tokens: solid black base, warm tungsten spotlight accent, desaturated severities. */
 @theme static {
-  --color-bg: #05060a;
-  --color-bg-2: #0a0d16;
-  --color-surface: rgba(17, 22, 39, 0.72);
-  --color-surface-solid: #111627;
-  --color-border: rgba(148, 163, 255, 0.1);
-  --color-border-strong: rgba(148, 163, 255, 0.22);
-  --color-text: #e8ecf5;
-  --color-muted: #8a93a8;
-  --color-faint: #4b5368;
-  --color-primary: #22d3ee;
-  --color-primary-2: #0ea5e9;
-  --color-accent: #8b5cf6;
-  --color-accent-2: #ec4899;
-  --color-critical: #ff3b5c;
-  --color-high: #ff8a3d;
-  --color-medium: #facc15;
-  --color-low: #34d399;
-  --color-info: #60a5fa;
+  --color-bg: #000000;
+  --color-bg-2: #0a0a0a;
+  --color-surface: #111111;
+  --color-surface-solid: #111111;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.16);
+  --color-text: #f5f2ec;
+  --color-muted: #9a968f;
+  --color-faint: #5a5752;
+  --color-primary: #f2c94c;
+  --color-primary-ink: #000000;
+  --color-primary-2: #f2c94c;
+  --color-accent: #f5f2ec;
+  --color-accent-2: #f2c94c;
+  --color-critical: #e5484d;
+  --color-high: #e8833a;
+  --color-medium: #d9b44a;
+  --color-low: #4caf7a;
+  --color-info: #7a9cc6;
 
-  --shadow-glow-primary: 0 0 24px rgba(34, 211, 238, 0.35);
-  --shadow-glow-critical: 0 0 28px rgba(255, 59, 92, 0.45);
+  --shadow-glow-primary: none;
+  --shadow-glow-critical: none;
 
-  --radius-sm: 8px;
-  --radius: 14px;
-  --radius-lg: 22px;
+  --radius-sm: 2px;
+  --radius: 4px;
+  --radius-lg: 4px;
 
-  --font-display: "Space Grotesk", system-ui, sans-serif;
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-display: "Geist", system-ui, sans-serif;
+  --font-sans: "Geist", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
 
   --ease-signal: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-micro: 0.18s;
-  --duration-ui: 0.4s;
+  --duration-ui: 0.3s;
   --duration-hero: 0.8s;
 
   --breakpoint-xs: 375px;
 }
 
-/* The spec's short names, for hand-written CSS. */
+/* CSS variables for direct style references. */
 :root {
   --bg: var(--color-bg);
   --bg-2: var(--color-bg-2);
@@ -52,6 +53,7 @@
   --muted: var(--color-muted);
   --faint: var(--color-faint);
   --primary: var(--color-primary);
+  --primary-ink: var(--color-primary-ink);
   --primary-2: var(--color-primary-2);
   --accent: var(--color-accent);
   --accent-2: var(--color-accent-2);
@@ -60,16 +62,14 @@
   --medium: var(--color-medium);
   --low: var(--color-low);
   --info: var(--color-info);
-  --glow-primary: var(--shadow-glow-primary);
-  --glow-critical: var(--shadow-glow-critical);
   color-scheme: dark;
 }
 
 @layer base {
   html,
-  body,
-  #root {
+  body {
     min-height: 100%;
+    overflow-x: clip;
   }
 
   body {
@@ -77,6 +77,8 @@
     background: var(--bg);
     color: var(--text);
     font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -85,6 +87,8 @@
   h3,
   h4 {
     font-family: var(--font-display);
+    letter-spacing: -0.03em;
+    font-weight: 500;
   }
 
   code,
@@ -94,7 +98,7 @@
   }
 
   ::selection {
-    background: rgba(34, 211, 238, 0.3);
+    background: rgba(242, 201, 76, 0.25);
     color: var(--text);
   }
 
@@ -109,13 +113,13 @@
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-thumb {
     background: var(--border-strong);
-    border-radius: 8px;
+    border-radius: 2px;
   }
 }
 
@@ -130,8 +134,38 @@
   }
 }
 
-@keyframes shimmer {
+/* Light sweep across wordmarks */
+@keyframes stageLightSweep {
+  0% {
+    background-position: 200% 0;
+  }
   100% {
-    transform: translateX(100%);
+    background-position: -200% 0;
+  }
+}
+
+.stage-light-sweep {
+  background: linear-gradient(
+    100deg,
+    #f5f2ec 0%,
+    #f5f2ec 35%,
+    #ffffff 50%,
+    #f5f2ec 65%,
+    #f5f2ec 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: stageLightSweep 9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-light-sweep {
+    animation: none;
+    color: #f5f2ec;
+    background: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
   }
 }
