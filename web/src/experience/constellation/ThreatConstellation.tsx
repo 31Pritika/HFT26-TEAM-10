@@ -13,6 +13,7 @@ import {
   Radio,
 } from "lucide-react";
 import { api } from "../../shared/api";
+import { useDocumentTitle } from "../../shared/useDocumentTitle";
 import type { GraphData } from "../../shared/types";
 import { NodeDetailPanel, type GraphNode, type GraphLink } from "./NodeDetailPanel";
 import { Constellation2D } from "./Constellation2D";
@@ -33,9 +34,7 @@ export default function ThreatConstellation() {
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
   const lastGraph = useRef("");
 
-  useEffect(() => {
-    document.title = "Threat Constellation — ShadowScope";
-  }, []);
+  useDocumentTitle("Threat Graph · ShadowScope");
 
   // Environment checks
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;

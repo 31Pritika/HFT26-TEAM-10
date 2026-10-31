@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Starts ShadowScope: backend on :8787, the mock provider if present, and the web app on :5173.
+# Starts ShadowScope: backend on :8787, the mock provider if present, and the web app on :5174.
 #
 #   scripts/start.sh                  this machine only, without sudo (some collectors stay off)
 #   scripts/start.sh --sudo           all collectors (asks for your password once)
@@ -11,7 +11,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BACKEND="$ROOT/backend"
 VENV="$BACKEND/.venv"
-PORT=8787
+PORT=8788
 LOGS="$BACKEND/data"
 
 USE_SUDO=0
@@ -101,7 +101,7 @@ ORIGINS="${SHADOWSCOPE_CORS_ORIGINS:-}"
 if [ "$HOST" != 127.0.0.1 ]; then
   LAN="$(lan_address)"
   [ "$HOST" != 0.0.0.0 ] && LAN="$HOST"
-  [ -n "$LAN" ] && ORIGINS="${ORIGINS:+$ORIGINS,}http://$LAN:5173"
+  [ -n "$LAN" ] && ORIGINS="${ORIGINS:+$ORIGINS,}http://$LAN:5174"
   echo "Warning: the API has no login. Anyone on this network can read it. Use only on a network you trust."
 fi
 
@@ -145,13 +145,13 @@ fi
 
 echo
 echo "ShadowScope is running. Press Ctrl+C to stop."
-[ "$RUN_WEB" = 1 ] && echo "  Dashboard:  http://localhost:5173/app"
+[ "$RUN_WEB" = 1 ] && echo "  Dashboard:  http://localhost:5174/app"
 echo "  API:        http://localhost:$PORT/api/health"
 echo "  Gateway:    http://localhost:8789/{provider}/...  (this machine only)"
 if [ -n "$LAN" ]; then
   echo
   echo "  From another laptop:"
-  [ "$RUN_WEB" = 1 ] && echo "    Open  http://$LAN:5173/app"
+  [ "$RUN_WEB" = 1 ] && echo "    Open  http://$LAN:5174/app"
   echo "    Or run its own web app with:  VITE_API_BASE=http://$LAN:$PORT/api npm run dev"
   echo "    (PowerShell:  \$env:VITE_API_BASE=\"http://$LAN:$PORT/api\"; npm run dev)"
 fi
